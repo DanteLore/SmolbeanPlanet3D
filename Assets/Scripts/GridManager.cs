@@ -80,7 +80,6 @@ public class GridManager : MonoBehaviour
         print("FRONT MATCHES: " + String.Join(", ", frontMatches));
         print("BACK MATCHES: " + String.Join(", ", backMatches));
 
-        // TODO:  Create rotated versions of all tiles
         // TODO:  Add the allowed neighbours to the MeshData
         // TODO:  Think about how to solve for multiple Y steps (maybe just clone and raise the tiles n times??)
         // TODO:  Seed the outside edge of the map with flat squares (in future seed with ocean, but for now, grass will do!)
