@@ -35,7 +35,8 @@ public class GridManager : MonoBehaviour
     public float tileSize = 4.0f;
     public float fuzzyEdgeFactor = 0.01f;
 
-    private Mesh floorMesh;
+    private List<MeshData> meshData;
+    private System.Random rand = new System.Random();
 
     public void Recreate()
     {
@@ -56,14 +57,13 @@ public class GridManager : MonoBehaviour
         meshes = meshes.SelectMany(MeshRotatedFourWays).ToList();
 
         // This is the one we're using, for now.
-        floorMesh = meshes.First(m => m.name == "BasicFloor");
-        var meshData = meshes.Select(CreateMeshData);
+        meshData = meshes.Select(CreateMeshData).ToList();
 
         print($"Loaded {meshes.Count()} meshes");
 
         // So it appears that X and Z axes are flipped when loading blender assets to unity.
 
-        var target = meshData.First(md => md.name == "BasicCliff");
+        var target = meshData.First(md => md.name == "BumpyFloor");
 
         print("LEFT: " + String.Join(", ", target.leftBoundary));
         print("RIGHT: " + String.Join(", ", target.rightBoundary));
@@ -223,7 +223,7 @@ public class GridManager : MonoBehaviour
 
     private Mesh GetMeshFor(int x, int z)
     {
-        return floorMesh;
+        return meshData[rand.Next(meshData.Count)].mesh;
     }
 
     private void ClearMap()
