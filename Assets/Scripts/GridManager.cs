@@ -52,8 +52,11 @@ public class GridManager : MonoBehaviour
         // Make copies of the meshes in the file, so any transformations etc don't mess things up
         var meshes = meshesInFile.Select(CloneMesh).ToList();
 
+        // Create rotated versions of the meshes
+        meshes = meshes.SelectMany(MeshRotatedFourWays).ToList();
+
         // This is the one we're using, for now.
-        floorMesh = meshes.First(m => m.name == "BasicCliffCornerOuter");
+        floorMesh = meshes.First(m => m.name == "BasicFloor");
         var meshData = meshes.Select(CreateMeshData);
 
         print($"Loaded {meshes.Count()} meshes");
@@ -77,15 +80,31 @@ public class GridManager : MonoBehaviour
         print("FRONT MATCHES: " + String.Join(", ", frontMatches));
         print("BACK MATCHES: " + String.Join(", ", backMatches));
 
-        // TODO:  Bung this in git!
         // TODO:  Create rotated versions of all tiles
-            //var rot = Quaternion.Euler(0.0f, 180.0f, 0.0f);
-            //var rotated = mesh.vertices.Select(v => rot * v).ToArray();
-            //mesh.vertices = rotated;
         // TODO:  Add the allowed neighbours to the MeshData
         // TODO:  Think about how to solve for multiple Y steps (maybe just clone and raise the tiles n times??)
         // TODO:  Seed the outside edge of the map with flat squares (in future seed with ocean, but for now, grass will do!)
         // TODO:  Wave function collapse from there, using the meshData!
+    }
+
+    private IEnumerable<Mesh> MeshRotatedFourWays(Mesh mesh)
+    {
+        yield return mesh;
+
+        yield return RotateMesh(CloneMesh(mesh), 90);
+        yield return RotateMesh(CloneMesh(mesh), 180);
+        yield return RotateMesh(CloneMesh(mesh), 270);
+    }
+
+    private Mesh RotateMesh(Mesh mesh, float angleDegrees)
+    {
+        mesh.name = mesh.name + $" rotated {angleDegrees}";
+
+        var rot = Quaternion.Euler(0.0f, angleDegrees, 0.0f);
+        var rotated = mesh.vertices.Select(v => rot * v).ToArray();
+        mesh.vertices = rotated;
+
+        return mesh;
     }
 
     private bool BoundariesMatch(Edge[] boundary1, Edge[] boundary2)
