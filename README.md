@@ -1,5 +1,27 @@
 
 
+# Devlog and Screenshots
+
+Newest entries at the top :)
+
+## Got basic wave function collapse working
+
+Unlike with the 2D version of this project, where I typed in the tile neighbour relationships by hand, here I load all the meshes from a single FBX file, then use a fuzzy edge matching algorithm to decide whether they are compatible as neighbours or not.  
+
+Hacked in a very basic weighting towards flat surfaces, which gives more open areas.
+![Screenshot](./Docs/Images/screenshot4.png)
+
+Added ramps as well as cliffs.  If I'd been manually typing tile relationships, this would have taken forever - but I'm not, so it was shockingly simple!
+![Screenshot](./Docs/Images/screenshot3.png)
+
+First working wave function collapse!
+![Screenshot](./Docs/Images/screenshot2.png)
+
+Partially working algorithm which seems to create ripples.  Not working but cool :)
+![Screenshot](./Docs/Images/screenshot1.png)
+
+# References and Notes:
+
 From the undisputed master of wave function collapse:
 https://www.youtube.com/watch?v=Uxeo9c-PX-w
 

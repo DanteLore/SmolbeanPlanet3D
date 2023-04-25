@@ -12,7 +12,6 @@ public class GridManager : MonoBehaviour
     public float tileSize = 4.0f;
     public float fuzzyEdgeFactor = 0.01f;
 
-    private Dictionary<String, NeighbourData> neighbourData;
     private System.Random rand = new System.Random();
 
     private MeshData[] map;
@@ -24,10 +23,15 @@ public class GridManager : MonoBehaviour
         var meshData = new MeshLoader(fuzzyEdgeFactor).LoadMeshes();
         print($"Loaded {meshData.Count()} meshes");
 
-        neighbourData = new NeighbourSelector(fuzzyEdgeFactor, meshData).SelectNeighbours();
+        var neighbourData = new NeighbourSelector(fuzzyEdgeFactor, meshData).SelectNeighbours();
 
-        map = new MapGenerator(mapWidth, mapHeight, meshData).GenerateMap();
+        var nd = neighbourData["BasicFloor"];
+        //print("Left: " + String.Join(",", nd.leftMatches));
+        //print("Right: " + String.Join(",", nd.rightMatches));
+        //print("Front: " + String.Join(",", nd.frontMatches));
+        //print("Back: " + String.Join(",", nd.backMatches));
 
+        map = new MapGenerator(mapWidth, mapHeight, meshData, neighbourData).GenerateMap();
         DrawMap();
     }
 
@@ -41,26 +45,19 @@ public class GridManager : MonoBehaviour
             {
                 // In future it might make sense to look at creating one big mesh here, rather than separate game objects... maybe.
                 var pos = new Vector3(x * tileSize, 0, z * tileSize);
-                Mesh mesh = GetMeshFor(x, z);
 
                 var tileObj = new GameObject();
                 tileObj.transform.position = pos - offset;
                 tileObj.AddComponent<MeshRenderer>();
                 var meshFilter = tileObj.AddComponent<MeshFilter>();
-                meshFilter.mesh = mesh;
+                meshFilter.mesh = map[z * mapWidth + x].mesh;
                 var collider = tileObj.AddComponent<MeshCollider>();
-                //collider.sharedMesh = floorMesh;
                 tileObj.GetComponent<Renderer>().material = meshMaterial;
 
                 tileObj.transform.parent = transform;
                 tileObj.name = $"Terrain cube {x}, 0, {z}";
             }
         }
-    }
-
-    private Mesh GetMeshFor(int x, int z)
-    {
-        return map[z * mapWidth + x].mesh;
     }
 
     private void ClearMap()
