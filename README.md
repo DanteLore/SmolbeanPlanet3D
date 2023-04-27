@@ -8,6 +8,9 @@ Newest entries at the top :)
 
 Unlike with the 2D version of this project, where I typed in the tile neighbour relationships by hand, here I load all the meshes from a single FBX file, then use a fuzzy edge matching algorithm to decide whether they are compatible as neighbours or not.  
 
+Added some irregularity to make the terrain look a little less blocky - but keeping a low-poly feel for now
+![Screenshot](./Docs/Images/screenshot6.png)
+
 Fixed normals on rotated meshes using a snazzy gizmo I copy pasta'd.
 ![Screenshot](./Docs/Images/screenshot5.png)
 
