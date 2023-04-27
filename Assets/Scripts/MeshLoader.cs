@@ -57,8 +57,10 @@ public class MeshLoader
         mesh.name = mesh.name + $" rotated {angleDegrees}";
 
         var rot = Quaternion.Euler(0.0f, angleDegrees, 0.0f);
-        var rotated = mesh.vertices.Select(v => rot * v).ToArray();
-        mesh.vertices = rotated;
+        var rotatedVerts = mesh.vertices.Select(v => rot * v).ToArray();
+        mesh.vertices = rotatedVerts;
+        var rotatedNormals = mesh.normals.Select(v => rot * v).ToArray();
+        mesh.normals = rotatedNormals;
 
         return mesh;
     }

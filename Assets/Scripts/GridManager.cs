@@ -14,6 +14,8 @@ public class GridManager : MonoBehaviour
 
     private System.Random rand = new System.Random();
 
+    public bool addMeshDebugGizmos = false;
+
     private MeshData[] map;
 
     public void Recreate()
@@ -53,6 +55,9 @@ public class GridManager : MonoBehaviour
                 meshFilter.mesh = map[z * mapWidth + x].mesh;
                 var collider = tileObj.AddComponent<MeshCollider>();
                 tileObj.GetComponent<Renderer>().material = meshMaterial;
+
+                if(addMeshDebugGizmos)
+                    tileObj.AddComponent<DebugMesh>();
 
                 tileObj.transform.parent = transform;
                 tileObj.name = $"Terrain cube {x}, 0, {z}";
