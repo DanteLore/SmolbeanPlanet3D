@@ -8,6 +8,15 @@ Newest entries at the top :)
 
 Unlike with the 2D version of this project, where I typed in the tile neighbour relationships by hand, here I load all the meshes from a single FBX file, then use a fuzzy edge matching algorithm to decide whether they are compatible as neighbours or not.  
 
+Some hard coded tile priorities, to try to make the algorithm favour flat areas and avoid sea-like options.  Not exactly mind blowing results...
+![Screenshot](./Docs/Images/screenshot10.png)
+
+Variable island size, by setting a radius.
+![Screenshot](./Docs/Images/screenshot9.png)
+
+A nice top down view of the sea around the "island".
+![Screenshot](./Docs/Images/screenshot8.png)
+
 Added sea round the edge of the island!
 ![Screenshot](./Docs/Images/screenshot7.png)
 

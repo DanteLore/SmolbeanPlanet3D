@@ -5,109 +5,41 @@ using UnityEngine;
 
 public class MapGenerator 
 {
-    public class MapSquareOptions
-    {
-        private List<string> options;
-        public int X { get; private set; }
-        public int Y { get; private set; }
-
-        public bool IsCollapsed { get { return options.Count == 1; }}
-
-        public String TileName { get { return options.First(); }}
-
-        public int NumberOfPossibilities { get { return options.Count; }}
-
-        public IReadOnlyList<String> Options { get { return options; }}
-
-        public MapSquareOptions(int x, int y, List<String> options)
-        {
-            this.options = options;
-            this.X = x;
-            this.Y = y;
-        }
-
-        public void Choose(String option)
-        {
-            options = new List<string> { option };
-        }
-
-        public bool Restrict(IEnumerable<String> allowed)
-        {
-            int cnt = options.Count;
-            options = options.Intersect(allowed).ToList();
-
-            if(options.Count == 0)
-                throw new Exception("Wave function collapse failed - impossible tile combination found");
-
-            //if(IsCollapsed)
-            //    Debug.Log($"Square X{X} Y{Y} restricted to {TileName}");
-            //else
-            //    Debug.Log($"Square X{X} Y{Y} restricted from {cnt} to {options.Count}");
-
-            return cnt != options.Count;
-        }
-    }
-
-    private int mapWidth = 10;
-    private int mapHeight = 10;
+    private int mapWidth;
+    private int mapHeight;
+    private float coastRadius = 0.8f;
     private Dictionary<String, MeshData> meshData;
     private Dictionary<String, NeighbourData> neighbourData;
+    private System.Random rand = new System.Random();
+    private List<string> allTileOptions;
+    private Dictionary<string, double> tileProbabilities;
+    private Vector2 mapCentre;
 
-    public MapGenerator(int mapWidth, int mapHeight, List<MeshData> meshData, Dictionary<String, NeighbourData> neighbourData)
+    public MapGenerator(int mapWidth, int mapHeight, float coastRadius, List<MeshData> meshData, Dictionary<String, NeighbourData> neighbourData)
     {
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
+        this.coastRadius = coastRadius;
         this.meshData = meshData.ToDictionary(md => md.name, md => md);
         this.neighbourData = neighbourData;
+
+        allTileOptions = neighbourData.Keys.ToList();
+        mapCentre = new Vector2(mapWidth / 2, mapHeight / 2);
     }
 
     public MeshData[] GenerateMap()
     {
-        System.Random rand = new System.Random();
+        MapSquareOptions[] map = InitialiseMap();
+        InitialiseTileProbabilities();
 
-        // Initialise possibilities
-        var allTileOptions = neighbourData.Keys.ToList();
-        Debug.Log("All Tile Options: " + String.Join(", ", allTileOptions));
+        AddOcean(map);
 
-        var map = new MapSquareOptions[mapHeight * mapWidth];
-        for(int y = 0; y < mapHeight; y++)
-            for(int x = 0; x < mapWidth; x++)
-                map[y * mapWidth + x] = new MapSquareOptions(x, y, allTileOptions);
-
-
-        Vector3 centre = new Vector3(mapWidth / 2, mapHeight / 2);
-        float radius = (Mathf.Min(mapHeight, mapWidth) / 2) * 0.9f;
-
-        for(int y = 0; y < mapHeight; y++)
-        { 
-            for(int x = 0; x < mapWidth; x++)
-            {
-                Vector3 pos = new Vector3(x, y);
-
-                if(Vector3.Distance(pos, centre) > radius)
-                {
-                    var target = map[y * mapWidth + x];
-                    target.Choose("SeaFloor");
-                    CollapseAt(target, map);
-                }
-            }
-        }
-
-        var mapCenter = new Vector2(mapWidth / 2, mapHeight / 2);
-
-        while(map.Any(ms => !ms.IsCollapsed))
+        while (map.Any(ms => !ms.IsCollapsed))
         {
             // Select square that isn't collapsed yet with lowest possibilities
-            var target = map.Where(ms => !ms.IsCollapsed).OrderBy(ms => ms.NumberOfPossibilities).ThenBy(ms => (new Vector2(ms.X, ms.Y) - mapCenter).magnitude).First();
-
-            // Choose random tile
-            if(target.Options.Contains("BasicFloor") && rand.NextDouble() <= 0.9f)
-                target.Choose("BasicFloor");
-            else if(target.Options.Contains("BasicRaisedFloor") && rand.NextDouble() <= 0.9f)
-                target.Choose("BasicRaisedFloor");
-            else
-                target.Choose(target.Options[rand.Next(target.Options.Count)]);
-            //Debug.Log($"Square X{target.X} Y{target.Y} given {target.TileName}");
+            var target = map.Where(ms => !ms.IsCollapsed).OrderBy(ms => ms.NumberOfPossibilities).ThenBy(ms => (new Vector2(ms.X, ms.Y) - mapCentre).magnitude).First();
+            string tile = SelectWeightedRandomTile(target);
+            target.Choose(tile);
 
             // Collapse outward - recurse until stable
             CollapseAt(target, map);
@@ -116,6 +48,74 @@ public class MapGenerator
         var tiles = map.Select(m => meshData[m.TileName]).ToArray();
 
         return tiles;
+    }
+
+    private MapSquareOptions[] InitialiseMap()
+    {
+        var map = new MapSquareOptions[mapHeight * mapWidth];
+        for (int y = 0; y < mapHeight; y++)
+            for (int x = 0; x < mapWidth; x++)
+                map[y * mapWidth + x] = new MapSquareOptions(x, y, allTileOptions);
+        return map;
+    }
+
+    private void AddOcean(MapSquareOptions[] map)
+    {
+        float radius = (Mathf.Min(mapHeight, mapWidth) / 2) * coastRadius;
+
+        for (int y = 0; y < mapHeight; y++)
+        {
+            for (int x = 0; x < mapWidth; x++)
+            {
+                Vector2 pos = new Vector2(x, y);
+
+                if (Vector2.Distance(pos, mapCentre) > radius)
+                {
+                    var target = map[y * mapWidth + x];
+                    target.Choose("SeaFloor");
+                    CollapseAt(target, map);
+                }
+            }
+        }
+    }
+
+    private void InitialiseTileProbabilities()
+    {
+        tileProbabilities = new Dictionary<string, double>();
+        foreach (var tileName in allTileOptions)
+        {
+            double p = 1.0;
+
+            if (tileName.ToLower().Contains("sea"))
+                p = 0.1;
+            else if (tileName.ToLower().Contains("floor"))
+                p = 10.0;
+
+            tileProbabilities.Add(tileName, p);
+        }
+    }
+
+    private string SelectWeightedRandomTile(MapSquareOptions target)
+    {
+        // Add some noise to the values so we get a random sort order and break ties between items with the same weighting in a random way
+        // Order by priority, biggest first
+        float noiseWeight = 0.001f;
+        var choices = target.Options.Select(o => (P: tileProbabilities[o] + rand.NextDouble() * noiseWeight, I: o)).OrderByDescending(c => c.P).ToList();
+        
+        double max = choices.Sum(c => c.P);
+        double cutoff = rand.NextDouble() * max;
+        double sum = 0;
+
+        // Walk down the list until we pass the randomly selected cutoff.  Return that index.
+        foreach (var c in choices)
+        {
+            sum += c.P;
+            if (sum > cutoff)
+                return c.I;
+        }
+
+        // Must be the last item...
+        return choices.Last().I;
     }
 
     private void CollapseAt(MapSquareOptions target, MapSquareOptions[] map)

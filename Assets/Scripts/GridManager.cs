@@ -11,6 +11,9 @@ public class GridManager : MonoBehaviour
     public int mapHeight = 10;
     public float tileSize = 4.0f;
     public float fuzzyEdgeFactor = 0.01f;
+    
+    [Range(0.0f, 1.0f)]
+    public float coastRadius = 0.8f;
 
     private System.Random rand = new System.Random();
 
@@ -28,12 +31,8 @@ public class GridManager : MonoBehaviour
         var neighbourData = new NeighbourSelector(fuzzyEdgeFactor, meshData).SelectNeighbours();
 
         var nd = neighbourData["BasicFloor"];
-        //print("Left: " + String.Join(",", nd.leftMatches));
-        //print("Right: " + String.Join(",", nd.rightMatches));
-        //print("Front: " + String.Join(",", nd.frontMatches));
-        //print("Back: " + String.Join(",", nd.backMatches));
 
-        map = new MapGenerator(mapWidth, mapHeight, meshData, neighbourData).GenerateMap();
+        map = new MapGenerator(mapWidth, mapHeight, coastRadius, meshData, neighbourData).GenerateMap();
         DrawMap();
     }
 
