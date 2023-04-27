@@ -74,6 +74,25 @@ public class MapGenerator
             for(int x = 0; x < mapWidth; x++)
                 map[y * mapWidth + x] = new MapSquareOptions(x, y, allTileOptions);
 
+
+        Vector3 centre = new Vector3(mapWidth / 2, mapHeight / 2);
+        float radius = (Mathf.Min(mapHeight, mapWidth) / 2) * 0.9f;
+
+        for(int y = 0; y < mapHeight; y++)
+        { 
+            for(int x = 0; x < mapWidth; x++)
+            {
+                Vector3 pos = new Vector3(x, y);
+
+                if(Vector3.Distance(pos, centre) > radius)
+                {
+                    var target = map[y * mapWidth + x];
+                    target.Choose("SeaFloor");
+                    CollapseAt(target, map);
+                }
+            }
+        }
+
         var mapCenter = new Vector2(mapWidth / 2, mapHeight / 2);
 
         while(map.Any(ms => !ms.IsCollapsed))
