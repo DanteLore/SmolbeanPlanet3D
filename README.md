@@ -8,6 +8,9 @@ Newest entries at the top :)
 
 A welcome return to using shadergraph, which I really enjoy!
 
+Waves!!
+![Screenshot](./Docs/Images/waves.gif)
+
 Added a very flat ocean, following a wonderful tutorial from here: https://alexanderameye.github.io/notes/stylized-water-shader/
 ![Screenshot](./Docs/Images/screenshot13.png)
 

@@ -49,32 +49,36 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 1
     - _BUILTIN_QueueOffset: 0
-    - _ColorRefractionScale: 0.001
-    - _ColorRefractionSpeed: 0.2
-    - _ColorRefractionStrength: 0.001
+    - _ColorRefractionScale: 0.0003
+    - _ColorRefractionSpeed: 0.1
+    - _ColorRefractionStrength: 0.002
     - _DepthFadeDistance: 0.5
-    - _DepthRefractionScale: 0.001
-    - _DepthRefractionSpeed: 0.2
-    - _DepthRefractionStrength: 0.005
+    - _DepthRefractionScale: 0.0003
+    - _DepthRefractionSpeed: 0.1
+    - _DepthRefractionStrength: 0.002
     - _HorizonDistance: 10
     - _IntersectionFoamDepth: 1.39
     - _IntersectionFoamFade: 0.2
-    - _IntersectionFoamScale: 1000
-    - _IntersectionFoamSpeed: 0.001
-    - _IntersectionFoamStrength: 0.513
+    - _IntersectionFoamScale: 10000
+    - _IntersectionFoamSpeed: 0.0001
+    - _IntersectionFoamStrength: 1
     - _QueueControl: 1
     - _QueueOffset: 0
     - _RefractionScale: 0.01
     - _RefractionSpeed: 0.2
     - _RefractionStrength: 0.002
-    - _ShimmerDensity: 1000
+    - _ShimmerDensity: 10000
     - _ShimmerFalloff: 7
     - _ShimmerStength: 1
+    - _WaveSpeed: 1
+    - _WaveSteepness: 0.1
+    - _Wavelength: 10
     m_Colors:
     - _DeepWaterColor: {r: 0.09692035, g: 0.15812963, b: 0.62264144, a: 0.4117647}
     - _HorizonColor: {r: 1, g: 0.80529636, b: 0.5707547, a: 1}
     - _ShallowWaterColor: {r: 0.3127892, g: 0.6925052, b: 0.9339623, a: 0.40392157}
     - _ShimmerColor: {r: 0.4292453, g: 0.9658024, b: 1, a: 1}
+    - _WaveDirections: {r: 0.1, g: 0.2, b: 0.4, a: 0.9}
   m_BuildTextureStacks: []
 --- !u!114 &4682196336493210084
 MonoBehaviour:
