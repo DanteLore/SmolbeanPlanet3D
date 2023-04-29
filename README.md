@@ -8,6 +8,14 @@ Newest entries at the top :)
 
 Unlike with the 2D version of this project, where I typed in the tile neighbour relationships by hand, here I load all the meshes from a single FBX file, then use a fuzzy edge matching algorithm to decide whether they are compatible as neighbours or not.  
 
+
+Added a very flat ocean, following a wonderful tutorial from here: https://alexanderameye.github.io/notes/stylized-water-shader/
+![Screenshot](./Docs/Images/screenshot13.png)
+
+![Screenshot](./Docs/Images/screenshot12.png)
+
+![Screenshot](./Docs/Images/screenshot11.png)
+
 Some hard coded tile priorities, to try to make the algorithm favour flat areas and avoid sea-like options.  Not exactly mind blowing results...
 ![Screenshot](./Docs/Images/screenshot10.png)
 
