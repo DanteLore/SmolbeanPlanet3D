@@ -4,10 +4,9 @@
 
 Newest entries at the top :)
 
-## Got basic wave function collapse working
+## Ocean
 
-Unlike with the 2D version of this project, where I typed in the tile neighbour relationships by hand, here I load all the meshes from a single FBX file, then use a fuzzy edge matching algorithm to decide whether they are compatible as neighbours or not.  
-
+A welcome return to using shadergraph, which I really enjoy!
 
 Added a very flat ocean, following a wonderful tutorial from here: https://alexanderameye.github.io/notes/stylized-water-shader/
 ![Screenshot](./Docs/Images/screenshot13.png)
@@ -15,6 +14,10 @@ Added a very flat ocean, following a wonderful tutorial from here: https://alexa
 ![Screenshot](./Docs/Images/screenshot12.png)
 
 ![Screenshot](./Docs/Images/screenshot11.png)
+
+## Tweaking Wave function collapse to try to build islands
+
+I think I'm missing something here.  I can't seem to get the tile priorities set up in a way that prevents very complex coastlines.  Really I want round islands which pile upwards towards the middle.
 
 Some hard coded tile priorities, to try to make the algorithm favour flat areas and avoid sea-like options.  Not exactly mind blowing results...
 ![Screenshot](./Docs/Images/screenshot10.png)
@@ -33,6 +36,10 @@ Added some irregularity to make the terrain look a little less blocky - but keep
 
 Fixed normals on rotated meshes using a snazzy gizmo I copy pasta'd.
 ![Screenshot](./Docs/Images/screenshot5.png)
+
+## Got basic wave function collapse working
+
+Unlike with the 2D version of this project, where I typed in the tile neighbour relationships by hand, here I load all the meshes from a single FBX file, then use a fuzzy edge matching algorithm to decide whether they are compatible as neighbours or not.  
 
 Hacked in a very basic weighting towards flat surfaces, which gives more open areas.
 ![Screenshot](./Docs/Images/screenshot4.png)
