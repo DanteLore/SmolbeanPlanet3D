@@ -31,9 +31,7 @@ public class MapGenerator
     {
         MapSquareOptions[] map = InitialiseMap();
         InitialiseTileProbabilities();
-
         AddOcean(map);
-
         while (map.Any(ms => !ms.IsCollapsed))
         {
             // Select square that isn't collapsed yet with lowest possibilities
@@ -87,9 +85,13 @@ public class MapGenerator
             double p = 1.0;
 
             if (tileName.ToLower().Contains("sea"))
-                p = 0.1;
-            else if (tileName.ToLower().Contains("floor"))
-                p = 10.0;
+                p *= 0.5;
+
+            if (tileName.ToLower().Contains("corner"))
+                p *= 0.5;
+
+            if (tileName.ToLower().Contains("floor"))
+                p *= 2.0;
 
             tileProbabilities.Add(tileName, p);
         }

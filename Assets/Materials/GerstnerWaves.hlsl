@@ -1,6 +1,8 @@
 #ifndef GERSTNER_INCLUDED
 #define GERSTNER_INCLUDED
 
+// https://alexanderameye.github.io/notes/stylized-water-shader/
+
 float3 GerstnerWave(float3 position, float steepness, float wavelength, float speed, float direction, inout float3 tangent, inout float3 binormal)
 {
     direction = direction * 2 - 1;
