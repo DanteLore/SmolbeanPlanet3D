@@ -4,6 +4,12 @@
 
 Newest entries at the top :)
 
+## More tweaks to wave function collapse
+
+
+Tweaked the meshes for cliff-slope transitons (applied transforms, sorted normals) allowing them to be used again.  Some sussy matches between meshes to be looked at...
+![Screenshot](./Docs/Images/screenshot15.png)
+
 ## Ocean
 
 A welcome return to using shadergraph, which I really enjoy!

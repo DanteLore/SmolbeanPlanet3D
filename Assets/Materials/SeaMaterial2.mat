@@ -57,7 +57,7 @@ Material:
     - _DepthRefractionSpeed: 0.1
     - _DepthRefractionStrength: 0.002
     - _HorizonDistance: 10
-    - _IntersectionFoamDepth: 1.39
+    - _IntersectionFoamDepth: 1
     - _IntersectionFoamFade: 0.2
     - _IntersectionFoamScale: 10000
     - _IntersectionFoamSpeed: 0.0001
@@ -67,9 +67,9 @@ Material:
     - _RefractionScale: 0.01
     - _RefractionSpeed: 0.2
     - _RefractionStrength: 0.002
-    - _ShimmerDensity: 10000
+    - _ShimmerDensity: 2000
     - _ShimmerFalloff: 7
-    - _ShimmerStength: 1
+    - _ShimmerStength: 0.2
     - _WaveSpeed: 1
     - _WaveSteepness: 0.1
     - _Wavelength: 10

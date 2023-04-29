@@ -35,7 +35,7 @@ public class MapGenerator
         while (map.Any(ms => !ms.IsCollapsed))
         {
             // Select square that isn't collapsed yet with lowest possibilities
-            var target = map.Where(ms => !ms.IsCollapsed).OrderBy(ms => ms.NumberOfPossibilities).ThenBy(ms => (new Vector2(ms.X, ms.Y) - mapCentre).magnitude).First();
+            var target = map.Where(ms => !ms.IsCollapsed).OrderBy(ms => ms.NumberOfPossibilities).ThenByDescending(DistanceFromMapCentre).First();
             string tile = SelectWeightedRandomTile(target);
             target.Choose(tile);
 
@@ -46,6 +46,11 @@ public class MapGenerator
         var tiles = map.Select(m => meshData[m.TileName]).ToArray();
 
         return tiles;
+    }
+
+    private float DistanceFromMapCentre(MapSquareOptions ms)
+    {
+        return (new Vector2(ms.X, ms.Y) - mapCentre).magnitude;
     }
 
     private MapSquareOptions[] InitialiseMap()
@@ -85,7 +90,7 @@ public class MapGenerator
             double p = 1.0;
 
             if (tileName.ToLower().Contains("sea"))
-                p *= 0.5;
+                p *= 0.1;
 
             if (tileName.ToLower().Contains("corner"))
                 p *= 0.5;

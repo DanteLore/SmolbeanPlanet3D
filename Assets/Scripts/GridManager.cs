@@ -11,7 +11,7 @@ public class GridManager : MonoBehaviour
     public int mapHeight = 10;
     public float tileSize = 4.0f;
     public float fuzzyEdgeFactor = 0.01f;
-    
+
     [Range(0.0f, 1.0f)]
     public float coastRadius = 0.8f;
 
@@ -30,7 +30,11 @@ public class GridManager : MonoBehaviour
 
         var neighbourData = new NeighbourSelector(fuzzyEdgeFactor, meshData).SelectNeighbours();
 
-        var nd = neighbourData["BasicFloor"];
+        var nd = neighbourData["SeaSlopeToCliffTransition"];
+        Debug.Log("Left: " + String.Join(", ", nd.leftMatches));
+        Debug.Log("Right: " + String.Join(", ", nd.rightMatches));
+        Debug.Log("Front: " + String.Join(", ", nd.frontMatches));
+        Debug.Log("Back: " + String.Join(", ", nd.backMatches));
 
         map = new MapGenerator(mapWidth, mapHeight, coastRadius, meshData, neighbourData).GenerateMap();
         DrawMap();
