@@ -6,6 +6,9 @@ Newest entries at the top :)
 
 ## More tweaks to wave function collapse
 
+Created a quick script to create islands with Perlin noise, which will form the "game map" underneath the mesh.  Wave function collapse will be used to "skin" this map.
+![Screenshot](./Docs/Images/waves.gif)
+
 Getting ready to add an offset game grid - looking at grid duality stuff which Oskar Stålberg uses in Townscaper etc. See here: https://www.youtube.com/watch?v=Uxeo9c-PX-w
 ![Screenshot](./Docs/Images/screenshot17.png)
 

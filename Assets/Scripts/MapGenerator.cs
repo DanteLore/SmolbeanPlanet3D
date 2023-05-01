@@ -29,21 +29,25 @@ public class MapGenerator
 
     public MeshData[] GenerateMap()
     {
-        MapSquareOptions[] map = InitialiseMap();
+        MapSquareOptions[] displayMap = InitialiseMap();
         InitialiseTileProbabilities();
-        AddOcean(map);
-        while (map.Any(ms => !ms.IsCollapsed))
+
+        
+        AddOcean(displayMap);
+
+
+        while (displayMap.Any(ms => !ms.IsCollapsed))
         {
             // Select square that isn't collapsed yet with lowest possibilities
-            var target = map.Where(ms => !ms.IsCollapsed).OrderBy(ms => ms.NumberOfPossibilities).ThenByDescending(DistanceFromMapCentre).First();
+            var target = displayMap.Where(ms => !ms.IsCollapsed).OrderBy(ms => ms.NumberOfPossibilities).ThenByDescending(DistanceFromMapCentre).First();
             string tile = SelectWeightedRandomTile(target);
             target.Choose(tile);
 
             // Collapse outward - recurse until stable
-            CollapseAt(target, map);
+            CollapseAt(target, displayMap);
         }
 
-        var tiles = map.Select(m => meshData[m.TileName]).ToArray();
+        var tiles = displayMap.Select(m => meshData[m.TileName]).ToArray();
 
         return tiles;
     }
@@ -75,7 +79,7 @@ public class MapGenerator
                 if (Vector2.Distance(pos, mapCentre) > radius)
                 {
                     var target = map[y * mapWidth + x];
-                    target.Choose("SeaFloor");
+                    target.Choose("Seabed");
                     CollapseAt(target, map);
                 }
             }
