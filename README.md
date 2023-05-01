@@ -6,6 +6,11 @@ Newest entries at the top :)
 
 ## More tweaks to wave function collapse
 
+Getting ready to add an offset game grid - looking at grid duality stuff which Oskar Stålberg uses in Townscaper etc. See here: https://www.youtube.com/watch?v=Uxeo9c-PX-w
+![Screenshot](./Docs/Images/screenshot17.png)
+
+Funky tunnels - slowly getting better at Blender...
+![Screenshot](./Docs/Images/screenshot16.png)
 
 Tweaked the meshes for cliff-slope transitons (applied transforms, sorted normals) allowing them to be used again.  Some sussy matches between meshes to be looked at...
 ![Screenshot](./Docs/Images/screenshot15.png)

@@ -50,12 +50,13 @@ public class GridManager : MonoBehaviour
             {
                 // In future it might make sense to look at creating one big mesh here, rather than separate game objects... maybe.
                 var pos = new Vector3(x * tileSize, 0, z * tileSize);
+                MeshData meshData = map[z * mapWidth + x];
 
                 var tileObj = new GameObject();
                 tileObj.transform.position = pos - offset;
                 tileObj.AddComponent<MeshRenderer>();
                 var meshFilter = tileObj.AddComponent<MeshFilter>();
-                meshFilter.mesh = map[z * mapWidth + x].mesh;
+                meshFilter.mesh = meshData.mesh;
                 var collider = tileObj.AddComponent<MeshCollider>();
                 tileObj.GetComponent<Renderer>().material = meshMaterial;
 
@@ -63,7 +64,7 @@ public class GridManager : MonoBehaviour
                     tileObj.AddComponent<DebugMesh>();
 
                 tileObj.transform.parent = transform;
-                tileObj.name = $"Terrain cube {x}, 0, {z}";
+                tileObj.name = $"({x}, 0, {z}) {meshData.name}";
             }
         }
     }
