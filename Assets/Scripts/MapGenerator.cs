@@ -93,10 +93,13 @@ public class MapGenerator
                 p *= 0.1;
 
             if (tileName.ToLower().Contains("corner"))
-                p *= 0.5;
+                p *= 0.8;
 
             if (tileName.ToLower().Contains("floor"))
-                p *= 2.0;
+                p *= 20.0;
+
+            if (tileName.ToLower().Contains("raised"))
+                p *= 20.0;
 
             tileProbabilities.Add(tileName, p);
         }
