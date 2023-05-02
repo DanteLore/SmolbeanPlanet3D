@@ -80,4 +80,31 @@ public class GridManager : MonoBehaviour
         while (transform.childCount > 0)
             DestroyImmediate(transform.GetChild(0).gameObject);
     }
+
+    private void Start()
+    {
+        MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+        CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+
+        int i = 0;
+        while (i < meshFilters.Length)
+        {
+            combine[i].mesh = meshFilters[i].mesh;
+            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+            Destroy(meshFilters[i].gameObject);
+
+            i++;
+        }
+
+        var renderer = gameObject.AddComponent<MeshRenderer>();
+        renderer.material = meshMaterial;
+        var meshFilter = gameObject.AddComponent<MeshFilter>();
+
+        Mesh mesh = new Mesh();
+        mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+        mesh.CombineMeshes(combine);
+        meshFilter.mesh = mesh;
+
+        var collider = gameObject.AddComponent<MeshCollider>();
+    }
 }
