@@ -92,6 +92,23 @@ public class MeshLoader
             .Where(e => Mathf.Abs(e.start.z - mesh.bounds.max.z) <= fuzzyEdgeFactor && Mathf.Abs(e.end.z - mesh.bounds.max.z) <= fuzzyEdgeFactor)
             .Select(e => new Edge {start = new Vector3(e.start.x, e.start.y, 0.0f), end = new Vector3(e.end.x, e.end.y, 0.0f)});
 
+        float maxX = mesh.vertices.Max(v => v.x);
+        float maxZ = mesh.vertices.Max(v => v.z);
+        float minX = mesh.vertices.Min(v => v.x);
+        float minZ = mesh.vertices.Min(v => v.z);
+
+        Vector3 backLeft = new Vector3(minX, 0.0f, maxZ);
+        Vector3 backRight = new Vector3(maxX, 0.0f, maxZ);
+        Vector3 frontLeft = new Vector3(minX, 0.0f, minZ);
+        Vector3 frontRight = new Vector3(maxX, 0.0f, minZ);
+
+        var backLeftVertex = mesh.vertices.OrderBy(v => (new Vector3(v.x, 0.0f, v.z) - backLeft).sqrMagnitude).First();
+        var backRightVertex = mesh.vertices.OrderBy(v => (new Vector3(v.x, 0.0f, v.z) - backRight).sqrMagnitude).First();
+        var frontLeftVertex = mesh.vertices.OrderBy(v => (new Vector3(v.x, 0.0f, v.z) - frontLeft).sqrMagnitude).First();
+        var frontRightVertex = mesh.vertices.OrderBy(v => (new Vector3(v.x, 0.0f, v.z) - frontRight).sqrMagnitude).First();
+
+        //Debug.Log($"{mesh.name} {backLeftVertex.y} {backRightVertex.y} {frontLeftVertex.y} {frontRightVertex.y}");
+
         return new MeshData
             {
                 name = mesh.name,
@@ -100,7 +117,11 @@ public class MeshLoader
                 leftBoundary = leftBoundary.ToArray(),
                 rightBoundary = rightBoundary.ToArray(),
                 frontBoundary = frontBoundary.ToArray(),
-                backBoundary = backBoundary.ToArray()
+                backBoundary = backBoundary.ToArray(),
+                backLeftHeight = backLeftVertex.y,
+                backRightHeight = backRightVertex.y,
+                frontLeftHeight = frontLeftVertex.y,
+                frontRightHeight = frontRightVertex.y
             };
     }
 }

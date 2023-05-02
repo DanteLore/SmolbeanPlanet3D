@@ -9,5 +9,9 @@ public class MeshData
     public Edge[] rightBoundary;
     public Edge[] frontBoundary;
     public Edge[] backBoundary;
+    public float backLeftHeight;
+    public float backRightHeight;
+    public float frontLeftHeight;
+    public float frontRightHeight;
 }
 

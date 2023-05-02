@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class MapGenerator 
 {
-    private int mapWidth;
-    private int mapHeight;
+    private int drawMapWidth;
+    private int drawMapHeight;
+    private int gameMapWidth;
+    private int gameMapHeight;
     private float coastRadius = 0.8f;
     private Dictionary<String, MeshData> meshData;
     private Dictionary<String, NeighbourData> neighbourData;
@@ -15,41 +17,75 @@ public class MapGenerator
     private Dictionary<string, double> tileProbabilities;
     private Vector2 mapCentre;
 
-    public MapGenerator(int mapWidth, int mapHeight, float coastRadius, List<MeshData> meshData, Dictionary<String, NeighbourData> neighbourData)
+    public MapGenerator(int gameMapWidth, int gameMapHeight, float coastRadius, List<MeshData> meshData, Dictionary<String, NeighbourData> neighbourData)
     {
-        this.mapWidth = mapWidth;
-        this.mapHeight = mapHeight;
+        this.gameMapWidth = gameMapWidth;
+        this.gameMapHeight = gameMapHeight;
+        this.drawMapWidth = gameMapWidth + 1;
+        this.drawMapHeight = gameMapHeight + 1;
         this.coastRadius = coastRadius;
         this.meshData = meshData.ToDictionary(md => md.name, md => md);
         this.neighbourData = neighbourData;
 
         allTileOptions = neighbourData.Keys.ToList();
-        mapCentre = new Vector2(mapWidth / 2, mapHeight / 2);
+        mapCentre = new Vector2(drawMapWidth / 2.0f, drawMapHeight / 2.0f);
     }
 
-    public MeshData[] GenerateMap()
+    public MeshData[] GenerateMap(int[] gameMap)
     {
-        MapSquareOptions[] displayMap = InitialiseMap();
+        MapSquareOptions[] drawMap = InitialiseMap();
         InitialiseTileProbabilities();
 
-        
-        AddOcean(displayMap);
+        ApplyGameMapRestrictions(gameMap, drawMap);
+        AddOcean(drawMap);
 
-
-        while (displayMap.Any(ms => !ms.IsCollapsed))
+        while (drawMap.Any(ms => !ms.IsCollapsed))
         {
             // Select square that isn't collapsed yet with lowest possibilities
-            var target = displayMap.Where(ms => !ms.IsCollapsed).OrderBy(ms => ms.NumberOfPossibilities).ThenByDescending(DistanceFromMapCentre).First();
+            var target = drawMap.Where(ms => !ms.IsCollapsed).OrderBy(ms => ms.NumberOfPossibilities).ThenByDescending(DistanceFromMapCentre).First();
             string tile = SelectWeightedRandomTile(target);
             target.Choose(tile);
 
             // Collapse outward - recurse until stable
-            CollapseAt(target, displayMap);
+            CollapseAt(target, drawMap);
         }
 
-        var tiles = displayMap.Select(m => meshData[m.TileName]).ToArray();
+        var tiles = drawMap.Select(m => meshData[m.TileName]).ToArray();
 
         return tiles;
+    }
+
+    private void ApplyGameMapRestrictions(int[] gameMap, MapSquareOptions[] drawMap)
+    {
+        for(int y = 0; y < gameMapHeight; y++)
+        {
+            for(int x = 0; x < gameMapWidth; x++)
+            {
+                int level = gameMap[y * gameMapWidth + x];
+
+                var backLeft = drawMap[(y + 1) * drawMapWidth + x];
+                var backRight = drawMap[(y + 1) * drawMapWidth + x + 1];
+                var frontLeft = drawMap[y * drawMapWidth + x];
+                var frontRight = drawMap[y * drawMapWidth + x + 1];
+
+                string[] allowedBackLeft = allTileOptions.Where(t => neighbourData[t].frontRightLevel == level).ToArray();
+                string[] allowedBackRight = allTileOptions.Where(t => neighbourData[t].frontleftLevel == level).ToArray();
+                string[] allowedFrontLeft = allTileOptions.Where(t => neighbourData[t].backRightLevel == level).ToArray();
+                string[] allowedFrontRight = allTileOptions.Where(t => neighbourData[t].backLeftLevel == level).ToArray();
+
+                backLeft.Restrict(allowedBackLeft);
+                CollapseAt(backLeft, drawMap);
+
+                backRight.Restrict(allowedBackRight);
+                CollapseAt(backRight, drawMap);
+
+                frontLeft.Restrict(allowedFrontLeft);
+                CollapseAt(frontLeft, drawMap);
+
+                frontRight.Restrict(allowedFrontRight);
+                CollapseAt(frontRight, drawMap);
+            }
+        }
     }
 
     private float DistanceFromMapCentre(MapSquareOptions ms)
@@ -59,28 +95,28 @@ public class MapGenerator
 
     private MapSquareOptions[] InitialiseMap()
     {
-        var map = new MapSquareOptions[mapHeight * mapWidth];
-        for (int y = 0; y < mapHeight; y++)
-            for (int x = 0; x < mapWidth; x++)
-                map[y * mapWidth + x] = new MapSquareOptions(x, y, allTileOptions);
-        return map;
+        var drawMap = new MapSquareOptions[drawMapHeight * drawMapWidth];
+        for (int y = 0; y < drawMapHeight; y++)
+            for (int x = 0; x < drawMapWidth; x++)
+                drawMap[y * drawMapWidth + x] = new MapSquareOptions(x, y, allTileOptions);
+        return drawMap;
     }
 
-    private void AddOcean(MapSquareOptions[] map)
+    private void AddOcean(MapSquareOptions[] drawMap)
     {
-        float radius = (Mathf.Min(mapHeight, mapWidth) / 2) * coastRadius;
+        float radius = (Mathf.Min(drawMapHeight, drawMapWidth) / 2) * coastRadius;
 
-        for (int y = 0; y < mapHeight; y++)
+        for (int y = 0; y < drawMapHeight; y++)
         {
-            for (int x = 0; x < mapWidth; x++)
+            for (int x = 0; x < drawMapWidth; x++)
             {
                 Vector2 pos = new Vector2(x, y);
 
                 if (Vector2.Distance(pos, mapCentre) > radius)
                 {
-                    var target = map[y * mapWidth + x];
+                    var target = drawMap[y * drawMapWidth + x];
                     target.Choose("Seabed");
-                    CollapseAt(target, map);
+                    CollapseAt(target, drawMap);
                 }
             }
         }
@@ -132,14 +168,14 @@ public class MapGenerator
         return choices.Last().I;
     }
 
-    private void CollapseAt(MapSquareOptions target, MapSquareOptions[] map)
+    private void CollapseAt(MapSquareOptions target, MapSquareOptions[] drawMap)
     {
         List<MapSquareOptions> recurseInto = new List<MapSquareOptions>();
         
         // Left
         if(target.X > 0)
         {
-            var left = map[target.Y * mapWidth + target.X - 1];
+            var left = drawMap[target.Y * drawMapWidth + target.X - 1];
             var allowed = target.Options.SelectMany(o => neighbourData[o].leftMatches).Distinct();
 
             if(left.Restrict(allowed))
@@ -147,9 +183,9 @@ public class MapGenerator
         }
         
         // Right
-        if(target.X < mapWidth - 1)
+        if(target.X < drawMapWidth - 1)
         {
-            var right = map[target.Y * mapWidth + target.X + 1];
+            var right = drawMap[target.Y * drawMapWidth + target.X + 1];
             var allowed = target.Options.SelectMany(o => neighbourData[o].rightMatches).Distinct();
 
             if(right.Restrict(allowed))
@@ -159,7 +195,7 @@ public class MapGenerator
         // Front
         if(target.Y > 0)
         {
-            var front = map[(target.Y - 1) * mapWidth + target.X];
+            var front = drawMap[(target.Y - 1) * drawMapWidth + target.X];
             var allowed = target.Options.SelectMany(o => neighbourData[o].frontMatches).Distinct();
 
             if(front.Restrict(allowed))
@@ -167,9 +203,9 @@ public class MapGenerator
         }
         
         // Back
-        if(target.Y < mapHeight - 1)
+        if(target.Y < drawMapHeight - 1)
         {
-            var back = map[(target.Y + 1) * mapWidth + target.X];
+            var back = drawMap[(target.Y + 1) * drawMapWidth + target.X];
             var allowed = target.Options.SelectMany(o => neighbourData[o].backMatches).Distinct();
 
             if(back.Restrict(allowed))
@@ -178,6 +214,6 @@ public class MapGenerator
 
         recurseInto = recurseInto.ToList();
         foreach(var square in recurseInto)
-            CollapseAt(square, map);
+            CollapseAt(square, drawMap);
     }
 }

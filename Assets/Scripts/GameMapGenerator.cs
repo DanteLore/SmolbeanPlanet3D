@@ -13,6 +13,10 @@ public class GameMapGenerator : MonoBehaviour
     public float noiseScale1 = 0.3f;
     public float noiseScale2 = 0.1f;
 
+    private int[] gameMap;
+
+    public int[] GameMap { get { return gameMap; }}
+
     void Start()
     {
         if(previewPlane != null)
@@ -24,15 +28,20 @@ public class GameMapGenerator : MonoBehaviour
     public void GenerateMap()
     {
         float[] noise = GenerateNoiseMap();
-        int[] map = noise.Select(s => Mathf.FloorToInt(Mathf.Lerp(0.0f, 3.0f, s))).ToArray();
-        PreviewMap(map);
+        gameMap = noise.Select(s => Mathf.FloorToInt(Mathf.Lerp(0.0f, 3f, s))).Select(x => x > 2 ? 2 : x).ToArray();
+        PreviewMap(gameMap);
+    }
+
+    public void HidePreview()
+    {
+        previewPlane.SetActive(false);
     }
 
     private float[] GenerateNoiseMap()
     {
         Vector2 center = new Vector2(mapWidth / 2.0f, mapHeight / 2.0f);
         float maxDist = Mathf.Min(mapWidth, mapHeight) / 2.0f;
-        float[] map = new float[mapWidth * mapHeight];
+        float[] noiseMap = new float[mapWidth * mapHeight];
 
         // Offset the perlin noise, because otherwise it's the same every run!
         float xOffset = Random.Range(0.0f, 1000.0f);
@@ -44,37 +53,45 @@ public class GameMapGenerator : MonoBehaviour
         {
             for (int x = 0; x < mapHeight; x++)
             {
-                var pos = new Vector2(x, y);
-                float dist = Vector2.Distance(pos, center);
-
+                // Two layers of Perlin noise
                 float sample = Mathf.PerlinNoise((x + xOffset) / (mapWidth * noiseScale1), (y + yOffset) / (mapHeight * noiseScale1));
                 sample += Mathf.PerlinNoise((x + xOffset) / (mapWidth * noiseScale2), (y + yOffset) / (mapHeight * noiseScale2));
 
+                // Dropoff from centre
+                var pos = new Vector2(x, y);
+                float dist = Vector2.Distance(pos, center);
                 sample *= islandFalloff.Evaluate(dist / maxDist);
 
                 if (sample > max)
                     max = sample;
 
-                map[y * mapWidth + x] = sample;
+                noiseMap[y * mapWidth + x] = sample;
             }
         }
 
-        // Normalise
-        for (int i = 0; i < map.Length; i++)
-            map[i] = map[i] / max;
-        return map;
+        // Normalise WRT maximum
+        for (int i = 0; i < noiseMap.Length; i++)
+            noiseMap[i] = noiseMap[i] / max;
+
+        return noiseMap;
     }
 
     private void PreviewMap(int[] map)
     {
+        if(previewPlane == null)
+            return;
+     
+        previewPlane.SetActive(true);
+
         Texture2D texture = new Texture2D(mapWidth, mapHeight);
         texture.filterMode = FilterMode.Point;
 
-        var material = GetComponent<Renderer>().material;
+        var material = previewPlane.GetComponent<Renderer>().material;
         material.mainTexture = texture;
         material.SetFloat("_Smoothness", 0.0f);
 
-        for (int y = 0; y < mapWidth; y++)
+        // Walk y backwards, because textures start in the top left
+        for (int y = mapWidth - 1; y >= 0; y--)
         {
             for (int x = 0; x < mapHeight; x++)
             {
@@ -82,11 +99,11 @@ public class GameMapGenerator : MonoBehaviour
 
                 Color color = Color.blue;
 
-                if (i >= 2)
+                if (i == 2)
                 {
                     color = new Color(0f, 1.0f, 0f);
                 }
-                else if (i >= 1)
+                else if (i == 1)
                 {
                     color = new Color(0f, 0.75f, 0f);
                 }

@@ -22,13 +22,34 @@ public class NeighbourSelector
 
     private NeighbourData CreateNeighbourData(MeshData target)
     {
+        var cornerLevelData = GetCornerLevelData(target);
+
+        //Debug.Log(target.name + " --> " + String.Join(",", cornerLevelData));
+
         return new NeighbourData
         {
             name = target.name,
             leftMatches = meshData.Where(md => BoundariesMatch(target.leftBoundary, md.rightBoundary)).Select(meshData => meshData.name).ToList(),
             rightMatches = meshData.Where(md => BoundariesMatch(target.rightBoundary, md.leftBoundary)).Select(meshData => meshData.name).ToList(),
             frontMatches = meshData.Where(md => BoundariesMatch(target.frontBoundary, md.backBoundary)).Select(meshData => meshData.name).ToList(),
-            backMatches = meshData.Where(md => BoundariesMatch(target.backBoundary, md.frontBoundary)).Select(meshData => meshData.name).ToList()
+            backMatches = meshData.Where(md => BoundariesMatch(target.backBoundary, md.frontBoundary)).Select(meshData => meshData.name).ToList(),
+            backLeftLevel = cornerLevelData[0],
+            backRightLevel = cornerLevelData[1],
+            frontleftLevel = cornerLevelData[2],
+            frontRightLevel = cornerLevelData[3]
+        };
+    }
+
+    private int[] GetCornerLevelData(MeshData target)
+    {
+        float meshHeight = 2.0f;
+        float fudge = 0.1f;
+
+        return new int[] {
+            Mathf.FloorToInt((target.backLeftHeight) / meshHeight) + 1,
+            Mathf.FloorToInt((target.backRightHeight) / meshHeight) + 1,
+            Mathf.FloorToInt((target.frontLeftHeight) / meshHeight) + 1,
+            Mathf.FloorToInt((target.frontRightHeight) / meshHeight) + 1
         };
     }
 

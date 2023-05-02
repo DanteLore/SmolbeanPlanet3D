@@ -6,9 +6,6 @@ using System.Collections.Generic;
 public class GridManager : MonoBehaviour
 {
     public Material meshMaterial;
-
-    public int mapWidth = 10;
-    public int mapHeight = 10;
     public float tileSize = 4.0f;
     public float fuzzyEdgeFactor = 0.01f;
 
@@ -21,8 +18,17 @@ public class GridManager : MonoBehaviour
 
     private MeshData[] map;
 
+    private int drawMapWidth;
+    private int drawMapHeight;
+
     public void Recreate()
     {
+        GameMapGenerator gameMapGenerator = GetComponent<GameMapGenerator>();
+        int gameMapWidth = gameMapGenerator.mapWidth;
+        int gameMapHeight = gameMapGenerator.mapHeight;
+        drawMapWidth = gameMapWidth + 1;
+        drawMapHeight = gameMapHeight + 1;
+
         ClearMap();
 
         var meshData = new MeshLoader(fuzzyEdgeFactor).LoadMeshes();
@@ -36,21 +42,21 @@ public class GridManager : MonoBehaviour
         Debug.Log("Front: " + String.Join(", ", nd.frontMatches));
         Debug.Log("Back: " + String.Join(", ", nd.backMatches));
 
-        map = new MapGenerator(mapWidth, mapHeight, coastRadius, meshData, neighbourData).GenerateMap();
+        map = new MapGenerator(gameMapWidth, gameMapHeight, coastRadius, meshData, neighbourData).GenerateMap(gameMapGenerator.GameMap);
         DrawMap();
     }
 
     private void DrawMap()
     {
-        Vector3 offset = new Vector3((mapWidth * tileSize) / 2, 0.0f, (mapHeight * tileSize) / 2);
+        Vector3 offset = new Vector3((drawMapWidth * tileSize) / 2, 0.0f, (drawMapHeight * tileSize) / 2);
 
-        for (int x = 0; x < mapWidth; x++)
+        for (int x = 0; x < drawMapWidth; x++)
         {
-            for (int z = 0; z < mapHeight; z++)
+            for (int z = 0; z < drawMapHeight; z++)
             {
                 // In future it might make sense to look at creating one big mesh here, rather than separate game objects... maybe.
                 var pos = new Vector3(x * tileSize, 0, z * tileSize);
-                MeshData meshData = map[z * mapWidth + x];
+                MeshData meshData = map[z * drawMapWidth + x];
 
                 var tileObj = new GameObject();
                 tileObj.transform.position = pos - offset;

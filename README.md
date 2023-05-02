@@ -1,10 +1,21 @@
 
 
+# TO DO List
+
+* Trees, Rocks and other resources
+* Merge all the tile meshes into a single mesh for better performance
+* Add a navigation mesh for the island
+* A woodcutters hut
+* A woodcutter, who goes and chops down trees
+
 # Devlog and Screenshots
 
 Newest entries at the top :)
 
 ## More tweaks to wave function collapse
+
+It's working!  Using the Perlin noise "game map" as "bones" for an island, wave function collapse then skins it, using available tiles!
+![Screenshot](./Docs/Images/screenshot19.png)
 
 Created a quick script to create islands with Perlin noise, which will form the "game map" underneath the mesh.  Wave function collapse will be used to "skin" this map.
 ![Screenshot](./Docs/Images/islands.gif)

@@ -8,7 +8,7 @@ public class GridManagerEditor : Editor
     {
         base.OnInspectorGUI();
 
-        if(GUILayout.Button("Recreate"))
+        if(GUILayout.Button("Wave Function Collapse"))
         {
             var gridManager = (GridManager)target;
             gridManager.Recreate();
