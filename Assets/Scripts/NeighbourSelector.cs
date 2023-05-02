@@ -43,7 +43,6 @@ public class NeighbourSelector
     private int[] GetCornerLevelData(MeshData target)
     {
         float meshHeight = 2.0f;
-        float fudge = 0.1f;
 
         return new int[] {
             Mathf.FloorToInt((target.backLeftHeight) / meshHeight) + 1,

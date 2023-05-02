@@ -2,8 +2,10 @@
 
 # TO DO List
 
-* Trees, Rocks and other resources
 * Merge all the tile meshes into a single mesh for better performance
+* Remove hard coded level count and either infer it from the meshes or set it in code
+* Add 2-level cliffs to allow noisier maps
+* Trees, Rocks and other resources
 * Add a navigation mesh for the island
 * A woodcutters hut
 * A woodcutter, who goes and chops down trees
