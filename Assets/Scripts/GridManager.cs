@@ -97,7 +97,7 @@ public class GridManager : MonoBehaviour
         }
 
         var renderer = gameObject.AddComponent<MeshRenderer>();
-        renderer.material = meshMaterial;
+        renderer.sharedMaterial = meshMaterial;
         var meshFilter = gameObject.AddComponent<MeshFilter>();
 
         Mesh mesh = new Mesh();

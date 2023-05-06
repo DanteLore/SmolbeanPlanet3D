@@ -14,6 +14,11 @@
 
 Newest entries at the top :)
 
+## Making a game
+
+Added some trees and a basic woodcutter's hut.
+![Screenshot](./Docs/Images/screenshot20.png)
+
 ## More tweaks to wave function collapse
 
 It's working!  Using the Perlin noise "game map" as "bones" for an island, wave function collapse then skins it, using available tiles!

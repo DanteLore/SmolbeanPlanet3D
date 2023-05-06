@@ -34,7 +34,6 @@ public class MapGenerator
     public MeshData[] GenerateMap(int[] gameMap)
     {
         MapSquareOptions[] drawMap = InitialiseMap();
-        InitialiseTileProbabilities();
 
         ApplyGameMapRestrictions(gameMap, drawMap);
         AddOcean(drawMap);
@@ -122,34 +121,11 @@ public class MapGenerator
         }
     }
 
-    private void InitialiseTileProbabilities()
-    {
-        tileProbabilities = new Dictionary<string, double>();
-        foreach (var tileName in allTileOptions)
-        {
-            double p = 1.0;
-
-            if (tileName.ToLower().Contains("sea"))
-                p *= 0.1;
-
-            if (tileName.ToLower().Contains("corner"))
-                p *= 0.8;
-
-            if (tileName.ToLower().Contains("floor"))
-                p *= 20.0;
-
-            if (tileName.ToLower().Contains("raised"))
-                p *= 20.0;
-
-            tileProbabilities.Add(tileName, p);
-        }
-    }
-
     private string SelectWeightedRandomTile(MapSquareOptions target)
     {
         // Add some noise to the values so we get a random sort order and break ties between items with the same weighting in a random way
         // Order by priority, biggest first
-        float noiseWeight = 0.001f;
+        float noiseWeight = 1f;
         var choices = target.Options.Select(o => (P: tileProbabilities[o] + rand.NextDouble() * noiseWeight, I: o)).OrderByDescending(c => c.P).ToList();
         
         double max = choices.Sum(c => c.P);
