@@ -13,14 +13,13 @@ public class GridManager : MonoBehaviour
 
     public bool mergeMeshes = true;
 
+    public string groundLayer = "Ground";
+
     private System.Random rand = new System.Random();
 
     public bool addMeshDebugGizmos = false;
 
     private MeshData[] map;
-
-    private int drawMapWidth;
-    private int drawMapHeight;
 
     private GameObject ground;
     private GameObject Ground 
@@ -39,6 +38,7 @@ public class GridManager : MonoBehaviour
                 {
                     ground = new GameObject();
                     ground.name = "Ground";
+                    ground.layer = LayerMask.NameToLayer(groundLayer);
                     ground.transform.parent = transform;
                 }
             }
@@ -47,14 +47,25 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    private GameMapGenerator gameMapGenerator;
+    protected GameMapGenerator GameMapGenerator
+    {
+        get
+        {
+            if(!gameMapGenerator)
+                gameMapGenerator = GetComponent<GameMapGenerator>();
+            return gameMapGenerator;
+        }
+    }
+
+    protected int GameMapWidth { get { return GameMapGenerator.mapWidth; }}
+    protected int GameMapHeight { get { return GameMapGenerator.mapHeight; }}
+
+    protected int DrawMapWidth { get { return GameMapWidth + 1; }}
+    protected int DrawMapHeight { get { return GameMapHeight + 1; }}
+
     public void Recreate()
     {
-        GameMapGenerator gameMapGenerator = GetComponent<GameMapGenerator>();
-        int gameMapWidth = gameMapGenerator.mapWidth;
-        int gameMapHeight = gameMapGenerator.mapHeight;
-        drawMapWidth = gameMapWidth + 1;
-        drawMapHeight = gameMapHeight + 1;
-
         ClearMap();
 
         var meshData = new MeshLoader(fuzzyEdgeFactor).LoadMeshes();
@@ -68,24 +79,24 @@ public class GridManager : MonoBehaviour
         //Debug.Log("Front: " + String.Join(", ", nd.frontMatches));
         //Debug.Log("Back: " + String.Join(", ", nd.backMatches));
 
-        map = new MapGenerator(gameMapWidth, gameMapHeight, coastRadius, meshData, neighbourData).GenerateMap(gameMapGenerator.GameMap);
+        map = new MapGenerator(GameMapWidth, GameMapHeight, coastRadius, meshData, neighbourData).GenerateMap(GameMapGenerator.GameMap);
         DrawMap();
     }
 
     private void DrawMap()
     {
+        Vector3 offset = new Vector3((DrawMapWidth * tileSize) / 2.0f, 0.0f, (DrawMapHeight * tileSize) / 2.0f);
 
-        Vector3 offset = new Vector3((drawMapWidth * tileSize) / 2, 0.0f, (drawMapHeight * tileSize) / 2);
-
-        for (int x = 0; x < drawMapWidth; x++)
+        for (int x = 0; x < DrawMapWidth; x++)
         {
-            for (int z = 0; z < drawMapHeight; z++)
+            for (int z = 0; z < DrawMapHeight; z++)
             {
                 // In future it might make sense to look at creating one big mesh here, rather than separate game objects... maybe.
                 var pos = new Vector3(x * tileSize, 0, z * tileSize);
-                MeshData meshData = map[z * drawMapWidth + x];
+                MeshData meshData = map[z * DrawMapWidth + x];
 
                 var tileObj = new GameObject();
+                tileObj.layer = LayerMask.NameToLayer(groundLayer);
                 tileObj.transform.position = pos - offset;
                 tileObj.AddComponent<MeshRenderer>();
                 var meshFilter = tileObj.AddComponent<MeshFilter>();
@@ -141,5 +152,26 @@ public class GridManager : MonoBehaviour
         meshFilter.sharedMesh = mesh;
 
         var collider = Ground.AddComponent<MeshCollider>();
+    }
+
+    internal Rect GetSquareBounds(int gameX, int gameZ)
+    {
+        float meshX = (gameX * tileSize) - ((DrawMapWidth * tileSize) / 2.0f);
+        float meshZ = (gameZ * tileSize) - ((DrawMapHeight * tileSize) / 2.0f);
+
+        return new Rect(meshX, meshZ, tileSize, tileSize);
+    }
+
+    internal float GetGridHeightAt(float worldX, float worldZ)
+    { 
+        Ray ray = new Ray(new Vector3(worldX, 100f, worldZ), Vector3.down);
+        if (Physics.Raycast(ray, out RaycastHit hit, 200f, LayerMask.GetMask(groundLayer))) 
+        {
+            return hit.point.y;
+        }
+        else
+        {
+            return float.NaN;
+        }
     }
 }
