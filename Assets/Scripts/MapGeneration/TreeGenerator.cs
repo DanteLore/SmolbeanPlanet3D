@@ -17,6 +17,10 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
     public float scaleMax = 1.2f;
     public float scaleMin = 0.8f;
     public float tiltMaxDegrees = 6.0f;
+    public float edgeBuffer = 0.1f;
+
+    public float noiseScale = 0.1f;
+    public float noiseThreshold = 0.5f;
 
     private int[] gameMap;
     private int mapWidth;
@@ -34,6 +38,9 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         mapWidth = gameMapGenerator.mapWidth;
         mapHeight = gameMapGenerator.mapHeight;
 
+        float xOffset = UnityEngine.Random.Range(0f, 1000f);
+        float yOffset = UnityEngine.Random.Range(0f, 1000f);
+
         gridManager = GameObject.FindAnyObjectByType<GridManager>();
 
         for(int z = 0; z < mapHeight; z++)
@@ -42,7 +49,12 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
             {
                 if(gameMap[z * mapWidth + x] > 0)
                 {
-                    CreateTreeAt(z, x);
+                    float sample = Mathf.PerlinNoise((x + xOffset) / (mapWidth * noiseScale), (z + yOffset) / (mapHeight * noiseScale));
+
+                    if(sample > noiseThreshold)
+                    {
+                        CreateTreeAt(z, x);
+                    }
                 }
             }
         }
@@ -58,8 +70,9 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         tree.transform.parent = treeParent.transform;
         tree.layer = LayerMask.NameToLayer(treeLayer);
 
-        float worldX = UnityEngine.Random.Range(squareBounds.xMin, squareBounds.xMax);
-        float worldZ = UnityEngine.Random.Range(squareBounds.yMin, squareBounds.yMax);
+        float buffer = gridManager.tileSize * edgeBuffer;
+        float worldX = UnityEngine.Random.Range(squareBounds.xMin + buffer, squareBounds.xMax - buffer);
+        float worldZ = UnityEngine.Random.Range(squareBounds.yMin + buffer, squareBounds.yMax - buffer);
         float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
         tree.transform.position = new Vector3(worldX, worldY, worldZ);
 
