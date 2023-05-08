@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 [Serializable]
 public struct TreeData
@@ -83,6 +84,12 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
 
         float scale = UnityEngine.Random.Range(scaleMin, scaleMax);
         tree.transform.localScale = new Vector3(scale, scale, scale);
+
+//        var collider = tree.GetComponentInChildren<CapsuleCollider>();
+//        var nmo = tree.AddComponent<NavMeshObstacle>();
+//        nmo.shape = NavMeshObstacleShape.Capsule;
+//        nmo.radius = collider.radius;
+//        nmo.height = collider.height;
     }
 
     public void Clear()
