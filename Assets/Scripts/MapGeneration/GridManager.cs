@@ -174,4 +174,15 @@ public class GridManager : MonoBehaviour
             return float.NaN;
         }
     }
+
+    internal Vector2Int GetGameSquareFromWorldCoords(Vector3 point)
+    {
+        float x = point.x + ((DrawMapWidth * tileSize) / 2.0f);
+        float y = point.z + ((DrawMapHeight * tileSize) / 2.0f);
+
+        x /= tileSize;
+        y /= tileSize;
+
+        return new Vector2Int(Mathf.FloorToInt(x), Mathf.FloorToInt(y));
+    }
 }

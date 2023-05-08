@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6187909461497170876}
   - component: {fileID: 326769973199409683}
   - component: {fileID: 399232774062234211}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WoodcuttersHut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2438480268290694441}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

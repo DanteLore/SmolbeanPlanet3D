@@ -17,8 +17,6 @@ public class Woodcutter : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("I'm alive!");
-
         hut = GetComponentInParent<WoodcuttersHut>();
         spawnPoint = hut.spawnPoint.transform.position;
         navAgent = GetComponent<NavMeshAgent>();
@@ -36,11 +34,8 @@ public class Woodcutter : MonoBehaviour
             var tree = GetTree(transform.position);
 
             if (tree == null)
-            {
-                Debug.Log("No trees left!");
                 break;
-            }
-
+                
             var dest = tree.transform.position;
             navAgent.SetDestination(dest);
             navAgent.isStopped = false;
@@ -53,7 +48,6 @@ public class Woodcutter : MonoBehaviour
 
                 if(stillTime > 10.0f)
                 {
-                    Debug.Log("I got stuck!  Going to blacklist this tree");
                     blacklist.Add(tree);
                     tree = null;
                     yield return new WaitForSeconds(1);
@@ -67,14 +61,11 @@ public class Woodcutter : MonoBehaviour
 
             if(tree)
             {
-                Debug.Log("Gonna chop this here tree!");
                 navAgent.isStopped = true;
                 yield return new WaitForSeconds(3);
                 Destroy(tree);
                 yield return new WaitForSeconds(2);
             }
-
-            Debug.Log("Headin' home");
             dest = spawnPoint;
             navAgent.SetDestination(dest);
             navAgent.isStopped = false;
@@ -83,12 +74,10 @@ public class Woodcutter : MonoBehaviour
             while (!CloseEnoughTo(dest))
                 yield return null;
 
-            Debug.Log("Home again.  Time for a snooze");
             navAgent.isStopped = true;
             body.SetActive(false);
             yield return new WaitForSeconds(5);
 
-            Debug.Log("Back to work!");
             body.SetActive(true);
         }
     }

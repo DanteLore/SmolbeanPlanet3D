@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5678464011766705148}
   - component: {fileID: 5678464011766705149}
   - component: {fileID: -8799437104107865017}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Woodcutter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,6 +85,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1bff9cede61d499b9cad2a2141b7ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hut: {fileID: 0}
+  spawnPoint: {x: 0, y: 0, z: 0}
+  TreeLayer: Nature
+  destinationThreshold: 1
 --- !u!1 &5678464012514408667
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +101,7 @@ GameObject:
   - component: {fileID: 5678464012514408647}
   - component: {fileID: 5678464012514408644}
   - component: {fileID: 5678464012514408645}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
