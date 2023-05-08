@@ -6,14 +6,14 @@ using UnityEngine;
 public class buildManager : MonoBehaviour
 {
     public GameObject mapCursorPrefab;
+    public GameObject buildingPrefab;
     public string groundLayer = "Ground";
     public string[] collisionLayers = { "Nature", "Buildings", "Creatures" };
 
     private GridManager gridManager;
     private GameMapGenerator gameMapGenerator;
-    private Vector2Int currentSquare;
-
     private GameObject mapCursor;
+    private Vector2Int currentSquare;
 
     void Start()
     {
@@ -28,11 +28,13 @@ public class buildManager : MonoBehaviour
     void Update()
     {
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(ray, out var hitInfo, LayerMask.GetMask(groundLayer)))
+        if(Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(groundLayer)))
         {
             Vector2Int newSquare = gridManager.GetGameSquareFromWorldCoords(hitInfo.point);
 
-            if(newSquare != currentSquare)
+            bool mouseDown = Input.GetMouseButtonDown(0);
+
+            if(newSquare != currentSquare || mouseDown)
             {
                 currentSquare = newSquare;
 
@@ -47,7 +49,17 @@ public class buildManager : MonoBehaviour
                     float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
                     var center = new Vector3(worldX, worldY, worldZ);
 
-                    Color color = CheckFlat(bounds) && CheckEmpty(center) ? Color.blue : Color.red;
+                    Color color = Color.red;
+
+                    if(CheckFlat(bounds) && CheckEmpty(center))
+                    {
+                        color = Color.blue;
+
+                        if(mouseDown)
+                        {
+                            PlaceBuilding(center);
+                        }
+                    }
 
                     mapCursor.transform.position = center;
                     mapCursor.GetComponent<Renderer>().material.SetColor("_baseColor", color);
@@ -59,6 +71,15 @@ public class buildManager : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            mapCursor.SetActive(false);
+        }
+    }
+
+    private void PlaceBuilding(Vector3 pos)
+    {
+        var building = Instantiate(buildingPrefab, pos, Quaternion.identity, transform);
     }
 
     private bool CheckEmpty(Vector3 center)

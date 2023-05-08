@@ -1,17 +1,16 @@
 using UnityEngine;
 using System.Linq;
 using System;
+using Unity.AI.Navigation;
 
 public class GridManager : MonoBehaviour
 {
     public Material meshMaterial;
-    public float tileSize = 4.0f;
     public float fuzzyEdgeFactor = 0.01f;
+    public float tileSize = 4.0f;
 
     [Range(0.0f, 1.0f)]
     public float coastRadius = 0.8f;
-
-    public bool mergeMeshes = true;
 
     public string groundLayer = "Ground";
 
@@ -21,31 +20,8 @@ public class GridManager : MonoBehaviour
 
     private MeshData[] map;
 
-    private GameObject ground;
-    private GameObject Ground 
-    {
-        get
-        {
-            if(ground == null)
-            {
-                var tf = transform.Find("Ground");
-
-                if(tf != null)
-                {
-                    ground = tf.gameObject;
-                }
-                else
-                {
-                    ground = new GameObject();
-                    ground.name = "Ground";
-                    ground.layer = LayerMask.NameToLayer(groundLayer);
-                    ground.transform.parent = transform;
-                }
-            }
-
-            return ground;
-        }
-    }
+    private GameObject Ground { get { return transform.Find("Ground").gameObject; }}
+    private GameObject Seabed { get { return transform.Find("Seabed").gameObject; }}
 
     private GameMapGenerator gameMapGenerator;
     protected GameMapGenerator GameMapGenerator
@@ -68,7 +44,7 @@ public class GridManager : MonoBehaviour
     {
         ClearMap();
 
-        var meshData = new MeshLoader(fuzzyEdgeFactor).LoadMeshes();
+        var meshData = GetComponent<MeshLoader>().LoadMeshes();
         print($"Loaded {meshData.Count()} meshes");
 
         var neighbourData = new NeighbourSelector(fuzzyEdgeFactor, meshData).SelectNeighbours();
@@ -81,6 +57,13 @@ public class GridManager : MonoBehaviour
 
         map = new MapGenerator(GameMapWidth, GameMapHeight, coastRadius, meshData, neighbourData).GenerateMap(GameMapGenerator.GameMap);
         DrawMap();
+        UpdateNavMesh();
+    }
+
+    private void UpdateNavMesh()
+    {
+        var surface = Ground.GetComponent<NavMeshSurface>();
+        surface.BuildNavMesh();
     }
 
     private void DrawMap()
@@ -91,11 +74,11 @@ public class GridManager : MonoBehaviour
         {
             for (int z = 0; z < DrawMapHeight; z++)
             {
-                // In future it might make sense to look at creating one big mesh here, rather than separate game objects... maybe.
+                // In future it might make sense to look at creating one big mesh here, rather than separate game objects then merging them... maybe.
                 var pos = new Vector3(x * tileSize, 0, z * tileSize);
                 MeshData meshData = map[z * DrawMapWidth + x];
 
-                var tileObj = new GameObject();
+                var tileObj = new GameObject($"({x}, 0, {z}) {meshData.name}");
                 tileObj.layer = LayerMask.NameToLayer(groundLayer);
                 tileObj.transform.position = pos - offset;
                 tileObj.AddComponent<MeshRenderer>();
@@ -104,16 +87,13 @@ public class GridManager : MonoBehaviour
                 var collider = tileObj.AddComponent<MeshCollider>();
                 tileObj.GetComponent<Renderer>().sharedMaterial = meshMaterial;
 
-                if(addMeshDebugGizmos)
-                    tileObj.AddComponent<DebugMesh>();
-
-                tileObj.transform.parent = Ground.transform;
-                tileObj.name = $"({x}, 0, {z}) {meshData.name}";
+                // Seabed is created to a separate mesh, as only the ground should be navigable
+                tileObj.transform.parent = meshData.name.StartsWith("Seabed") ? Seabed.transform : Ground.transform;
             }
         }
 
-        if(mergeMeshes)
-            MergeMeshes();
+        MergeMeshes(Ground);
+        MergeMeshes(Seabed);
     }
 
     private void ClearMap()
@@ -123,13 +103,24 @@ public class GridManager : MonoBehaviour
 
         while (Ground.transform.childCount > 0)
             DestroyImmediate(Ground.transform.GetChild(0).gameObject);
+
+        while (Seabed.transform.childCount > 0)
+            DestroyImmediate(Seabed.transform.GetChild(0).gameObject);
         
-        DestroyImmediate(Ground);
+        DestroyImmediate(Ground.GetComponent<MeshFilter>());
+        DestroyImmediate(Ground.GetComponent<MeshRenderer>());
+        DestroyImmediate(Ground.GetComponent<MeshCollider>());
+        DestroyImmediate(Ground.GetComponent<DebugMesh>());
+        
+        DestroyImmediate(Seabed.GetComponent<MeshFilter>());
+        DestroyImmediate(Seabed.GetComponent<MeshRenderer>());
+        DestroyImmediate(Seabed.GetComponent<MeshCollider>());
+        DestroyImmediate(Seabed.GetComponent<DebugMesh>());
     }
 
-    private void MergeMeshes()
+    private void MergeMeshes(GameObject parent)
     {
-        MeshFilter[] meshFilters = Ground.GetComponentsInChildren<MeshFilter>();
+        MeshFilter[] meshFilters = parent.GetComponentsInChildren<MeshFilter>();
         CombineInstance[] combine = new CombineInstance[meshFilters.Length];
 
         int i = 0;
@@ -142,16 +133,19 @@ public class GridManager : MonoBehaviour
             i++;
         }
 
-        var renderer = Ground.AddComponent<MeshRenderer>();
+        var renderer = parent.AddComponent<MeshRenderer>();
         renderer.sharedMaterial = meshMaterial;
-        var meshFilter = Ground.AddComponent<MeshFilter>();
+        var meshFilter = parent.AddComponent<MeshFilter>();
 
         Mesh mesh = new Mesh();
         mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
         mesh.CombineMeshes(combine);
         meshFilter.sharedMesh = mesh;
 
-        var collider = Ground.AddComponent<MeshCollider>();
+        var collider = parent.AddComponent<MeshCollider>();
+
+        if(addMeshDebugGizmos)
+            parent.AddComponent<DebugMesh>();
     }
 
     internal Rect GetSquareBounds(int gameX, int gameZ)

@@ -3,19 +3,27 @@ using System.Linq;
 using UnityEditor;
 using System.Collections.Generic;
 
-public class MeshLoader
+public class MeshLoader : MonoBehaviour
 {
-    private float fuzzyEdgeFactor;
+    public float fuzzyEdgeFactor = 0.01f;
 
-    public MeshLoader(float fuzzyEdgeFactor)
-    {
-        this.fuzzyEdgeFactor = fuzzyEdgeFactor;
-    }
+    public string assetPath = "Assets/Meshes/CubicTerrain.fbx";
 
     public List<MeshData> LoadMeshes()
     {
-        // Loading this from Resources rather than using an editor property seems a bit nasty, but it works, and I can't find anything else that does.
-        var meshesInFile = Resources.LoadAll<Mesh>("TileMeshes"); // Passed here is the name of the folder that contains the FBX file. within '/Resources'.
+
+        // Still more work to do here. Really, this needs to be an editor script which loads the meshes into the GridManager for use either at runtime or in edit mode.
+
+#if UNITY_EDITOR
+            var meshesInFile = AssetDatabase.LoadAllAssetsAtPath(assetPath)
+                .Where(o => o is Mesh)
+                .Select(m => (Mesh)m);
+#else
+            var meshesInFile = new Mesh[0];
+#endif
+
+        foreach(var m in meshesInFile)
+            Debug.Log(m.name);
 
         // Make copies of the meshes in the file, so any transformations etc don't mess things up
         var meshes = meshesInFile.Select(CloneMesh).ToList();
@@ -106,8 +114,6 @@ public class MeshLoader
         var backRightVertex = mesh.vertices.OrderBy(v => (new Vector3(v.x, 0.0f, v.z) - backRight).sqrMagnitude).First();
         var frontLeftVertex = mesh.vertices.OrderBy(v => (new Vector3(v.x, 0.0f, v.z) - frontLeft).sqrMagnitude).First();
         var frontRightVertex = mesh.vertices.OrderBy(v => (new Vector3(v.x, 0.0f, v.z) - frontRight).sqrMagnitude).First();
-
-        //Debug.Log($"{mesh.name} {backLeftVertex.y} {backRightVertex.y} {frontLeftVertex.y} {frontRightVertex.y}");
 
         return new MeshData
             {
