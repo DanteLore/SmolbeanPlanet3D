@@ -17,7 +17,7 @@ Newest entries at the top :)
 
 ## Making a game
 
-![[Video]](https://dantelore.com/assorted/Smolbean3D-1.m4v)
+[![Video]](https://dantelore.com/assorted/Smolbean3D-1.m4v)
 
 Forest Generation, using some tree prefabs I made myself, perlin noise and some random rotation, scale etc.
 ![Screenshot](./Docs/Images/screenshot21.png)
