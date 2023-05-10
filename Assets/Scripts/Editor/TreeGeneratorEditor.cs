@@ -12,6 +12,7 @@ public class TreeGeneratorEditor : Editor
         {
             var treeGenerator = (TreeGenerator)target;
             treeGenerator.GenerateTrees();
+            EditorUtility.SetDirty(target);
         }
     }
 }

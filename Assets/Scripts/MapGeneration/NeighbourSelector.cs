@@ -15,9 +15,9 @@ public class NeighbourSelector
         this.meshData = meshData;
     }
 
-    public Dictionary<int, NeighbourData> SelectNeighbours()
+    public IEnumerable<NeighbourData> SelectNeighbours()
     {
-        return meshData.Select(CreateNeighbourData).ToDictionary(nd => nd.id, nd => nd);
+        return meshData.Select(CreateNeighbourData);
     }
 
     private NeighbourData CreateNeighbourData(MeshData target)

@@ -52,8 +52,6 @@ public class MapGenerator
 
         var tiles = drawMap.Select(m => meshData[neighbourData[m.TileId].name]).ToArray();
 
-        Debug.Log($"    WFC done");
-
         return tiles;
     }
 

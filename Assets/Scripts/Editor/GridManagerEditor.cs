@@ -12,6 +12,7 @@ public class GridManagerEditor : Editor
         {
             var gridManager = (GridManager)target;
             gridManager.Recreate();
+            EditorUtility.SetDirty(target);
         }
     }
 }

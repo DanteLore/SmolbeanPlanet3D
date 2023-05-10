@@ -5,6 +5,7 @@ using Unity.AI.Navigation;
 
 public class GridManager : MonoBehaviour
 {
+    public TerrainData terrainData;
     public Material meshMaterial;
     public float fuzzyEdgeFactor = 0.01f;
     public float tileSize = 4.0f;
@@ -46,10 +47,8 @@ public class GridManager : MonoBehaviour
         
         ClearMap();
 
-        var meshData = GetComponent<MeshLoader>().LoadMeshes();
-        print($"Loaded {meshData.Count()} meshes");
-
-        var neighbourData = new NeighbourSelector(fuzzyEdgeFactor, meshData).SelectNeighbours();
+        var meshData = terrainData.meshData.ToList();
+        var neighbourData = terrainData.neighbourData.ToDictionary(nd => nd.id, nd => nd);
         
         map = new MapGenerator(GameMapWidth, GameMapHeight, coastRadius, meshData, neighbourData).GenerateMap(GameMapGenerator.GameMap);
 
