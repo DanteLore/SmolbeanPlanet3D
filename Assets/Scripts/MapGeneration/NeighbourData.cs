@@ -2,11 +2,12 @@ using System.Collections.Generic;
 
 public class NeighbourData
 {
+    public int id;
     public string name;
-    public List<string> leftMatches;
-    public List<string> rightMatches;
-    public List<string> frontMatches;
-    public List<string> backMatches;
+    public List<int> leftMatches;
+    public List<int> rightMatches;
+    public List<int> frontMatches;
+    public List<int> backMatches;
     public int backLeftLevel;
     public int backRightLevel;
     public int frontleftLevel;

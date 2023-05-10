@@ -4,31 +4,31 @@ using System;
 
 public class MapSquareOptions
 {
-    private List<string> options;
+    private List<int> options;
     public int X { get; private set; }
     public int Y { get; private set; }
 
     public bool IsCollapsed { get { return options.Count == 1; }}
 
-    public String TileName { get { return options.First(); }}
+    public int TileId { get { return options.First(); }}
 
     public int NumberOfPossibilities { get { return options.Count; }}
 
-    public IReadOnlyList<String> Options { get { return options; }}
+    public IReadOnlyList<int> Options { get { return options; }}
 
-    public MapSquareOptions(int x, int y, List<String> options)
+    public MapSquareOptions(int x, int y, List<int> options)
     {
         this.options = options;
         this.X = x;
         this.Y = y;
     }
 
-    public void Choose(String option)
+    public void Choose(int option)
     {
-        options = new List<string> { option };
+        options = new List<int> { option };
     }
 
-    public bool Restrict(IEnumerable<String> allowed)
+    public bool Restrict(IEnumerable<int> allowed)
     {
         int cnt = options.Count;
         options = options.Intersect(allowed).ToList();

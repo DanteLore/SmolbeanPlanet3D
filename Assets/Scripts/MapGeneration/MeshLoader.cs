@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class MeshLoader : MonoBehaviour
 {
     public float fuzzyEdgeFactor = 0.01f;
+    public float flatnessThreshold = 0.5f;
 
     public string assetPath = "Assets/Meshes/CubicTerrain.fbx";
 
@@ -22,19 +23,10 @@ public class MeshLoader : MonoBehaviour
             var meshesInFile = new Mesh[0];
 #endif
 
-        foreach(var m in meshesInFile)
-            Debug.Log(m.name);
-
-        // Make copies of the meshes in the file, so any transformations etc don't mess things up
-        var meshes = meshesInFile.Select(CloneMesh).ToList();
-
-        // Create rotated versions of the meshes
-        meshes = meshes.SelectMany(MeshRotatedFourWays).ToList();
-
-        // This is the one we're using, for now.
-        var meshData = meshes.Select(CreateMeshData).ToList();
-
-        return meshData;
+       return meshesInFile
+            .Select(CloneMesh)
+            .SelectMany(MeshRotatedFourWays)
+            .Select(CreateMeshData).ToList();
     }
 
     private Mesh CloneMesh(Mesh m)
@@ -54,6 +46,10 @@ public class MeshLoader : MonoBehaviour
     private IEnumerable<Mesh> MeshRotatedFourWays(Mesh mesh)
     {
         yield return mesh;
+
+        bool isRoughlyFlat = (mesh.vertices.Max(v => v.y) - mesh.vertices.Min(v => v.y)) <= flatnessThreshold;
+        if(isRoughlyFlat) // No need to create rotated versions if this tile is basically flat
+            yield break;
 
         yield return RotateMesh(CloneMesh(mesh), 90);
         yield return RotateMesh(CloneMesh(mesh), 180);
@@ -117,6 +113,7 @@ public class MeshLoader : MonoBehaviour
 
         return new MeshData
             {
+                id = mesh.name.GetHashCode(),
                 name = mesh.name,
                 mesh = mesh,
                 edges = edges.ToArray(),

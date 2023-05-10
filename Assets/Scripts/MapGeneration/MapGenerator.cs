@@ -11,13 +11,13 @@ public class MapGenerator
     private int gameMapHeight;
     private float coastRadius = 0.8f;
     private Dictionary<String, MeshData> meshData;
-    private Dictionary<String, NeighbourData> neighbourData;
+    private Dictionary<int, NeighbourData> neighbourData;
     private System.Random rand = new System.Random();
-    private List<string> allTileOptions;
-    private Dictionary<string, double> tileProbabilities;
+    private List<int> allTileOptions;
     private Vector2 mapCentre;
+    MapSquareOptions[] drawMap;
 
-    public MapGenerator(int gameMapWidth, int gameMapHeight, float coastRadius, List<MeshData> meshData, Dictionary<String, NeighbourData> neighbourData)
+    public MapGenerator(int gameMapWidth, int gameMapHeight, float coastRadius, List<MeshData> meshData, Dictionary<int, NeighbourData> neighbourData)
     {
         this.gameMapWidth = gameMapWidth;
         this.gameMapHeight = gameMapHeight;
@@ -29,36 +29,37 @@ public class MapGenerator
 
         allTileOptions = neighbourData.Keys.ToList();
         mapCentre = new Vector2(drawMapWidth / 2.0f, drawMapHeight / 2.0f);
-
-        // All probabilities are 1 for now.  Maybe add weights later!
-        tileProbabilities = allTileOptions.ToDictionary(o => o, _ => 1.0);
     }
 
-    public MeshData[] GenerateMap(int[] gameMap)
+    public MeshData[] GenerateMap(List<int> gameMap)
     {
-        MapSquareOptions[] drawMap = InitialiseMap();
+        drawMap = InitialiseMap();
 
-        ApplyGameMapRestrictions(gameMap, drawMap);
-        AddOcean(drawMap);
+        AddOcean();
+
+        ApplyGameMapRestrictions(gameMap);
 
         while (drawMap.Any(ms => !ms.IsCollapsed))
         {
             // Select square that isn't collapsed yet with lowest possibilities
-            var target = drawMap.Where(ms => !ms.IsCollapsed).OrderBy(ms => ms.NumberOfPossibilities).ThenByDescending(DistanceFromMapCentre).First();
-            string tile = SelectWeightedRandomTile(target);
+            var target = drawMap.Where(ms => !ms.IsCollapsed).OrderBy(ms => ms.NumberOfPossibilities).First();
+            int tile = SelectRandomTile(target);
             target.Choose(tile);
 
-            // Collapse outward - recurse until stable
-            CollapseAt(target, drawMap);
+            // Collapse - recurse until stable
+            CollapseAt(target);
         }
 
-        var tiles = drawMap.Select(m => meshData[m.TileName]).ToArray();
+        var tiles = drawMap.Select(m => meshData[neighbourData[m.TileId].name]).ToArray();
+
+        Debug.Log($"    WFC done");
 
         return tiles;
     }
 
-    private void ApplyGameMapRestrictions(int[] gameMap, MapSquareOptions[] drawMap)
+    private void ApplyGameMapRestrictions(List<int> gameMap)
     {
+        var recurseInto = new List<MapSquareOptions>();
         for(int y = 0; y < gameMapHeight; y++)
         {
             for(int x = 0; x < gameMapWidth; x++)
@@ -70,24 +71,22 @@ public class MapGenerator
                 var frontLeft = drawMap[y * drawMapWidth + x];
                 var frontRight = drawMap[y * drawMapWidth + x + 1];
 
-                string[] allowedBackLeft = allTileOptions.Where(t => neighbourData[t].frontRightLevel == level).ToArray();
-                string[] allowedBackRight = allTileOptions.Where(t => neighbourData[t].frontleftLevel == level).ToArray();
-                string[] allowedFrontLeft = allTileOptions.Where(t => neighbourData[t].backRightLevel == level).ToArray();
-                string[] allowedFrontRight = allTileOptions.Where(t => neighbourData[t].backLeftLevel == level).ToArray();
+                if(backLeft.Restrict(allTileOptions.Where(t => neighbourData[t].frontRightLevel == level)))
+                    recurseInto.Add(backLeft);
 
-                backLeft.Restrict(allowedBackLeft);
-                CollapseAt(backLeft, drawMap);
+                if(backRight.Restrict(allTileOptions.Where(t => neighbourData[t].frontleftLevel == level)))
+                    recurseInto.Add(backRight);
 
-                backRight.Restrict(allowedBackRight);
-                CollapseAt(backRight, drawMap);
+                if(frontLeft.Restrict(allTileOptions.Where(t => neighbourData[t].backRightLevel == level)))
+                    recurseInto.Add(frontLeft);
 
-                frontLeft.Restrict(allowedFrontLeft);
-                CollapseAt(frontLeft, drawMap);
-
-                frontRight.Restrict(allowedFrontRight);
-                CollapseAt(frontRight, drawMap);
+                if(frontRight.Restrict(allTileOptions.Where(t => neighbourData[t].backLeftLevel == level)))
+                    recurseInto.Add(frontRight);
             }
         }
+
+        foreach(var square in recurseInto)
+            CollapseAt(square);
     }
 
     private float DistanceFromMapCentre(MapSquareOptions ms)
@@ -104,9 +103,12 @@ public class MapGenerator
         return drawMap;
     }
 
-    private void AddOcean(MapSquareOptions[] drawMap)
+    private void AddOcean()
     {
         float radius = (Mathf.Min(drawMapHeight, drawMapWidth) / 2) * coastRadius;
+        var squaresToCollapse = new List<MapSquareOptions>();
+
+        var seabed = meshData.Values.First(x => x.name == "Seabed").id;
 
         for (int y = 0; y < drawMapHeight; y++)
         {
@@ -117,37 +119,22 @@ public class MapGenerator
                 if (Vector2.Distance(pos, mapCentre) > radius)
                 {
                     var target = drawMap[y * drawMapWidth + x];
-                    target.Choose("Seabed");
-                    CollapseAt(target, drawMap);
+                    target.Choose(seabed);
+                    squaresToCollapse.Add(target);
                 }
             }
         }
+
+        foreach(var square in squaresToCollapse)
+            CollapseAt(square);
     }
 
-    private string SelectWeightedRandomTile(MapSquareOptions target)
+    private int SelectRandomTile(MapSquareOptions target)
     {
-        // Add some noise to the values so we get a random sort order and break ties between items with the same weighting in a random way
-        // Order by priority, biggest first
-        float noiseWeight = 1f;
-        var choices = target.Options.Select(o => (P: tileProbabilities[o] + rand.NextDouble() * noiseWeight, I: o)).OrderByDescending(c => c.P).ToList();
-        
-        double max = choices.Sum(c => c.P);
-        double cutoff = rand.NextDouble() * max;
-        double sum = 0;
-
-        // Walk down the list until we pass the randomly selected cutoff.  Return that index.
-        foreach (var c in choices)
-        {
-            sum += c.P;
-            if (sum > cutoff)
-                return c.I;
-        }
-
-        // Must be the last item...
-        return choices.Last().I;
+        return target.Options[rand.Next(target.Options.Count)];
     }
 
-    private void CollapseAt(MapSquareOptions target, MapSquareOptions[] drawMap)
+    private void CollapseAt(MapSquareOptions target)
     {
         List<MapSquareOptions> recurseInto = new List<MapSquareOptions>();
         
@@ -191,8 +178,7 @@ public class MapGenerator
                 recurseInto.Add(back);
         }
 
-        recurseInto = recurseInto.ToList();
         foreach(var square in recurseInto)
-            CollapseAt(square, drawMap);
+            CollapseAt(square);
     }
 }

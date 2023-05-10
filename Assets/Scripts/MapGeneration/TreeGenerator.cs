@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,7 +24,7 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
     public float noiseScale = 0.1f;
     public float noiseThreshold = 0.5f;
 
-    private int[] gameMap;
+    private List<int> gameMap;
     private int mapWidth;
     private int mapHeight;
 

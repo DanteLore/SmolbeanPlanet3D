@@ -42,22 +42,22 @@ public class GridManager : MonoBehaviour
 
     public void Recreate()
     {
+        DateTime startTime = DateTime.Now;
+        
         ClearMap();
 
         var meshData = GetComponent<MeshLoader>().LoadMeshes();
         print($"Loaded {meshData.Count()} meshes");
 
         var neighbourData = new NeighbourSelector(fuzzyEdgeFactor, meshData).SelectNeighbours();
-
-        //var nd = neighbourData["SeaSlopeToCliffTransition"];
-        //Debug.Log("Left: " + String.Join(", ", nd.leftMatches));
-        //Debug.Log("Right: " + String.Join(", ", nd.rightMatches));
-        //Debug.Log("Front: " + String.Join(", ", nd.frontMatches));
-        //Debug.Log("Back: " + String.Join(", ", nd.backMatches));
-
+        
         map = new MapGenerator(GameMapWidth, GameMapHeight, coastRadius, meshData, neighbourData).GenerateMap(GameMapGenerator.GameMap);
+
         DrawMap();
+
         UpdateNavMesh();
+
+        Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
     }
 
     private void UpdateNavMesh()

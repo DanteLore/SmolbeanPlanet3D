@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class MeshData
 {
+    public int id;
     public string name;
     public Mesh mesh;
     public Edge[] edges;

@@ -15,24 +15,23 @@ public class NeighbourSelector
         this.meshData = meshData;
     }
 
-    public Dictionary<String, NeighbourData> SelectNeighbours()
+    public Dictionary<int, NeighbourData> SelectNeighbours()
     {
-        return meshData.Select(CreateNeighbourData).ToDictionary(nd => nd.name, nd => nd);
+        return meshData.Select(CreateNeighbourData).ToDictionary(nd => nd.id, nd => nd);
     }
 
     private NeighbourData CreateNeighbourData(MeshData target)
     {
         var cornerLevelData = GetCornerLevelData(target);
 
-        //Debug.Log(target.name + " --> " + String.Join(",", cornerLevelData));
-
         return new NeighbourData
         {
+            id = target.name.GetHashCode(),
             name = target.name,
-            leftMatches = meshData.Where(md => BoundariesMatch(target.leftBoundary, md.rightBoundary)).Select(meshData => meshData.name).ToList(),
-            rightMatches = meshData.Where(md => BoundariesMatch(target.rightBoundary, md.leftBoundary)).Select(meshData => meshData.name).ToList(),
-            frontMatches = meshData.Where(md => BoundariesMatch(target.frontBoundary, md.backBoundary)).Select(meshData => meshData.name).ToList(),
-            backMatches = meshData.Where(md => BoundariesMatch(target.backBoundary, md.frontBoundary)).Select(meshData => meshData.name).ToList(),
+            leftMatches = meshData.Where(md => BoundariesMatch(target.leftBoundary, md.rightBoundary)).Select(meshData => meshData.id).ToList(),
+            rightMatches = meshData.Where(md => BoundariesMatch(target.rightBoundary, md.leftBoundary)).Select(meshData => meshData.id).ToList(),
+            frontMatches = meshData.Where(md => BoundariesMatch(target.frontBoundary, md.backBoundary)).Select(meshData => meshData.id).ToList(),
+            backMatches = meshData.Where(md => BoundariesMatch(target.backBoundary, md.frontBoundary)).Select(meshData => meshData.id).ToList(),
             backLeftLevel = cornerLevelData[0],
             backRightLevel = cornerLevelData[1],
             frontleftLevel = cornerLevelData[2],

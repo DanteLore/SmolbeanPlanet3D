@@ -15,15 +15,15 @@ public class GameMapGenerator : MonoBehaviour
 
     public MapData mapData;
 
-    public int[] GameMap 
+    public List<int> GameMap 
     { 
         get 
         { 
-            return mapData.GameMap; 
+            return mapData.GameMap.ToList(); 
         }
         set
         {
-            mapData.SetGameMap(value);
+            mapData.SetGameMap(value.ToArray());
         }
     }
 
@@ -37,8 +37,8 @@ public class GameMapGenerator : MonoBehaviour
 
     public void GenerateMap()
     {
-        float[] noise = GenerateNoiseMap();
-        GameMap = noise.Select(s => Mathf.FloorToInt(Mathf.Lerp(0.0f, 3f, s))).Select(x => x > 2 ? 2 : x).ToArray();
+        var noise = GenerateNoiseMap();
+        GameMap = noise.Select(s => Mathf.FloorToInt(Mathf.Lerp(0.0f, 3f, s))).Select(x => x > 2 ? 2 : x).ToList();
         PreviewMap(GameMap);
     }
 
@@ -47,11 +47,11 @@ public class GameMapGenerator : MonoBehaviour
         previewPlane.SetActive(false);
     }
 
-    private float[] GenerateNoiseMap()
+    private List<float> GenerateNoiseMap()
     {
         Vector2 center = new Vector2(mapWidth / 2.0f, mapHeight / 2.0f);
         float maxDist = Mathf.Min(mapWidth, mapHeight) / 2.0f;
-        float[] noiseMap = new float[mapWidth * mapHeight];
+        var noiseMap = new List<float>();
 
         // Offset the perlin noise, because otherwise it's the same every run!
         float xOffset = Random.Range(0.0f, 1000.0f);
@@ -75,18 +75,15 @@ public class GameMapGenerator : MonoBehaviour
                 if (sample > max)
                     max = sample;
 
-                noiseMap[y * mapWidth + x] = sample;
+                noiseMap.Add(sample);
             }
         }
 
         // Normalise WRT maximum
-        for (int i = 0; i < noiseMap.Length; i++)
-            noiseMap[i] = noiseMap[i] / max;
-
-        return noiseMap;
+        return noiseMap.Select(f => f / max).ToList();
     }
 
-    private void PreviewMap(int[] map)
+    private void PreviewMap(List<int> map)
     {
         if(previewPlane == null)
             return;
