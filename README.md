@@ -22,6 +22,7 @@ So I suddenly realised that if this is going to be a real game, I'm going to nee
 2. Save and load games
 3. Generate a map with WFC very quickly
 4. Add a menu system to actually do the above
+
 This has led me onto a refactoring spree of epic proportions - with little visible change to the game!  So far, I have the WFC algorithm working 20-30 times quicker (from 40s to < 2s>) and have
 separated the mesh generation, matching and data prep out into editor functions.  Hopefully this will allow me to do some saving and loading more easily - by just saving the game map and re-skinning by repeating the WFC algo with a known random seed.  No need to store mesh data, I hope...
 
