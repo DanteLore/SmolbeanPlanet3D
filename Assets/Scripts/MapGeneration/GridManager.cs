@@ -15,8 +15,6 @@ public class GridManager : MonoBehaviour
 
     public string groundLayer = "Ground";
 
-    private System.Random rand = new System.Random();
-
     public bool addMeshDebugGizmos = false;
 
     private MeshData[] map;
@@ -43,6 +41,8 @@ public class GridManager : MonoBehaviour
 
     public void Recreate()
     {
+        UnityEngine.Random.InitState(1);
+
         DateTime startTime = DateTime.Now;
         
         ClearMap();

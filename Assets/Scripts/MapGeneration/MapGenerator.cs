@@ -12,7 +12,6 @@ public class MapGenerator
     private float coastRadius = 0.8f;
     private Dictionary<String, MeshData> meshData;
     private Dictionary<int, NeighbourData> neighbourData;
-    private System.Random rand = new System.Random();
     private List<int> allTileOptions;
     private Vector2 mapCentre;
     MapSquareOptions[] drawMap;
@@ -129,7 +128,7 @@ public class MapGenerator
 
     private int SelectRandomTile(MapSquareOptions target)
     {
-        return target.Options[rand.Next(target.Options.Count)];
+        return target.Options[UnityEngine.Random.Range(0, target.Options.Count)];
     }
 
     private void CollapseAt(MapSquareOptions target)
