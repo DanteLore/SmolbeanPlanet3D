@@ -17,7 +17,16 @@ Newest entries at the top :)
 
 ## Making a game
 
-[![Video]](https://dantelore.com/assorted/Smolbean3D-1.m4v)
+So I suddenly realised that if this is going to be a real game, I'm going to need to be able to:
+1. Generate new maps at runtime
+2. Save and load games
+3. Generate a map with WFC very quickly
+4. Add a menu system to actually do the above
+This has led me onto a refactoring spree of epic proportions - with little visible change to the game!  So far, I have the WFC algorithm working 20-30 times quicker (from 40s to < 2s>) and have
+separated the mesh generation, matching and data prep out into editor functions.  Hopefully this will allow me to do some saving and loading more easily - by just saving the game map and re-skinning by repeating the WFC algo with a known random seed.  No need to store mesh data, I hope...
+
+Lots of progress on creating a god-game out of the WFC map.  I think in my head it's currently looking a lot like the original Settlers game from back in the day.  So far in reality, there's just a woodcutter's hut and a strange blue capsule who cuts down trees.  Check out the video (click through below)...
+[![Video](./Docs/Images/screenshot22.png)](https://dantelore.com/assorted/Smolbean3D-1.m4v)
 
 Forest Generation, using some tree prefabs I made myself, perlin noise and some random rotation, scale etc.
 ![Screenshot](./Docs/Images/screenshot21.png)
