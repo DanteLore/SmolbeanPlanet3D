@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MapData", menuName = "Smolbean/MapData", order = 1)]

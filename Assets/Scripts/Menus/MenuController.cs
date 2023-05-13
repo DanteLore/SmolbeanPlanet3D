@@ -15,7 +15,10 @@ public class MenuController : MonoBehaviour
             Destroy(gameObject);
         else
             Instance = this;
+    }
 
+    void Start()
+    {
         CloseAll();
     }
 
