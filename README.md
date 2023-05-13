@@ -113,6 +113,12 @@ Partially working algorithm which seems to create ripples.  Not working but cool
 
 # References and Notes:
 
+Here is some nice music...
+https://soundimage.org/naturescience-2/
+
+And some free sound effects
+https://freesound.org/people/BurghRecords/sounds/490845/
+
 From the undisputed master of wave function collapse:
 https://www.youtube.com/watch?v=Uxeo9c-PX-w
 
