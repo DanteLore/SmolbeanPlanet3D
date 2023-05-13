@@ -13,9 +13,5 @@ public class GameMapGeneratorEditor : Editor
         {
             generator.GenerateMap();
         }
-        if (GUILayout.Button("Hide Map Preview"))
-        {
-            generator.HidePreview();
-        }
     }
 }

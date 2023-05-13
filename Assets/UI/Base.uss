@@ -1,0 +1,17 @@
+.title {
+    font-size: 36px;
+}
+
+.menuContainer {
+    width: 90%;
+    height: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    background-color: rgba(255, 255, 255, 0.38);
+}

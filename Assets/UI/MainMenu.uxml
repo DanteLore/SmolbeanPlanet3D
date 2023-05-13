@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=00c18cbe3e66a49d99556b6328067b38&amp;type=3#Base" />
+    <ui:VisualElement class="menuContainer">
+        <ui:Label text="Smolbean Planet 3D!" display-tooltip-when-elided="true" class="title" />
+        <ui:VisualElement>
+            <ui:Button text="New Game" display-tooltip-when-elided="true" name="newGameButton" />
+            <ui:Button text="Resume" display-tooltip-when-elided="true" name="resumeButton" />
+            <ui:Button text="Quit" display-tooltip-when-elided="true" name="quitButton" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

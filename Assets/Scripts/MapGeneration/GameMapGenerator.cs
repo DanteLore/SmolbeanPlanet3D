@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class GameMapGenerator : MonoBehaviour
 {
@@ -15,15 +16,19 @@ public class GameMapGenerator : MonoBehaviour
 
     public MapData mapData;
 
+    public event EventHandler<List<int>> OnGameMapChanged;
+
     public List<int> GameMap 
     { 
         get 
         { 
             return mapData.GameMap.ToList(); 
         }
-        set
+        private set
         {
             mapData.SetGameMap(value.ToArray());
+
+            OnGameMapChanged?.Invoke(this, GameMap);
         }
     }
 
@@ -35,11 +40,13 @@ public class GameMapGenerator : MonoBehaviour
         }
     }
 
-    public void GenerateMap()
+    public void GenerateMap(int seed = 0)
     {
+        if(seed != 0)
+            UnityEngine.Random.InitState(seed);
+
         var noise = GenerateNoiseMap();
         GameMap = noise.Select(s => Mathf.FloorToInt(Mathf.Lerp(0.0f, 3f, s))).Select(x => x > 2 ? 2 : x).ToList();
-        PreviewMap(GameMap);
     }
 
     public void HidePreview()
@@ -54,8 +61,8 @@ public class GameMapGenerator : MonoBehaviour
         var noiseMap = new List<float>();
 
         // Offset the perlin noise, because otherwise it's the same every run!
-        float xOffset = Random.Range(0.0f, 1000.0f);
-        float yOffset = Random.Range(0.0f, 1000.0f);
+        float xOffset = UnityEngine.Random.Range(0.0f, 1000.0f);
+        float yOffset = UnityEngine.Random.Range(0.0f, 1000.0f);
 
         // Generate noise
         float max = 0f;
@@ -81,44 +88,5 @@ public class GameMapGenerator : MonoBehaviour
 
         // Normalise WRT maximum
         return noiseMap.Select(f => f / max).ToList();
-    }
-
-    private void PreviewMap(List<int> map)
-    {
-        if(previewPlane == null)
-            return;
-     
-        previewPlane.SetActive(true);
-
-        Texture2D texture = new Texture2D(mapWidth, mapHeight);
-        texture.filterMode = FilterMode.Point;
-
-        var material = previewPlane.GetComponent<Renderer>().sharedMaterial;
-        material.mainTexture = texture;
-        material.SetFloat("_Smoothness", 0.0f);
-
-        // Walk y backwards, because textures start in the top left
-        for (int y = mapWidth - 1; y >= 0; y--)
-        {
-            for (int x = 0; x < mapHeight; x++)
-            {
-                float i = map[y * mapWidth + x];
-
-                Color color = Color.blue;
-
-                if (i == 2)
-                {
-                    color = new Color(0f, 1.0f, 0f);
-                }
-                else if (i == 1)
-                {
-                    color = new Color(0f, 0.75f, 0f);
-                }
-
-                texture.SetPixel(x, y, color);
-            }
-        }
-
-        texture.Apply();
     }
 }
