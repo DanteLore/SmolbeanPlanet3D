@@ -3,8 +3,10 @@
     <ui:VisualElement class="menuContainer">
         <ui:Label text="Smolbean Planet 3D!" display-tooltip-when-elided="true" class="title" />
         <ui:VisualElement>
-            <ui:Button text="New Game" display-tooltip-when-elided="true" name="newGameButton" />
             <ui:Button text="Resume" display-tooltip-when-elided="true" name="resumeButton" />
+            <ui:Button text="New Game..." display-tooltip-when-elided="true" name="newGameButton" />
+            <ui:Button text="Save Game..." display-tooltip-when-elided="true" name="saveGameButton" />
+            <ui:Button text="Load Game..." display-tooltip-when-elided="true" name="loadGameButton" />
             <ui:Button text="Quit" display-tooltip-when-elided="true" name="quitButton" />
         </ui:VisualElement>
     </ui:VisualElement>
