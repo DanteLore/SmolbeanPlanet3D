@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class SaveGameManager : MonoBehaviour
 {
@@ -46,5 +47,12 @@ public class SaveGameManager : MonoBehaviour
             .OrderByDescending(f => f.CreationTime)
             .Select(f => Path.GetFileNameWithoutExtension(f.Name));
         return files;
+    }
+
+    internal static void LoadGame(string name)
+    {
+        string filename = GetFilename(name);
+        
+        Debug.Log($"Loading game from {filename}");
     }
 }
