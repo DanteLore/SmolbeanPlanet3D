@@ -97,7 +97,7 @@ public class Woodcutter : MonoBehaviour
         return candidates
             .Select(c => c.gameObject)
             .Except(blacklist)
-            .Where(go => go.GetComponent<Tree>() != null)
+            .Where(go => go.GetComponent<PineTree>() != null)
             .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - pos))
             .FirstOrDefault();
     }
