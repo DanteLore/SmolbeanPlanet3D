@@ -11,7 +11,16 @@ public class GridManagerEditor : Editor
         if(GUILayout.Button("Wave Function Collapse"))
         {
             var gridManager = (GridManager)target;
-            gridManager.Recreate();
+            var generator = GameObject.FindAnyObjectByType<GameMapGenerator>();
+
+            var newMap = generator.GenerateMap();
+            gridManager.mapData.GameMap = newMap.ToArray();
+            gridManager.mapData.GameMapWidth = generator.mapWidth;
+            gridManager.mapData.GameMapHeight = generator.mapHeight;
+            EditorUtility.SetDirty(gridManager.mapData);
+            AssetDatabase.SaveAssetIfDirty(gridManager.mapData);
+
+            gridManager.Recreate(newMap, generator.mapWidth, generator.mapHeight);
             EditorUtility.SetDirty(target);
         }
     }

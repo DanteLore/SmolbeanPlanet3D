@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class buildManager : MonoBehaviour
+public class BuildManager : MonoBehaviour, IObjectGenerator
 {
     public GameObject mapCursorPrefab;
     public GameObject buildingPrefab;
+    public GameObject buildingParent;
     public string groundLayer = "Ground";
     public string[] collisionLayers = { "Nature", "Buildings", "Creatures" };
 
@@ -27,6 +28,9 @@ public class buildManager : MonoBehaviour
 
     void Update()
     {
+        if(GameStateManager.Instance.IsPaused)
+            return;
+
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if(Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(groundLayer)))
         {
@@ -38,7 +42,7 @@ public class buildManager : MonoBehaviour
             {
                 currentSquare = newSquare;
 
-                int level = gameMapGenerator.GameMap[currentSquare.y * gameMapGenerator.mapWidth + currentSquare.x];
+                int level = gridManager.GameMap[currentSquare.y * gameMapGenerator.mapWidth + currentSquare.x];
 
                 if(level > 0)
                 {
@@ -79,7 +83,7 @@ public class buildManager : MonoBehaviour
 
     private void PlaceBuilding(Vector3 pos)
     {
-        var building = Instantiate(buildingPrefab, pos, Quaternion.identity, transform);
+        var building = Instantiate(buildingPrefab, pos, Quaternion.identity, buildingParent.transform);
     }
 
     private bool CheckEmpty(Vector3 center)
@@ -127,5 +131,11 @@ public class buildManager : MonoBehaviour
             return false;
 
         return true;
+    }
+
+    public void Clear()
+    {
+        while (buildingParent.transform.childCount > 0)
+            DestroyImmediate(buildingParent.transform.GetChild(0).gameObject);
     }
 }

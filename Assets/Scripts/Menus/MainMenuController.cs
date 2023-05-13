@@ -6,8 +6,6 @@ public class MainMenuController : MonoBehaviour
 {
     UIDocument document;
 
-    bool isVisible;
-
     void OnEnable()
     {
         document = GetComponent<UIDocument>();
@@ -20,14 +18,6 @@ public class MainMenuController : MonoBehaviour
         
         var quitButton = document.rootVisualElement.Q<Button>("quitButton");
         quitButton.clicked += QuitButtonClicked;
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Debug.Log("Escape key was pressed");
-        }
     }
 
     private void NewGameButtonClicked()

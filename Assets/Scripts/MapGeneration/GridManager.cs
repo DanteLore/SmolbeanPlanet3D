@@ -2,9 +2,11 @@ using UnityEngine;
 using System.Linq;
 using System;
 using Unity.AI.Navigation;
+using System.Collections.Generic;
 
 public class GridManager : MonoBehaviour
 {
+    public MapData mapData;
     public TerrainData terrainData;
     public Material meshMaterial;
     public float fuzzyEdgeFactor = 0.01f;
@@ -21,26 +23,25 @@ public class GridManager : MonoBehaviour
 
     private GameObject Ground { get { return transform.Find("Ground").gameObject; }}
     private GameObject Seabed { get { return transform.Find("Seabed").gameObject; }}
-
-    private GameMapGenerator gameMapGenerator;
-    protected GameMapGenerator GameMapGenerator
-    {
-        get
-        {
-            if(!gameMapGenerator)
-                gameMapGenerator = GetComponent<GameMapGenerator>();
-            return gameMapGenerator;
-        }
-    }
-
-    protected int GameMapWidth { get { return GameMapGenerator.mapWidth; }}
-    protected int GameMapHeight { get { return GameMapGenerator.mapHeight; }}
-
+    public List<int> GameMap {get; private set;}
+    protected int GameMapWidth { get; private set; }
+    protected int GameMapHeight { get; private set; }
     protected int DrawMapWidth { get { return GameMapWidth + 1; }}
     protected int DrawMapHeight { get { return GameMapHeight + 1; }}
 
-    public void Recreate()
+    void Start()
     {
+        GameMapWidth = mapData.GameMapWidth;
+        GameMapHeight = mapData.GameMapWidth;
+        GameMap = mapData.GameMap.ToList();
+    }
+
+    public void Recreate(List<int> gameMap, int width, int height)
+    {
+        GameMapWidth = width;
+        GameMapHeight = height;
+        GameMap = gameMap;
+
         UnityEngine.Random.InitState(1);
 
         DateTime startTime = DateTime.Now;
@@ -50,7 +51,7 @@ public class GridManager : MonoBehaviour
         var meshData = terrainData.meshData.ToList();
         var neighbourData = terrainData.neighbourData.ToDictionary(nd => nd.id, nd => nd);
         
-        map = new MapGenerator(GameMapWidth, GameMapHeight, coastRadius, meshData, neighbourData).GenerateMap(GameMapGenerator.GameMap);
+        map = new MapGenerator(GameMapWidth, GameMapHeight, coastRadius, meshData, neighbourData).GenerateMap(GameMap);
 
         DrawMap();
 

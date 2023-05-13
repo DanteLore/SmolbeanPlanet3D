@@ -68,11 +68,14 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        GetKeyboardMovement();
-        CheckMouseAtScreenEdge();
-        UpdateVelocity();
-        UpdateBasePosition();
-        UpdateCameraPosition();
+        if(!GameStateManager.Instance.IsPaused)
+        {
+            GetKeyboardMovement();
+            CheckMouseAtScreenEdge();
+            UpdateVelocity();
+            UpdateBasePosition();
+            UpdateCameraPosition();
+        }
     }
 
     private void UpdateVelocity()

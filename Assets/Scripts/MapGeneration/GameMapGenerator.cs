@@ -14,24 +14,6 @@ public class GameMapGenerator : MonoBehaviour
     public float noiseScale1 = 0.3f;
     public float noiseScale2 = 0.1f;
 
-    public MapData mapData;
-
-    public event EventHandler<List<int>> OnGameMapChanged;
-
-    public List<int> GameMap 
-    { 
-        get 
-        { 
-            return mapData.GameMap.ToList(); 
-        }
-        private set
-        {
-            mapData.SetGameMap(value.ToArray());
-
-            OnGameMapChanged?.Invoke(this, GameMap);
-        }
-    }
-
     void Start()
     {
         if(previewPlane != null)
@@ -40,13 +22,13 @@ public class GameMapGenerator : MonoBehaviour
         }
     }
 
-    public void GenerateMap(int seed = 0)
+    public List<int> GenerateMap(int seed = 0)
     {
         if(seed != 0)
             UnityEngine.Random.InitState(seed);
 
         var noise = GenerateNoiseMap();
-        GameMap = noise.Select(s => Mathf.FloorToInt(Mathf.Lerp(0.0f, 3f, s))).Select(x => x > 2 ? 2 : x).ToList();
+        return noise.Select(s => Mathf.FloorToInt(Mathf.Lerp(0.0f, 3f, s))).Select(x => x > 2 ? 2 : x).ToList();
     }
 
     public void HidePreview()

@@ -8,16 +8,19 @@ public class NewGameMenuController : MonoBehaviour
 {
     UIDocument document;
     GameMapGenerator mapGenerator;
-
+    GridManager gridManager;
+    TreeGenerator treeGenerator;
     VisualElement previewPane;
     private Toggle randomToggle;
     private TextField seedTextField;
+    private List<int> map;
 
     void OnEnable()
     {
         document = GetComponent<UIDocument>();
-        mapGenerator = FindAnyObjectByType<GameMapGenerator>();
-        mapGenerator.OnGameMapChanged += MapChanged;
+        mapGenerator = FindObjectOfType<GameMapGenerator>();
+        gridManager = FindObjectOfType<GridManager>();
+        treeGenerator = FindObjectOfType<TreeGenerator>();
         
         var startGameButton = document.rootVisualElement.Q<Button>("startGameButton");
         startGameButton.clicked += StartGameClicked;
@@ -35,7 +38,9 @@ public class NewGameMenuController : MonoBehaviour
 
         randomToggle.value = true;
         seedTextField.SetEnabled(false);
-        GenerateMap();
+        
+        map = gridManager.GameMap;
+        DrawMap();
     }
 
     private void CancelButtonClicked()
@@ -45,12 +50,15 @@ public class NewGameMenuController : MonoBehaviour
 
     private void StartGameClicked()
     {
-        Debug.Log("Time to start the game!");
+        gridManager.Recreate(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
+        treeGenerator.GenerateTrees();
+        MenuController.Instance.CloseAll();
     }
 
     private void NewMapButtonClicked()
     {
         GenerateMap();
+        DrawMap();
     }
 
     private void GenerateMap()
@@ -67,12 +75,11 @@ public class NewGameMenuController : MonoBehaviour
 
         seedTextField.value = seed.ToString();
 
-        mapGenerator.GenerateMap(seed);
+        map = mapGenerator.GenerateMap(seed);
     }
 
-    private void MapChanged(object sender, List<int> e)
+    private void DrawMap()
     {
-
         Texture2D texture = new Texture2D(mapGenerator.mapWidth, mapGenerator.mapHeight);
         texture.filterMode = FilterMode.Point;
 
@@ -81,7 +88,7 @@ public class NewGameMenuController : MonoBehaviour
         {
             for (int x = 0; x < mapGenerator.mapHeight; x++)
             {
-                float i = mapGenerator.GameMap[y * mapGenerator.mapWidth + x];
+                float i = map[y * mapGenerator.mapWidth + x];
 
                 Color color = Color.blue;
 

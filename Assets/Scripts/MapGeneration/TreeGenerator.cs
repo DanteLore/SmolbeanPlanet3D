@@ -33,17 +33,19 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
 
     public void GenerateTrees()
     {
-        Clear();
 
+        gridManager = GameObject.FindAnyObjectByType<GridManager>();
         gameMapGenerator = GameObject.FindAnyObjectByType<GameMapGenerator>();
-        gameMap = gameMapGenerator.GameMap;
+
+        Clear();
+        
+        gameMap = gridManager.GameMap;
         mapWidth = gameMapGenerator.mapWidth;
         mapHeight = gameMapGenerator.mapHeight;
 
         float xOffset = UnityEngine.Random.Range(0f, 1000f);
         float yOffset = UnityEngine.Random.Range(0f, 1000f);
 
-        gridManager = GameObject.FindAnyObjectByType<GridManager>();
 
         for(int z = 0; z < mapHeight; z++)
         {

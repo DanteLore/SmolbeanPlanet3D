@@ -24,19 +24,17 @@ public class MenuController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if(isVisible)
-            {
                 CloseAll();
-            }
             else
-            {
                 ShowMenu();
-            }
         }
     }
 
 
     public void ShowMenu(string menuName = "MainMenu")
     {
+        GameStateManager.Instance.Pause();
+
         foreach(Transform child in transform)
         {
             child.gameObject.SetActive(child.gameObject.name == menuName);
@@ -53,5 +51,6 @@ public class MenuController : MonoBehaviour
         }
 
         isVisible = false;
+        GameStateManager.Instance.Resume();
     }
 }
