@@ -21,7 +21,7 @@ This weekend I had a very bad back, so I was basically stuck doing very little o
 Added a variety of menus and toolbars, load and save game functionality, the ability to create a new game, erm, in-game... as well as stones and a new
 stonecutter's hut.
 
-I have decided I want the game to be, eventually, a cross between The Settlers and Rimworld. The aim overall will be to manage a colony of people with increasingly complex needs on a small, resource constrained island.  There won't be an "enemy" as such - in fact, the colonists are their own worst enemies - because their greed could cause them to cut down the last tree or ill the last animal for a tasty snack.  Just like real life, mankind (smolbean kind) will cause it's own downfall 99% of the time.  So resource chains and building-based production like the settlers, but I'd like the player to _care_ about their colonists, thus the Rimworld vibe.  Anyway... a long way to go...
+I have decided I want the game to be, eventually, a cross between The Settlers and Rimworld. The aim overall will be to manage a colony of people with increasingly complex needs on a small, resource constrained island.  There won't be an "enemy" as such - in fact, the colonists are their own worst enemies - because their greed could cause them to cut down the last tree or kill the last animal for a tasty snack.  Just like real life, mankind (smolbean kind) will cause it's own downfall 99% of the time.  So resource chains and building-based production like the settlers, but I'd like the player to _care_ about their colonists, thus the Rimworld vibe.  Anyway... a long way to go...
 
 Rocks and new buildings.
 ![Screenshot](./Docs/Images/screenshot27.png)
@@ -35,10 +35,23 @@ Creating an island, with preview, in the game.
 Save and load menus, with an automated name generator (foreshadowing random names for colonists, perhaps).
 ![Screenshot](./Docs/Images/screenshot24.png)
 
-Not-so-low-poly stonecutter hut.  I greated the cool stone brick style of the stonecutters hut by staring blankly at this YouTube video for hours: https://www.youtube.com/watch?v=tX3JZF53e24&t=2s
+Not-so-low-poly stonecutter hut.  I created the cool stone brick style of the stonecutters hut by staring blankly at this YouTube video for hours: https://www.youtube.com/watch?v=tX3JZF53e24&t=2s
 ![Screenshot](./Docs/Images/screenshot23.png)
 
+Here's an updated TO DO list...
 
+1. Add a stonecutter and get them cuttin' stones
+2. Set up the build menu to create buttons automatically, perhaps from some scriptable object data (prefab, thumbnail, building data etc).
+3. Animals (dodos I think) and a hunter
+4. Drops!  Trees drop logs, rocks drop stones.  Wood/Stonecutters collect these and dump them by their huts, until there's no more room.
+5. Separate people from their buildings - currently, the colonists lifespans are controlled by their buildings.  Do this centrally.
+6. Create rigged models for the colonists, animate and import them.  Colonists dress the way they dress, they don't change clothes based on their job.
+7. Get some decent GPU-instanced grass on the go, to make the ground look more professional.
+8. Sort out the lighting so the buildings look less lame.
+9. Add time of day as a concept, including day/night cycle.
+10. Warehouse and Porters (new job type - carries stuff round the island as needed).
+11. First production chain buildings - Sawmill? Butcher?
+...OK, that's like a year's worth of work...
 
 ## Making a game
 
