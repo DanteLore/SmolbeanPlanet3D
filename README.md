@@ -1,14 +1,23 @@
 
-
 # TO DO List
 
-* Merge all the tile meshes into a single mesh for better performance
-* Remove hard coded level count and either infer it from the meshes or set it in code
-* Add 2-level cliffs to allow noisier maps
-* Trees, Rocks and other resources
-* Add a navigation mesh for the island
-* A woodcutters hut
-* A woodcutter, who goes and chops down trees
+1. Add a stonecutter and get them cuttin' stones
+2. Set up the build menu to create buttons automatically, perhaps from some scriptable object data (prefab, thumbnail, building data etc).
+3. Animals (dodos I think) and a hunter
+4. Drops!  Trees drop logs, rocks drop stones.  Wood/Stonecutters collect these and dump them by their huts, until there's no more room.
+5. Separate people from their buildings - currently, the colonists lifespans are controlled by their buildings.  Do this centrally.
+6. Create rigged models for the colonists, animate and import them.  Colonists dress the way they dress, they don't change clothes based on their job.
+7. Get some decent GPU-instanced grass on the go, to make the ground look more professional.
+8. Sort out the lighting so the buildings look less lame.
+9. Add time of day as a concept, including day/night cycle.
+10. Warehouse and Porters (new job type - carries stuff round the island as needed).  Maybe you start with the "Warehouse" as a big pile of resources and a few people gathered round a camp fire.  Maybe a ship wreck?
+11. Building of buildings - so porters and builders create the buildings using resources.
+12. First production chain buildings - Sawmill? Butcher?
+13. Lights and lighting effects on buildings - colonists carrying torches at night etc.
+14. Colonist stats - e.g. stronger people can carry more.  Cutting wood makes you strong etc.
+15. Graphs and charts showing progress over time.
+
+...OK, that's like a year's worth of work...
 
 # Devlog and Screenshots
 
@@ -37,22 +46,6 @@ Save and load menus, with an automated name generator (foreshadowing random name
 
 Not-so-low-poly stonecutter hut.  I created the cool stone brick style of the stonecutters hut by staring blankly at this YouTube video for hours: https://www.youtube.com/watch?v=tX3JZF53e24&t=2s
 ![Screenshot](./Docs/Images/screenshot23.png)
-
-Here's an updated TO DO list...
-
-1. Add a stonecutter and get them cuttin' stones
-2. Set up the build menu to create buttons automatically, perhaps from some scriptable object data (prefab, thumbnail, building data etc).
-3. Animals (dodos I think) and a hunter
-4. Drops!  Trees drop logs, rocks drop stones.  Wood/Stonecutters collect these and dump them by their huts, until there's no more room.
-5. Separate people from their buildings - currently, the colonists lifespans are controlled by their buildings.  Do this centrally.
-6. Create rigged models for the colonists, animate and import them.  Colonists dress the way they dress, they don't change clothes based on their job.
-7. Get some decent GPU-instanced grass on the go, to make the ground look more professional.
-8. Sort out the lighting so the buildings look less lame.
-9. Add time of day as a concept, including day/night cycle.
-10. Warehouse and Porters (new job type - carries stuff round the island as needed).  Maybe you start with the "Warehouse" as a big pile of resources and a few people gathered round a camp fire.
-11. Building of buildings - so porters and builders create the buildings using resources.
-12. First production chain buildings - Sawmill? Butcher?
-...OK, that's like a year's worth of work...
 
 ## Making a game
 
