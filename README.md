@@ -14,6 +14,31 @@
 
 Newest entries at the top :)
 
+## Very busy weekend
+
+This weekend I had a very bad back, so I was basically stuck doing very little on the computer.  As a result though, HUGE progress of Smolbean Planet 3D.
+
+Added a variety of menus and toolbars, load and save game functionality, the ability to create a new game, erm, in-game... as well as stones and a new
+stonecutter's hut.
+
+I have decided I want the game to be, eventually, a cross between The Settlers and Rimworld. The aim overall will be to manage a colony of people with increasingly complex needs on a small, resource constrained island.  There won't be an "enemy" as such - in fact, the colonists are their own worst enemies - because their greed could cause them to cut down the last tree or ill the last animal for a tasty snack.  Just like real life, mankind (smolbean kind) will cause it's own downfall 99% of the time.  So resource chains and building-based production like the settlers, but I'd like the player to _care_ about their colonists, thus the Rimworld vibe.  Anyway... a long way to go...
+
+Rocks and new buildings.
+![Screenshot](./Docs/Images/screenshot27.png)
+
+A Main menu.
+![Screenshot](./Docs/Images/screenshot26.png)
+
+Creating an island, with preview, in the game.
+![Screenshot](./Docs/Images/screenshot25.png)
+
+Save and load menus, with an automated name generator (foreshadowing random names for colonists, perhaps).
+![Screenshot](./Docs/Images/screenshot24.png)
+
+Not-so-low-poly stonecutter hut.  I greated the cool stone brick style of the stonecutters hut by staring blankly at this YouTube video for hours: https://www.youtube.com/watch?v=tX3JZF53e24&t=2s
+![Screenshot](./Docs/Images/screenshot23.png)
+
+
 
 ## Making a game
 

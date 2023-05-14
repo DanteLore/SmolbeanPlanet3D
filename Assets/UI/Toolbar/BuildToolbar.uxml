@@ -1,7 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=00c18cbe3e66a49d99556b6328067b38&amp;type=3#Base" />
+    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
     <ui:VisualElement name="VisualElement" class="toolbarContainer">
         <ui:Button display-tooltip-when-elided="true" name="mainToolbarButton" class="toolButton" style="background-image: url(&apos;project://database/Assets/UI/Toolbar/Images/home-7-256.png?fileID=2800000&amp;guid=48c7fe68062fe49b495b9a6b90427739&amp;type=3#home-7-256&apos;); background-color: rgba(56, 56, 56, 0);" />
         <ui:Button display-tooltip-when-elided="true" name="woodcutterButton" class="toolButton" style="background-image: url(&apos;project://database/Assets/UI/Toolbar/Images/Buildings/Woodcutter.png?fileID=2800000&amp;guid=f8e98448019e242d793edd5cbca829f7&amp;type=3#Woodcutter&apos;); background-color: rgba(56, 56, 56, 0);" />
+        <ui:Button display-tooltip-when-elided="true" name="stonecutterButton" class="toolButton" style="background-image: url(&apos;project://database/Assets/UI/Toolbar/Images/Buildings/Stonecutter.png?fileID=2800000&amp;guid=3b18fc93b31a14a3cb547b10f6cc63c4&amp;type=3#Stonecutter&apos;); background-color: rgba(56, 56, 56, 0);" />
     </ui:VisualElement>
 </ui:UXML>
