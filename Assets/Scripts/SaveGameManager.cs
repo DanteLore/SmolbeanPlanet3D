@@ -11,6 +11,7 @@ public class SaveFileData
     public int gameMapHeight;
     public List<int> gameMap;
     public List<NatureObjectSaveData> treeData;
+    public List<NatureObjectSaveData> rockData;
     public List<BuildingObjectSaveData> buildingData;
 }
 
@@ -22,6 +23,7 @@ public class SaveGameManager : MonoBehaviour
 
     private GridManager gridManager;
     private TreeGenerator treeGenerator;
+    private RockGenerator rockGenerator;
     private BuildManager buildManager;
 
     void Awake()
@@ -36,6 +38,7 @@ public class SaveGameManager : MonoBehaviour
     {
         gridManager = GameObject.FindAnyObjectByType<GridManager>();
         treeGenerator = GameObject.FindAnyObjectByType<TreeGenerator>();
+        rockGenerator = GameObject.FindAnyObjectByType<RockGenerator>();
         buildManager = GameObject.FindAnyObjectByType<BuildManager>();
     }
 
@@ -60,6 +63,7 @@ public class SaveGameManager : MonoBehaviour
             gameMapHeight = gridManager.GameMapHeight,
             gameMap = gridManager.GameMap,
             treeData = treeGenerator.GetSaveData(),
+            rockData = rockGenerator.GetSaveData(),
             buildingData = buildManager.GetSaveData()
         };
 
@@ -104,6 +108,7 @@ public class SaveGameManager : MonoBehaviour
 
         GameObject.FindAnyObjectByType<GridManager>().Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight);
         treeGenerator.LoadTrees(saveData.treeData);
+        rockGenerator.LoadRocks(saveData.rockData);
         buildManager.LoadBuildings(saveData.buildingData);
         MenuController.Instance.CloseAll();
     }

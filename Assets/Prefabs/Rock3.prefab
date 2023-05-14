@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 2247409373651977816}
   - component: {fileID: 2247409373651977819}
   - component: {fileID: 2683902948344963436}
-  m_Layer: 0
+  - component: {fileID: -2144406283683017046}
+  m_Layer: 7
   m_Name: Rock3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,9 +93,40 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2247409373651977818}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 4
+  serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -3983063591393173388, guid: 0303c2fe5b6a64daeabb225779da650f, type: 3}
+--- !u!114 &-2144406283683017046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2247409373651977818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f6451243468846449f1a661feebd4d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveData:
+    positionX: 0
+    positionY: 0
+    positionZ: 0
+    rotationX: 0
+    rotationY: 0
+    rotationZ: 0
+    scaleX: 0
+    scaleY: 0
+    scaleZ: 0
+    prefabIndex: 0

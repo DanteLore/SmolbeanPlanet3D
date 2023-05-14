@@ -8,7 +8,6 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     public static BuildManager Instance;
     public GameObject mapCursorPrefab;
     public GameObject buildingPrefab;
-    public GameObject buildingParent;
     public string groundLayer = "Ground";
     public string[] collisionLayers = { "Nature", "Buildings", "Creatures" };
     private GridManager gridManager;
@@ -40,11 +39,11 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
 
     void Start()
     {
-        gridManager = GetComponent<GridManager>();
-        gameMapGenerator = GetComponent<GameMapGenerator>();
+        gridManager = FindObjectOfType<GridManager>();
+        gameMapGenerator = FindObjectOfType<GameMapGenerator>();
         currentSquare = new Vector2Int(int.MaxValue, int.MaxValue);
 
-        mapCursor = Instantiate(mapCursorPrefab, Vector3.zero, Quaternion.identity, transform);
+        mapCursor = Instantiate(mapCursorPrefab, Vector3.zero, Quaternion.identity, transform.parent);
         mapCursor.SetActive(false);
     }
 
@@ -115,7 +114,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     {
         Vector3 pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
 
-        var building = Instantiate(buildingPrefab, pos, Quaternion.identity, buildingParent.transform);
+        var building = Instantiate(buildingPrefab, pos, Quaternion.identity, transform);
         building.GetComponent<ISmolbeanBuilding>().SaveData = saveData;
     }
 
@@ -168,8 +167,8 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
 
     public void Clear()
     {
-        while (buildingParent.transform.childCount > 0)
-            DestroyImmediate(buildingParent.transform.GetChild(0).gameObject);
+        while (transform.childCount > 0)
+            DestroyImmediate(transform.GetChild(0).gameObject);
     }
 
     public List<BuildingObjectSaveData> GetSaveData()

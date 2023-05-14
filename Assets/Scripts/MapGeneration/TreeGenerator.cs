@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-[Serializable]
-public struct TreeData
-{
-    public GameObject prefab;
-    public float probability;
-}
-
 public class TreeGenerator : MonoBehaviour, IObjectGenerator
 {
-    public MapData mapData;
-    public GameObject treeParent;
+    [Serializable]
+    public struct TreeData
+    {
+        public GameObject prefab;
+        public float probability;
+    }
+
     public TreeData[] treeData;
-    public string treeLayer = "Nature";
 
     public float scaleMax = 1.2f;
     public float scaleMin = 0.8f;
@@ -25,9 +22,7 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
     public float noiseScale = 0.1f;
     public float noiseThreshold = 0.5f;
 
-    private List<int> gameMap;
-    private int mapWidth;
-    private int mapHeight;
+    public MapData mapData;
 
     private GridManager gridManager;
 
@@ -35,7 +30,6 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
     {
         return GetComponentsInChildren<SmolbeanTree>().Select(t => t.saveData).ToList();
     }
-
 
     public void LoadTrees(List<NatureObjectSaveData> loadedData)
     {
@@ -110,8 +104,8 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
 
     public void Clear()
     {
-        while (treeParent.transform.childCount > 0)
-            DestroyImmediate(treeParent.transform.GetChild(0).gameObject);
+        while (transform.childCount > 0)
+            DestroyImmediate(transform.GetChild(0).gameObject);
     }
 
     private void InstantiateTree(NatureObjectSaveData data)
@@ -121,8 +115,7 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         var scale = new Vector3(data.scaleX, data.scaleY, data.scaleZ);
 
         GameObject tree = Instantiate(treeData[data.prefabIndex].prefab);
-        tree.transform.parent = treeParent.transform;
-        tree.layer = LayerMask.NameToLayer(treeLayer);
+        tree.transform.parent = transform;
         tree.transform.position = position;
         tree.transform.rotation = rotation;
         tree.transform.localScale = scale;

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 711817566595342870}
   - component: {fileID: -8618161870230810385}
   - component: {fileID: -7333509524848684341}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Tree5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,8 +94,17 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3637283354967090501}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
+  serializedVersion: 2
   m_Radius: 0.34
   m_Height: 5.7101703
   m_Direction: 1
@@ -112,6 +121,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e9a1d49eff6141abb6cd0fe3216efcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  saveData:
+    positionX: 0
+    positionY: 0
+    positionZ: 0
+    rotationX: 0
+    rotationY: 0
+    rotationZ: 0
+    scaleX: 0
+    scaleY: 0
+    scaleZ: 0
+    prefabIndex: 0
 --- !u!208 &-7333509524848684341
 NavMeshObstacle:
   m_ObjectHideFlags: 0
