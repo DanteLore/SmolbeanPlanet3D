@@ -24,10 +24,10 @@ public class GridManager : MonoBehaviour
     private GameObject Ground { get { return transform.Find("Ground").gameObject; }}
     private GameObject Seabed { get { return transform.Find("Seabed").gameObject; }}
     public List<int> GameMap {get; private set;}
-    protected int GameMapWidth { get; private set; }
-    protected int GameMapHeight { get; private set; }
-    protected int DrawMapWidth { get { return GameMapWidth + 1; }}
-    protected int DrawMapHeight { get { return GameMapHeight + 1; }}
+    public int GameMapWidth { get; private set; }
+    public int GameMapHeight { get; private set; }
+    public int DrawMapWidth { get { return GameMapWidth + 1; }}
+    public int DrawMapHeight { get { return GameMapHeight + 1; }}
 
     void Start()
     {

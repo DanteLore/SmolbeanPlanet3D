@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+using System.Linq;
 
 [Serializable]
 public struct TreeData
@@ -31,11 +31,32 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
     private GridManager gridManager;
     private GameMapGenerator gameMapGenerator;
 
-    public void GenerateTrees()
-    {
+    private List<NatureObjectSaveData> saveData;
 
+    void Start()
+    {
         gridManager = GameObject.FindAnyObjectByType<GridManager>();
         gameMapGenerator = GameObject.FindAnyObjectByType<GameMapGenerator>();
+    }
+
+    public List<NatureObjectSaveData> GetSaveData()
+    {
+        return saveData;
+    }
+
+    public void LoadTrees(List<NatureObjectSaveData> loadedData)
+    {
+        saveData = loadedData;
+
+        Clear();
+
+        foreach(var treeData in saveData)
+            InstantiateTree(treeData);
+    }
+
+    public void GenerateTrees()
+    {
+        saveData = new List<NatureObjectSaveData>();
 
         Clear();
         
@@ -46,7 +67,6 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         float xOffset = UnityEngine.Random.Range(0f, 1000f);
         float yOffset = UnityEngine.Random.Range(0f, 1000f);
 
-
         for(int z = 0; z < mapHeight; z++)
         {
             for(int x = 0; x < mapWidth; x++)
@@ -56,48 +76,64 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
                     float sample = Mathf.PerlinNoise((x + xOffset) / (mapWidth * noiseScale), (z + yOffset) / (mapHeight * noiseScale));
 
                     if(sample > noiseThreshold)
-                    {
-                        CreateTreeAt(z, x);
-                    }
+                        saveData.Add(GenerateTreeData(z, x));
                 }
             }
         }
+
+        foreach(var treeData in saveData)
+            InstantiateTree(treeData);
     }
 
-    private void CreateTreeAt(int z, int x)
+    private NatureObjectSaveData GenerateTreeData(int z, int x)
     {
         Rect squareBounds = gridManager.GetSquareBounds(x, z);
 
         int treeIndex = UnityEngine.Random.Range(0, treeData.Length);
 
-        GameObject tree = Instantiate(treeData[treeIndex].prefab);
-        tree.transform.parent = treeParent.transform;
-        tree.layer = LayerMask.NameToLayer(treeLayer);
-
         float buffer = gridManager.tileSize * edgeBuffer;
         float worldX = UnityEngine.Random.Range(squareBounds.xMin + buffer, squareBounds.xMax - buffer);
         float worldZ = UnityEngine.Random.Range(squareBounds.yMin + buffer, squareBounds.yMax - buffer);
         float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
-        tree.transform.position = new Vector3(worldX, worldY, worldZ);
 
         float rotationY = UnityEngine.Random.Range(0f, 360f);
         float rotationX = UnityEngine.Random.Range(-tiltMaxDegrees, tiltMaxDegrees);
         float rotationZ = UnityEngine.Random.Range(-tiltMaxDegrees, tiltMaxDegrees);
-        tree.transform.rotation = Quaternion.Euler(rotationX, rotationY, rotationZ);
 
         float scale = UnityEngine.Random.Range(scaleMin, scaleMax);
-        tree.transform.localScale = new Vector3(scale, scale, scale);
 
-//        var collider = tree.GetComponentInChildren<CapsuleCollider>();
-//        var nmo = tree.AddComponent<NavMeshObstacle>();
-//        nmo.shape = NavMeshObstacleShape.Capsule;
-//        nmo.radius = collider.radius;
-//        nmo.height = collider.height;
+        return new NatureObjectSaveData
+        {
+            positionX = worldX,
+            positionY = worldY,
+            positionZ = worldZ,
+            rotationX = rotationX,
+            rotationY = rotationY,
+            rotationZ = rotationZ,
+            scaleX = scale,
+            scaleY = scale,
+            scaleZ = scale,
+            prefabIndex = treeIndex
+        };
     }
 
     public void Clear()
     {
         while (treeParent.transform.childCount > 0)
             DestroyImmediate(treeParent.transform.GetChild(0).gameObject);
+    }
+
+    private void InstantiateTree(NatureObjectSaveData data)
+    {
+        var position = new Vector3(data.positionX, data.positionY, data.positionZ);
+        var rotation = Quaternion.Euler(data.rotationX, data.rotationY, data.rotationZ);
+        var scale = new Vector3(data.scaleX, data.scaleY, data.scaleZ);
+
+        GameObject tree = Instantiate(treeData[data.prefabIndex].prefab);
+        tree.transform.parent = treeParent.transform;
+        tree.layer = LayerMask.NameToLayer(treeLayer);
+        tree.transform.position = position;
+        tree.transform.rotation = rotation;
+        tree.transform.localScale = scale;
     }
 }

@@ -34,7 +34,7 @@ public class LoadGameMenuController : MonoBehaviour
 
     private void LoadButtonClicked()
     {
-        SaveGameManager.LoadGame((string)fileListView.selectedItem);
+        SaveGameManager.Instance.LoadGame((string)fileListView.selectedItem);
         MenuController.Instance.ShowMenu();
     }
 

@@ -5,11 +5,22 @@ using System.Linq;
 using System;
 using Newtonsoft.Json;  
 
+public class SaveFileData
+{
+    public int gameMapWidth;
+    public int gameMapHeight;
+    public List<int> gameMap;
+    public List<NatureObjectSaveData> treeData;
+}
+
 public class SaveGameManager : MonoBehaviour
 {
     public static SaveGameManager Instance { get; private set; }
 
     public static readonly string EXTENSION = ".sbp";
+
+    private GridManager gridManager;
+    private TreeGenerator treeGenerator;
 
     void Awake()
     {
@@ -17,6 +28,12 @@ public class SaveGameManager : MonoBehaviour
             Destroy(this);
         else
             Instance = this;
+    }
+
+    void Start()
+    {
+        gridManager = GameObject.FindAnyObjectByType<GridManager>();
+        treeGenerator = GameObject.FindAnyObjectByType<TreeGenerator>();
     }
 
     public void SaveGame(string name)
@@ -34,10 +51,18 @@ public class SaveGameManager : MonoBehaviour
         // 4. The location and state of all the creatures etc - future.
         // 5. Likewise items (wood, stone etc), stats, history etc etc
 
+        var saveData = new SaveFileData
+        {
+            gameMapWidth = gridManager.GameMapWidth,
+            gameMapHeight = gridManager.GameMapHeight,
+            gameMap = gridManager.GameMap,
+            treeData = treeGenerator.GetSaveData()
+        };
+
         using (StreamWriter file = File.CreateText(filename))
         {
             JsonSerializer serializer = new JsonSerializer();
-            serializer.Serialize(file, GameObject.FindAnyObjectByType<GridManager>().GameMap);
+            serializer.Serialize(file, saveData);
         }
     }
 
@@ -61,18 +86,20 @@ public class SaveGameManager : MonoBehaviour
         return files;
     }
 
-    internal static void LoadGame(string name)
+    public void LoadGame(string name)
     {
         string filename = GetFilename(name);
         Debug.Log($"Loading game from {filename}");
 
+        SaveFileData saveData = null;
         using (StreamReader file = File.OpenText(filename))
         {
             JsonSerializer serializer = new JsonSerializer();
-            List<int> map = (List<int>)serializer.Deserialize(file, typeof(List<int>));
-            GameObject.FindAnyObjectByType<GridManager>().Recreate(map, 100, 100);
-            MenuController.Instance.CloseAll();
+            saveData = (SaveFileData)serializer.Deserialize(file, typeof(SaveFileData));
         }
 
+        GameObject.FindAnyObjectByType<GridManager>().Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight);
+        treeGenerator.LoadTrees(saveData.treeData);
+        MenuController.Instance.CloseAll();
     }
 }
