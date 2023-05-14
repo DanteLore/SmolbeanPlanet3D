@@ -1,17 +1,40 @@
+using System;
 using UnityEngine;
 
 public class BuildManager : MonoBehaviour, IObjectGenerator
 {
+    public static BuildManager Instance;
     public GameObject mapCursorPrefab;
     public GameObject buildingPrefab;
     public GameObject buildingParent;
     public string groundLayer = "Ground";
     public string[] collisionLayers = { "Nature", "Buildings", "Creatures" };
-
     private GridManager gridManager;
     private GameMapGenerator gameMapGenerator;
     private GameObject mapCursor;
     private Vector2Int currentSquare;
+    private Vector3 center;
+    private bool okToBuild;
+    public bool IsBuilding { get; private set; }
+
+    public void BeginBuild()
+    {
+        IsBuilding = true;
+    }
+
+    public void EndBuild()
+    {
+        IsBuilding = false;
+        mapCursor.SetActive(false);
+    }
+
+    void Awake()
+    {
+        if(Instance != null && Instance != this)
+            Destroy(this);
+        else   
+            Instance = this;
+    }
 
     void Start()
     {
@@ -25,56 +48,50 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
 
     void Update()
     {
-        if(GameStateManager.Instance.IsPaused)
+        if(GameStateManager.Instance.IsPaused || !IsBuilding)
             return;
 
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(groundLayer)))
-        {
-            Vector2Int newSquare = gridManager.GetGameSquareFromWorldCoords(hitInfo.point);
-
-            bool mouseDown = Input.GetMouseButtonDown(0);
-
-            if(newSquare != currentSquare || mouseDown)
-            {
-                currentSquare = newSquare;
-
-                int level = gridManager.GameMap[currentSquare.y * gameMapGenerator.mapWidth + currentSquare.x];
-
-                if(level > 0)
-                {
-                    var bounds = gridManager.GetSquareBounds(currentSquare.x, currentSquare.y);
-
-                    float worldX = bounds.center.x;
-                    float worldZ = bounds.center.y;
-                    float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
-                    var center = new Vector3(worldX, worldY, worldZ);
-
-                    Color color = Color.red;
-
-                    if(CheckFlat(bounds) && CheckEmpty(center))
-                    {
-                        color = Color.blue;
-
-                        if(mouseDown)
-                        {
-                            PlaceBuilding(center);
-                        }
-                    }
-
-                    mapCursor.transform.position = center;
-                    mapCursor.GetComponent<Renderer>().material.SetColor("_baseColor", color);
-                    mapCursor.SetActive(true);
-                }
-                else
-                {
-                    mapCursor.SetActive(false);
-                }
-            }
-        }
-        else
+        bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        if(isOverUI)
         {
             mapCursor.SetActive(false);
+            return;
+        }
+
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(!Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(groundLayer)))
+        {
+            mapCursor.SetActive(false);
+            return;
+        }
+
+        Vector2Int newSquare = gridManager.GetGameSquareFromWorldCoords(hitInfo.point);
+
+        bool mouseDown = Input.GetMouseButtonDown(0);
+
+        if(mouseDown && okToBuild)
+        {
+            PlaceBuilding(center);
+            EndBuild();
+        }
+        else if(newSquare != currentSquare)
+        {
+            currentSquare = newSquare;
+
+            int level = gridManager.GameMap[currentSquare.y * gameMapGenerator.mapWidth + currentSquare.x];
+
+            var bounds = gridManager.GetSquareBounds(currentSquare.x, currentSquare.y);
+
+            float worldX = bounds.center.x;
+            float worldZ = bounds.center.y;
+            float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
+            center = new Vector3(worldX, worldY, worldZ);
+            okToBuild = CheckFlat(bounds) && CheckEmpty(center);
+
+            Color color = okToBuild ? Color.blue : Color.red;
+            mapCursor.transform.position = center;
+            mapCursor.GetComponent<Renderer>().material.SetColor("_baseColor", color);
+            mapCursor.SetActive(true);
         }
     }
 

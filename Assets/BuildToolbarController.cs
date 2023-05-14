@@ -20,11 +20,12 @@ public class BuildToolbarController : MonoBehaviour
 
     private void MainMenuButtonClicked()
     {
+        BuildManager.Instance.EndBuild();
         ToolbarController.Instance.ShowToolbar();
     }
 
     private void WoodcutterButtonClicked()
     {
-        //BuildManager.Instance.BeginBuild();
+        BuildManager.Instance.BeginBuild();
     }
 }
