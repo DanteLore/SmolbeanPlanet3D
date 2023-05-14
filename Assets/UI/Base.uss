@@ -1,0 +1,98 @@
+VisualElement {
+    color: rgb(255, 255, 255);
+    -unity-font: url('project://database/Assets/UI/Fonts/Acme-Regular.ttf?fileID=12800000&guid=181d1a44a80844316a6bf906b3287e10&type=3#Acme-Regular');
+    -unity-font-definition: url('project://database/Assets/UI/Fonts/Acme-Regular%20SDF.asset?fileID=11400000&guid=188be3c69c8cc496c90c64d17f6c8bb4&type=2#Acme-Regular SDF');
+}
+
+.menuContainer {
+    left: 10%;
+    top: 10%;
+    right: 10%;
+    position: absolute;
+    bottom: 10%;
+    background-color: rgba(0, 0, 0, 0.78);
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    flex-grow: 1;
+    align-items: center;
+    align-self: stretch;
+}
+
+.menuContainer Button {
+    width: 50%;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: rgb(51, 51, 51);
+    -unity-text-align: upper-center;
+}
+
+.menuContainer Button:hover {
+    background-color: rgb(168, 168, 168);
+}
+
+.toolbarContainer {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.78);
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 10px;
+    flex-direction: row;
+}
+
+.toolbarContainer Button {
+    width: 32px;
+    height: 32px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+.toolbarContainer Button:hover {
+    scale: 1.2 1.2;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+.title {
+    font-size: 32px;
+    margin-bottom: 10px;
+}

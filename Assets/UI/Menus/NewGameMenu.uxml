@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=00c18cbe3e66a49d99556b6328067b38&amp;type=3#Base" />
+    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
     <ui:VisualElement class="menuContainer" style="align-items: center; justify-content: center;">
         <ui:Label text="Create your island" display-tooltip-when-elided="true" name="title" class="title" />
         <ui:VisualElement style="flex-direction: row; padding-bottom: 20px; width: 600px;">
@@ -10,7 +10,7 @@
                 <ui:Button text="Generate Map" display-tooltip-when-elided="true" name="newMapButton" style="margin-top: 20px;" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement style="flex-direction: row-reverse; width: 600px;">
+        <ui:VisualElement style="flex-direction: row-reverse; width: 100%; flex-grow: 1;">
             <ui:Button text="Start" display-tooltip-when-elided="true" name="startGameButton" style="-unity-text-align: middle-center; width: 100px; height: 30px;" />
             <ui:Button text="Cancel" display-tooltip-when-elided="true" name="cancelButton" style="width: 100px; height: 30px;" />
         </ui:VisualElement>

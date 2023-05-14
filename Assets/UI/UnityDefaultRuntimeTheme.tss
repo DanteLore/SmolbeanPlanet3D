@@ -1,2 +1,4 @@
-@import url("unity-theme://default");
+
+@import url("Base.uss");
+
 VisualElement {}
