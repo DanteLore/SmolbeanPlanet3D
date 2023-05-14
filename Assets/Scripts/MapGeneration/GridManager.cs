@@ -29,11 +29,19 @@ public class GridManager : MonoBehaviour
     public int DrawMapWidth { get { return GameMapWidth + 1; }}
     public int DrawMapHeight { get { return GameMapHeight + 1; }}
 
-    void Start()
+    void Awake()
     {
-        GameMapWidth = mapData.GameMapWidth;
-        GameMapHeight = mapData.GameMapWidth;
-        GameMap = mapData.GameMap.ToList();
+        BootstrapMapData();
+    }
+
+    public void BootstrapMapData()
+    {
+        if(mapData != null)
+        {
+            GameMapWidth = mapData.GameMapWidth;
+            GameMapHeight = mapData.GameMapWidth;
+            GameMap = mapData.GameMap.ToList();
+        }
     }
 
     public void Recreate(List<int> gameMap, int width, int height)

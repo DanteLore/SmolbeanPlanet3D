@@ -12,6 +12,7 @@ public struct TreeData
 
 public class TreeGenerator : MonoBehaviour, IObjectGenerator
 {
+    public MapData mapData;
     public GameObject treeParent;
     public TreeData[] treeData;
     public string treeLayer = "Nature";
@@ -29,40 +30,28 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
     private int mapHeight;
 
     private GridManager gridManager;
-    private GameMapGenerator gameMapGenerator;
-
-    private List<NatureObjectSaveData> saveData;
-
-    void Start()
-    {
-        gridManager = GameObject.FindAnyObjectByType<GridManager>();
-        gameMapGenerator = GameObject.FindAnyObjectByType<GameMapGenerator>();
-    }
 
     public List<NatureObjectSaveData> GetSaveData()
     {
-        return saveData;
+        return GetComponentsInChildren<PineTree>().Select(t => t.saveData).ToList();
     }
+
 
     public void LoadTrees(List<NatureObjectSaveData> loadedData)
     {
-        saveData = loadedData;
-
         Clear();
 
-        foreach(var treeData in saveData)
+        foreach(var treeData in loadedData)
             InstantiateTree(treeData);
     }
 
-    public void GenerateTrees()
+    public void GenerateTrees(List<int> gameMap, int mapWidth, int mapHeight)
     {
-        saveData = new List<NatureObjectSaveData>();
+        gridManager = GameObject.FindAnyObjectByType<GridManager>();
+
+        var treeData = new List<NatureObjectSaveData>();
 
         Clear();
-        
-        gameMap = gridManager.GameMap;
-        mapWidth = gameMapGenerator.mapWidth;
-        mapHeight = gameMapGenerator.mapHeight;
 
         float xOffset = UnityEngine.Random.Range(0f, 1000f);
         float yOffset = UnityEngine.Random.Range(0f, 1000f);
@@ -76,13 +65,15 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
                     float sample = Mathf.PerlinNoise((x + xOffset) / (mapWidth * noiseScale), (z + yOffset) / (mapHeight * noiseScale));
 
                     if(sample > noiseThreshold)
-                        saveData.Add(GenerateTreeData(z, x));
+                    {
+                        var data = GenerateTreeData(z, x);
+                        treeData.Add(data);
+                    }
                 }
             }
         }
 
-        foreach(var treeData in saveData)
-            InstantiateTree(treeData);
+        treeData.ForEach(InstantiateTree);
     }
 
     private NatureObjectSaveData GenerateTreeData(int z, int x)
@@ -135,5 +126,6 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         tree.transform.position = position;
         tree.transform.rotation = rotation;
         tree.transform.localScale = scale;
+        tree.GetComponent<PineTree>().saveData = data;
     }
 }

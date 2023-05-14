@@ -35,7 +35,7 @@ public class LoadGameMenuController : MonoBehaviour
     private void LoadButtonClicked()
     {
         SaveGameManager.Instance.LoadGame((string)fileListView.selectedItem);
-        MenuController.Instance.ShowMenu();
+        MenuController.Instance.CloseAll();
     }
 
     private void CancelButtonClicked()

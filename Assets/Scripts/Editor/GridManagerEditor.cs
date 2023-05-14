@@ -8,9 +8,11 @@ public class GridManagerEditor : Editor
     {
         base.OnInspectorGUI();
 
+        var gridManager = (GridManager)target;
+        gridManager.BootstrapMapData();
+
         if(GUILayout.Button("Wave Function Collapse"))
         {
-            var gridManager = (GridManager)target;
             var generator = GameObject.FindAnyObjectByType<GameMapGenerator>();
 
             var newMap = generator.GenerateMap();

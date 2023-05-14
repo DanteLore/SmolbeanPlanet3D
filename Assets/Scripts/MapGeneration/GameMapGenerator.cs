@@ -1,26 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System;
 
 public class GameMapGenerator : MonoBehaviour
 {
-    public GameObject previewPlane;
     public AnimationCurve islandFalloff;
     public int mapHeight = 100;
     public int mapWidth = 100;
 
     public float noiseScale1 = 0.3f;
     public float noiseScale2 = 0.1f;
-
-    void Start()
-    {
-        if(previewPlane != null)
-        {
-            previewPlane.SetActive(false);
-        }
-    }
 
     public List<int> GenerateMap(int seed = 0)
     {
@@ -29,11 +18,6 @@ public class GameMapGenerator : MonoBehaviour
 
         var noise = GenerateNoiseMap();
         return noise.Select(s => Mathf.FloorToInt(Mathf.Lerp(0.0f, 3f, s))).Select(x => x > 2 ? 2 : x).ToList();
-    }
-
-    public void HidePreview()
-    {
-        previewPlane.SetActive(false);
     }
 
     private List<float> GenerateNoiseMap()
