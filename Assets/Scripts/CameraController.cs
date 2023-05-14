@@ -164,6 +164,10 @@ public class CameraController : MonoBehaviour
         if(!useScreenEdge)
             return;
 
+        bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        if(isOverUI)
+            return;
+
         Vector2 mousePosition = Mouse.current.position.ReadValue();
         Vector3 moveDirection = Vector3.zero;
 
