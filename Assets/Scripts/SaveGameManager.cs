@@ -11,6 +11,7 @@ public class SaveFileData
     public int gameMapHeight;
     public List<int> gameMap;
     public List<NatureObjectSaveData> treeData;
+    public List<BuildingObjectSaveData> buildingData;
 }
 
 public class SaveGameManager : MonoBehaviour
@@ -21,6 +22,7 @@ public class SaveGameManager : MonoBehaviour
 
     private GridManager gridManager;
     private TreeGenerator treeGenerator;
+    private BuildManager buildManager;
 
     void Awake()
     {
@@ -34,6 +36,7 @@ public class SaveGameManager : MonoBehaviour
     {
         gridManager = GameObject.FindAnyObjectByType<GridManager>();
         treeGenerator = GameObject.FindAnyObjectByType<TreeGenerator>();
+        buildManager = GameObject.FindAnyObjectByType<BuildManager>();
     }
 
     public void SaveGame(string name)
@@ -56,7 +59,8 @@ public class SaveGameManager : MonoBehaviour
             gameMapWidth = gridManager.GameMapWidth,
             gameMapHeight = gridManager.GameMapHeight,
             gameMap = gridManager.GameMap,
-            treeData = treeGenerator.GetSaveData()
+            treeData = treeGenerator.GetSaveData(),
+            buildingData = buildManager.GetSaveData()
         };
 
         using (StreamWriter file = File.CreateText(filename))
@@ -100,6 +104,7 @@ public class SaveGameManager : MonoBehaviour
 
         GameObject.FindAnyObjectByType<GridManager>().Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight);
         treeGenerator.LoadTrees(saveData.treeData);
+        buildManager.LoadBuildings(saveData.buildingData);
         MenuController.Instance.CloseAll();
     }
 }

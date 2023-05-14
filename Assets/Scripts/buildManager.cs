@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BuildManager : MonoBehaviour, IObjectGenerator
@@ -97,7 +99,24 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
 
     private void PlaceBuilding(Vector3 pos)
     {
+        BuildingObjectSaveData saveData = new BuildingObjectSaveData
+        {
+            positionX = pos.x,
+            positionY = pos.y,
+            positionZ = pos.z,
+            rotationY = 0,
+            prefabIndex = 0
+        };
+
+        InstantiateBuilding(saveData);
+    }
+
+    private void InstantiateBuilding(BuildingObjectSaveData saveData)
+    {
+        Vector3 pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
+
         var building = Instantiate(buildingPrefab, pos, Quaternion.identity, buildingParent.transform);
+        building.GetComponent<ISmolbeanBuilding>().SaveData = saveData;
     }
 
     private bool CheckEmpty(Vector3 center)
@@ -151,5 +170,18 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     {
         while (buildingParent.transform.childCount > 0)
             DestroyImmediate(buildingParent.transform.GetChild(0).gameObject);
+    }
+
+    public List<BuildingObjectSaveData> GetSaveData()
+    {
+        return GetComponentsInChildren<ISmolbeanBuilding>().Select(b => b.SaveData).ToList();
+    }
+
+    public void LoadBuildings(List<BuildingObjectSaveData> loadedData)
+    {
+        Clear();
+
+        foreach(var buildingData in loadedData)
+            InstantiateBuilding(buildingData);
     }
 }

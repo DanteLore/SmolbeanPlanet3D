@@ -33,7 +33,7 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
 
     public List<NatureObjectSaveData> GetSaveData()
     {
-        return GetComponentsInChildren<PineTree>().Select(t => t.saveData).ToList();
+        return GetComponentsInChildren<SmolbeanTree>().Select(t => t.saveData).ToList();
     }
 
 
@@ -126,6 +126,6 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         tree.transform.position = position;
         tree.transform.rotation = rotation;
         tree.transform.localScale = scale;
-        tree.GetComponent<PineTree>().saveData = data;
+        tree.GetComponent<SmolbeanTree>().saveData = data;
     }
 }
