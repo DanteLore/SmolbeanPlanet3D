@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using System.Linq;
 
-public class Woodcutter : ResourceGatherer
+public class Stonecutter : ResourceGatherer
 {
     protected override GameObject GetTarget(Vector3 pos)
     {
@@ -13,7 +10,7 @@ public class Woodcutter : ResourceGatherer
         return candidates
             .Select(c => c.gameObject)
             .Except(blacklist)
-            .Where(go => go.GetComponent<SmolbeanTree>() != null)
+            .Where(go => go.GetComponent<SmolbeanRock>() != null)
             .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - pos))
             .FirstOrDefault();
     }

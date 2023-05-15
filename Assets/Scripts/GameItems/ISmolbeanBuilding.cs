@@ -1,4 +1,8 @@
+using UnityEngine;
+
 public interface ISmolbeanBuilding
 {
-    BuildingObjectSaveData SaveData {get; set;}
+    public BuildingObjectSaveData SaveData {get; set;}
+
+    public Vector3 GetSpawnPoint();
 }

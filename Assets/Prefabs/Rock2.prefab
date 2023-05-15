@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6547321965748580985}
   - component: {fileID: 1687766306489675516}
   - component: {fileID: 5063649910047706568}
-  - component: {fileID: 8353892599116407411}
   - component: {fileID: -482618016648383138}
+  - component: {fileID: 2823389328173496974}
   m_Layer: 7
   m_Name: Rock2
   m_TagString: Untagged
@@ -85,28 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8353892599116407411
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 705949116435854121}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 5244915625381210605, guid: 0303c2fe5b6a64daeabb225779da650f, type: 3}
 --- !u!114 &-482618016648383138
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,3 +108,24 @@ MonoBehaviour:
     scaleY: 0
     scaleZ: 0
     prefabIndex: 0
+--- !u!65 &2823389328173496974
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705949116435854121}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.7382729, y: 1.4558038, z: 2.3565898}
+  m_Center: {x: -0.036604613, y: 0.5123517, z: -0.30491522}

@@ -1,7 +1,12 @@
 
+
+# Smolbean Ideas
+
+I have decided I want the game to be, eventually, a cross between The Settlers and Rimworld. The aim overall will be to manage a colony of people with increasingly complex needs on a small, resource constrained island.  There won't be an "enemy" as such - in fact, the colonists are their own worst enemies - because their greed could cause them to cut down the last tree or kill the last animal for a tasty snack.  Just like real life, mankind (smolbean kind) will cause it's own downfall 99% of the time.  So resource chains and building-based production like the settlers, but I'd like the player to _care_ about their colonists, thus the Rimworld vibe.  Anyway... a long way to go...
+
 # TO DO List
 
-1. Add a stonecutter and get them cuttin' stones
+1. ~Add a stonecutter and get them cuttin' stones~
 2. ~Set up the build menu to create buttons automatically, perhaps from some scriptable object data (prefab, thumbnail, building data etc).~
 3. Animals (dodos I think) and a hunter
 4. Drops!  Trees drop logs, rocks drop stones.  Wood/Stonecutters collect these and dump them by their huts, until there's no more room.
@@ -23,14 +28,18 @@
 
 Newest entries at the top :)
 
+
+New graphics settings.  The depth of field on the camera (IMO) brings so much life to the scene.  Lighting slightly improved.  Held back at this stage by Unity's inability to use baked animation on prefabs... and given that every asset in the game is a prefab... this makes it a blocker.  Just means objcts look
+a bit lame with not lit by the "sun" light.
+![Screenshot](./Docs/Images/screenshot27.png)
+
+
 ## Very busy weekend
 
 This weekend I had a very bad back, so I was basically stuck in the house, unable to do very much.  As a result though, I made HUGE progress on Smolbean Planet 3D.
 
 Added a variety of menus and toolbars, load and save game functionality, the ability to create a new game, erm, in-game... as well as stones and a new
 stonecutter's hut.
-
-I have decided I want the game to be, eventually, a cross between The Settlers and Rimworld. The aim overall will be to manage a colony of people with increasingly complex needs on a small, resource constrained island.  There won't be an "enemy" as such - in fact, the colonists are their own worst enemies - because their greed could cause them to cut down the last tree or kill the last animal for a tasty snack.  Just like real life, mankind (smolbean kind) will cause it's own downfall 99% of the time.  So resource chains and building-based production like the settlers, but I'd like the player to _care_ about their colonists, thus the Rimworld vibe.  Anyway... a long way to go...
 
 Rocks and new buildings.
 ![Screenshot](./Docs/Images/screenshot27.png)

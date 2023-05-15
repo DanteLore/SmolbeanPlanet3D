@@ -71,7 +71,7 @@ Material:
     - _RefractionScale: 0.01
     - _RefractionSpeed: 0.2
     - _RefractionStrength: 0.002
-    - _ShimmerDensity: 2000
+    - _ShimmerDensity: 20000
     - _ShimmerFalloff: 7
     - _ShimmerStength: 0.2
     - _WaveSpeed: 1
