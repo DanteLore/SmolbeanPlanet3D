@@ -54,8 +54,8 @@ Material:
     - _BUILTIN_QueueOffset: 0
     - _ColorRefractionScale: 0.003
     - _ColorRefractionSpeed: 0.1
-    - _ColorRefractionStrength: 0.002
-    - _DepthFadeDistance: 0.5
+    - _ColorRefractionStrength: 0.003
+    - _DepthFadeDistance: 0.4
     - _DepthRefractionScale: 0.003
     - _DepthRefractionSpeed: 0.1
     - _DepthRefractionStrength: 0.002
@@ -78,9 +78,9 @@ Material:
     - _WaveSteepness: 0.1
     - _Wavelength: 10
     m_Colors:
-    - _DeepWaterColor: {r: 0.09692029, g: 0.15812957, b: 0.62264144, a: 0.5019608}
+    - _DeepWaterColor: {r: 0.09692026, g: 0.15812954, b: 0.62264144, a: 0.5803922}
     - _HorizonColor: {r: 1, g: 0.80529636, b: 0.5707547, a: 1}
-    - _ShallowWaterColor: {r: 0.31278917, g: 0.6925052, b: 0.9339623, a: 0.2509804}
+    - _ShallowWaterColor: {r: 0.31278914, g: 0.6925052, b: 0.9339623, a: 0.5568628}
     - _ShimmerColor: {r: 0.4292453, g: 0.9658024, b: 1, a: 1}
     - _WaveDirections: {r: 0.1, g: 0.2, b: 0.4, a: 0.9}
   m_BuildTextureStacks: []

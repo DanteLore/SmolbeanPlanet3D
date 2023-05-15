@@ -16,6 +16,7 @@ public class GridManager : MonoBehaviour
     public float coastRadius = 0.8f;
 
     public string groundLayer = "Ground";
+    private int groundLayerMask;
 
     public bool addMeshDebugGizmos = false;
 
@@ -31,6 +32,7 @@ public class GridManager : MonoBehaviour
 
     void Awake()
     {
+        groundLayerMask = LayerMask.GetMask(groundLayer);
         BootstrapMapData();
     }
 
@@ -156,7 +158,7 @@ public class GridManager : MonoBehaviour
             parent.AddComponent<DebugMesh>();
     }
 
-    internal Rect GetSquareBounds(int gameX, int gameZ)
+    public Rect GetSquareBounds(int gameX, int gameZ)
     {
         float meshX = (gameX * tileSize) - ((DrawMapWidth * tileSize) / 2.0f);
         float meshZ = (gameZ * tileSize) - ((DrawMapHeight * tileSize) / 2.0f);
@@ -164,10 +166,16 @@ public class GridManager : MonoBehaviour
         return new Rect(meshX, meshZ, tileSize, tileSize);
     }
 
-    internal float GetGridHeightAt(float worldX, float worldZ)
+    public Bounds GetMapBounds()
+    {
+        return Ground.GetComponent<MeshFilter>().mesh.bounds;
+    }
+
+    public float GetGridHeightAt(float worldX, float worldZ)
     { 
+
         Ray ray = new Ray(new Vector3(worldX, 100f, worldZ), Vector3.down);
-        if (Physics.Raycast(ray, out RaycastHit hit, 200f, LayerMask.GetMask(groundLayer))) 
+        if (Physics.Raycast(ray, out RaycastHit hit, 200f, groundLayerMask)) 
         {
             return hit.point.y;
         }
@@ -177,7 +185,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    internal Vector2Int GetGameSquareFromWorldCoords(Vector3 point)
+    public Vector2Int GetGameSquareFromWorldCoords(Vector3 point)
     {
         float x = point.x + ((DrawMapWidth * tileSize) / 2.0f);
         float y = point.z + ((DrawMapHeight * tileSize) / 2.0f);
