@@ -31,7 +31,7 @@ Newest entries at the top :)
 
 New graphics settings.  The depth of field on the camera (IMO) brings so much life to the scene.  Lighting slightly improved.  Held back at this stage by Unity's inability to use baked animation on prefabs... and given that every asset in the game is a prefab... this makes it a blocker.  Just means objcts look
 a bit lame with not lit by the "sun" light.
-![Screenshot](./Docs/Images/screenshot27.png)
+![Screenshot](./Docs/Images/screenshot28.png)
 
 
 ## Very busy weekend
