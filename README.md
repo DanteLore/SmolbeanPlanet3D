@@ -8,7 +8,7 @@
 5. Separate people from their buildings - currently, the colonists lifespans are controlled by their buildings.  Do this centrally.
 6. Create rigged models for the colonists, animate and import them.  Colonists dress the way they dress, they don't change clothes based on their job.
 7. Get some decent GPU-instanced grass on the go, to make the ground look more professional.
-8. Sort out the lighting so the buildings look less lame.
+8. ~Sort out the lighting so the buildings look less lame.~ (can't get much better without baking)
 9. Add time of day as a concept, including day/night cycle.
 10. Warehouse and Porters (new job type - carries stuff round the island as needed).  Maybe you start with the "Warehouse" as a big pile of resources and a few people gathered round a camp fire.  Maybe a ship wreck?
 11. Building of buildings - so porters and builders create the buildings using resources.
