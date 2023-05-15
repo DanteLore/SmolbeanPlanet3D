@@ -2,7 +2,7 @@
 # TO DO List
 
 1. Add a stonecutter and get them cuttin' stones
-2. Set up the build menu to create buttons automatically, perhaps from some scriptable object data (prefab, thumbnail, building data etc).
+2. ~Set up the build menu to create buttons automatically, perhaps from some scriptable object data (prefab, thumbnail, building data etc).~
 3. Animals (dodos I think) and a hunter
 4. Drops!  Trees drop logs, rocks drop stones.  Wood/Stonecutters collect these and dump them by their huts, until there's no more room.
 5. Separate people from their buildings - currently, the colonists lifespans are controlled by their buildings.  Do this centrally.
