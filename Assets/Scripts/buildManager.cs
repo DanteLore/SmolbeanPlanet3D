@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class BuildManager : MonoBehaviour, IObjectGenerator
 {
+    public BuildingSpec[] buildings;
     public static BuildManager Instance;
     public GameObject mapCursorPrefab;
-    public GameObject buildingPrefab;
     public string groundLayer = "Ground";
     public string[] collisionLayers = { "Nature", "Buildings", "Creatures" };
     private GridManager gridManager;
@@ -17,9 +17,11 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     private Vector3 center;
     private bool okToBuild;
     public bool IsBuilding { get; private set; }
+    private int selectedBuildingIndex;
 
-    public void BeginBuild()
+    public void BeginBuild(BuildingSpec spec)
     {
+        selectedBuildingIndex = Array.IndexOf(buildings, spec);
         IsBuilding = true;
     }
 
@@ -104,7 +106,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
             positionY = pos.y,
             positionZ = pos.z,
             rotationY = 0,
-            prefabIndex = 0
+            prefabIndex = selectedBuildingIndex
         };
 
         InstantiateBuilding(saveData);
@@ -114,7 +116,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     {
         Vector3 pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
 
-        var building = Instantiate(buildingPrefab, pos, Quaternion.identity, transform);
+        var building = Instantiate(buildings[saveData.prefabIndex].prefab, pos, Quaternion.identity, transform);
         building.GetComponent<ISmolbeanBuilding>().SaveData = saveData;
     }
 

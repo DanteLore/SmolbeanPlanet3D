@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine.UIElements;
 
 public class BuildToolbarController : MonoBehaviour
 {
-    UIDocument document;
+    private UIDocument document;
 
     void OnEnable()
     {
@@ -14,18 +15,30 @@ public class BuildToolbarController : MonoBehaviour
         var mainMenuButton = document.rootVisualElement.Q<Button>("mainToolbarButton");
         mainMenuButton.clicked += MainMenuButtonClicked;
         
-        var woodcutterButton = document.rootVisualElement.Q<Button>("woodcutterButton");
-        woodcutterButton.clicked += WoodcutterButtonClicked;
+        var buttonContainer = document.rootVisualElement.Q<VisualElement>("toolbarContainer");
+        buttonContainer.Clear();
+        buttonContainer.Add(mainMenuButton);
+
+        foreach(var spec in BuildManager.Instance.buildings)
+        {
+            Button button = new Button();
+            button.clickable.clickedWithEventInfo += BuildButtonClicked;
+            button.style.backgroundColor = new Color(0, 0, 0, 0);
+            button.style.backgroundImage = spec.thumbnail;
+            button.userData = spec;
+            buttonContainer.Add(button);
+        }
+    }
+
+    private void BuildButtonClicked(EventBase eventBase)
+    {
+        var spec = (BuildingSpec)((Button)eventBase.target).userData;
+        BuildManager.Instance.BeginBuild(spec);
     }
 
     private void MainMenuButtonClicked()
     {
         BuildManager.Instance.EndBuild();
         ToolbarController.Instance.ShowToolbar();
-    }
-
-    private void WoodcutterButtonClicked()
-    {
-        BuildManager.Instance.BeginBuild();
     }
 }

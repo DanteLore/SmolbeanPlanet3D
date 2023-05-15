@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 7837628046763817345}
   - component: {fileID: 6394968070652197841}
   - component: {fileID: 7552140733555622206}
-  m_Layer: 0
+  - component: {fileID: -1545842200889632184}
+  m_Layer: 8
   m_Name: StonecuttersHut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,6 +109,18 @@ CapsuleCollider:
   m_Height: 6.57
   m_Direction: 1
   m_Center: {x: 0.0000013113022, y: 1.2, z: 0.0000011920929}
+--- !u!114 &-1545842200889632184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5560271367840597242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f27a230f4c7334c8e812204fa82e8b4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8922918703999009748
 GameObject:
   m_ObjectHideFlags: 0
@@ -117,7 +130,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1851234442589678992}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
