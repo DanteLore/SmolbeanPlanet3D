@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: StonecuttersHutSpec
   m_EditorClassIdentifier: 
   buildingName: Stonecutter's Hut
-  prefab: {fileID: 5560271367840597242, guid: 886ad075998a542109a8ac96bf797615, type: 3}
+  prefab: {fileID: 7127336335192020291, guid: 886ad075998a542109a8ac96bf797615, type: 3}
   thumbnail: {fileID: 2800000, guid: 3b18fc93b31a14a3cb547b10f6cc63c4, type: 3}

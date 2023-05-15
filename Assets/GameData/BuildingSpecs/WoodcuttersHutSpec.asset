@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: WoodcuttersHutSpec
   m_EditorClassIdentifier: 
   buildingName: Woodcutter's Hut
-  prefab: {fileID: 3524106781437497020, guid: 94ca215b1bc314f3abb19e3610b10604, type: 3}
+  prefab: {fileID: 5049767018856108957, guid: 94ca215b1bc314f3abb19e3610b10604, type: 3}
   thumbnail: {fileID: 2800000, guid: f8e98448019e242d793edd5cbca829f7, type: 3}

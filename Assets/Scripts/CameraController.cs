@@ -16,12 +16,11 @@ public class CameraController : MonoBehaviour
     public float damping = 15f;
     private float speed;
 
-    [Header("Vertical Movement (Zoom)")]
-    public float stepSize = 2f;
-    public float zoomDamping= 7.5f;
-    public float minHeight = 5f;
-    public float maxHeight = 50f;
-    public float zoomSpeed = 2f;
+    [Header("Zoom")]
+    public float stepSize = 0.01f;
+    [Range(0f, 1f)]
+    public float minZoomFactor = 0.05f;
+    public float zoomSpeed = 8f;
 
     [Header("Rotation")]
     public float maxRotationSpeed = 2f;
@@ -34,6 +33,7 @@ public class CameraController : MonoBehaviour
 
     private Vector3 targetPosition;
     private float zoomHeight;
+    private float zoomVectorMaxLength;
     private Vector3 horizontalVelocity;
     private Vector3 lastPosition;
 
@@ -49,7 +49,8 @@ public class CameraController : MonoBehaviour
         if(Application.isEditor)
             useScreenEdge = false; // Disabe bump scroll in editor
 
-        zoomHeight = cameraTransform.localPosition.y;
+        zoomHeight = 0.5f;
+        zoomVectorMaxLength = cameraTransform.localPosition.magnitude * 2;
         cameraTransform.LookAt(transform);
 
         lastPosition = transform.position;
@@ -145,27 +146,20 @@ public class CameraController : MonoBehaviour
 
         if(Mathf.Abs(value) > 0.1f)
         {
-            zoomHeight = cameraTransform.localPosition.y + value * stepSize;
-            zoomHeight = Mathf.Clamp(zoomHeight, minHeight, maxHeight);
+            zoomHeight = zoomHeight + value * stepSize;
+            zoomHeight = Mathf.Clamp(zoomHeight, minZoomFactor, 1f);
         }
     }
 
     private void UpdateCameraPosition()
     {
-        Vector3 zoomTarget = new Vector3(cameraTransform.localPosition.x, zoomHeight, cameraTransform.localPosition.z);
-        zoomTarget -= zoomSpeed * (zoomHeight - cameraTransform.localPosition.y) * Vector3.forward;
-
-        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.deltaTime * zoomDamping);
-        //cameraTransform.LookAt(transform);
+        var zoomTarget = (cameraTransform.localPosition).normalized * zoomHeight * zoomVectorMaxLength;
+        cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.deltaTime * zoomSpeed);
     }
 
     private void CheckMouseAtScreenEdge()
     {
         if(!useScreenEdge)
-            return;
-
-        bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
-        if(isOverUI)
             return;
 
         Vector2 mousePosition = Mouse.current.position.ReadValue();
