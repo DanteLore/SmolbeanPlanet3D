@@ -25,7 +25,7 @@ Newest entries at the top :)
 
 ## Very busy weekend
 
-This weekend I had a very bad back, so I was basically stuck doing very little on the computer.  As a result though, HUGE progress of Smolbean Planet 3D.
+This weekend I had a very bad back, so I was basically stuck in the house, unable to do very much.  As a result though, I made HUGE progress on Smolbean Planet 3D.
 
 Added a variety of menus and toolbars, load and save game functionality, the ability to create a new game, erm, in-game... as well as stones and a new
 stonecutter's hut.
