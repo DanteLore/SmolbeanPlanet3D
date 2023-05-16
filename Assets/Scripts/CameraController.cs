@@ -28,7 +28,7 @@ public class CameraController : MonoBehaviour
     public float maxTilt = 80.0f;
 
     [Header("Screen Edge Movement")]
-    public float edgeTolerance = 0.05f;
+    public float edgeTolerance = 0.01f;
     private bool useScreenEdge = true;
 
     private Vector3 targetPosition;
