@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4880386700111951870}
   - component: {fileID: 2853688406467720704}
   - component: {fileID: 6983870677337891780}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MapCursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}

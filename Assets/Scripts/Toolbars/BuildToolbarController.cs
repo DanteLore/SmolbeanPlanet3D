@@ -15,9 +15,8 @@ public class BuildToolbarController : MonoBehaviour
         var mainMenuButton = document.rootVisualElement.Q<Button>("mainToolbarButton");
         mainMenuButton.clicked += MainMenuButtonClicked;
         
-        var buttonContainer = document.rootVisualElement.Q<VisualElement>("toolbarContainer");
+        var buttonContainer = document.rootVisualElement.Q<VisualElement>("buildingButtonContainer");
         buttonContainer.Clear();
-        buttonContainer.Add(mainMenuButton);
 
         foreach(var spec in BuildManager.Instance.buildings)
         {
@@ -28,6 +27,16 @@ public class BuildToolbarController : MonoBehaviour
             button.userData = spec;
             buttonContainer.Add(button);
         }
+    }
+
+    private void DeleteButtonClicked()
+    {
+
+    }
+
+    private void RotateButtonClicked()
+    {
+        
     }
 
     private void BuildButtonClicked(EventBase eventBase)

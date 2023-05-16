@@ -2,13 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BuildManager : MonoBehaviour, IObjectGenerator
 {
     public BuildingSpec[] buildings;
     public static BuildManager Instance;
     public GameObject mapCursorPrefab;
+    public GameObject buildingEditWidgetPrefab;
     public string groundLayer = "Ground";
+    public string buildingLayer = "Buildings";
     public string[] collisionLayers = { "Nature", "Buildings", "Creatures" };
     private GridManager gridManager;
     private GameMapGenerator gameMapGenerator;
@@ -17,19 +20,11 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     private Vector3 center;
     private bool okToBuild;
     public bool IsBuilding { get; private set; }
+    public bool IsEditing { get; private set; }
+
+    private Transform editTargetTransform;
     private int selectedBuildingIndex;
-
-    public void BeginBuild(BuildingSpec spec)
-    {
-        selectedBuildingIndex = Array.IndexOf(buildings, spec);
-        IsBuilding = true;
-    }
-
-    public void EndBuild()
-    {
-        IsBuilding = false;
-        mapCursor.SetActive(false);
-    }
+    private GameObject buildingEditWidget;
 
     void Awake()
     {
@@ -49,20 +44,77 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
         mapCursor.SetActive(false);
     }
 
+    public void BeginBuild(BuildingSpec spec)
+    {
+        selectedBuildingIndex = Array.IndexOf(buildings, spec);
+        IsBuilding = true;
+    }
+
+    public void EndBuild()
+    {
+        IsBuilding = false;
+        mapCursor.SetActive(false);
+    }
+
+    private void BeginEdit(Transform target)
+    {
+        IsEditing = true;
+        editTargetTransform = target;
+        buildingEditWidget = Instantiate(buildingEditWidgetPrefab, target.position, target.rotation, target);
+        //buildingEditWidget.GetComponent<BuildingEdit>().OnObjectDestroyed += delegate { EndEdit(); };
+    }
+
+    private void EndEdit()
+    {
+        IsEditing = false;
+        Destroy(buildingEditWidget);
+    }
+
     void Update()
     {
-        if(GameStateManager.Instance.IsPaused || !IsBuilding)
+        if (GameStateManager.Instance.IsPaused)
             return;
 
         bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
-        if(isOverUI)
+        if (isOverUI)
         {
             mapCursor.SetActive(false);
             return;
         }
 
+        if (IsBuilding)
+            UpdateBuildMode();
+        else 
+            UpdateSelectBuildingMode();
+    }
+
+    private void UpdateSelectBuildingMode()
+    {
+        if (!Mouse.current.leftButton.wasPressedThisFrame)
+            return;
+
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if(!Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(groundLayer)))
+        bool hitSomething = Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(buildingLayer));
+
+        if(IsEditing && !hitSomething) 
+        {
+            // User clicked off the building
+            EndEdit();
+        }
+        else if(IsEditing && hitInfo.transform != editTargetTransform)
+        {
+            EndEdit();
+            BeginEdit(hitInfo.transform);
+        }
+        else if(!IsEditing)
+        {
+            BeginEdit(hitInfo.transform);
+        }
+    }
+    private void UpdateBuildMode()
+    {
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (!Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(groundLayer)))
         {
             mapCursor.SetActive(false);
             return;
@@ -70,14 +122,14 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
 
         Vector2Int newSquare = gridManager.GetGameSquareFromWorldCoords(hitInfo.point);
 
-        bool mouseDown = Input.GetMouseButtonDown(0);
+        bool mouseDown = Mouse.current.leftButton.wasPressedThisFrame;
 
-        if(mouseDown && okToBuild)
+        if (mouseDown && okToBuild)
         {
             PlaceBuilding(center);
             EndBuild();
         }
-        else if(newSquare != currentSquare)
+        else if (newSquare != currentSquare)
         {
             currentSquare = newSquare;
 
