@@ -31,6 +31,16 @@ Newest entries at the top :)
 
 ## GPU gardening
 
+Here's the shadergraph for the grass shader - in case it's useful to anyone.
+![Screenshot](./Docs/Images/screenshot34.png)
+
+So happy with the way grass has turned out - and still with a respectable frame rate, even on my Macbook M1.
+![Screenshot](./Docs/Images/screenshot33.png)
+
+![Screenshot](./Docs/Images/screenshot32.png)
+
+![Screenshot](./Docs/Images/screenshot31.png)
+
 Two millon blades of grass - but only 10FPS :)
 ![Screenshot](./Docs/Images/screenshot30.png)
 

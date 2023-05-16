@@ -4,7 +4,14 @@ using System.Linq;
 
 public class GrassInstancer : MonoBehaviour
 {
-    public int instanceCount;
+    private class Batch
+    {
+        public List<Matrix4x4> batchData = new List<Matrix4x4>();
+        public Vector3 center;
+    }
+
+    private const int BATCH_SIZE = 1024;
+    public int instanceAttemptsPerSquareMeter = 1000;
     public Mesh mesh;
     public Material material;
     public string groundLayer = "Ground";
@@ -16,20 +23,23 @@ public class GrassInstancer : MonoBehaviour
     public float maxScale = 1.5f;
     public float maxTilt = 10f;
     public float noiseScale = 0.1f;
+    public float renderThreshold = 100f;
 
-    private List<List<Matrix4x4>> batches;
-    private Bounds bounds;
+    private List<Batch> batches;
     private int rayLayerMask;
     private int groundLayerMask;
     private int groundLayerNum;
-    private float xOffset;
-    private float yOffset;
+    private float xNoiseOffset;
+    private float yNoiseOffset;
+    private Bounds mapBounds;
+    public Transform cameraTransform;
 
     void Update()
     {
         foreach(var batch in batches)
+            if(Vector3.Distance(batch.center, cameraTransform.position) < renderThreshold)
             for(int i = 0; i < mesh.subMeshCount; i++)
-                Graphics.DrawMeshInstanced(mesh, i, material, batch, null, UnityEngine.Rendering.ShadowCastingMode.Off, true);
+                Graphics.DrawMeshInstanced(mesh, i, material, batch.batchData, null, UnityEngine.Rendering.ShadowCastingMode.Off, true);
     }
 
     void Start()
@@ -39,42 +49,85 @@ public class GrassInstancer : MonoBehaviour
 
     public void Draw()
     {
+        System.DateTime start = System.DateTime.Now;
         Random.InitState(randomSeed);
+        xNoiseOffset = UnityEngine.Random.Range(0f, 1000f);
+        yNoiseOffset = UnityEngine.Random.Range(0f, 1000f);
 
-        batches = new List<List<Matrix4x4>>();
-        bounds = FindAnyObjectByType<GridManager>().GetMapBounds();
         rayLayerMask = LayerMask.GetMask(occlusionLayers.Append(groundLayer).ToArray());
         groundLayerMask = LayerMask.GetMask(groundLayer);
         groundLayerNum = LayerMask.NameToLayer(groundLayer);
 
-        xOffset = UnityEngine.Random.Range(0f, 1000f);
-        yOffset = UnityEngine.Random.Range(0f, 1000f);
+        mapBounds = FindAnyObjectByType<GridManager>().GetMapBounds();
+        float area = mapBounds.size.x * mapBounds.size.y;
+        int instanceCount = Mathf.CeilToInt(instanceAttemptsPerSquareMeter * area);
+        Debug.Log($"Map area {area}sqm => {instanceCount} instance attempts total");
 
-        int itemsCreated = 0;
-        int itemsAddedToCurrentBatch = 0;
-        batches.Add(new List<Matrix4x4>());
-        while (itemsCreated < instanceCount)
+        int desiredBatchCount = instanceCount / BATCH_SIZE;
+        float sqrt = Mathf.Sqrt(desiredBatchCount);
+        int xSlices = Mathf.FloorToInt(sqrt);
+        int zSlices = Mathf.CeilToInt(sqrt);
+        int batchCount = xSlices * zSlices;
+
+        Debug.Log($"Dividing the map {xSlices}x{zSlices} == {batchCount} batches == {batchCount * BATCH_SIZE} objects.");
+
+        batches = new List<Batch>();
+        int itemAdded = 0;
+
+        foreach(var subBounds in SplitBounds(mapBounds, xSlices, zSlices))
         {
-            if (itemsAddedToCurrentBatch >= 1000)
-            {
-                batches.Add(new List<Matrix4x4>());
-                itemsAddedToCurrentBatch = 0;
-            }
+            var currentBatch = new Batch();
+            currentBatch.center = subBounds.center;
+            batches.Add(currentBatch);
 
-            if (CreateItemIfPossible(batches.Last()))
-            {
-                itemsAddedToCurrentBatch++;
-                itemsCreated++;
-            }
+            for(int i = 0; i < BATCH_SIZE; i++)
+                if(CreateItemIfPossible(currentBatch.batchData, subBounds))
+                    itemAdded++;
         }
 
-        Debug.Log("Number of grass batches: " + batches.Count);
+        Debug.Log("Actual instances added: " + itemAdded);
+        Debug.Log($"Setup grass instance data in {(System.DateTime.Now - start).Seconds}s");
     }
 
-    private bool CreateItemIfPossible(List<Matrix4x4> batch)
+    public IEnumerable<Bounds> SplitBounds(Bounds originalBounds, int xSlices, int zSlices)
     {
-        float posX = Random.Range(bounds.min.x, bounds.max.x);
-        float posZ = Random.Range(bounds.min.z, bounds.max.z);
+        Vector3 size = originalBounds.size;
+        Vector3 min = originalBounds.min;
+
+        float subSizeX = size.x / xSlices;
+        float subSizeZ = size.z / zSlices;
+
+        for (int i = 0; i < xSlices; i++)
+        {
+            for (int j = 0; j < zSlices; j++)
+            {
+                Vector3 subMin = new Vector3(
+                    min.x + i * subSizeX,
+                    min.y,
+                    min.z + j * subSizeZ
+                );
+
+                Vector3 subMax = new Vector3(
+                    subMin.x + subSizeX,
+                    originalBounds.max.y,
+                    subMin.z + subSizeZ
+                );
+
+                Bounds subBounds = new Bounds(
+                    subMin + 0.5f * (subMax - subMin),
+                    subMax - subMin
+                );
+                
+                yield return subBounds;
+            }
+        }
+    }
+
+
+    private bool CreateItemIfPossible(List<Matrix4x4> batch, Bounds subBounds)
+    {
+        float posX = Random.Range(subBounds.min.x, subBounds.max.x);
+        float posZ = Random.Range(subBounds.min.z, subBounds.max.z);
 
         Ray ray = new Ray(new Vector3(posX, 100f, posZ), Vector3.down);
         if (!Physics.Raycast(ray, out RaycastHit hit, 200f, rayLayerMask))
@@ -88,7 +141,7 @@ public class GrassInstancer : MonoBehaviour
         if (angle > maxSlopeAngle)
             return false;
 
-        float noise = Mathf.PerlinNoise((posX + xOffset) / (bounds.size.x * noiseScale), (posZ + yOffset) / (bounds.size.z * noiseScale));
+        float noise = Mathf.PerlinNoise((posX + xNoiseOffset) / (mapBounds.size.x * noiseScale), (posZ + yNoiseOffset) / (mapBounds.size.z * noiseScale));
         if(Random.Range(0.1f, 1.0f) > noise)
             return false;
 
