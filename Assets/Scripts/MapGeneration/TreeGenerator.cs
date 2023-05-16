@@ -13,15 +13,12 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
     }
 
     public TreeData[] treeData;
-
     public float scaleMax = 1.2f;
     public float scaleMin = 0.8f;
     public float tiltMaxDegrees = 6.0f;
     public float edgeBuffer = 0.1f;
-
     public float noiseScale = 0.1f;
     public float noiseThreshold = 0.5f;
-
     public MapData mapData;
 
     private GridManager gridManager;
@@ -80,6 +77,9 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         float worldX = UnityEngine.Random.Range(squareBounds.xMin + buffer, squareBounds.xMax - buffer);
         float worldZ = UnityEngine.Random.Range(squareBounds.yMin + buffer, squareBounds.yMax - buffer);
         float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
+
+        if(float.IsNaN(worldY))
+            throw new Exception("No grid");
 
         float rotationY = UnityEngine.Random.Range(0f, 360f);
         float rotationX = UnityEngine.Random.Range(-tiltMaxDegrees, tiltMaxDegrees);

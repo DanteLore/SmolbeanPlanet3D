@@ -110,6 +110,7 @@ public class SaveGameManager : MonoBehaviour
         treeGenerator.LoadTrees(saveData.treeData);
         rockGenerator.LoadRocks(saveData.rockData);
         buildManager.LoadBuildings(saveData.buildingData);
+        FindObjectOfType<GrassInstancer>().Draw();
         MenuController.Instance.CloseAll();
     }
 }

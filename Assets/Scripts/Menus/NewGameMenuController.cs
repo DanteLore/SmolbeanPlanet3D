@@ -11,6 +11,7 @@ public class NewGameMenuController : MonoBehaviour
     GridManager gridManager;
     TreeGenerator treeGenerator;
     RockGenerator rockGenerator;
+    private GrassInstancer grassInstancer;
     VisualElement previewPane;
     private Toggle randomToggle;
     private TextField seedTextField;
@@ -23,6 +24,7 @@ public class NewGameMenuController : MonoBehaviour
         gridManager = FindObjectOfType<GridManager>();
         treeGenerator = FindObjectOfType<TreeGenerator>();
         rockGenerator = FindObjectOfType<RockGenerator>();
+        grassInstancer = FindObjectOfType<GrassInstancer>();
         
         var startGameButton = document.rootVisualElement.Q<Button>("startGameButton");
         startGameButton.clicked += StartGameClicked;
@@ -55,6 +57,7 @@ public class NewGameMenuController : MonoBehaviour
         gridManager.Recreate(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
         treeGenerator.GenerateTrees(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
         rockGenerator.GenerateRocks(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
+        grassInstancer.Draw();
         MenuController.Instance.CloseAll();
     }
 

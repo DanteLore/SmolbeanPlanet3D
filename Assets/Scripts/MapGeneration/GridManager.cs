@@ -16,7 +16,6 @@ public class GridManager : MonoBehaviour
     public float coastRadius = 0.8f;
 
     public string groundLayer = "Ground";
-    private int groundLayerMask;
 
     public bool addMeshDebugGizmos = false;
 
@@ -32,7 +31,6 @@ public class GridManager : MonoBehaviour
 
     void Awake()
     {
-        groundLayerMask = LayerMask.GetMask(groundLayer);
         BootstrapMapData();
     }
 
@@ -47,7 +45,7 @@ public class GridManager : MonoBehaviour
     }
 
     public void Recreate(List<int> gameMap, int width, int height)
-    {
+    {        
         GameMapWidth = width;
         GameMapHeight = height;
         GameMap = gameMap;
@@ -173,9 +171,8 @@ public class GridManager : MonoBehaviour
 
     public float GetGridHeightAt(float worldX, float worldZ)
     { 
-
         Ray ray = new Ray(new Vector3(worldX, 100f, worldZ), Vector3.down);
-        if (Physics.Raycast(ray, out RaycastHit hit, 200f, groundLayerMask)) 
+        if(Physics.Raycast(ray, out RaycastHit hit, 200f, LayerMask.GetMask(groundLayer))) 
         {
             return hit.point.y;
         }
