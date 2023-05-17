@@ -12,7 +12,7 @@ public class RockGeneratorEditor : Editor
         if(GUILayout.Button("Generate Rocks"))
         {
             var rockGenerator = (RockGenerator)target;
-            rockGenerator.GenerateRocks(rockGenerator.mapData.GameMap.ToList(), rockGenerator.mapData.GameMapWidth, rockGenerator.mapData.GameMapHeight);
+            rockGenerator.Generate(rockGenerator.mapData.GameMap.ToList(), rockGenerator.mapData.GameMapWidth, rockGenerator.mapData.GameMapHeight);
             EditorUtility.SetDirty(target);
         }
     }

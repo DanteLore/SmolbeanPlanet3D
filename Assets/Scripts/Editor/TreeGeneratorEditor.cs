@@ -12,7 +12,7 @@ public class TreeGeneratorEditor : Editor
         if(GUILayout.Button("Generate Trees"))
         {
             var treeGenerator = (TreeGenerator)target;
-            treeGenerator.GenerateTrees(treeGenerator.mapData.GameMap.ToList(), treeGenerator.mapData.GameMapWidth, treeGenerator.mapData.GameMapHeight);
+            treeGenerator.Generate(treeGenerator.mapData.GameMap.ToList(), treeGenerator.mapData.GameMapWidth, treeGenerator.mapData.GameMapHeight);
             EditorUtility.SetDirty(target);
         }
     }

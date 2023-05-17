@@ -11,6 +11,7 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         public GameObject prefab;
         public float probability;
     }
+    public int Priority { get { return 10; } }
 
     public TreeData[] treeData;
     public float scaleMax = 1.2f;
@@ -36,7 +37,7 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
             InstantiateTree(treeData);
     }
 
-    public void GenerateTrees(List<int> gameMap, int mapWidth, int mapHeight)
+    public void Generate(List<int> gameMap, int mapWidth, int mapHeight)
     {
         gridManager = GameObject.FindAnyObjectByType<GridManager>();
 

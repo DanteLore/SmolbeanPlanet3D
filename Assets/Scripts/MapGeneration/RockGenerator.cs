@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class RockGenerator : MonoBehaviour
+public class RockGenerator : MonoBehaviour, IObjectGenerator
 {
     [Serializable]
     public struct RockData
@@ -12,6 +12,8 @@ public class RockGenerator : MonoBehaviour
         public float probability;
     }
 
+    public int Priority { get { return 10; } }
+
     public RockData[] rockData;
     public float rocksPerGridSquareFactor = 0.1f;
     public int maxRocksPerSquare = 5;
@@ -19,10 +21,11 @@ public class RockGenerator : MonoBehaviour
     public float scaleMax = 1.2f;
     public float scaleMin = 0.8f;
     public float tiltMaxDegrees = 6.0f;
+    public string natureLayer = "Nature";
 
     public MapData mapData;
 
-    public void GenerateRocks(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
         Debug.Log("Gonna genrate some ROCK!!!!");
         Clear();
@@ -39,45 +42,58 @@ public class RockGenerator : MonoBehaviour
                 continue;
 
             Rect squareBounds = gridManager.GetSquareBounds(x, z);
+            bool boxFull = Physics.CheckBox(squareBounds.center, new Vector3(squareBounds.width / 2f, 100f, squareBounds.height / 2f), Quaternion.identity, LayerMask.GetMask(natureLayer));
 
-            int rockCount = UnityEngine.Random.Range(0, maxRocksPerSquare);
-
-            while(rockCount-- > 0)
+            if(boxFull)
             {
-                int rockIndex = UnityEngine.Random.Range(0, rockData.Length);
+                Debug.Log("Square already looking busy, finding a different one");
+            }
+            else
+            {
+                int rockCount = UnityEngine.Random.Range(0, maxRocksPerSquare);
 
-                float buffer = gridManager.tileSize * edgeBuffer;
-                float worldX = UnityEngine.Random.Range(squareBounds.xMin + buffer, squareBounds.xMax - buffer);
-                float worldZ = UnityEngine.Random.Range(squareBounds.yMin + buffer, squareBounds.yMax - buffer);
-                float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
-
-                float rotationY = UnityEngine.Random.Range(0f, 360f);
-                float rotationX = UnityEngine.Random.Range(-tiltMaxDegrees, tiltMaxDegrees);
-                float rotationZ = UnityEngine.Random.Range(-tiltMaxDegrees, tiltMaxDegrees);
-
-                float scaleX = UnityEngine.Random.Range(scaleMin, scaleMax);
-                float scaleY = UnityEngine.Random.Range(scaleMin, scaleMax);
-                float scaleZ = UnityEngine.Random.Range(scaleMin, scaleMax);
-
-                var saveData = new NatureObjectSaveData
+                while(rockCount-- > 0)
                 {
-                    positionX = worldX,
-                    positionY = worldY,
-                    positionZ = worldZ,
-                    rotationX = rotationX,
-                    rotationY = rotationY,
-                    rotationZ = rotationZ,
-                    scaleX = scaleX,
-                    scaleY = scaleY,
-                    scaleZ = scaleZ,
-                    prefabIndex = rockIndex
-                };
+                    var rockData = GenerateRockData(gridManager, squareBounds);
+                    InstantiateRock(rockData);
 
-                InstantiateRock(saveData);
-
-                numberOfRocksToGenerate--;
+                    numberOfRocksToGenerate--;
+                }
             }
         }
+    }
+
+    private NatureObjectSaveData GenerateRockData(GridManager gridManager, Rect squareBounds)
+    {
+        int rockIndex = UnityEngine.Random.Range(0, rockData.Length);
+
+        float buffer = gridManager.tileSize * edgeBuffer;
+        float worldX = UnityEngine.Random.Range(squareBounds.xMin + buffer, squareBounds.xMax - buffer);
+        float worldZ = UnityEngine.Random.Range(squareBounds.yMin + buffer, squareBounds.yMax - buffer);
+        float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
+
+        float rotationY = UnityEngine.Random.Range(0f, 360f);
+        float rotationX = UnityEngine.Random.Range(-tiltMaxDegrees, tiltMaxDegrees);
+        float rotationZ = UnityEngine.Random.Range(-tiltMaxDegrees, tiltMaxDegrees);
+
+        float scaleX = UnityEngine.Random.Range(scaleMin, scaleMax);
+        float scaleY = UnityEngine.Random.Range(scaleMin, scaleMax);
+        float scaleZ = UnityEngine.Random.Range(scaleMin, scaleMax);
+
+        var saveData = new NatureObjectSaveData
+        {
+            positionX = worldX,
+            positionY = worldY,
+            positionZ = worldZ,
+            rotationX = rotationX,
+            rotationY = rotationY,
+            rotationZ = rotationZ,
+            scaleX = scaleX,
+            scaleY = scaleY,
+            scaleZ = scaleZ,
+            prefabIndex = rockIndex
+        };
+        return saveData;
     }
 
     private void InstantiateRock(NatureObjectSaveData saveData)
@@ -105,7 +121,7 @@ public class RockGenerator : MonoBehaviour
     {
         Clear();
 
-        foreach(var treeData in loadedData)
-            InstantiateRock(treeData);
+        foreach(var rockData in loadedData)
+            InstantiateRock(rockData);
     }
 }

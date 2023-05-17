@@ -159,7 +159,8 @@ public class CameraController : MonoBehaviour
 
     private void CheckMouseAtScreenEdge()
     {
-        if(!useScreenEdge)
+        bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        if(!useScreenEdge || isOverUI)
             return;
 
         Vector2 mousePosition = Mouse.current.position.ReadValue();

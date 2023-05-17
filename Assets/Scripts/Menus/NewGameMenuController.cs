@@ -55,9 +55,8 @@ public class NewGameMenuController : MonoBehaviour
     private void StartGameClicked()
     {
         gridManager.Recreate(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
-        treeGenerator.GenerateTrees(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
-        rockGenerator.GenerateRocks(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
-        grassInstancer.Draw();
+        treeGenerator.Generate(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
+        rockGenerator.Generate(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
         MenuController.Instance.CloseAll();
     }
 

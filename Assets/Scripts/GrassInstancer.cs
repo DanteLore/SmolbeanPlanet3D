@@ -2,13 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class GrassInstancer : MonoBehaviour
+public class GrassInstancer : MonoBehaviour, IObjectGenerator
 {
     private class Batch
     {
         public List<Matrix4x4> batchData = new List<Matrix4x4>();
         public Vector3 center;
     }
+
+    public int Priority { get { return 100; } }
 
     private const int BATCH_SIZE = 1024;
     public int instanceAttemptsPerSquareMeter = 1000;
@@ -44,10 +46,20 @@ public class GrassInstancer : MonoBehaviour
 
     void Start()
     {
-        Draw();
+        GenerateGrass();
     }
 
-    public void Draw()
+    public void Clear()
+    {
+        batches = new List<Batch>();
+    }
+
+    public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    {
+        GenerateGrass();
+    }
+
+    private void GenerateGrass()
     {
         System.DateTime start = System.DateTime.Now;
         Random.InitState(randomSeed);
@@ -122,7 +134,6 @@ public class GrassInstancer : MonoBehaviour
             }
         }
     }
-
 
     private bool CreateItemIfPossible(List<Matrix4x4> batch, Bounds subBounds)
     {

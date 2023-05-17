@@ -106,11 +106,10 @@ public class SaveGameManager : MonoBehaviour
             saveData = (SaveFileData)serializer.Deserialize(file, typeof(SaveFileData));
         }
 
-        GameObject.FindAnyObjectByType<GridManager>().Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight);
+        gridManager.Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight);
         treeGenerator.LoadTrees(saveData.treeData);
         rockGenerator.LoadRocks(saveData.rockData);
         buildManager.LoadBuildings(saveData.buildingData);
-        FindObjectOfType<GrassInstancer>().Draw();
         MenuController.Instance.CloseAll();
     }
 }
