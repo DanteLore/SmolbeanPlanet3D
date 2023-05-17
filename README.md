@@ -12,7 +12,7 @@ I have decided I want the game to be, eventually, a cross between The Settlers a
 4. Drops!  Trees drop logs, rocks drop stones.  Wood/Stonecutters collect these and dump them by their huts, until there's no more room.
 5. Separate people from their buildings - currently, the colonists lifespans are controlled by their buildings.  Do this centrally.
 6. Create rigged models for the colonists, animate and import them.  Colonists dress the way they dress, they don't change clothes based on their job.
-7. Get some decent GPU-instanced grass on the go, to make the ground look more professional.
+7. ~Get some decent GPU-instanced grass on the go, to make the ground look more professional.~
 8. ~Sort out the lighting so the buildings look less lame.~ (can't get much better without baking)
 9. Add time of day as a concept, including day/night cycle.
 10. Warehouse and Porters (new job type - carries stuff round the island as needed).  Maybe you start with the "Warehouse" as a big pile of resources and a few people gathered round a camp fire.  Maybe a ship wreck?
@@ -21,6 +21,8 @@ I have decided I want the game to be, eventually, a cross between The Settlers a
 13. Lights and lighting effects on buildings - colonists carrying torches at night etc.
 14. Colonist stats - e.g. stronger people can carry more.  Cutting wood makes you strong etc.
 15. Graphs and charts showing progress over time.
+16. ~Rotation and deletion of buildings~
+17. Ground wear - as colonists (and animals?) move around the map, record their steps on a texture.  Use this texture in a shader to start to show wear on the grass.  This should lead to areas of high traffic starting to get paths appearing on them...
 
 ...OK, that's like a year's worth of work...
 
