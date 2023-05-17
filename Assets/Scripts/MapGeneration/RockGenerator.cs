@@ -12,7 +12,7 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
         public float probability;
     }
 
-    public int Priority { get { return 10; } }
+    public int Priority { get { return 20; } }
 
     public RockData[] rockData;
     public float rocksPerGridSquareFactor = 0.1f;

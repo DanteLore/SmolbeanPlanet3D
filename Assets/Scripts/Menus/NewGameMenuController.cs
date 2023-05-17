@@ -22,9 +22,6 @@ public class NewGameMenuController : MonoBehaviour
         document = GetComponent<UIDocument>();
         mapGenerator = FindObjectOfType<GameMapGenerator>();
         gridManager = FindObjectOfType<GridManager>();
-        treeGenerator = FindObjectOfType<TreeGenerator>();
-        rockGenerator = FindObjectOfType<RockGenerator>();
-        grassInstancer = FindObjectOfType<GrassInstancer>();
         
         var startGameButton = document.rootVisualElement.Q<Button>("startGameButton");
         startGameButton.clicked += StartGameClicked;
@@ -55,8 +52,6 @@ public class NewGameMenuController : MonoBehaviour
     private void StartGameClicked()
     {
         gridManager.Recreate(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
-        treeGenerator.Generate(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
-        rockGenerator.Generate(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
         MenuController.Instance.CloseAll();
     }
 

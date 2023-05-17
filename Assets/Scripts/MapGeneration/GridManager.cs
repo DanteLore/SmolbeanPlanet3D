@@ -63,10 +63,10 @@ public class GridManager : MonoBehaviour
 
         DrawMap();
 
-        UpdateNavMesh();
-
         foreach(var gen in GetComponentsInChildren<IObjectGenerator>().OrderBy(g => g.Priority))
             gen.Generate(GameMap, GameMapWidth, GameMapHeight);
+
+        InvokeRepeating("UpdateNavMesh", 0f, 30f);
 
         Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
     }
@@ -109,6 +109,8 @@ public class GridManager : MonoBehaviour
 
     private void ClearMap()
     {
+        CancelInvoke("UpdateNavMesh");
+
         foreach(var gen in GetComponentsInChildren<IObjectGenerator>())
             gen.Clear();
 
@@ -167,9 +169,16 @@ public class GridManager : MonoBehaviour
         return new Rect(meshX, meshZ, tileSize, tileSize);
     }
 
+    public Bounds GetIslandBounds()
+    {
+        // This won't work if we ever do maps that aren't islands...
+        return Ground.GetComponent<MeshFilter>().mesh.bounds;
+    }
+
     public Bounds GetMapBounds()
     {
-        return Ground.GetComponent<MeshFilter>().mesh.bounds;
+        // This won't work if we ever do maps that aren't islands...
+        return Seabed.GetComponent<MeshFilter>().mesh.bounds;
     }
 
     public float GetGridHeightAt(float worldX, float worldZ)

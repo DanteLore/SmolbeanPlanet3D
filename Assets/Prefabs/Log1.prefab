@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9101655516942305609}
   - component: {fileID: 7628984843367267603}
   - component: {fileID: 1138779723388280976}
+  - component: {fileID: 8442377822479249617}
   m_Layer: 7
   m_Name: Log1
   m_TagString: Untagged
@@ -107,3 +108,19 @@ CapsuleCollider:
   m_Height: 2.29
   m_Direction: 2
   m_Center: {x: -0.01, y: 0.2, z: 0.01}
+--- !u!208 &8442377822479249617
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925756840314817885}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.38900003, y: 0.296, z: 1.085}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.105000004, y: 0.28800002, z: -0.019000001}
+  m_TimeToStationary: 0.5

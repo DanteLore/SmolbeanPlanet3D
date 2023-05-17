@@ -13,6 +13,7 @@ public abstract class ResourceGatherer : MonoBehaviour
     protected GameObject body;
     protected List<GameObject> blacklist = new List<GameObject>();
     protected Vector3 spawnPoint;
+    private Vector3 lastReportedPosition;
 
     void Start()
     {
@@ -22,6 +23,20 @@ public abstract class ResourceGatherer : MonoBehaviour
         body = transform.Find("Body").gameObject;
 
         StartCoroutine(GathererLoop());
+        lastReportedPosition = transform.position;
+    }
+
+    void Update()
+    {
+        if(!body.activeInHierarchy)
+            return;
+
+        float threshold = GroundWearManager.Instance.updateThreshold;
+        if(Vector3.SqrMagnitude(transform.position - lastReportedPosition) > threshold * threshold)
+        {
+            lastReportedPosition = transform.position;
+            GroundWearManager.Instance.WalkedOn(transform.position);
+        }
     }
 
     protected abstract GameObject GetTarget(Vector3 pos);

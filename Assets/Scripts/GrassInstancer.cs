@@ -70,7 +70,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         groundLayerMask = LayerMask.GetMask(groundLayer);
         groundLayerNum = LayerMask.NameToLayer(groundLayer);
 
-        mapBounds = FindAnyObjectByType<GridManager>().GetMapBounds();
+        mapBounds = FindAnyObjectByType<GridManager>().GetIslandBounds();
         float area = mapBounds.size.x * mapBounds.size.y;
         int instanceCount = Mathf.CeilToInt(instanceAttemptsPerSquareMeter * area);
         Debug.Log($"Map area {area}sqm => {instanceCount} instance attempts total");
