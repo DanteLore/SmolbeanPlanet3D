@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,6 +8,8 @@ public class BuildingEdit : MonoBehaviour
 {
     public GameObject deleteWidget;
     public GameObject rotateWidget;
+    public string widgetLayer = "Widgets";
+    public Action BuildingDelete;
     private List<GameObject> allWidgets;
     private Transform cameraTransform;
 
@@ -22,7 +25,7 @@ public class BuildingEdit : MonoBehaviour
         AlwaysFaceTheCamera();
 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask("Widgets")))
+        if (Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(widgetLayer)))
         {
             foreach(var w in allWidgets)
             {
@@ -33,9 +36,9 @@ public class BuildingEdit : MonoBehaviour
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 if (hitInfo.transform.gameObject == deleteWidget)
-                    Debug.Log("Delete!");
+                    DeleteTarget();
                 else if(hitInfo.transform.gameObject == rotateWidget)
-                    Debug.Log("Rotate!");
+                    RotateTarget();
             }
         }
         else
@@ -43,6 +46,18 @@ public class BuildingEdit : MonoBehaviour
             foreach(var w in allWidgets)
                 w.GetComponent<Renderer>().material.SetColor("_baseColor", Color.red);
         }
+    }
+
+    private void DeleteTarget()
+    {
+        Debug.Log("Delete clicked");
+        BuildingDelete?.Invoke();
+    }
+
+    private void RotateTarget()
+    {
+        transform.parent.Rotate(Vector3.up, 90);
+        AlwaysFaceTheCamera();
     }
 
     private void AlwaysFaceTheCamera()

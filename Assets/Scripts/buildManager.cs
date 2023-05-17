@@ -12,6 +12,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     public GameObject buildingEditWidgetPrefab;
     public string groundLayer = "Ground";
     public string buildingLayer = "Buildings";
+    public string widgetLayer = "Widgets";
     public string[] collisionLayers = { "Nature", "Buildings", "Creatures" };
     private GridManager gridManager;
     private GameMapGenerator gameMapGenerator;
@@ -46,6 +47,9 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
 
     public void BeginBuild(BuildingSpec spec)
     {
+        if(IsEditing)
+            EndEdit();
+
         selectedBuildingIndex = Array.IndexOf(buildings, spec);
         IsBuilding = true;
     }
@@ -61,14 +65,19 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
         IsEditing = true;
         editTargetTransform = target;
         buildingEditWidget = Instantiate(buildingEditWidgetPrefab, target.position, target.rotation, target);
-        //buildingEditWidget.GetComponent<BuildingEdit>().OnObjectDestroyed += delegate { EndEdit(); };
+        buildingEditWidget.GetComponent<BuildingEdit>().BuildingDelete += DeleteTargetBuilding;
     }
 
     private void EndEdit()
     {
         IsEditing = false;
+        editTargetTransform = null;
         Destroy(buildingEditWidget);
     }
+
+    // TODO:  The following three "Update" methods should be illegal.  This is a shameful implementation of a state machine
+    //        and if I weren't so tired of this code, I'd do some kind of massive refactor.
+    //        as is stands though, just gonna leave it for Future Dan(tm) to sort out!
 
     void Update()
     {
@@ -94,7 +103,13 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
             return;
 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        bool hitSomething = Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(buildingLayer));
+        bool hitSomething = Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(buildingLayer, widgetLayer));
+
+        if(hitSomething && hitInfo.transform.gameObject.layer == LayerMask.NameToLayer(widgetLayer))
+        {
+            // If we hit a widget, do nothing here
+            return;
+        }
 
         if(IsEditing && !hitSomething) 
         {
@@ -106,7 +121,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
             EndEdit();
             BeginEdit(hitInfo.transform);
         }
-        else if(!IsEditing)
+        else if(!IsEditing && hitSomething)
         {
             BeginEdit(hitInfo.transform);
         }
@@ -148,6 +163,12 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
             mapCursor.GetComponent<Renderer>().material.SetColor("_baseColor", color);
             mapCursor.SetActive(true);
         }
+    }
+
+    private void DeleteTargetBuilding()
+    {
+        Destroy(editTargetTransform.gameObject); 
+        EndEdit();
     }
 
     private void PlaceBuilding(Vector3 pos)
