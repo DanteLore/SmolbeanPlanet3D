@@ -3,6 +3,7 @@ using System.Linq;
 using System;
 using Unity.AI.Navigation;
 using System.Collections.Generic;
+using UnityEngine.AI;
 
 public class GridManager : MonoBehaviour
 {
@@ -99,12 +100,18 @@ public class GridManager : MonoBehaviour
                 var collider = tileObj.AddComponent<MeshCollider>();
                 tileObj.GetComponent<Renderer>().sharedMaterial = meshMaterial;
 
+                if(meshData.name.Contains("Sea"))
+                {
+                    var nmm = tileObj.AddComponent<NavMeshModifier>();
+                    nmm.overrideArea = true;
+                    nmm.area = NavMesh.GetAreaFromName("Seaside");
+                }
+
                 // Seabed is created to a separate mesh, as only the ground should be navigable
                 tileObj.transform.parent = meshData.name.StartsWith("Seabed") ? Seabed.transform : Ground.transform;
             }
         }
 
-        MergeMeshes(Ground);
         MergeMeshes(Seabed);
     }
 
@@ -172,14 +179,12 @@ public class GridManager : MonoBehaviour
 
     public Bounds GetIslandBounds()
     {
-        // This won't work if we ever do maps that aren't islands...
-        return Ground.GetComponent<MeshFilter>().mesh.bounds;
-    }
+        var combinedBounds = new Bounds();
 
-    public Bounds GetMapBounds()
-    {
-        // This won't work if we ever do maps that aren't islands...
-        return Seabed.GetComponent<MeshFilter>().mesh.bounds;
+        foreach(var renderer in Ground.GetComponentsInChildren<Renderer>())
+            combinedBounds.Encapsulate(renderer.bounds);
+
+        return combinedBounds;
     }
 
     public float GetGridHeightAt(float worldX, float worldZ)
