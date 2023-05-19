@@ -46,13 +46,13 @@ public class GridManager : MonoBehaviour
 
     public void Recreate(List<int> gameMap, int width, int height)
     {        
+        DateTime startTime = DateTime.Now;
+
         GameMapWidth = width;
         GameMapHeight = height;
         GameMap = gameMap;
 
         UnityEngine.Random.InitState(1);
-
-        DateTime startTime = DateTime.Now;
         
         ClearMap();
 
@@ -73,6 +73,7 @@ public class GridManager : MonoBehaviour
 
     private void UpdateNavMesh()
     {
+        Debug.Log("Updating nav mesh");
         var surface = Ground.GetComponent<NavMeshSurface>();
         surface.BuildNavMesh();
     }
@@ -111,7 +112,7 @@ public class GridManager : MonoBehaviour
     {
         CancelInvoke("UpdateNavMesh");
 
-        foreach(var gen in GetComponentsInChildren<IObjectGenerator>())
+        foreach(var gen in GetComponentsInChildren<IObjectGenerator>().OrderByDescending(g => g.Priority))
             gen.Clear();
 
         while (Ground.transform.childCount > 0)

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +11,8 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     public Material grassMaterial;
     public int wearStrength = 20;
     public float updateThreshold = 0.5f;
+    public int squaresToGrowBackEachFrame = 50;
+    public int wearRadius = 3;
 
     public float mapWidth = 400f;
     public float mapHeight = 400f;
@@ -39,12 +40,18 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         InvokeRepeating("UpdateTexture", 1.0f, 0.5f);
     }
 
-    void Update()
+    void FixedUpdate()
     {
-        //int x = UnityEngine.Random.Range(0, textureWidth);
-        //int y = UnityEngine.Random.Range(0, textureHeight);
+        float amount = wearStrength / 128f;
+        for(int i = 0; i < squaresToGrowBackEachFrame; i++)
+        {
+            int x = UnityEngine.Random.Range(0, textureWidth);
+            int y = UnityEngine.Random.Range(0, textureHeight);
 
-        //wearTexture.SetPixel(x, y, Color.white);
+            var px = wearTexture.GetPixel(x, y);
+            float r = Mathf.Clamp01(px.r - amount);
+            wearTexture.SetPixel(x, y, new Color(r, px.g, px.b));
+        }
     }
 
     public void WalkedOn(Vector3 position)
@@ -54,25 +61,19 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
         var center = new Vector2Int(Mathf.RoundToInt(textureWidth * mapX), Mathf.RoundToInt(textureWidth * mapZ));
 
-        //Debug.Log($"{position.x} - {mapBounds.min.x} / {mapBounds.size.x} == {mapX}");
-
-        int radius = 3;
-
-        for(int y = Mathf.Max(center.y - radius, 0); y < Mathf.Min(center.y + radius, textureHeight); y++)
+        for(int y = Mathf.Max(center.y - wearRadius, 0); y < Mathf.Min(center.y + wearRadius, textureHeight); y++)
         {
 
-            for(int x = Mathf.Max(center.x - radius, 0); x < Mathf.Min(center.x + radius, textureWidth); x++)
+            for(int x = Mathf.Max(center.x - wearRadius, 0); x < Mathf.Min(center.x + wearRadius, textureWidth); x++)
             {
                 float dist = Vector2.Distance(new Vector2(x, y), center);
 
-                if(dist <= radius)
+                if(dist <= wearRadius)
                 {
-                    float c = wearStrength * ((radius - dist) / 255);
-
-                    //Debug.Log($"float {c} = {wearStrength} * ({radius} - {dist}) / {radius}");
+                    float c = wearStrength * ((wearRadius - dist) / 256f);
 
                     var px = wearTexture.GetPixel(x, y);
-                    wearTexture.SetPixel(x, y, new Color(px.r + c, 0f, 0f));
+                    wearTexture.SetPixel(x, y, new Color(Mathf.Clamp01(px.r + c), px.g, px.b));
                 }
             }
         }
@@ -85,6 +86,8 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
     public void Clear()
     {
+        CancelInvoke("UpdateTexture");
+
         for (int y = 0; y < textureHeight; y++)
         {
             for (int x = 0; x < textureWidth; x++)
@@ -98,6 +101,6 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
     public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        // Nothing to do here
+        InvokeRepeating("UpdateTexture", 1.0f, 0.5f);
     }
 }
