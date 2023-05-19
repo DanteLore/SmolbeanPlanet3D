@@ -91,7 +91,7 @@ public class CameraController : MonoBehaviour
         Vector3 inputValue = movement.ReadValue<Vector2>().x * GetCameraRight() + movement.ReadValue<Vector2>().y * GetCameraForward();
         inputValue = inputValue.normalized;
 
-        if(inputValue.sqrMagnitude > 0.1f)
+        if(inputValue.sqrMagnitude > 0.5f)
         {
             targetPosition += inputValue;
         }
@@ -195,21 +195,40 @@ public class CameraController : MonoBehaviour
             positionX = transform.position.x,
             positionY = transform.position.y,
             positionZ = transform.position.z,
-            rotationX = cameraTransform.rotation.eulerAngles.x,
-            rotationY = cameraTransform.rotation.eulerAngles.y,
-            forwardX = cameraTransform.forward.x,
-            forwardY = cameraTransform.forward.y,
-            forwardZ = cameraTransform.forward.z,
+            rotationX = transform.rotation.eulerAngles.x,
+            rotationY = transform.rotation.eulerAngles.y,
+            rotationZ = transform.rotation.eulerAngles.z,
+            cameraPositionX = cameraTransform.localPosition.x,
+            cameraPositionY = cameraTransform.localPosition.y,
+            cameraPositionZ = cameraTransform.localPosition.z,
+            cameraRotationX = cameraTransform.localRotation.eulerAngles.x,
+            cameraRotationY = cameraTransform.localRotation.eulerAngles.y,
+            cameraRotationZ = cameraTransform.localRotation.eulerAngles.z,
             zoomHeight = zoomHeight
         };
     }
 
     public void LoadState(CameraSaveData cameraData)
     {
-        transform.position = new Vector3(cameraData.positionX, cameraData.positionY, cameraData.positionZ);
-        cameraTransform.rotation = Quaternion.Euler(cameraData.rotationX, cameraData.rotationY, 0f);
-        transform.rotation = Quaternion.Euler(0f, cameraData.rotationY, 0f);
+        cameraActions.Disable();
 
-        zoomHeight = cameraData.zoomHeight;
+        try
+        {
+            targetPosition = Vector3.zero;
+            horizontalVelocity = Vector3.zero;
+
+            transform.position = new Vector3(cameraData.positionX, cameraData.positionY, cameraData.positionZ);
+            transform.rotation = Quaternion.Euler(cameraData.rotationX, cameraData.rotationY, cameraData.rotationZ);
+
+            lastPosition = transform.position;
+            
+            cameraTransform.localPosition = new Vector3(cameraData.cameraPositionX, cameraData.cameraPositionY, cameraData.cameraPositionZ);
+            cameraTransform.localRotation = Quaternion.Euler(cameraData.cameraRotationX, cameraData.cameraRotationY, cameraData.cameraRotationZ);
+            zoomHeight = cameraData.zoomHeight;
+        }
+        finally
+        {        
+            cameraActions.Enable();
+        }
     }
 }
