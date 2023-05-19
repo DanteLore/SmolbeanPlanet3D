@@ -22,7 +22,9 @@ I have decided I want the game to be, eventually, a cross between The Settlers a
 14. Colonist stats - e.g. stronger people can carry more.  Cutting wood makes you strong etc.
 15. Graphs and charts showing progress over time.
 16. ~Rotation and deletion of buildings~
-17. Ground wear - as colonists (and animals?) move around the map, record their steps on a texture.  Use this texture in a shader to start to show wear on the grass.  This should lead to areas of high traffic starting to get paths appearing on them...
+17. ~Ground wear - as colonists (and animals?) move around the map, record their steps on a texture.  Use this texture in a shader to start to show wear on the grass.  This should lead to areas of high traffic starting to get paths appearing on them...~
+18. Save camera position with game
+19. Save ground wear pattern with game
 
 ...OK, that's like a year's worth of work...
 
