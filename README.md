@@ -23,8 +23,11 @@ I have decided I want the game to be, eventually, a cross between The Settlers a
 15. Graphs and charts showing progress over time.
 16. ~Rotation and deletion of buildings~
 17. ~Ground wear - as colonists (and animals?) move around the map, record their steps on a texture.  Use this texture in a shader to start to show wear on the grass.  This should lead to areas of high traffic starting to get paths appearing on them...~
-18. Save camera position with game
+18. ~Save camera position with game~
 19. Save ground wear pattern with game
+20. Buildings add instant ground wear when placed (how to stop the grass regrowing under buildings...?)
+21. Grass is shorter where ground is worn
+22. A world map - overlaying the wear texture, buildings and colonist locations etc onto the existing map
 
 ...OK, that's like a year's worth of work...
 
