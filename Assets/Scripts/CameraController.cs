@@ -137,6 +137,7 @@ public class CameraController : MonoBehaviour
 
         float x = inputValue.ReadValue<Vector2>().y * -1 * maxRotationSpeed + cameraTransform.rotation.eulerAngles.x;
         x = Mathf.Clamp(x, minTilt, maxTilt);
+
         cameraTransform.rotation = Quaternion.Euler(x, y , 0.0f);
     }
 
@@ -185,5 +186,30 @@ public class CameraController : MonoBehaviour
         }
 
         targetPosition += moveDirection;
+    }
+
+    public CameraSaveData GetSaveData()
+    {
+        return new CameraSaveData
+        {
+            positionX = transform.position.x,
+            positionY = transform.position.y,
+            positionZ = transform.position.z,
+            rotationX = cameraTransform.rotation.eulerAngles.x,
+            rotationY = cameraTransform.rotation.eulerAngles.y,
+            forwardX = cameraTransform.forward.x,
+            forwardY = cameraTransform.forward.y,
+            forwardZ = cameraTransform.forward.z,
+            zoomHeight = zoomHeight
+        };
+    }
+
+    public void LoadState(CameraSaveData cameraData)
+    {
+        transform.position = new Vector3(cameraData.positionX, cameraData.positionY, cameraData.positionZ);
+        cameraTransform.rotation = Quaternion.Euler(cameraData.rotationX, cameraData.rotationY, 0f);
+        transform.rotation = Quaternion.Euler(0f, cameraData.rotationY, 0f);
+
+        zoomHeight = cameraData.zoomHeight;
     }
 }

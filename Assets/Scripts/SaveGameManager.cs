@@ -13,6 +13,7 @@ public class SaveFileData
     public List<NatureObjectSaveData> treeData;
     public List<NatureObjectSaveData> rockData;
     public List<BuildingObjectSaveData> buildingData;
+    public CameraSaveData cameraData;
 }
 
 public class SaveGameManager : MonoBehaviour
@@ -25,6 +26,7 @@ public class SaveGameManager : MonoBehaviour
     private TreeGenerator treeGenerator;
     private RockGenerator rockGenerator;
     private BuildManager buildManager;
+    private CameraController cameraController;
 
     void Awake()
     {
@@ -40,6 +42,7 @@ public class SaveGameManager : MonoBehaviour
         treeGenerator = GameObject.FindAnyObjectByType<TreeGenerator>();
         rockGenerator = GameObject.FindAnyObjectByType<RockGenerator>();
         buildManager = GameObject.FindAnyObjectByType<BuildManager>();
+        cameraController = GameObject.FindAnyObjectByType<CameraController>();
     }
 
     public void SaveGame(string name)
@@ -64,7 +67,8 @@ public class SaveGameManager : MonoBehaviour
             gameMap = gridManager.GameMap,
             treeData = treeGenerator.GetSaveData(),
             rockData = rockGenerator.GetSaveData(),
-            buildingData = buildManager.GetSaveData()
+            buildingData = buildManager.GetSaveData(),
+            cameraData = cameraController.GetSaveData()
         };
 
         using (StreamWriter file = File.CreateText(filename))
@@ -110,6 +114,8 @@ public class SaveGameManager : MonoBehaviour
         treeGenerator.LoadTrees(saveData.treeData);
         rockGenerator.LoadRocks(saveData.rockData);
         buildManager.LoadBuildings(saveData.buildingData);
+        if(saveData.cameraData != null)
+            cameraController.LoadState(saveData.cameraData);
         MenuController.Instance.CloseAll();
     }
 }
