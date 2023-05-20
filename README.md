@@ -79,6 +79,7 @@ Save and load menus, with an automated name generator (foreshadowing random name
 ![Screenshot](./Docs/Images/screenshot24.png)
 
 Not-so-low-poly stonecutter hut.  I created the cool stone brick style of the stonecutters hut by staring blankly at this YouTube video for hours: https://www.youtube.com/watch?v=tX3JZF53e24&t=2s
+UPDATE:  Then I found this two-parter: https://www.youtube.com/watch?v=19uj2bOwb3A
 ![Screenshot](./Docs/Images/screenshot23.png)
 
 ## Making a game
