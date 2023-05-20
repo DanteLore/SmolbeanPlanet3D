@@ -162,7 +162,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
-  m_WalkableMask: 1
+  m_WalkableMask: 9
   m_ObstacleAvoidanceType: 4
 --- !u!54 &7462178603203635159
 Rigidbody:
@@ -205,3 +205,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NatureLayer: Nature
   destinationThreshold: 2
+  state: 0

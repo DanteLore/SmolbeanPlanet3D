@@ -55,7 +55,7 @@ NavMeshAgent:
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
-  m_WalkableMask: 1
+  m_WalkableMask: 9
   m_ObstacleAvoidanceType: 4
 --- !u!54 &5678464011766705149
 Rigidbody:
@@ -98,6 +98,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NatureLayer: Nature
   destinationThreshold: 1
+  state: 0
 --- !u!1 &5678464012514408667
 GameObject:
   m_ObjectHideFlags: 0

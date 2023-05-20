@@ -67,7 +67,7 @@ public class GridManager : MonoBehaviour
         foreach(var gen in GetComponentsInChildren<IObjectGenerator>().OrderBy(g => g.Priority))
             gen.Generate(GameMap, GameMapWidth, GameMapHeight);
 
-        InvokeRepeating("UpdateNavMesh", 0f, 30f);
+        InvokeRepeating("UpdateNavMesh", 0.0f, 60.0f);
 
         Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
     }
