@@ -36,6 +36,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _vertexTexture:
+        m_Texture: {fileID: 2800000, guid: 5d316d5c873b74a6f8a2b8a4f3b2814c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _wearTexture:
         m_Texture: {fileID: 2800000, guid: 5d316d5c873b74a6f8a2b8a4f3b2814c, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -56,9 +60,9 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _windScale: 0.1
-    - _windSpeed: 5
-    - _windStrength: 0.5
+    - _windScale: 0.005
+    - _windSpeed: 0.02
+    - _windStrength: 1
     m_Colors:
     - _baseColor: {r: 0.3803922, g: 0.79215693, b: 0.3254902, a: 0}
     - _mapOffset: {r: 0.5, g: 0.5, b: 0, a: 0}

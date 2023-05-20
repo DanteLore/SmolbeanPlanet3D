@@ -71,9 +71,9 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
                 if(dist <= wearRadius)
                 {
                     float c = wearStrength * ((wearRadius - dist) / 256f);
-
-                    var px = wearTexture.GetPixel(x, y);
-                    wearTexture.SetPixel(x, y, new Color(Mathf.Clamp01(px.r + c), px.g, px.b));
+                    var px = wearTexture.GetPixel(x, y); 
+                    px.r = Mathf.Clamp01(px.r + c); // Wear is on the RED channel
+                    wearTexture.SetPixel(x, y, px);
                 }
             }
         }
@@ -92,7 +92,9 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         {
             for (int x = 0; x < textureWidth; x++)
             {
-                wearTexture.SetPixel(x, y, Color.black);
+                Color c = wearTexture.GetPixel(x, y);
+                c.r = 0.0f; // Wear is on the RED channel
+                wearTexture.SetPixel(x, y, c);
             }
         }
 
