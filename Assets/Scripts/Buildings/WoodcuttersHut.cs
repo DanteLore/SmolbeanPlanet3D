@@ -3,16 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WoodcuttersHut : MonoBehaviour, ISmolbeanBuilding
+public class WoodcuttersHut : SmolbeanBuilding
 {
     public GameObject spawnPoint;
     public GameObject woodcutterPrefab;
     public float spawnDelaySeconds = 5f;
     private GameObject woodcutter;
-    public BuildingObjectSaveData SaveData {get; set;}
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+        
         StartCoroutine(CreateWoodcutter(spawnDelaySeconds));
     }
 
@@ -23,7 +24,7 @@ public class WoodcuttersHut : MonoBehaviour, ISmolbeanBuilding
         woodcutter = Instantiate(woodcutterPrefab, spawnPoint.transform.position, Quaternion.identity, transform);
     }
 
-    public Vector3 GetSpawnPoint()
+    public override Vector3 GetSpawnPoint()
     {
         return spawnPoint.transform.position;
     }

@@ -197,7 +197,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
         Vector3 pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
 
         var building = Instantiate(buildings[saveData.prefabIndex].prefab, pos, Quaternion.identity, transform);
-        building.GetComponent<ISmolbeanBuilding>().SaveData = saveData;
+        building.GetComponent<SmolbeanBuilding>().SaveData = saveData;
     }
 
     private bool CheckEmpty(Vector3 center)
@@ -255,7 +255,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
 
     public List<BuildingObjectSaveData> GetSaveData()
     {
-        return GetComponentsInChildren<ISmolbeanBuilding>().Select(b => b.SaveData).ToList();
+        return GetComponentsInChildren<SmolbeanBuilding>().Select(b => b.SaveData).ToList();
     }
 
     public void LoadBuildings(List<BuildingObjectSaveData> loadedData)

@@ -20,7 +20,7 @@ public abstract class ResourceGatherer : MonoBehaviour
 
     void Start()
     {
-        var hut = GetComponentInParent<ISmolbeanBuilding>();
+        var hut = GetComponentInParent<SmolbeanBuilding>();
         spawnPoint = hut.GetSpawnPoint();
         navAgent = GetComponent<NavMeshAgent>();
         navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;

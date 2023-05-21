@@ -62,6 +62,6 @@ Material:
     - _QueueOffset: 0
     - _windScale: 0.005
     - _windSpeed: 0.02
-    - _windStrength: 0.05
+    - _windStrength: 0.1
     m_Colors: []
   m_BuildTextureStacks: []

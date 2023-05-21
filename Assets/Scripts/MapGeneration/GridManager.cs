@@ -87,7 +87,6 @@ public class GridManager : MonoBehaviour
         {
             for (int z = 0; z < DrawMapHeight; z++)
             {
-                // In future it might make sense to look at creating one big mesh here, rather than separate game objects then merging them... maybe.
                 var pos = new Vector3(x * tileSize, 0, z * tileSize);
                 MeshData meshData = map[z * DrawMapWidth + x];
 
@@ -112,6 +111,7 @@ public class GridManager : MonoBehaviour
             }
         }
 
+        // Seabed can be merged to a single mesh
         MergeMeshes(Seabed);
     }
 

@@ -9,7 +9,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
     public Texture2D wearTexture;
     public Material grassMaterial;
-    public int wearStrength = 20;
+    public int wearStrength = 2;
     public float updateThreshold = 0.5f;
     public int squaresToGrowBackEachFrame = 50;
     public int wearRadius = 3;
@@ -56,27 +56,74 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
     public void WalkedOn(Vector3 position)
     {
-        float mapX = (position.x - mapOffsetX) / mapWidth;
-        float mapZ = (position.z - mapOffsetY) / mapHeight;
+        WearCircle(WorldToTexture(position), wearRadius);
+    }
 
-        var center = new Vector2Int(Mathf.RoundToInt(textureWidth * mapX), Mathf.RoundToInt(textureWidth * mapZ));
-
-        for(int y = Mathf.Max(center.y - wearRadius, 0); y < Mathf.Min(center.y + wearRadius, textureHeight); y++)
+    private void WearCircle(Vector2Int center, int radius)
+    {
+        for (int y = Mathf.Max(center.y - radius, 0); y < Mathf.Min(center.y + radius, textureHeight); y++)
         {
-
-            for(int x = Mathf.Max(center.x - wearRadius, 0); x < Mathf.Min(center.x + wearRadius, textureWidth); x++)
+            for (int x = Mathf.Max(center.x - radius, 0); x < Mathf.Min(center.x + radius, textureWidth); x++)
             {
                 float dist = Vector2.Distance(new Vector2(x, y), center);
 
-                if(dist <= wearRadius)
+                if (dist <= radius)
                 {
-                    float c = wearStrength * ((wearRadius - dist) / 256f);
-                    var px = wearTexture.GetPixel(x, y); 
+                    float c = wearStrength * ((radius - dist) / 256f);
+                    var px = wearTexture.GetPixel(x, y);
                     px.r = Mathf.Clamp01(px.r + c); // Wear is on the RED channel
                     wearTexture.SetPixel(x, y, px);
                 }
             }
         }
+    }
+
+    public void BuildingOn(Bounds bounds, BuildingWearPattern wearPattern, Vector2 wearScale)
+    {
+        var min = WorldToTexture(bounds.min);
+        var max = WorldToTexture(bounds.max);
+        var center = WorldToTexture(bounds.center);
+
+        if(wearPattern == BuildingWearPattern.Rectangle)
+        {
+            int dx = Mathf.RoundToInt((max.x - min.x) * Mathf.Clamp01(1f - wearScale.x));
+            int dy = Mathf.RoundToInt((max.y - min.y) * Mathf.Clamp01(1f - wearScale.y));
+            min = new Vector2Int(min.x + dx, min.y + dy);
+            max = new Vector2Int(max.x + dx, max.y + dy);
+
+            WearRectangle(min, max, center);
+        }
+        else // Circle 
+        {
+            int radius = Mathf.RoundToInt(Vector2Int.Distance(min, center) * Mathf.Min(wearScale.x, wearScale.y));
+            WearCircle(center, radius);
+        }
+    }
+
+    private void WearRectangle(Vector2Int min, Vector2Int max, Vector2Int center)
+    {
+        float radius = Vector2Int.Distance(min, center);
+
+        for (int y = min.y; y < max.y; y++)
+        {
+            for (int x = min.x; x < max.x; x++)
+            {
+                float dist = Vector2.Distance(new Vector2(x, y), center);
+                
+                float c = wearStrength * ((radius - dist) / 256f);
+                var px = wearTexture.GetPixel(x, y);
+                px.r = Mathf.Clamp01(px.r + c); // Wear is on the RED channel
+                wearTexture.SetPixel(x, y, px);
+            }
+        }
+    }
+
+    private Vector2Int WorldToTexture(Vector3 world)
+    {
+        float mapX = (world.x - mapOffsetX) / mapWidth;
+        float mapZ = (world.z - mapOffsetY) / mapHeight;
+
+        return new Vector2Int(Mathf.CeilToInt(textureWidth * mapX), Mathf.CeilToInt(textureHeight * mapZ));
     }
 
     private void UpdateTexture()

@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StonecuttersHut : MonoBehaviour, ISmolbeanBuilding
+public class StonecuttersHut : SmolbeanBuilding
 {
     public GameObject spawnPoint;
     public GameObject stonecutterPrefab;
     public float spawnDelaySeconds = 5f;
     private GameObject stonecutter;
-    public BuildingObjectSaveData SaveData { get; set; }
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         StartCoroutine(CreateWoodcutter(spawnDelaySeconds));
     }
 
@@ -22,7 +22,7 @@ public class StonecuttersHut : MonoBehaviour, ISmolbeanBuilding
         stonecutter = Instantiate(stonecutterPrefab, spawnPoint.transform.position, Quaternion.identity, transform);
     }
 
-    public Vector3 GetSpawnPoint()
+    public override Vector3 GetSpawnPoint()
     {
         return spawnPoint.transform.position;
     }
