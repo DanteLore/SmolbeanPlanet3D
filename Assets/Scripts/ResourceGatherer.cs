@@ -97,11 +97,11 @@ public abstract class ResourceGatherer : MonoBehaviour
 
     protected IEnumerator GathererLoop()
     {
-        State = ResourceGathererState.Resting;
-        yield return new WaitForSeconds(1);
-
         while(true)
         {
+            State = ResourceGathererState.Resting;
+            yield return new WaitForSeconds(1);
+
             var target = GetTarget(transform.position);
             while(target == null)
             {
@@ -110,6 +110,7 @@ public abstract class ResourceGatherer : MonoBehaviour
                 target = GetTarget(transform.position);
             }
 
+            State = ResourceGathererState.Walking;
             StartWalkingTo(target.transform.position);
             yield return new WaitForSeconds(0.5f);
                 
@@ -136,6 +137,7 @@ public abstract class ResourceGatherer : MonoBehaviour
                 }
             }
 
+            State = ResourceGathererState.Walking;
             StartWalkingTo(spawnPoint);
             yield return new WaitForSeconds(0.5f);
 
@@ -160,7 +162,6 @@ public abstract class ResourceGatherer : MonoBehaviour
         lastPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         navAgent.SetDestination(dest);
         navAgent.isStopped = false;
-        State = ResourceGathererState.Walking;
     }
 
     protected bool CloseEnoughTo(Vector3 dest)
