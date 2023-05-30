@@ -9,17 +9,32 @@ public abstract class ResourceGatherer : MonoBehaviour
 {
     public string NatureLayer = "Nature";
     public float destinationThreshold = 1.0f;
-    public enum ResourceGathererState {Resting, Walking, Gathering, Stuck}
-    public ResourceGathererState state = ResourceGathererState.Resting;
     protected NavMeshAgent navAgent;
     protected GameObject body;
     protected List<GameObject> blacklist = new List<GameObject>();
     protected Vector3 spawnPoint;
     private Vector3 lastReportedPosition;
     private Vector3 lastPosition;
+    private Animator animator;
+
+    public enum ResourceGathererState {Resting, Walking, Gathering, Stuck}
+    private ResourceGathererState state = ResourceGathererState.Resting;
+    protected ResourceGathererState State
+    {
+        get { return state; }
+        set
+        {
+            state = value;
+            if(animator)
+            {
+                animator.SetBool("IsWalking", (state == ResourceGathererState.Walking));
+            }
+        }
+    }
 
     void Start()
     {
+        animator = GetComponentInChildren<Animator>();
         var hut = GetComponentInParent<SmolbeanBuilding>();
         spawnPoint = hut.GetSpawnPoint();
         navAgent = GetComponent<NavMeshAgent>();
@@ -53,13 +68,13 @@ public abstract class ResourceGatherer : MonoBehaviour
         {
             yield return new WaitForSeconds(10.0f);
  
-            if (state == ResourceGathererState.Walking & !navAgent.pathPending && navAgent.remainingDistance > navAgent.stoppingDistance) 
+            if (State == ResourceGathererState.Walking & !navAgent.pathPending && navAgent.remainingDistance > navAgent.stoppingDistance) 
             {
                 if (Vector3.Distance(transform.position, lastPosition) <= 1.0f) 
                 {
                     //Vector3 destination = navAgent.destination;
                     navAgent.ResetPath();
-                    state = ResourceGathererState.Stuck;
+                    State = ResourceGathererState.Stuck;
                     Debug.Log("Agent Is Stuck");
                 }
                 lastPosition = transform.position;
@@ -82,7 +97,7 @@ public abstract class ResourceGatherer : MonoBehaviour
 
     protected IEnumerator GathererLoop()
     {
-        state = ResourceGathererState.Resting;
+        State = ResourceGathererState.Resting;
         yield return new WaitForSeconds(1);
 
         while(true)
@@ -100,7 +115,7 @@ public abstract class ResourceGatherer : MonoBehaviour
                 
             while (!CloseEnoughTo(target))
             {
-                if (state == ResourceGathererState.Stuck || target == null)
+                if (State == ResourceGathererState.Stuck || target == null)
                 {
                     Debug.Log("Giving up and going home");
                     break;
@@ -108,9 +123,9 @@ public abstract class ResourceGatherer : MonoBehaviour
                 yield return new WaitForSeconds(0.5f);
             }
 
-            if (state != ResourceGathererState.Stuck && target != null)
+            if (State != ResourceGathererState.Stuck && target != null)
             {
-                state = ResourceGathererState.Gathering;
+                State = ResourceGathererState.Gathering;
                 navAgent.isStopped = true;
 
                 if (target)
@@ -126,12 +141,12 @@ public abstract class ResourceGatherer : MonoBehaviour
 
             while (!CloseEnoughTo(spawnPoint))
             {
-                if (state == ResourceGathererState.Stuck)
+                if (State == ResourceGathererState.Stuck)
                     StartWalkingTo(spawnPoint);
                 yield return new WaitForSeconds(0.5f);
             }
 
-            state = ResourceGathererState.Resting;
+            State = ResourceGathererState.Resting;
             navAgent.isStopped = true;
             body.SetActive(false);
             yield return new WaitForSeconds(5);
@@ -145,7 +160,7 @@ public abstract class ResourceGatherer : MonoBehaviour
         lastPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         navAgent.SetDestination(dest);
         navAgent.isStopped = false;
-        state = ResourceGathererState.Walking;
+        State = ResourceGathererState.Walking;
     }
 
     protected bool CloseEnoughTo(Vector3 dest)

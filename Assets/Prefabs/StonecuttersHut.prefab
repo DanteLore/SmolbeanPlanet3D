@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wearPattern: 0
-  wearScale: {x: 0.6, y: 0.6}
+  wearScale: {x: 1, y: 1}
   building: {fileID: 3821925883988594265}
   spawnPoint: {fileID: 2543294295182630151}
   stonecutterPrefab: {fileID: 7581404027262410325, guid: 37fd71f21f41849eab406cbaab22eee9, type: 3}
