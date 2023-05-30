@@ -12,7 +12,7 @@ NavMeshProjectSettings:
   - name: Jump
     cost: 2
   - name: Seaside
-    cost: 5
+    cost: 2
   - name: 
     cost: 1
   - name: 

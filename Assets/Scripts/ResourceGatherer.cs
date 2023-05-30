@@ -22,14 +22,7 @@ public abstract class ResourceGatherer : MonoBehaviour
     protected ResourceGathererState State
     {
         get { return state; }
-        set
-        {
-            state = value;
-            if(animator)
-            {
-                animator.SetBool("IsWalking", (state == ResourceGathererState.Walking));
-            }
-        }
+        set { state = value; }
     }
 
     void Start()
@@ -58,6 +51,8 @@ public abstract class ResourceGatherer : MonoBehaviour
             lastReportedPosition = transform.position;
             GroundWearManager.Instance.WalkedOn(transform.position);
         }
+
+        animator.SetBool("IsWalking", (navAgent.velocity.sqrMagnitude > 0.1f));
     }
 
     IEnumerator SolveStuck() 
@@ -133,7 +128,7 @@ public abstract class ResourceGatherer : MonoBehaviour
                 {
                     yield return new WaitForSeconds(3);
                     Destroy(target);
-                    yield return new WaitForSeconds(2);
+                    yield return new WaitForSeconds(1);
                 }
             }
 
@@ -159,6 +154,7 @@ public abstract class ResourceGatherer : MonoBehaviour
 
     private void StartWalkingTo(Vector3 dest)
     {
+        State = ResourceGathererState.Walking;
         lastPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         navAgent.SetDestination(dest);
         navAgent.isStopped = false;
