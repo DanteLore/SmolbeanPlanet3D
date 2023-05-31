@@ -5,32 +5,7 @@
 I have decided I want the game to be, eventually, a cross between The Settlers and Rimworld. The aim overall will be to manage a colony of people with increasingly complex needs on a small, resource constrained island.  There won't be an "enemy" as such - in fact, the colonists are their own worst enemies - because their greed could cause them to cut down the last tree or kill the last animal for a tasty snack.  Just like real life, mankind (smolbean kind) will cause it's own downfall 99% of the time.  So resource chains and building-based production like the settlers, but I'd like the player to _care_ about their colonists, thus the Rimworld vibe.  Anyway... a long way to go...
 
 # TO DO List
-
-1. ~Add a stonecutter and get them cuttin' stones~
-2. ~Set up the build menu to create buttons automatically, perhaps from some scriptable object data (prefab, thumbnail, building data etc).~
-3. Animals (dodos I think) and a hunter
-4. Drops!  Trees drop logs, rocks drop stones.  Wood/Stonecutters collect these and dump them by their huts, until there's no more room.
-5. Separate people from their buildings - currently, the colonists lifespans are controlled by their buildings.  Do this centrally.
-6. ~Create rigged models for the colonists, animate and import them.  Colonists dress the way they dress, they don't change clothes based on their job.~
-7. ~Get some decent GPU-instanced grass on the go, to make the ground look more professional.~
-8. ~Sort out the lighting so the buildings look less lame.~ (can't get much better without baking)
-9. Add time of day as a concept, including day/night cycle.
-10. Warehouse and Porters (new job type - carries stuff round the island as needed).  Maybe you start with the "Warehouse" as a big pile of resources and a few people gathered round a camp fire.  Maybe a ship wreck?
-11. Building of buildings - so porters and builders create the buildings using resources.
-12. First production chain buildings - Sawmill? Butcher?
-13. Lights and lighting effects on buildings - colonists carrying torches at night etc.
-14. Colonist stats - e.g. stronger people can carry more.  Cutting wood makes you strong etc.
-15. Graphs and charts showing progress over time.
-16. ~Rotation and deletion of buildings~
-17. ~Ground wear - as colonists (and animals?) move around the map, record their steps on a texture.  Use this texture in a shader to start to show wear on the grass.  This should lead to areas of high traffic starting to get paths appearing on them...~
-18. ~Save camera position with game~
-19. Save ground wear pattern with game
-20. ~Buildings add instant ground wear when placed (how to stop the grass regrowing under buildings...?)~
-21. ~Grass is shorter where ground is worn~
-22. A world map - overlaying the wear texture, buildings and colonist locations etc onto the existing map
-23. Wear pattern shouldn't travel up cliffs
-24. Tools of the trade - axe, pickaxe etc - plus animations
-25. 
+The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/smolbean-planet-3d
 
 # Devlog and Screenshots
 
