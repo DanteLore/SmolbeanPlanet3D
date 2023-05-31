@@ -11,7 +11,7 @@ I have decided I want the game to be, eventually, a cross between The Settlers a
 3. Animals (dodos I think) and a hunter
 4. Drops!  Trees drop logs, rocks drop stones.  Wood/Stonecutters collect these and dump them by their huts, until there's no more room.
 5. Separate people from their buildings - currently, the colonists lifespans are controlled by their buildings.  Do this centrally.
-6. Create rigged models for the colonists, animate and import them.  Colonists dress the way they dress, they don't change clothes based on their job.
+6. ~Create rigged models for the colonists, animate and import them.  Colonists dress the way they dress, they don't change clothes based on their job.~
 7. ~Get some decent GPU-instanced grass on the go, to make the ground look more professional.~
 8. ~Sort out the lighting so the buildings look less lame.~ (can't get much better without baking)
 9. Add time of day as a concept, including day/night cycle.
@@ -25,11 +25,12 @@ I have decided I want the game to be, eventually, a cross between The Settlers a
 17. ~Ground wear - as colonists (and animals?) move around the map, record their steps on a texture.  Use this texture in a shader to start to show wear on the grass.  This should lead to areas of high traffic starting to get paths appearing on them...~
 18. ~Save camera position with game~
 19. Save ground wear pattern with game
-20. Buildings add instant ground wear when placed (how to stop the grass regrowing under buildings...?)
-21. Grass is shorter where ground is worn
+20. ~Buildings add instant ground wear when placed (how to stop the grass regrowing under buildings...?)~
+21. ~Grass is shorter where ground is worn~
 22. A world map - overlaying the wear texture, buildings and colonist locations etc onto the existing map
-
-...OK, that's like a year's worth of work...
+23. Wear pattern shouldn't travel up cliffs
+24. Tools of the trade - axe, pickaxe etc - plus animations
+25. 
 
 # Devlog and Screenshots
 
