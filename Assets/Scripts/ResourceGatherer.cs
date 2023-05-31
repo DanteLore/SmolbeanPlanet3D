@@ -69,7 +69,7 @@ public abstract class ResourceGatherer : MonoBehaviour
         {
             yield return new WaitForSeconds(10.0f);
  
-            if (State == ResourceGathererState.Walking & !navAgent.pathPending && navAgent.remainingDistance > navAgent.stoppingDistance) 
+            if (State == ResourceGathererState.Walking && !navAgent.pathPending && navAgent.remainingDistance > navAgent.stoppingDistance) 
             {
                 if (Vector3.Distance(transform.position, lastPosition) <= 1.0f) 
                 {
@@ -87,13 +87,17 @@ public abstract class ResourceGatherer : MonoBehaviour
 
     private GameObject GetTarget(Vector3 pos)
     {
-        return GetTargets(pos).FirstOrDefault(g => PathExists(g.transform.position));
+        // this just doesn't seem to work - come back to it!
+        return GetTargets(pos).FirstOrDefault();  //.FirstOrDefault(g => PathExists(g.transform.position));
     }
 
     private bool PathExists(Vector3 target)
     {
+        NavMesh.SamplePosition(transform.position, out var fromHit, 10f, navAgent.areaMask);
+        NavMesh.SamplePosition(target, out var toHit, 10f, navAgent.areaMask);
+
         var path = new NavMeshPath();
-        return navAgent.CalculatePath(transform.position, path);
+        return NavMesh.CalculatePath(fromHit.position, toHit.position, navAgent.areaMask, path);
     }
 
     protected IEnumerator GathererLoop()
