@@ -11,6 +11,18 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Smolbean Colonists
+
+Finally managed to create and rig some very basic low poly characters to replace the original 'capsules'.  I followed [this excellent tutorial from Imphenzia](https://www.youtube.com/watch?v=PTWV67qUX2k), which explains why my characters look like very poor copies of his!  
+
+The blender-unity workflow for animation is, frankly, a dog's dinner.  Managing animation clips in blender across 14 windows, then jumping through weird hoops to import to Unity... gah... miserable.  This is going to really put me off the whole process - but I'll force myself to stick with it I guess...
+
+![Screenshot](./Docs/Images/screenshot37.png)
+
+![Screenshot](./Docs/Images/screenshot36.png)
+
+![Screenshot](./Docs/Images/screenshot35.png)
+
 
 ## GPU gardening
 
