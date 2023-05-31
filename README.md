@@ -14,6 +14,8 @@ Newest entries at the top :)
 
 ## GPU gardening
 
+Need perlin noise that tiles?  http://kitfox.com/projects/perlinNoiseMaker/
+
 Here's the shadergraph for the grass shader - in case it's useful to anyone.
 ![Screenshot](./Docs/Images/screenshot34.png)
 
