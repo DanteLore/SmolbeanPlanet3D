@@ -17,6 +17,6 @@ public class Woodcutter : ResourceGatherer
 
     protected override string GetGatheringTrigger()
     {
-        return "StartMining";
+        return "StartChopping";
     }
 }

@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NatureLayer: Nature
-  destinationThreshold: 2
+  destinationThreshold: 1
 --- !u!1001 &377112930599266902
 PrefabInstance:
   m_ObjectHideFlags: 0
