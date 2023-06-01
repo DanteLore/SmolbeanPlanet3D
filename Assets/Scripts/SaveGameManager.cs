@@ -21,6 +21,7 @@ public class SaveGameManager : MonoBehaviour
     public static SaveGameManager Instance { get; private set; }
 
     public static readonly string EXTENSION = ".sbp";
+    public Texture2D groundTexture;
 
     private GridManager gridManager;
     private TreeGenerator treeGenerator;
@@ -53,13 +54,6 @@ public class SaveGameManager : MonoBehaviour
         if(File.Exists(filename))
             File.Delete(filename);
 
-        // Things to be saved:
-        // 1. The game map (which allows regeneration of the island mesh)
-        // 2. The locations, rotations and scale of all the trees
-        // 3. The locations, rotations and scale of all the buildings
-        // 4. The location and state of all the creatures etc - future.
-        // 5. Likewise items (wood, stone etc), stats, history etc etc
-
         var saveData = new SaveFileData
         {
             gameMapWidth = gridManager.GameMapWidth,
@@ -76,6 +70,16 @@ public class SaveGameManager : MonoBehaviour
             JsonSerializer serializer = new JsonSerializer();
             serializer.Serialize(file, saveData);
         }
+
+        if(groundTexture != null)
+        {
+            File.WriteAllBytes(GetPngFilename(filename), groundTexture.EncodeToPNG());
+        }
+    }
+
+    private static string GetPngFilename(string filename)
+    {
+        return filename.Replace(EXTENSION, ".png");
     }
 
     private static string GetFilename(string name)
@@ -111,11 +115,22 @@ public class SaveGameManager : MonoBehaviour
         }
 
         gridManager.Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight);
-        treeGenerator.LoadTrees(saveData.treeData);
-        rockGenerator.LoadRocks(saveData.rockData);
-        buildManager.LoadBuildings(saveData.buildingData);
+        
+        if(saveData.treeData != null)
+            treeGenerator.LoadTrees(saveData.treeData);
+        if(saveData.rockData != null)
+            rockGenerator.LoadRocks(saveData.rockData);
+        if(saveData.buildingData != null)
+            buildManager.LoadBuildings(saveData.buildingData);
         if(saveData.cameraData != null)
             cameraController.LoadState(saveData.cameraData);
+
+        string pngFilename = GetPngFilename(filename);
+        if(File.Exists(pngFilename) && groundTexture != null)
+        {
+            groundTexture.LoadImage(File.ReadAllBytes(pngFilename));
+        }
+
         MenuController.Instance.CloseAll();
     }
 }
