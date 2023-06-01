@@ -4,7 +4,7 @@ public enum BuildingWearPattern { Circle, Rectangle }
 
 public abstract class SmolbeanBuilding : MonoBehaviour
 {
-    public BuildingObjectSaveData SaveData {get; set;}
+    public int PrefabIndex {get; set;}
     public BuildingWearPattern wearPattern = BuildingWearPattern.Rectangle;
     public Vector2 wearScale = Vector2.one;
     public GameObject building;

@@ -24,6 +24,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     private bool okToBuild;
     public bool IsBuilding { get; private set; }
     public bool IsEditing { get; private set; }
+    public Texture2D groundTexture;
 
     private Transform editTargetTransform;
     private int selectedBuildingIndex;
@@ -196,8 +197,8 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     {
         Vector3 pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
 
-        var building = Instantiate(buildings[saveData.prefabIndex].prefab, pos, Quaternion.identity, transform);
-        building.GetComponent<SmolbeanBuilding>().SaveData = saveData;
+        var building = Instantiate(buildings[saveData.prefabIndex].prefab, pos, Quaternion.Euler(0f, saveData.rotationY, 0f), transform);
+        building.GetComponent<SmolbeanBuilding>().PrefabIndex = saveData.prefabIndex;
     }
 
     private bool CheckEmpty(Vector3 center)
@@ -255,7 +256,16 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
 
     public List<BuildingObjectSaveData> GetSaveData()
     {
-        return GetComponentsInChildren<SmolbeanBuilding>().Select(b => b.SaveData).ToList();
+        return GetComponentsInChildren<SmolbeanBuilding>()
+            .Select(b => new BuildingObjectSaveData
+            {
+                positionX = b.transform.position.x,
+                positionY = b.transform.position.y,
+                positionZ = b.transform.position.z,
+                rotationY = b.transform.rotation.eulerAngles.y,
+                prefabIndex = b.PrefabIndex
+            })
+            .ToList();
     }
 
     public void LoadBuildings(List<BuildingObjectSaveData> loadedData)
