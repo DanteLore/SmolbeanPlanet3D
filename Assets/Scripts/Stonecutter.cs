@@ -14,4 +14,9 @@ public class Stonecutter : ResourceGatherer
             .Where(go => go.GetComponent<SmolbeanRock>() != null)
             .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - pos));
     }
+
+    protected override string GetGatheringTrigger()
+    {
+        return "StartMining";
+    }
 }

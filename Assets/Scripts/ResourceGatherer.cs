@@ -27,11 +27,19 @@ public abstract class ResourceGatherer : MonoBehaviour
             state = value; 
             if(animator != null)
             {
+                animator.SetBool("IsIdle", (state == ResourceGathererState.Resting));
                 animator.SetBool("IsWalking", (state == ResourceGathererState.Walking));
                 animator.SetBool("IsStuck", (state == ResourceGathererState.Stuck));
+
+                if(state == ResourceGathererState.Gathering)
+                    animator.SetTrigger(GetGatheringTrigger());
+                else
+                    animator.ResetTrigger(GetGatheringTrigger());
             }
         }
     }
+
+    protected abstract string GetGatheringTrigger();
 
     void Start()
     {
@@ -134,16 +142,15 @@ public abstract class ResourceGatherer : MonoBehaviour
                 State = ResourceGathererState.Gathering;
                 navAgent.isStopped = true;
 
-                if (target)
-                {
-                    navAgent.updateRotation = false;
-                    var n = target.transform.position - transform.position;
-                    transform.rotation = Quaternion.LookRotation(new Vector3(n.x, 0, n.z));
+                navAgent.updateRotation = false;
+                var n = target.transform.position - transform.position;
+                transform.rotation = Quaternion.LookRotation(new Vector3(n.x, 0, n.z));
 
-                    yield return new WaitForSeconds(3);
-                    Destroy(target);
-                    yield return new WaitForSeconds(1);
-                }
+                yield return new WaitForSeconds(3);
+                Destroy(target);
+
+                State = ResourceGathererState.Resting;
+                yield return new WaitForSeconds(1);
             }
 
             State = ResourceGathererState.Walking;

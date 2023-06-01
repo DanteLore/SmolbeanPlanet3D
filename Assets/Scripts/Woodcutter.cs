@@ -14,4 +14,9 @@ public class Woodcutter : ResourceGatherer
             .Where(go => go.GetComponent<SmolbeanTree>() != null)
             .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - pos));
     }
+
+    protected override string GetGatheringTrigger()
+    {
+        return "StartMining";
+    }
 }
