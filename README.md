@@ -11,6 +11,11 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## World map
+
+Added a world map, showing wear patterns, trees, rocks etc
+![Screenshot](./Docs/Images/screenshot38.png)
+
 ## Smolbean Colonists
 
 Finally managed to create and rig some very basic low poly characters to replace the original 'capsules'.  I followed [this excellent tutorial from Imphenzia](https://www.youtube.com/watch?v=PTWV67qUX2k), which explains why my characters look like very poor copies of his!  
