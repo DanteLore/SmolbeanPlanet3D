@@ -1,6 +1,5 @@
 using UnityEngine;
 
-public class SmolbeanRock : MonoBehaviour
+public class SmolbeanRock : SmolbeanItem
 {
-    [SerializeField] public NatureObjectSaveData saveData;
 }

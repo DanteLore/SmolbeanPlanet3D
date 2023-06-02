@@ -1,6 +1,5 @@
 using UnityEngine;
 
-public class SmolbeanTree : MonoBehaviour
+public class SmolbeanTree : SmolbeanItem
 {
-    [SerializeField] public NatureObjectSaveData saveData;
 }

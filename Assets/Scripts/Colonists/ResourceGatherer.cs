@@ -9,6 +9,7 @@ public abstract class ResourceGatherer : MonoBehaviour
 {
     public string NatureLayer = "Nature";
     public float destinationThreshold = 1.0f;
+    public float damage = 20f;
     protected NavMeshAgent navAgent;
     protected GameObject body;
     protected List<GameObject> blacklist = new List<GameObject>();
@@ -116,6 +117,7 @@ public abstract class ResourceGatherer : MonoBehaviour
             yield return new WaitForSeconds(1);
 
             var target = GetTarget(transform.position);
+
             while(target == null)
             {
                 Debug.Log("Can't find any targets in my search radius.  Will try again in a sec");
@@ -146,8 +148,13 @@ public abstract class ResourceGatherer : MonoBehaviour
                 var n = target.transform.position - transform.position;
                 transform.rotation = Quaternion.LookRotation(new Vector3(n.x, 0, n.z));
 
-                yield return new WaitForSeconds(3);
-                Destroy(target);
+                var damageable = target.GetComponent<IDamagable>();
+                while(!damageable.IsDead)
+                {
+                    yield return new WaitForSeconds(1f);
+                    damageable.TakeDamage(damage);
+                    yield return new WaitForEndOfFrame();
+                }
 
                 State = ResourceGathererState.Resting;
                 yield return new WaitForSeconds(1);
