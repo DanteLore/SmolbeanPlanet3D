@@ -129,7 +129,7 @@ public class CameraController : MonoBehaviour
     
     private void RotateCamera(InputAction.CallbackContext inputValue)
     {
-        if(!Mouse.current.rightButton.isPressed)
+        if(!Mouse.current.rightButton.isPressed || GameStateManager.Instance.IsPaused)
             return;
 
         float y = inputValue.ReadValue<Vector2>().x * maxRotationSpeed + transform.rotation.eulerAngles.y;

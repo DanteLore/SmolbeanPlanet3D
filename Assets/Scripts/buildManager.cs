@@ -79,7 +79,9 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     {
         IsEditing = false;
         editTargetTransform = null;
-        Destroy(buildingEditWidget);
+        
+        if(buildingEditWidget != null)
+            Destroy(buildingEditWidget);
     }
 
     // TODO:  The following three "Update" methods should be illegal.  This is a shameful implementation of a state machine
@@ -89,7 +91,10 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     void Update()
     {
         if (GameStateManager.Instance.IsPaused)
+        {
+            EndEdit();
             return;
+        }
 
         bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
         if (isOverUI)
