@@ -31,6 +31,10 @@ public class MenuController : MonoBehaviour
             else
                 ShowMenu();
         }
+        else if (Input.GetKeyDown(KeyCode.M) && !isVisible)
+        {
+            ShowMenu("MapMenu");
+        }
     }
 
 
