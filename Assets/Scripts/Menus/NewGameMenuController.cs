@@ -84,9 +84,9 @@ public class NewGameMenuController : MonoBehaviour
         texture.filterMode = FilterMode.Point;
 
         // Walk y backwards, because textures start in the top left
-        for (int y = mapGenerator.mapWidth - 1; y >= 0; y--)
+        for (int y = mapGenerator.mapHeight - 1; y >= 0; y--)
         {
-            for (int x = 0; x < mapGenerator.mapHeight; x++)
+            for (int x = 0; x < mapGenerator.mapWidth; x++)
             {
                 float i = map[y * mapGenerator.mapWidth + x];
 

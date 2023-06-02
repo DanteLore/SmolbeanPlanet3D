@@ -24,7 +24,6 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     private bool okToBuild;
     public bool IsBuilding { get; private set; }
     public bool IsEditing { get; private set; }
-    public Texture2D groundTexture;
 
     private Transform editTargetTransform;
     private int selectedBuildingIndex;

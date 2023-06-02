@@ -17,6 +17,9 @@ public class MainToolbarController : MonoBehaviour
         
         var buildToolbarButton = document.rootVisualElement.Q<Button>("buildToolbarButton");
         buildToolbarButton.clicked += BuildToolbarButtonClicked;
+        
+        var mapButton = document.rootVisualElement.Q<Button>("mapButton");
+        mapButton.clicked += MapButtonClicked;
     }
 
     private void MainMenuButtonClicked()
@@ -27,5 +30,10 @@ public class MainToolbarController : MonoBehaviour
     private void BuildToolbarButtonClicked()
     {
         ToolbarController.Instance.ShowToolbar("BuildToolbar");
+    }
+
+    private void MapButtonClicked()
+    {
+        MenuController.Instance.ShowMenu("MapMenu");
     }
 }
