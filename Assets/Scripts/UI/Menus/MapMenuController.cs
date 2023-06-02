@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +10,11 @@ public class MapMenuController : MonoBehaviour
     private UIDocument document;
     private VisualElement mapBox;
 
-    public Color seaColor;
-    public Color lowGroundColor;
-    public Color highGroundColor;
+    public Color wornGroundColor;
+
+    public Color[] mapLevelColors;
+
+    public Texture2D groundTexture;
 
 
     void OnEnable()
@@ -30,34 +33,38 @@ public class MapMenuController : MonoBehaviour
 
     private void DrawMap()
     {
-        Texture2D texture = new Texture2D(gridManager.GameMapWidth, gridManager.GameMapHeight);
-        texture.filterMode = FilterMode.Point;
+        int width = groundTexture.width;
+        int height = groundTexture.height;
 
-        // Walk y backwards, because textures start in the top left
-        for (int y = gridManager.GameMapHeight - 1; y >= 0; y--)
+        Texture2D mapTexture = new Texture2D(width, height);
+        mapTexture.filterMode = FilterMode.Point;
+
+        for(int y = 0; y < height; y++)
         {
-            for (int x = 0; x < gridManager.GameMapWidth; x++)
+            for(int x = 0; x < width; x++) 
             {
-                float i = gridManager.GameMap[y * gridManager.GameMapWidth + x];
+                float wear = groundTexture.GetPixel(x, y).r;
 
-                Color color = seaColor;
-
-                if (i == 2)
-                {
-                    color = highGroundColor;
-                }
-                else if (i == 1)
-                {
-                    color = lowGroundColor;
-                }
-
-                texture.SetPixel(x, y, color);
+                Color baseColor = GetMapColorAt((x * 1f) / width, (y * 1f) / height);
+                Color c = Color.Lerp(baseColor, wornGroundColor, wear);
+                
+                mapTexture.SetPixel(x, y, c);
             }
         }
 
-        mapBox.style.backgroundImage = texture;
+        mapBox.style.backgroundImage = mapTexture;
 
-        texture.Apply();
+        mapTexture.Apply();
+    }
+
+    private Color GetMapColorAt(float dX, float dY)
+    {
+        int x = Mathf.RoundToInt(Mathf.Clamp01(dX) * (gridManager.GameMapWidth - 1));
+        int y = Mathf.RoundToInt(Mathf.Clamp01(dY) * (gridManager.GameMapHeight - 1));
+
+        int val = gridManager.GameMap[y * gridManager.GameMapWidth + x];
+
+        return mapLevelColors[val];
     }
 
     private void CloseButtonClicked()
