@@ -6,6 +6,8 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
 {
     [SerializeField] public NatureObjectSaveData saveData;
 
+    public GameObject destroyParticleSystemPrefab;
+
     public float maxHealth = 100f;
     public float health = 100f;
     public float healPerSecond = 1f;
@@ -16,8 +18,8 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
     {
         if(IsDead)
         {
-            // Dead!!
-            DestroyImmediate(gameObject);
+            Instantiate(destroyParticleSystemPrefab, transform.position, transform.rotation);
+            Destroy(gameObject);
         }
         else
         {
