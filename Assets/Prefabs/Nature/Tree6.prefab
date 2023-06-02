@@ -109,7 +109,7 @@ MonoBehaviour:
     scaleY: 0
     scaleZ: 0
     prefabIndex: 0
-  destroyParticleSystemPrefab: {fileID: 4184650568157583799, guid: 112bff5543e3d45298114ec5f5f3e380, type: 3}
+  destroyParticleSystemPrefab: {fileID: 1572338817668193572, guid: 112bff5543e3d45298114ec5f5f3e380, type: 3}
   maxHealth: 100
   health: 100
   healPerSecond: 1

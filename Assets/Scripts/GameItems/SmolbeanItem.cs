@@ -19,6 +19,7 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
         if(IsDead)
         {
             Instantiate(destroyParticleSystemPrefab, transform.position, transform.rotation);
+            
             Destroy(gameObject);
         }
         else
