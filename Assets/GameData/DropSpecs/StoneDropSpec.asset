@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82318625a37943d3a4fec9d0e7e748b, type: 3}
+  m_Name: StoneDropSpec
+  m_EditorClassIdentifier: 
+  dropName: Stone Block
+  dropRate: 4
+  stackSize: 8
+  singlePrefab: {fileID: 0}
+  somePrefab: {fileID: 0}
+  lotsPrefab: {fileID: 0}
