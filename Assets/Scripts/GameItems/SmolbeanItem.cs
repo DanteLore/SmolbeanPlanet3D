@@ -13,19 +13,25 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
     public float healPerSecond = 1f;
 
     public bool IsDead { get { return health <= 0; }}
+    private bool deadCalled = false;
 
     void Update()
     {
-        if(IsDead)
+        if(IsDead && !deadCalled)
         {
-            Instantiate(destroyParticleSystemPrefab, transform.position, transform.rotation);
-            
-            Destroy(gameObject);
+            deadCalled = true;
+            Dead();
         }
         else
         {
             health = Mathf.Min(health + healPerSecond * Time.deltaTime, maxHealth);
         }
+    }
+
+    protected virtual void Dead()
+    {
+        Instantiate(destroyParticleSystemPrefab, transform.position, transform.rotation);
+        Destroy(gameObject);
     }
 
     public void TakeDamage(float damage)

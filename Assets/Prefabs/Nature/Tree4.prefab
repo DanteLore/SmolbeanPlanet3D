@@ -106,7 +106,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.2
-  m_Height: 5.4
+  m_Height: 4.25
   m_Direction: 1
   m_Center: {x: 0, y: 2, z: 0}
 --- !u!114 &3162616662174696969
@@ -136,6 +136,9 @@ MonoBehaviour:
   maxHealth: 100
   health: 100
   healPerSecond: 1
+  treeFallTime: 5
+  treeFallAngle: 80
+  choppedParticleSystemPrefab: {fileID: 1708857678183282219, guid: c0a8a93d928bb43529ca1831cdbf6913, type: 3}
 --- !u!208 &2326811742335506731
 NavMeshObstacle:
   m_ObjectHideFlags: 0

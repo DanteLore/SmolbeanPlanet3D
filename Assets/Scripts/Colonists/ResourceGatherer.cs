@@ -156,8 +156,11 @@ public abstract class ResourceGatherer : MonoBehaviour
                     yield return new WaitForEndOfFrame();
                 }
 
-                State = ResourceGathererState.Resting;
-                yield return new WaitForSeconds(1);
+                while(target != null)
+                {
+                    State = ResourceGathererState.Resting;
+                    yield return new WaitForSeconds(1);
+                }
             }
 
             State = ResourceGathererState.Walking;
