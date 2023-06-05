@@ -8,6 +8,8 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
 
     public GameObject destroyParticleSystemPrefab;
 
+    public DropSpec dropSpec;
+
     public float maxHealth = 100f;
     public float health = 100f;
     public float healPerSecond = 1f;
@@ -21,6 +23,7 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
         {
             deadCalled = true;
             Dead();
+            DropItems();
         }
         else
         {
@@ -32,6 +35,11 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
     {
         Instantiate(destroyParticleSystemPrefab, transform.position, transform.rotation);
         Destroy(gameObject);
+    }
+
+    protected virtual void DropItems()
+    {
+        DropController.Instance.CreateDrop(dropSpec, transform.position);
     }
 
     public void TakeDamage(float damage)

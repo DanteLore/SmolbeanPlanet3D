@@ -110,6 +110,7 @@ MonoBehaviour:
     scaleZ: 0
     prefabIndex: 0
   destroyParticleSystemPrefab: {fileID: 1572338817668193572, guid: 112bff5543e3d45298114ec5f5f3e380, type: 3}
+  dropSpec: {fileID: 11400000, guid: edeccd8bca67e4f46b70aeec6790c583, type: 2}
   maxHealth: 100
   health: 100
   healPerSecond: 1

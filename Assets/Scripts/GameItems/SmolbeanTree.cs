@@ -30,6 +30,7 @@ public class SmolbeanTree : SmolbeanItem
             yield return new WaitForSeconds(0.1f);
 
         Instantiate(destroyParticleSystemPrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
+        DropItems();
         Destroy(gameObject);
     }
 }

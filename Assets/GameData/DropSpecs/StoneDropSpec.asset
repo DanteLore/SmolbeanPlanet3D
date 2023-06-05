@@ -15,6 +15,7 @@ MonoBehaviour:
   dropName: Stone Block
   dropRate: 4
   stackSize: 8
-  singlePrefab: {fileID: 0}
-  somePrefab: {fileID: 0}
-  lotsPrefab: {fileID: 0}
+  thumbnail: {fileID: 2800000, guid: 2240f3fcaae1a4ddbb3d3c669319b795, type: 3}
+  singlePrefab: {fileID: 267465091510682009, guid: c6c3b92ad70b44f09bb0216c3c626b33, type: 3}
+  somePrefab: {fileID: 7242215899012063861, guid: 385777ab043584807825929f0a2eafb1, type: 3}
+  lotsPrefab: {fileID: 9138819701476296874, guid: 0a53fe394ab0d49629e23323b43acbf6, type: 3}
