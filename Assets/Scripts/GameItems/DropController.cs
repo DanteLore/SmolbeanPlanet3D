@@ -7,6 +7,8 @@ public class DropController : MonoBehaviour, IObjectGenerator
     public static DropController Instance { get; private set; }
     public int Priority { get { return 100; } }
     public DropSpec[] dropSpecs;
+    public string dropLayer = "Drops";
+    public float dropMergeRadius = 2f;
     private Dictionary<string, DropSpec> dropSpecLookup;
 
     void Awake()
@@ -30,10 +32,26 @@ public class DropController : MonoBehaviour, IObjectGenerator
 
     public GameObject CreateDrop(DropSpec spec, Vector3 position, int quantity = 0)
     {
-        var gameObject = Instantiate(spec.lotsPrefab, position, Quaternion.identity, transform);
+        var others = Physics.OverlapSphere(position, dropMergeRadius, LayerMask.GetMask(dropLayer))
+            .Select(d => d.GetComponent<ItemStack>())
+            .Where(d => d != null && d.dropSpec == spec)
+            .OrderBy(d => d.quantity);
+
+        int qtty = (quantity == 0) ? spec.dropRate : quantity;
+        
+        foreach(var other in others)
+        {
+            if(qtty + other.quantity > spec.stackSize)
+                break;
+                
+            qtty += other.quantity;
+            DestroyImmediate(other.gameObject);
+        }
+
+        var gameObject = Instantiate(spec.GetPrefabFor(qtty), position, Quaternion.identity, transform);
         var itemStack = gameObject.GetComponent<ItemStack>();
         itemStack.dropSpec = spec;
-        itemStack.quantity = (quantity == 0) ? spec.dropRate : quantity;
+        itemStack.quantity = qtty;
 
         return gameObject;
     }
