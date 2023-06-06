@@ -23,7 +23,6 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
         {
             deadCalled = true;
             Dead();
-            DropItems();
         }
         else
         {
@@ -34,6 +33,7 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
     protected virtual void Dead()
     {
         Instantiate(destroyParticleSystemPrefab, transform.position, transform.rotation);
+        DropItems();
         Destroy(gameObject);
     }
 
