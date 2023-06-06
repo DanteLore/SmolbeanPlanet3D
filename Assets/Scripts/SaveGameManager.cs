@@ -126,8 +126,8 @@ public class SaveGameManager : MonoBehaviour
             rockGenerator.LoadRocks(saveData.rockData);
         if(saveData.buildingData != null)
             buildManager.LoadBuildings(saveData.buildingData);
-        //if(saveData.dropItemData != null)
-        dropController.LoadDrops(saveData.dropItemData);
+        if(saveData.dropItemData != null)
+            dropController.LoadDrops(saveData.dropItemData);
         if(saveData.cameraData != null)
             cameraController.LoadState(saveData.cameraData);
 

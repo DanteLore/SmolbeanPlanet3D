@@ -149,7 +149,7 @@ Rigidbody:
   m_GameObject: {fileID: 5678464011766705138}
   serializedVersion: 4
   m_Mass: 100
-  m_Drag: 5
+  m_Drag: 50
   m_AngularDrag: 0.5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -159,7 +159,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 5120
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -179,7 +179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1bff9cede61d499b9cad2a2141b7ba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NatureLayer: Nature
+  natureLayer: Nature
+  dropLayer: Drops
   destinationThreshold: 1
   damage: 20
   dropSpec: {fileID: 11400000, guid: edeccd8bca67e4f46b70aeec6790c583, type: 2}
