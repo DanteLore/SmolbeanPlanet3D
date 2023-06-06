@@ -58,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 2342996652910833306}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5475477010335715804}
@@ -147,6 +147,7 @@ Transform:
   m_Children:
   - {fileID: 7149796513386707120}
   - {fileID: 6485176588718662401}
+  - {fileID: 1044665604581238921}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -187,6 +188,7 @@ MonoBehaviour:
   wearScale: {x: 0.8, y: 0.8}
   building: {fileID: 2342996652910833306}
   spawnPoint: {fileID: 1878854329804994461}
+  dropPoint: {fileID: 7886708135536024003}
   woodcutterPrefab: {fileID: 5678464011766705138, guid: 448bb25b7e83a4d2f8875362bd561e51, type: 3}
   spawnDelaySeconds: 5
 --- !u!208 &4150118438198778675
@@ -205,3 +207,34 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: -0.11800001, y: 2.4510002, z: 0}
   m_TimeToStationary: 0.5
+--- !u!1 &7886708135536024003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1044665604581238921}
+  m_Layer: 8
+  m_Name: DropPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1044665604581238921
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7886708135536024003}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.99, y: 0.5, z: 0.67}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5475477010335715804}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

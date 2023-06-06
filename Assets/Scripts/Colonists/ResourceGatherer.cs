@@ -4,19 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
+using System;
 
 public abstract class ResourceGatherer : MonoBehaviour
 {
-    public string NatureLayer = "Nature";
+    public string natureLayer = "Nature";
+    public string dropLayer = "Drops";
     public float destinationThreshold = 1.0f;
     public float damage = 20f;
+    public DropSpec dropSpec;
     protected NavMeshAgent navAgent;
     protected GameObject body;
-    protected List<GameObject> blacklist = new List<GameObject>();
     protected Vector3 spawnPoint;
+    protected Vector3 dropPoint;
     private Vector3 lastReportedPosition;
     private Vector3 lastPosition;
     private Animator animator;
+    private Stack<InventoryItem> inventory;
 
     public enum ResourceGathererState {Resting, Walking, Gathering, Stuck}
     private ResourceGathererState state = ResourceGathererState.Resting;
@@ -47,9 +51,11 @@ public abstract class ResourceGatherer : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         var hut = GetComponentInParent<SmolbeanBuilding>();
         spawnPoint = hut.GetSpawnPoint();
+        dropPoint = hut.GetDropPoint();
         navAgent = GetComponent<NavMeshAgent>();
         navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         body = transform.Find("Body").gameObject;
+        inventory = new Stack<InventoryItem>();
 
         StartCoroutine(GathererLoop());
         lastReportedPosition = transform.position;
@@ -161,17 +167,53 @@ public abstract class ResourceGatherer : MonoBehaviour
                     State = ResourceGathererState.Resting;
                     yield return new WaitForSeconds(1);
                 }
+
+                target = GetDropTarget();
+            }
+
+            while (target == null && !CloseEnoughTo(target))
+            {
+                if (State == ResourceGathererState.Stuck)
+                {
+                    Debug.Log("Giving up and going home");
+                    break;
+                }
+                yield return new WaitForSeconds(0.5f);
+            }
+
+            if (State != ResourceGathererState.Stuck && target != null)
+            {
+                var stack = target.GetComponent<ItemStack>();
+                var item = DropController.Instance.Pickup(stack);
+                inventory.Push(item);
+            }
+
+            State = ResourceGathererState.Walking;
+            StartWalkingTo(dropPoint);
+            yield return new WaitForSeconds(0.1f);
+
+            while (!CloseEnoughTo(dropPoint))
+            {
+                if (State == ResourceGathererState.Stuck)
+                    StartWalkingTo(spawnPoint);
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            while(inventory.Any())
+            {
+                var item = inventory.Pop();
+                DropController.Instance.Drop(item.dropSpec, dropPoint, item.quantity);
             }
 
             State = ResourceGathererState.Walking;
             StartWalkingTo(spawnPoint);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.1f);
 
             while (!CloseEnoughTo(spawnPoint))
             {
                 if (State == ResourceGathererState.Stuck)
                     StartWalkingTo(spawnPoint);
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(0.1f);
             }
 
             State = ResourceGathererState.Resting;
@@ -181,6 +223,18 @@ public abstract class ResourceGatherer : MonoBehaviour
 
             body.SetActive(true);
         }
+    }
+
+    private GameObject GetDropTarget()
+    {
+        var candidates = Physics.OverlapSphere(transform.position, 20f, LayerMask.GetMask(dropLayer));
+
+        return candidates
+            .Select(c => c.gameObject.GetComponent<ItemStack>())
+            .Where(i => i != null && i.dropSpec == dropSpec)
+            .Select(i => i.gameObject)
+            .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - transform.position))
+            .FirstOrDefault();
     }
 
     private void StartWalkingTo(Vector3 dest)
@@ -202,7 +256,7 @@ public abstract class ResourceGatherer : MonoBehaviour
 
     protected bool CloseEnoughTo(GameObject target)
     {
-        var found = Physics.OverlapSphere(transform.position, destinationThreshold, LayerMask.GetMask(NatureLayer));
+        var found = Physics.OverlapSphere(transform.position, destinationThreshold, LayerMask.GetMask(natureLayer));
         return found.Any(c => c.gameObject == target);
     }
 }

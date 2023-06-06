@@ -5,6 +5,7 @@ using UnityEngine;
 public class StonecuttersHut : SmolbeanBuilding
 {
     public GameObject spawnPoint;
+    public GameObject dropPoint;
     public GameObject stonecutterPrefab;
     public float spawnDelaySeconds = 5f;
     private GameObject stonecutter;
@@ -12,6 +13,7 @@ public class StonecuttersHut : SmolbeanBuilding
     protected override void Start()
     {
         base.Start();
+
         StartCoroutine(CreateWoodcutter(spawnDelaySeconds));
     }
 
@@ -25,5 +27,10 @@ public class StonecuttersHut : SmolbeanBuilding
     public override Vector3 GetSpawnPoint()
     {
         return spawnPoint.transform.position;
+    }
+
+    public override Vector3 GetDropPoint()
+    {
+        return dropPoint.transform.position;
     }
 }

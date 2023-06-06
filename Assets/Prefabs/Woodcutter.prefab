@@ -181,6 +181,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NatureLayer: Nature
   destinationThreshold: 1
+  damage: 20
+  dropSpec: {fileID: 11400000, guid: edeccd8bca67e4f46b70aeec6790c583, type: 2}
 --- !u!1001 &502959277502828767
 PrefabInstance:
   m_ObjectHideFlags: 0

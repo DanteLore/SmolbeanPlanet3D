@@ -39,7 +39,7 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
 
     protected virtual void DropItems()
     {
-        DropController.Instance.CreateDrop(dropSpec, transform.position);
+        DropController.Instance.Drop(dropSpec, transform.position);
     }
 
     public void TakeDamage(float damage)

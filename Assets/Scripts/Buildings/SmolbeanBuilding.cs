@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public enum BuildingWearPattern { Circle, Rectangle }
@@ -10,6 +11,7 @@ public abstract class SmolbeanBuilding : MonoBehaviour
     public GameObject building;
 
     public abstract Vector3 GetSpawnPoint();
+    public abstract Vector3 GetDropPoint();
 
     protected virtual void Start()
     {
@@ -25,4 +27,5 @@ public abstract class SmolbeanBuilding : MonoBehaviour
     {
         GroundWearManager.Instance.BuildingOn(building.GetComponent<Renderer>().bounds, wearPattern, wearScale);
     }
+
 }
