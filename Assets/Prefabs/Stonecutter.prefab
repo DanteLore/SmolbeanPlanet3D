@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 2194747601723512404}
   - component: {fileID: 7462178603203635159}
   - component: {fileID: 7560148371789551531}
+  - component: {fileID: 8921668510571840926}
   m_Layer: 9
   m_Name: Stonecutter
   m_TagString: Untagged
@@ -184,6 +185,26 @@ MonoBehaviour:
   destinationThreshold: 1
   damage: 20
   dropSpec: {fileID: 11400000, guid: 0f9b0f898ed5a495aab57be747c4a3ac, type: 2}
+--- !u!114 &8921668510571840926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7581404027262410325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68fa791a1deb24dd6b411d5047a385b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - name: Chopping
+    clip: {fileID: 8300000, guid: aa8fbf99c1c064c6a842b6b98360fcfb, type: 3}
+    loop: 1
+  - name: Chopped
+    clip: {fileID: 8300000, guid: 70004ba418ef2415e92faf8822d866e8, type: 3}
+    loop: 0
+  mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
 --- !u!1001 &377112930599266902
 PrefabInstance:
   m_ObjectHideFlags: 0

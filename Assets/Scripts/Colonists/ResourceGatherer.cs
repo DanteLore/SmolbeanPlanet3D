@@ -21,6 +21,7 @@ public abstract class ResourceGatherer : MonoBehaviour
     private Vector3 lastPosition;
     private Animator animator;
     private Stack<InventoryItem> inventory;
+    private SoundPlayer soundPlayer;
 
     public enum ResourceGathererState {Resting, Walking, Gathering, Stuck}
     private ResourceGathererState state = ResourceGathererState.Resting;
@@ -56,6 +57,7 @@ public abstract class ResourceGatherer : MonoBehaviour
         navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         body = transform.Find("Body").gameObject;
         inventory = new Stack<InventoryItem>();
+        soundPlayer = GetComponent<SoundPlayer>();
 
         StartCoroutine(GathererLoop());
         lastReportedPosition = transform.position;
@@ -153,6 +155,7 @@ public abstract class ResourceGatherer : MonoBehaviour
             if (State != ResourceGathererState.Stuck && target != null)
             {
                 State = ResourceGathererState.Gathering;
+                soundPlayer.Play("Chopping");
                 navAgent.isStopped = true;
 
                 navAgent.updateRotation = false;
@@ -166,6 +169,12 @@ public abstract class ResourceGatherer : MonoBehaviour
                     damageable.TakeDamage(damage);
                     yield return new WaitForEndOfFrame();
                 }
+
+                soundPlayer.Stop("Chopping");
+
+                soundPlayer.Play("Chopped");
+                
+                soundPlayer.Play("Falling");
 
                 while(target != null)
                 {
