@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using UnityEngine.Audio;
 
 public class SoundPlayer : MonoBehaviour
@@ -30,9 +29,14 @@ public class SoundPlayer : MonoBehaviour
         foreach(var clip in clips)
         {
             var audioSource = gameObject.AddComponent<AudioSource>();
+            audioSource.playOnAwake = false;
             audioSource.clip = clip.clip;
             audioSource.loop = clip.loop;
             audioSource.outputAudioMixerGroup = mixerGroup;
+            audioSource.rolloffMode = AudioRolloffMode.Linear;
+            audioSource.minDistance = 10f;
+            audioSource.maxDistance = 60f;
+            audioSource.spatialBlend = 1;
 
             players.Add(clip.name, audioSource);
         }
@@ -43,6 +47,14 @@ public class SoundPlayer : MonoBehaviour
         if(players.TryGetValue(clipName, out var player))
         {
             player.Play();
+        }
+    }
+
+    public void PlayOneShot(string clipName)
+    {
+        if(players.TryGetValue(clipName, out var player))
+        {
+            AudioSource.PlayClipAtPoint(player.clip, transform.position, player.volume);
         }
     }
 

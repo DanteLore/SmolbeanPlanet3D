@@ -8,6 +8,13 @@ public class SmolbeanTree : SmolbeanItem
 
     public GameObject choppedParticleSystemPrefab;
 
+    private SoundPlayer soundPlayer;
+
+    void Awake()
+    {
+        soundPlayer = GetComponent<SoundPlayer>();
+    }
+
     protected override void Dead()
     {
         StartCoroutine(FallDown());
@@ -19,7 +26,6 @@ public class SmolbeanTree : SmolbeanItem
         var rb = gameObject.AddComponent<Rigidbody>();
         rb.mass = 1000f;
         rb.drag = .1f;
-        //rb.AddForce(Vector3.right, ForceMode.Impulse);
 
         yield return new WaitForEndOfFrame();
 
@@ -30,7 +36,10 @@ public class SmolbeanTree : SmolbeanItem
             yield return new WaitForSeconds(0.1f);
 
         Instantiate(destroyParticleSystemPrefab, transform.position, Quaternion.Euler(0f, 0f, 0f));
+        soundPlayer.Play("Break");
         DropItems();
+        GetComponent<MeshRenderer>().enabled = false;
+        yield return new WaitForSeconds(3f);
         Destroy(gameObject);
     }
 }

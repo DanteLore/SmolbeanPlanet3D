@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 828b6cfd66e994add93c56b51850a787, type: 3}
+  m_Name: Storehouse
+  m_EditorClassIdentifier: 
+  buildingName: Storehouse
+  prefab: {fileID: 3150097488275511410, guid: 27668fb8b39f94520a1633b49064c01d, type: 3}
+  thumbnail: {fileID: 2800000, guid: ac39f8e7d6b8e4575835f3d72f932f8d, type: 3}

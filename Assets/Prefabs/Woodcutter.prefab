@@ -200,7 +200,7 @@ MonoBehaviour:
   clips:
   - name: Chopping
     clip: {fileID: 8300000, guid: 4bb6c9a033b6142018eac2ca072cdba3, type: 3}
-    loop: 0
+    loop: 1
   - name: Chopped
     clip: {fileID: 8300000, guid: 08eebd7104c6e46bc8bff2094acd3d32, type: 3}
     loop: 0

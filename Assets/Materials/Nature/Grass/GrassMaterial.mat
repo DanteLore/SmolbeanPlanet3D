@@ -54,9 +54,9 @@ Material:
     - _QueueOffset: 0
     - _noiseScale: 0.1
     - _noiseStrength: 0.358
-    - _windScale: 0.1
+    - _windScale: 1
     - _windSpeed: 5
-    - _windStrength: 0.49
+    - _windStrength: 1
     m_Colors:
     - _baseColor: {r: 0.34522963, g: 0.754717, b: 0.29547882, a: 0}
   m_BuildTextureStacks: []
