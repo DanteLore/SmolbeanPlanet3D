@@ -11,6 +11,11 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## New building types
+
+Assed a mine and a storehouse.  This gives me a chance to create new colonist jobs - and mograte over to proper state machines.
+![Screenshot](./Docs/Images/screenshot39.png)
+
 ## World map
 
 Added a world map, showing wear patterns, trees, rocks etc

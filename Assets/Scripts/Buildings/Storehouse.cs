@@ -8,13 +8,6 @@ public class Storehouse : SmolbeanBuilding
     protected override void Start()
     {
         base.Start();
-        
-        StartCoroutine(CreateCourier(spawnDelaySeconds));
-    }
-
-    private IEnumerator CreateCourier(float delayTime)
-    {
-        yield return new WaitForSeconds(delayTime);
     }
 
     public override Vector3 GetSpawnPoint()
