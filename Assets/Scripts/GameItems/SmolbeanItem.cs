@@ -24,7 +24,7 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
             deadCalled = true;
             Dead();
         }
-        else
+        else if(health < maxHealth)
         {
             health = Mathf.Min(health + healPerSecond * Time.deltaTime, maxHealth);
         }

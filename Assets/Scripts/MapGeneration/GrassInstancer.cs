@@ -7,7 +7,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     private class Batch
     {
         public List<Matrix4x4> batchData = new List<Matrix4x4>();
-        public Vector3 center;
+        public Bounds bounds;
     }
 
     public int Priority { get { return 100; } }
@@ -34,18 +34,30 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     private float xNoiseOffset;
     private float yNoiseOffset;
     private Bounds mapBounds;
-    public Transform cameraTransform;
+    public Camera mainCamera;
+    private float renderThresholdSqr;
 
     void Update()
     {
+        var planes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
+
         foreach(var batch in batches)
-            if(Vector3.Distance(batch.center, cameraTransform.position) < renderThreshold)
-            for(int i = 0; i < mesh.subMeshCount; i++)
-                Graphics.DrawMeshInstanced(mesh, i, material, batch.batchData, null, UnityEngine.Rendering.ShadowCastingMode.Off, true);
+        {
+            Vector3 p = batch.bounds.ClosestPoint(mainCamera.transform.position);
+
+            if(Vector3.SqrMagnitude(p - mainCamera.transform.position) < renderThresholdSqr && GeometryUtility.TestPlanesAABB(planes, batch.bounds))
+            {
+                for(int i = 0; i < mesh.subMeshCount; i++)
+                {
+                    Graphics.DrawMeshInstanced(mesh, i, material, batch.batchData, null, UnityEngine.Rendering.ShadowCastingMode.Off, true);
+                }
+            }
+        }
     }
 
     void Start()
     {
+        renderThresholdSqr = renderThreshold * renderThreshold;
         GenerateGrass();
     }
 
@@ -75,6 +87,8 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         int instanceCount = Mathf.CeilToInt(instanceAttemptsPerSquareMeter * area);
         Debug.Log($"Map area {area}sqm => {instanceCount} instance attempts total");
 
+        // Basically take the optimistic view that we can place grass everywhere we want to, and never want to go over the 1024 batch size limit.
+        // In reality this doesn't happen very often - but we can't predict that, so aim to collapse batches at the end.
         int desiredBatchCount = instanceCount / BATCH_SIZE;
         float sqrt = Mathf.Sqrt(desiredBatchCount);
         int xSlices = Mathf.FloorToInt(sqrt);
@@ -89,7 +103,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         foreach(var subBounds in SplitBounds(mapBounds, xSlices, zSlices))
         {
             var currentBatch = new Batch();
-            currentBatch.center = subBounds.center;
+            currentBatch.bounds = subBounds;
             batches.Add(currentBatch);
 
             for(int i = 0; i < BATCH_SIZE; i++)
@@ -98,7 +112,75 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         }
 
         Debug.Log("Actual instances added: " + itemAdded);
+        Debug.Log("Batches created: " + batches.Count());
+
+        batches = batches.Where(b => b.batchData.Count() >= BATCH_SIZE / 20).ToList();
+
+        Debug.Log("Batches kept (large enough): " + batches.Count());
+        Debug.Log("Average batch size pre-merge (max 1024): " + itemAdded / batches.Count());
+
+        // Batch collapse performance
+        // No batch collapse: ~5.3ms
+        // CollapseAdjacentBatches: ~4.0ms
+
+        batches = CollapseAdjacentBatchesQuadStyle(batches);
+
+        Debug.Log("Batches after merge: " + batches.Count());
+        Debug.Log("Average batch size post-merge (max 1024): " + itemAdded / batches.Count());
         Debug.Log($"Setup grass instance data in {(System.DateTime.Now - start).Seconds}s");
+    }
+
+    private List<Batch> CollapseAdjacentBatchesQuadStyle(List<Batch> batches)
+    {
+        return batches;
+    }
+
+    private List<Batch> CollapseAdjacentBatches(List<Batch> batches)
+    {
+        List<Batch> result = new List<Batch>();
+
+        if(batches.Count() <= 1)
+            return result;
+
+        int i = 0;
+        while(i < batches.Count - 1)
+        {
+            var current = batches[i];
+
+            int j = i + 1;
+            while(
+                    j < batches.Count
+                    && AreAdjacent(current, batches[j]) 
+                    && current.batchData.Count + batches[j].batchData.Count <= BATCH_SIZE 
+                )
+            {
+                current = MergeBatches(current, batches[j]);
+                j++;
+            }
+        
+            result.Add(current);
+            i = j;
+        }
+
+        return result;
+    }
+
+    private Batch MergeBatches(Batch b1, Batch b2)
+    {
+        var newBounds = b1.bounds;
+        newBounds.Encapsulate(b2.bounds);
+
+        var newData = b1.batchData.Concat(b2.batchData).ToList();
+
+        return new Batch { batchData = newData, bounds = newBounds };
+    }
+
+    private bool AreAdjacent(Batch current, Batch next)
+    {
+        var p1 = current.bounds.ClosestPoint(next.bounds.center);
+        var p2 = next.bounds.ClosestPoint(p1);
+
+        return Vector3.SqrMagnitude(p1 - p2) < 1f;
     }
 
     public IEnumerable<Bounds> SplitBounds(Bounds originalBounds, int xSlices, int zSlices)
@@ -109,9 +191,9 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         float subSizeX = size.x / xSlices;
         float subSizeZ = size.z / zSlices;
 
-        for (int i = 0; i < xSlices; i++)
+        for (int j = 0; j < zSlices; j++)
         {
-            for (int j = 0; j < zSlices; j++)
+            for (int i = 0; i < xSlices; i++)
             {
                 Vector3 subMin = new Vector3(
                     min.x + i * subSizeX,
