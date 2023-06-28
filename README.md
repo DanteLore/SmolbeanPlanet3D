@@ -13,7 +13,7 @@ Newest entries at the top :)
 
 ## New building types
 
-Added a mine and a storehouse.  This gives me a chance to create new colonist jobs - and mograte over to proper state machines.
+Added a mine and a storehouse.  This gives me a chance to create new colonist jobs - and migrate over to proper state machines.
 ![Screenshot](./Docs/Images/screenshot39.png)
 
 ## World map
