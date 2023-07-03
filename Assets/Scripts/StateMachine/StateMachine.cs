@@ -37,8 +37,6 @@ public class StateMachine
         if(state == currentState)
             return;
 
-        Debug.Log("New state: " + state.GetType().Name);
-
         currentState?.OnExit();
         currentState = state;
 
