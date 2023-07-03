@@ -62,7 +62,7 @@ Material:
     - _QueueOffset: 0
     - _windScale: 0.005
     - _windSpeed: 0.02
-    - _windStrength: 1
+    - _windStrength: 2
     m_Colors:
     - _baseColor: {r: 0.3803922, g: 0.79215693, b: 0.3254902, a: 0}
     - _mapOffset: {r: -0.4995, g: -0.4995, b: 0, a: 0}
