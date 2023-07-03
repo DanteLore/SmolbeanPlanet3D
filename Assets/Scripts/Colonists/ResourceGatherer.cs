@@ -12,6 +12,7 @@ public abstract class ResourceGatherer : MonoBehaviour
     public string dropLayer = "Drops";
     public float destinationThreshold = 1.0f;
     public float damage = 20f;
+    public float hitCooldown = 1f;
     public float idleTime = 1f;
     public float sleepTime = 2f;
     public DropSpec dropSpec;

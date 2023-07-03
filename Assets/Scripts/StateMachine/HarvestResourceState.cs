@@ -8,6 +8,7 @@ public class HarvestResource : IState
     private Animator animator;
     private IDamagable target;
     private SoundPlayer soundPlayer;
+    private float lastHit = 0;
 
     public HarvestResource(ResourceGatherer gatherer, NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer)
     {
@@ -42,6 +43,10 @@ public class HarvestResource : IState
 
     public void Tick()
     {
-        target.TakeDamage(gatherer.damage * Time.deltaTime);
+        if(Time.time - lastHit > gatherer.hitCooldown)
+        {
+            lastHit = Time.time;
+            target.TakeDamage(gatherer.damage);
+        }
     }
 }

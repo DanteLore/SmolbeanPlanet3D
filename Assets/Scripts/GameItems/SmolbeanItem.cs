@@ -17,7 +17,7 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
     public bool IsDead { get { return health <= 0; }}
     private bool deadCalled = false;
 
-    void Update()
+    protected virtual void Update()
     {
         if(IsDead && !deadCalled)
         {
@@ -42,7 +42,7 @@ public class SmolbeanItem : MonoBehaviour, IDamagable
         DropController.Instance.Drop(dropSpec, transform.position);
     }
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {   
         health -= damage;
     }

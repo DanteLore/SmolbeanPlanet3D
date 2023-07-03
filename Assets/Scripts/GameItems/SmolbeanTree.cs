@@ -5,10 +5,15 @@ public class SmolbeanTree : SmolbeanItem
 {
     public float treeFallTime = 5f;
     public float treeFallAngle = 85f;
+    public float recoilAngle = 10f;
+    public float recoilFrequency = 2f;
 
     public GameObject choppedParticleSystemPrefab;
 
     private SoundPlayer soundPlayer;
+    private bool recoiling = false;
+    private float recoilStart;
+    private Quaternion startRotation;
 
     void Awake()
     {
@@ -18,6 +23,8 @@ public class SmolbeanTree : SmolbeanItem
     protected override void Dead()
     {
         StartCoroutine(FallDown());
+
+        recoiling = false;
     }
 
     private IEnumerator FallDown()
@@ -41,5 +48,29 @@ public class SmolbeanTree : SmolbeanItem
         GetComponent<MeshRenderer>().enabled = false;
         yield return new WaitForSeconds(3f);
         Destroy(gameObject);
+    }
+
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+
+        recoiling = true;
+        recoilStart = Time.fixedTime;
+        startRotation = transform.rotation;
+    }
+
+    void FixedUpdate()
+    {
+        if(recoiling)
+        {
+            float t = (Time.fixedTime - recoilStart);
+            float weight = Mathf.Cos(t);
+            float r = Mathf.Lerp(-recoilAngle, recoilAngle, Mathf.Sin(t * (recoilFrequency * 2f * Mathf.PI)));
+
+            transform.rotation = startRotation * Quaternion.Euler(r * weight * Time.fixedDeltaTime, 0f, 0f);
+
+            if(weight <= 0)
+                recoiling = false;
+        }
     }
 }
