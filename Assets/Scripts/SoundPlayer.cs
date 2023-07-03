@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using System.Linq;
 
 public class SoundPlayer : MonoBehaviour
 {
@@ -16,35 +17,52 @@ public class SoundPlayer : MonoBehaviour
     public AudioMixerGroup mixerGroup;
 
     private Dictionary<string, AudioSource> players;
+    private Dictionary<string, SoundClipSpec> clipLookup;
 
     void Awake()
     {
         players = new Dictionary<string, AudioSource>();
+        clipLookup = clips.ToDictionary(c => c.name, c => c);
 
         if(!mixerGroup)
         {
             Debug.LogWarning("No AudioMixer assigned to " + name);
         }
+    }
 
-        foreach(var clip in clips)
-        {
-            var audioSource = gameObject.AddComponent<AudioSource>();
-            audioSource.playOnAwake = false;
-            audioSource.clip = clip.clip;
-            audioSource.loop = clip.loop;
-            audioSource.outputAudioMixerGroup = mixerGroup;
-            audioSource.rolloffMode = AudioRolloffMode.Linear;
-            audioSource.minDistance = 10f;
-            audioSource.maxDistance = 60f;
-            audioSource.spatialBlend = 1;
+    private AudioSource CreateAudioSource(SoundClipSpec clip)
+    {
+        var audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.clip = clip.clip;
+        audioSource.loop = clip.loop;
+        audioSource.outputAudioMixerGroup = mixerGroup;
+        audioSource.rolloffMode = AudioRolloffMode.Linear;
+        audioSource.minDistance = 10f;
+        audioSource.maxDistance = 60f;
+        audioSource.spatialBlend = 1;
 
-            players.Add(clip.name, audioSource);
-        }
-    }   
+        players.Add(clip.name, audioSource);
+        return audioSource;
+    }
+
+    private AudioSource CreateAudioSource(string clipName)
+    {
+        if(clipLookup.TryGetValue(clipName, out var spec))
+            return CreateAudioSource(spec);
+        
+        return null;
+    }
 
     public void Play(string clipName)
     {
-        if(players.TryGetValue(clipName, out var player))
+        AudioSource player;
+        if(!players.TryGetValue(clipName, out player))
+        {
+            player = CreateAudioSource(clipName);
+        }
+
+        if(player)
         {
             player.Play();
         }
