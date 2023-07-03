@@ -1,18 +1,15 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 public class Stonecutter : ResourceGatherer
 {
-    protected override IEnumerable<GameObject> GetTargets(Vector3 pos)
+    protected override Type GetTargetType()
     {
-        var candidates = Physics.OverlapSphere(pos, 500, LayerMask.GetMask(natureLayer));
-
-        return candidates
-            .Select(c => c.gameObject)
-            .Where(go => go.GetComponent<SmolbeanRock>() != null)
-            .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - pos));
+        return typeof(SmolbeanRock);
     }
+    
 
     protected override string GetGatheringTrigger()
     {

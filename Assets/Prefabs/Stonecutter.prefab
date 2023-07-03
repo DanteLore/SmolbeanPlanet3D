@@ -184,6 +184,8 @@ MonoBehaviour:
   dropLayer: Drops
   destinationThreshold: 1
   damage: 20
+  idleTime: 1
+  sleepTime: 2
   dropSpec: {fileID: 11400000, guid: 0f9b0f898ed5a495aab57be747c4a3ac, type: 2}
 --- !u!114 &8921668510571840926
 MonoBehaviour:
