@@ -66,10 +66,10 @@ public abstract class ResourceGatherer : MonoBehaviour
         var searchForResources = new SearchForResourceState(this, natureLayer);
         var searchForDrops = new SearchForDropsState(this, dropLayer);
 
-        var walkToResource = new WalkToResourceState(this, navAgent, animator);
-        var walkToDrop = new WalkToDropState(this, navAgent, animator);
-        var walkHome = new WalkHomeState(this, navAgent, animator);
-        var walkToDropPoint = new WalkToDropPointState(this, navAgent, animator);
+        var walkToResource = new WalkToResourceState(this, navAgent, animator, soundPlayer);
+        var walkToDrop = new WalkToDropState(this, navAgent, animator, soundPlayer);
+        var walkHome = new WalkHomeState(this, navAgent, animator, soundPlayer);
+        var walkToDropPoint = new WalkToDropPointState(this, navAgent, animator, soundPlayer);
 
         var harvestResource = new HarvestResource(this, navAgent, animator, soundPlayer);
         var pickupDrop = new PickupDropsState(this, DropController.Instance);

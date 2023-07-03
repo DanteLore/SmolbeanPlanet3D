@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8472926578039447536}
   - component: {fileID: 1722032353878147967}
-  - component: {fileID: 2424609630509763085}
   - component: {fileID: 214345811279600263}
+  - component: {fileID: 7554533456020058687}
   m_Layer: 8
   m_Name: Storehouse
   m_TagString: Untagged
@@ -56,22 +56,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.4685845, y: 4.1009326, z: 4.3997364}
   m_Center: {x: 0.013140917, y: 1.8982613, z: -0.0017166138}
---- !u!208 &2424609630509763085
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3150097488275511410}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 0
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!114 &214345811279600263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,6 +72,22 @@ MonoBehaviour:
   wearScale: {x: 0.5, y: 0.5}
   building: {fileID: 6719174780933112508}
   spawnDelaySeconds: 5
+--- !u!208 &7554533456020058687
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3150097488275511410}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2.2342925, y: 2.0504665, z: 2.199868}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0.01314092, y: 1.898261, z: -0.001716614}
+  m_TimeToStationary: 0.5
 --- !u!1 &6719174780933112508
 GameObject:
   m_ObjectHideFlags: 0

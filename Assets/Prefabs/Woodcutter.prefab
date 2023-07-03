@@ -209,6 +209,9 @@ MonoBehaviour:
   - name: Falling
     clip: {fileID: 8300000, guid: 104bc6411797349e7afadf1b571900e3, type: 3}
     loop: 0
+  - name: Footsteps
+    clip: {fileID: 8300000, guid: fe536c24d81564d2faf2711639d9b668, type: 3}
+    loop: 1
   mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
 --- !u!1001 &502959277502828767
 PrefabInstance:
