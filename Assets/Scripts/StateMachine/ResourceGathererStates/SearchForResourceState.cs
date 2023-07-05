@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class SearchForResourceState : IState
 {
@@ -27,17 +28,19 @@ public class SearchForResourceState : IState
         if(gatherer.Target == null)
             gatherer.Target = GetTargets(gatherer.transform.position)
                                     .Take(5)
-                                    .OrderBy(_ => UnityEngine.Random.Range(0, 1000))
+                                    .ToList()
+                                    .OrderBy(_ => Guid.NewGuid())
                                     .FirstOrDefault();
     }
 
     private IEnumerable<GameObject> GetTargets(Vector3 pos)
     {
-        var candidates = Physics.OverlapSphere(pos, 500, LayerMask.GetMask(natureLayer));
+        var candidates = Physics.OverlapSphere(pos, 500f, LayerMask.GetMask(natureLayer));
 
         return candidates
             .Select(c => c.gameObject)
             .Where(go => go.GetComponent(gatherer.TargetType) != null)
-            .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - pos));
+            .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - pos))
+            .ToList();
     }
 }

@@ -55,8 +55,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.4685845, y: 4.1009326, z: 4.3997364}
-  m_Center: {x: 0.013140917, y: 1.8982613, z: -0.0017166138}
+  m_Size: {x: 4.5, y: 6, z: 4.5}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &214345811279600263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,8 +73,8 @@ MonoBehaviour:
   wearScale: {x: 0.5, y: 0.5}
   building: {fileID: 6719174780933112508}
   spawnDelaySeconds: 5
+  portersToSpawn: 5
   spawnPoint: {fileID: 4461010311040620285}
-  dropPoint: {fileID: 0}
   porterPrefab: {fileID: 5678464011766705138, guid: fd07e7047b08443eab281c57cf0ff590, type: 3}
 --- !u!208 &7554533456020058687
 NavMeshObstacle:
@@ -86,11 +86,11 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 2.2342925, y: 2.0504665, z: 2.199868}
+  m_Extents: {x: 2.25, y: 3, z: 2.25}
   m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 1
-  m_Center: {x: 0.01314092, y: 1.898261, z: -0.001716614}
+  m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
 --- !u!1 &4461010311040620285
 GameObject:
@@ -116,7 +116,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4461010311040620285}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.5}
+  m_LocalPosition: {x: 0, y: 0.5, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

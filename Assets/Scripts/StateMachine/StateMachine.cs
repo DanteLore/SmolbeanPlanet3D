@@ -6,6 +6,7 @@ using UnityEngine;
 public class StateMachine
 {
     private IState currentState;
+    private bool shouldLog = false;
     private Dictionary<Type, List<Transition>> transitions = new Dictionary<Type, List<Transition>>();
     private List<Transition> currentTransitions = new List<Transition>();
     private List<Transition> anyTransitions = new List<Transition>();
@@ -23,6 +24,17 @@ public class StateMachine
         }
     }
 
+    public StateMachine(bool shouldLog = false)
+    {
+        this.shouldLog = shouldLog;
+    }
+
+    private void Log(string message)
+    {
+        if(shouldLog)
+            Debug.Log(message);
+    }
+
     public void Tick()
     {
         var transition = GetTransition();
@@ -36,6 +48,8 @@ public class StateMachine
     {
         if(state == currentState)
             return;
+
+        Log("Changed state to: " + state.GetType().Name);
 
         currentState?.OnExit();
         currentState = state;

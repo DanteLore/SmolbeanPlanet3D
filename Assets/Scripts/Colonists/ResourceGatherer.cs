@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public abstract class ResourceGatherer : Colonist
+public abstract class ResourceGatherer : Colonist, IGatherDrops
 {
     public float damage = 20f;
     public float hitCooldown = 1f;
@@ -12,7 +12,7 @@ public abstract class ResourceGatherer : Colonist
     private StateMachine stateMachine;
 
     public GameObject Target { get; set; }
-    public GameObject DropTarget { get; set; }
+    public GameObject TargetDrop { get; set; }
     public Vector3 DropPoint { get; private set; }
 
 
@@ -88,11 +88,11 @@ public abstract class ResourceGatherer : Colonist
         void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
         Func<bool> HasTarget() => () => Target != null;
         Func<bool> IsCloseEnoughToTarget() => () => CloseEnoughTo(Target);
-        Func<bool> IsCloseEnoughToDrop() => () => CloseEnoughTo(DropTarget);
+        Func<bool> IsCloseEnoughToDrop() => () => CloseEnoughTo(TargetDrop);
         Func<bool> TargetIsDying() => () => Target != null && Target.GetComponent<IDamagable>().IsDead;
         Func<bool> TargetIsDead() => () => Target == null;
-        Func<bool> DropFound() => () => DropTarget != null;
-        Func<bool> NoDropsFound() => () => DropTarget == null;
+        Func<bool> DropFound() => () => TargetDrop != null;
+        Func<bool> NoDropsFound() => () => TargetDrop == null;
         Func<bool> InventoryEmpty() => () => Inventory.IsEmpty();
         Func<bool> InventoryNotEmpty() => () => !Inventory.IsEmpty();
         Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);

@@ -4,14 +4,17 @@ using UnityEngine;
 public class Storehouse : SmolbeanBuilding
 {
     public float spawnDelaySeconds = 5f;
+    public int portersToSpawn = 5;
     public GameObject spawnPoint;
-    public GameObject dropPoint;
     public GameObject porterPrefab;
-    private GameObject porter;
+
+    public Inventory Inventory { get; private set; }
 
     protected override void Start()
     {
         base.Start();
+
+        Inventory = new Inventory();
 
         StartCoroutine(CreatePorter(spawnDelaySeconds));
     }
@@ -20,12 +23,16 @@ public class Storehouse : SmolbeanBuilding
     {
         yield return new WaitForSeconds(delayTime);
 
-        porter = Instantiate(porterPrefab, spawnPoint.transform.position, Quaternion.identity, transform);
+        for(int i = 0; i < portersToSpawn; i++)
+        {
+            Instantiate(porterPrefab, spawnPoint.transform.position, Quaternion.identity, transform);
+            yield return new WaitForSeconds(delayTime);
+        }
     }
 
     public override Vector3 GetSpawnPoint()
     {
-        return transform.position;
+        return spawnPoint.transform.position;
     }
 
     public override Vector3 GetDropPoint()

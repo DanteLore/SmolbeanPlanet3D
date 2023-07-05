@@ -1,10 +1,10 @@
 public class PickupDropsState : IState
 {
-    private ResourceGatherer gatherer;
+    private IGatherDrops gatherer;
     private DropController dropController;
     private ItemStack stack;
 
-    public PickupDropsState(ResourceGatherer gatherer, DropController dropController)
+    public PickupDropsState(IGatherDrops gatherer, DropController dropController)
     {
         this.gatherer = gatherer;
         this.dropController = dropController;
@@ -12,7 +12,7 @@ public class PickupDropsState : IState
 
     public void OnEnter()
     {       
-        stack = gatherer.DropTarget.GetComponent<ItemStack>();
+        stack = gatherer.TargetDrop.GetComponent<ItemStack>();
     }
 
     public void OnExit()
@@ -23,6 +23,6 @@ public class PickupDropsState : IState
     public void Tick()
     {
         gatherer.Inventory.PickUp(dropController.Pickup(stack));
-        gatherer.DropTarget = null;
+        gatherer.TargetDrop = null;
     }
 }

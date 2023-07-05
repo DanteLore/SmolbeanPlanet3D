@@ -24,8 +24,8 @@ public class SearchForDropsState : IState
 
     public void Tick()
     {
-        if(!gatherer.DropTarget)
-            gatherer.DropTarget = GetDropTarget();
+        if(!gatherer.TargetDrop)
+            gatherer.TargetDrop = GetDropTarget();
     }
 
     private GameObject GetDropTarget()
