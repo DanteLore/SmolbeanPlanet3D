@@ -6,29 +6,19 @@ using UnityEngine.AI;
 using System.Linq;
 using System;
 
-public abstract class ResourceGatherer : MonoBehaviour
+public abstract class ResourceGatherer : Colonist
 {
-    public string natureLayer = "Nature";
-    public string dropLayer = "Drops";
-    public float destinationThreshold = 1.0f;
     public float damage = 20f;
     public float hitCooldown = 1f;
     public float idleTime = 1f;
     public float sleepTime = 2f;
     public DropSpec dropSpec;
-    private NavMeshAgent navAgent;
-    private GameObject body;
-    private Vector3 lastReportedPosition;
-    private Vector3 lastPosition;
-    private Animator animator;
-    private Stack<InventoryItem> inventory;
-    private SoundPlayer soundPlayer;
     private StateMachine stateMachine;
 
     public GameObject Target { get; set; }
     public GameObject DropTarget { get; set; }
-    public Vector3 SpawnPoint { get; set; }
-    public Vector3 DropPoint { get; set; }
+    public Vector3 DropPoint { get; private set; }
+
 
     public Type TargetType
     {
@@ -50,17 +40,11 @@ public abstract class ResourceGatherer : MonoBehaviour
 
     protected abstract Type GetTargetType();
 
-    void Start()
+    protected override void Start()
     {
-        animator = GetComponentInChildren<Animator>();
-        var hut = GetComponentInParent<SmolbeanBuilding>();
-        SpawnPoint = hut.GetSpawnPoint();
-        DropPoint = hut.GetDropPoint();
-        navAgent = GetComponent<NavMeshAgent>();
-        navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
-        body = transform.Find("Body").gameObject;
-        inventory = new Stack<InventoryItem>();
-        soundPlayer = GetComponent<SoundPlayer>();
+        base.Start();
+
+        DropPoint = Home.GetDropPoint();
 
         stateMachine = new StateMachine();
         
@@ -74,7 +58,7 @@ public abstract class ResourceGatherer : MonoBehaviour
 
         var harvestResource = new HarvestResource(this, navAgent, animator, soundPlayer);
         var pickupDrop = new PickupDropsState(this, DropController.Instance);
-        var dropInventory = new DropInventoryState(this, DropController.Instance);
+        var dropInventory = new DropInventoryAtDropPointState(this, DropController.Instance);
 
         var idle = new IdleState(animator);
         var sleeping = new SleepState(this);
@@ -113,51 +97,19 @@ public abstract class ResourceGatherer : MonoBehaviour
         Func<bool> TargetIsDead() => () => Target == null;
         Func<bool> DropFound() => () => DropTarget != null;
         Func<bool> NoDropsFound() => () => DropTarget == null;
-        Func<bool> InventoryEmpty() => () => inventory.Count == 0;
-        Func<bool> InventoryNotEmpty() => () => inventory.Any();
+        Func<bool> InventoryEmpty() => () => Inventory.IsEmpty();
+        Func<bool> InventoryNotEmpty() => () => !Inventory.IsEmpty();
         Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
         Func<bool> IsAtDropPoint() => () => CloseEnoughTo(DropPoint);
         Func<bool> HasBeenIdleForAWhile() => () => idle.TimeIdle >= idleTime;
         Func<bool> HasBeenSleepingForAWhile() => () => sleeping.TimeAsleep >= sleepTime;
     }
 
-    void Update()
+    protected override void Update()
     {
+        base.Update();
+
         stateMachine.Tick();
-        UpdateGroundWear();
-    }
-
-    private void UpdateGroundWear()
-    {
-        if (!body.activeInHierarchy)
-            return;
-
-        float threshold = GroundWearManager.Instance.updateThreshold;
-        if (Vector3.SqrMagnitude(transform.position - lastReportedPosition) > threshold * threshold)
-        {
-            lastReportedPosition = transform.position;
-            GroundWearManager.Instance.WalkedOn(transform.position);
-        }
-    }
-
-    public void Hide()
-    {
-        body.SetActive(false);
-    }
-
-    public void Show()
-    {
-        body.SetActive(true);
-    }
-
-    public void PickUp(InventoryItem item)
-    {
-        inventory.Push(item);
-    }
-
-    public InventoryItem DropFirstInInventory()
-    {
-        return (inventory.Count > 0) ? inventory.Pop() : null;
     }
 
     private bool DropPointFull()
@@ -168,19 +120,5 @@ public abstract class ResourceGatherer : MonoBehaviour
                     .Sum(i => i.quantity);
 
         return count >= dropSpec.stackSize;
-    }
-
-    protected bool CloseEnoughTo(Vector3 dest)
-    {
-        Vector3 v1 = new Vector3(transform.position.x, 0.0f, transform.position.z);
-        Vector3 v2 = new Vector3(dest.x, 0.0f, dest.z);
-
-        return Vector3.SqrMagnitude(v1 - v2) < destinationThreshold;
-    }
-
-    protected bool CloseEnoughTo(GameObject target)
-    {
-        var found = Physics.OverlapSphere(transform.position, destinationThreshold, LayerMask.GetMask(natureLayer, dropLayer));
-        return found.Any(c => c.gameObject == target);
     }
 }
