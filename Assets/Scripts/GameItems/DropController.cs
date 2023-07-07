@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using System.Linq;
-using System;
+using UnityEngine.AI;
 
 public class DropController : MonoBehaviour, IObjectGenerator
 {
@@ -10,7 +11,9 @@ public class DropController : MonoBehaviour, IObjectGenerator
     public DropSpec[] dropSpecs;
     public string dropLayer = "Drops";
     public float dropMergeRadius = 2f;
+    public float inaccessibleDistance = 0.5f;
     private Dictionary<string, DropSpec> dropSpecLookup;
+    private float inaccessibleThreshold;
 
     void Awake()
     {
@@ -22,8 +25,44 @@ public class DropController : MonoBehaviour, IObjectGenerator
 
     void Start()
     {
+        inaccessibleThreshold = inaccessibleDistance * inaccessibleDistance;
         dropSpecLookup = dropSpecs.ToDictionary(x => x.dropName, x => x);
         print("Loaded " + dropSpecLookup.Count() + " drop specs");
+        
+        StartCoroutine(CleanUp());
+    }
+
+    private IEnumerator CleanUp()
+    {
+        while(true)
+        {
+            RemoveInaccessibleDrops();
+
+            yield return new WaitForSeconds(5f);
+        }
+    }
+
+    private void RemoveInaccessibleDrops()
+    {
+        List<GameObject> inaccessible = new List<GameObject>();
+
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            var child = transform.GetChild(i).gameObject;
+            if (!NavMesh.SamplePosition(child.transform.position, out var hit, 1000f, NavMesh.AllAreas)
+                        || Vector3.SqrMagnitude(child.transform.position - hit.position) > inaccessibleThreshold)
+            {
+                inaccessible.Add(child);
+            }
+        }
+
+        if(inaccessible.Count > 0)
+        {
+            Debug.Log("Destroying inaccessible drops x " + inaccessible.Count);
+
+            foreach(var child in inaccessible)
+                Destroy(child);
+        }
     }
 
     public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
@@ -76,8 +115,6 @@ public class DropController : MonoBehaviour, IObjectGenerator
     public void LoadDrops(List<DropItemSaveData> dropItemData)
     {
         Clear();
-
-        Debug.Log(dropItemData.Count());
 
         foreach(var dropItem in dropItemData)
         {

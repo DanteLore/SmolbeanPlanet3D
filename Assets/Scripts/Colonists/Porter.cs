@@ -14,7 +14,7 @@ public class Porter : Colonist, IGatherDrops
     {
         base.Start();
 
-        stateMachine = new StateMachine(shouldLog:true);
+        stateMachine = new StateMachine(shouldLog:false);
 
         var idle = new IdleState(animator);
         var sleeping = new SleepState(this);
@@ -33,7 +33,8 @@ public class Porter : Colonist, IGatherDrops
         AT(sleeping, idle, HasBeenSleepingForAWhile());
         AT(idle, searchForJob, HasBeenIdleForAWhile());
 
-        AT(walkToJobStart, walkHome, () => walkToJobStart.StuckTime > 2f);
+        AT(walkToJobStart, walkHome, NoDropFound()); // Drop picked up while I was en route
+        AT(walkToJobStart, walkHome, () => walkToJobStart.StuckTime > 2f); // Stuck
 
         stateMachine.SetState(searchForJob);
 
