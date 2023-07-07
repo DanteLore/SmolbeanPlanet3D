@@ -184,6 +184,7 @@ MonoBehaviour:
   dropLayer: Drops
   destinationThreshold: 1
   damage: 20
+  hitCooldown: 1
   idleTime: 1
   sleepTime: 2
   dropSpec: {fileID: 11400000, guid: 0f9b0f898ed5a495aab57be747c4a3ac, type: 2}
@@ -203,12 +204,15 @@ MonoBehaviour:
   - name: Chopping
     clip: {fileID: 8300000, guid: aa8fbf99c1c064c6a842b6b98360fcfb, type: 3}
     loop: 1
+    volume: 1
   - name: Chopped
     clip: {fileID: 8300000, guid: 70004ba418ef2415e92faf8822d866e8, type: 3}
     loop: 0
+    volume: 1
   - name: Footsteps
     clip: {fileID: 8300000, guid: fe536c24d81564d2faf2711639d9b668, type: 3}
     loop: 1
+    volume: 1
   mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
 --- !u!1001 &377112930599266902
 PrefabInstance:

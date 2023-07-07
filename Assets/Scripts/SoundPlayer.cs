@@ -6,11 +6,16 @@ using System.Linq;
 public class SoundPlayer : MonoBehaviour
 {
     [System.Serializable]
-    public struct SoundClipSpec
+    public class SoundClipSpec
     {
         public string name;
+
         public AudioClip clip;
-        public bool loop;
+
+        public bool loop = false;
+
+        [Range(0f, 1f)]
+        public float volume = 1f;
     }
 
     public SoundClipSpec[] clips;
@@ -41,6 +46,7 @@ public class SoundPlayer : MonoBehaviour
         audioSource.minDistance = 10f;
         audioSource.maxDistance = 60f;
         audioSource.spatialBlend = 1;
+        audioSource.volume = clip.volume;
 
         players.Add(clip.name, audioSource);
         return audioSource;
