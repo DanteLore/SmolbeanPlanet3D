@@ -41,15 +41,15 @@ public abstract class WalkStateBase : IState
 
     public void Tick()
     {
-        if(Vector3.SqrMagnitude(lastPosition - navAgent.transform.position) >= 0.1f)
+        if(Vector3.SqrMagnitude(lastPosition - navAgent.transform.position) >= 1f)
         {
             lastMoved = Time.time;
             lastPosition = navAgent.transform.position;
         }
 
-        if(Time.time - lastMoved > 0.5f)
+        if(Time.time - lastMoved > 1f)
         {
-            // Kick the nav agent after half a second of inactivity
+            // Kick the nav agent after small amount of
             navAgent.isStopped = true;
             navAgent.SetDestination(GetDestination());
             navAgent.isStopped = false;

@@ -60,28 +60,28 @@ public abstract class ResourceGatherer : Colonist, IGatherDrops
         var sleeping = new SleepState(this);
         var waitForTargetToDie = new WaitForTargetToDieState(animator);
 
-        AT(walkToResource,  walkHome,           () => walkToResource.StuckTime > 2f);
-        AT(walkToDrop,      walkHome,           () => walkToDrop.StuckTime > 2f);
-        AT(walkToDropPoint, walkHome,           () => walkToDropPoint.StuckTime > 2f);
+        AT(walkToResource,  walkHome,           () => walkToResource.StuckTime > 5f);
+        AT(walkToDrop,      walkHome,           () => walkToDrop.StuckTime > 5f);
+        AT(walkToDropPoint, walkHome,           () => walkToDropPoint.StuckTime > 5f);
 
-        AT(searchForResources, walkToResource, HasTarget());
-        AT(walkToResource, harvestResource, IsCloseEnoughToTarget());
-        AT(harvestResource, waitForTargetToDie, TargetIsDying());
-        AT(waitForTargetToDie, searchForDrops, TargetIsDead());
+        AT(searchForResources,  walkToResource,     HasTarget());
+        AT(walkToResource,      harvestResource,    IsCloseEnoughToTarget());
+        AT(harvestResource,     waitForTargetToDie, TargetIsDying());
+        AT(waitForTargetToDie,  searchForDrops,     TargetIsDead());
 
-        AT(searchForDrops, walkToDrop, DropFound());
-        AT(walkToDrop, pickupDrop, IsCloseEnoughToDrop());
-        AT(walkToDrop, walkHome, NoDropsFound());
-        AT(pickupDrop, walkHome, InventoryEmpty());
-        AT(pickupDrop, walkToDropPoint, InventoryNotEmpty());
+        AT(searchForDrops,  walkToDrop,         DropFound());
+        AT(walkToDrop,      pickupDrop,         IsCloseEnoughToDrop());
+        AT(walkToDrop,      walkHome,           NoDropsFound());
+        AT(pickupDrop,      walkHome,           InventoryEmpty());
+        AT(pickupDrop,      walkToDropPoint,    InventoryNotEmpty());
 
-        AT(walkToDropPoint, dropInventory, IsAtDropPoint());
-        AT(dropInventory, walkHome, InventoryEmpty());
+        AT(walkToDropPoint, dropInventory,  IsAtDropPoint());
+        AT(dropInventory,   walkHome,       InventoryEmpty());
 
-        AT(searchForDrops, walkHome, NoDropsFound());
-        AT(walkHome, sleeping, IsAtSpawnPoint());
-        AT(sleeping, idle, HasBeenSleepingForAWhile());
-        AT(idle, searchForResources, HasBeenIdleForAWhile());
+        AT(searchForDrops,  walkHome,           NoDropsFound());
+        AT(walkHome,        sleeping,           IsAtSpawnPoint());
+        AT(sleeping,        idle,               HasBeenSleepingForAWhile());
+        AT(idle,            searchForResources, HasBeenIdleForAWhile());
 
         stateMachine.SetState(searchForResources);
 

@@ -50,11 +50,13 @@ public class DropController : MonoBehaviour, IObjectGenerator
         {
             var child = transform.GetChild(i).gameObject;
             if (!NavMesh.SamplePosition(child.transform.position, out var hit, 1000f, NavMesh.AllAreas)
-                        || Vector3.SqrMagnitude(child.transform.position - hit.position) > inaccessibleThreshold)
+                        || IsOnNavMesh(child, hit))
             {
                 inaccessible.Add(child);
             }
         }
+
+        inaccessible = inaccessible.Where(i => Time.time - i.GetComponent<ItemStack>().CreateTime > 5f).ToList();
 
         if(inaccessible.Count > 0)
         {
@@ -63,6 +65,11 @@ public class DropController : MonoBehaviour, IObjectGenerator
             foreach(var child in inaccessible)
                 Destroy(child);
         }
+    }
+
+    private bool IsOnNavMesh(GameObject child, NavMeshHit hit)
+    {
+        return Vector3.SqrMagnitude(child.transform.position - hit.position) > inaccessibleThreshold;
     }
 
     public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)

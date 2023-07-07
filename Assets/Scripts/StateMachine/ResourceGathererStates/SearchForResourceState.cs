@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using UnityEngine.AI;
 
 public class SearchForResourceState : IState
 {
@@ -40,7 +41,15 @@ public class SearchForResourceState : IState
         return candidates
             .Select(c => c.gameObject)
             .Where(go => go.GetComponent(gatherer.TargetType) != null)
+            .Where(IsOnNavMesh)
             .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - pos))
             .ToList();
+    }
+
+    private bool IsOnNavMesh(GameObject obj)
+    {
+        return 
+                NavMesh.SamplePosition(obj.transform.position, out var hit, 10f, NavMesh.AllAreas)
+            &&  Vector3.SqrMagnitude(obj.transform.position - hit.position) <= 1f;
     }
 }

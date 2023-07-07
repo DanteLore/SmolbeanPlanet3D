@@ -175,4 +175,5 @@ MonoBehaviour:
   - name: Break
     clip: {fileID: 8300000, guid: f7c1fe68078c04f06801755389a5e8f5, type: 3}
     loop: 0
+    volume: 1
   mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
