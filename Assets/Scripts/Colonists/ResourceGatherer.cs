@@ -60,9 +60,9 @@ public abstract class ResourceGatherer : Colonist, IGatherDrops
         var sleeping = new SleepState(this);
         var waitForTargetToDie = new WaitForTargetToDieState(animator);
 
-        AT(walkToResource,  walkHome, () => walkToResource.StuckTime > 2f);
-        AT(walkToDrop,      walkHome, () => walkToDrop.StuckTime > 2f);
-        AT(walkToDropPoint, walkHome, () => walkToDropPoint.StuckTime > 2f);
+        AT(walkToResource,  walkHome,           () => walkToResource.StuckTime > 2f);
+        AT(walkToDrop,      walkHome,           () => walkToDrop.StuckTime > 2f);
+        AT(walkToDropPoint, walkHome,           () => walkToDropPoint.StuckTime > 2f);
 
         AT(searchForResources, walkToResource, HasTarget());
         AT(walkToResource, harvestResource, IsCloseEnoughToTarget());

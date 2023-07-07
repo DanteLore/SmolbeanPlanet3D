@@ -33,7 +33,7 @@ public class Porter : Colonist, IGatherDrops
         AT(sleeping, idle, HasBeenSleepingForAWhile());
         AT(idle, searchForJob, HasBeenIdleForAWhile());
 
-        AT(walkToJobStart, walkHome, NoDropFound()); // Drop picked up while I was en route
+        AT(walkToJobStart, searchForJob, NoDropFound()); // Drop picked up or deleted while I was en route, find a new one
         AT(walkToJobStart, walkHome, () => walkToJobStart.StuckTime > 2f); // Stuck
 
         stateMachine.SetState(searchForJob);

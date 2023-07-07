@@ -27,7 +27,7 @@ public class SearchForResourceState : IState
     {
         if(gatherer.Target == null)
             gatherer.Target = GetTargets(gatherer.transform.position)
-                                    .Take(5)
+                                    .Take(10)
                                     .ToList()
                                     .OrderBy(_ => Guid.NewGuid())
                                     .FirstOrDefault();
