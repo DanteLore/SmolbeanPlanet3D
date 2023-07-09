@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public abstract class ResourceGatherer : Colonist, IGatherDrops
+public abstract class ResourceGatherer : Colonist, IGatherDrops, IReturnDrops
 {
     public float damage = 20f;
     public float hitCooldown = 1f;
@@ -14,7 +14,6 @@ public abstract class ResourceGatherer : Colonist, IGatherDrops
     public GameObject Target { get; set; }
     public GameObject TargetDrop { get; set; }
     public Vector3 DropPoint { get; private set; }
-
 
     public Type TargetType
     {

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class DropInventoryAtDropPointState : IState
 {
-    private ResourceGatherer gatherer;
+    private IReturnDrops colonist;
     private DropController dropController;
 
-    public DropInventoryAtDropPointState(ResourceGatherer gatherer, DropController dropController)
+    public DropInventoryAtDropPointState(IReturnDrops colonist, DropController dropController)
     {
-        this.gatherer = gatherer;
+        this.colonist = colonist;
         this.dropController = dropController;
     }
 
@@ -25,9 +25,9 @@ public class DropInventoryAtDropPointState : IState
 
     public void Tick()
     {
-        var item = gatherer.Inventory.DropFirst();
+        var item = colonist.Inventory.DropFirst();
 
         if(item != null)
-            DropController.Instance.Drop(item.dropSpec, gatherer.DropPoint, item.quantity);
+            DropController.Instance.Drop(item.dropSpec, colonist.DropPoint, item.quantity);
     }
 }

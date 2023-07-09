@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 2194747601723512404}
   - component: {fileID: 7462178603203635159}
   - component: {fileID: 8921668510571840926}
+  - component: {fileID: -4414751964478250915}
   m_Layer: 9
   m_Name: Miner
   m_TagString: Untagged
@@ -193,6 +194,24 @@ MonoBehaviour:
     loop: 1
     volume: 1
   mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
+--- !u!114 &-4414751964478250915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7581404027262410325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b4712370f96b443eb773d0860c69d58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  natureLayer: Nature
+  dropLayer: Drops
+  destinationThreshold: 1
+  idleTime: 3
+  sleepTime: 1
+  miningTime: 6
 --- !u!1001 &377112930599266902
 PrefabInstance:
   m_ObjectHideFlags: 0
