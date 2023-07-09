@@ -48,12 +48,14 @@ public class OperateMineState : IState
     {
         Finished = false;
         miner.Hide();
+        mine.StartMining();
 
         stateMachine.SetState(startState);
     }
 
     public void OnExit()
     {
+        mine.StopMining();
         miner.Show();
     }
 

@@ -14,9 +14,13 @@ public class Mine : SmolbeanBuilding
     public float tunnelLengthIncrementPerHarvest = 0.05f;
     public float TunnelTime { get; private set; }
 
+    private Animator animator;
+
     protected override void Start()
     {
         base.Start();
+
+        animator = GetComponent<Animator>();
 
         TunnelTime = startingTunnelTime;
 
@@ -52,5 +56,15 @@ public class Mine : SmolbeanBuilding
         {
             return null;
         }
+    }
+
+    public void StartMining()
+    {
+        animator.SetBool("IsMining", true);
+    }
+
+    public void StopMining()
+    {
+        animator.SetBool("IsMining", false);
     }
 }
