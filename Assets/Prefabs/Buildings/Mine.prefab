@@ -292,7 +292,7 @@ MonoBehaviour:
   porterPrefab: {fileID: 7581404027262410325, guid: b522e60482e3d4bc284b1c320b8e85bd, type: 3}
   spawnPoint: {fileID: 8620811781803389415}
   dropPoint: {fileID: 1433819507790876408}
-  dropSpec: {fileID: 11400000, guid: 0f9b0f898ed5a495aab57be747c4a3ac, type: 2}
+  dropSpec: {fileID: 11400000, guid: 592fe3e9d2c554deb95c8d9c22268a65, type: 2}
   dropProbability: 0.3
   startingTunnelTime: 2
   tunnelLengthIncrementPerHarvest: 0.05

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82318625a37943d3a4fec9d0e7e748b, type: 3}
+  m_Name: IronDropSpec
+  m_EditorClassIdentifier: 
+  dropName: Iron
+  dropRate: 3
+  stackSize: 9
+  thumbnail: {fileID: 2800000, guid: 36d4bc8a49f794ecc8ba6b1eaa422790, type: 3}
+  singlePrefab: {fileID: 9080239257328057335, guid: b9935ed60997845579fbabfc9735fa54, type: 3}
+  somePrefab: {fileID: 2838004555994074335, guid: 99e8864f71e0e4adfbd1efd1383a06da, type: 3}
+  lotsPrefab: {fileID: 1124614266668142258, guid: 451b9ae61d8ea40c1bd851027b5d7e94, type: 3}

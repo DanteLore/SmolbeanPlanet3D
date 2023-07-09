@@ -50,7 +50,7 @@ public class Mine : SmolbeanBuilding
         if(UnityEngine.Random.Range(0f, 1f) < dropProbability)
         {
             TunnelTime += tunnelLengthIncrementPerHarvest;
-            return DropController.Instance.CreateInventoryItem(dropSpec, 1);
+            return DropController.Instance.CreateInventoryItem(dropSpec, dropSpec.dropRate);
         }
         else
         {
