@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,10 +8,17 @@ public class Mine : SmolbeanBuilding
     public GameObject porterPrefab;
     public GameObject spawnPoint;
     public GameObject dropPoint;
+    public DropSpec dropSpec;
+    public float dropProbability = 0.2f;
+    public float startingTunnelTime = 2f;
+    public float tunnelLengthIncrementPerHarvest = 0.05f;
+    public float TunnelTime { get; private set; }
 
     protected override void Start()
     {
         base.Start();
+
+        TunnelTime = startingTunnelTime;
 
         StartCoroutine(CreateMiner(spawnDelaySeconds));
     }
@@ -31,5 +39,18 @@ public class Mine : SmolbeanBuilding
     public override Vector3 GetDropPoint()
     {
         return dropPoint.transform.position;
+    }
+
+    public InventoryItem TryHarvest()
+    {
+        if(UnityEngine.Random.Range(0f, 1f) < dropProbability)
+        {
+            TunnelTime += tunnelLengthIncrementPerHarvest;
+            return DropController.Instance.CreateInventoryItem(dropSpec, 1);
+        }
+        else
+        {
+            return null;
+        }
     }
 }

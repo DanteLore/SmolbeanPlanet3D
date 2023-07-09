@@ -5,9 +5,8 @@ using System;
 
 public class Miner : Colonist, IReturnDrops
 {
-    public float idleTime = 3f;
-    public float sleepTime = 1f;
-    public float miningTime = 6f;
+    public float idleTime = 1f;
+    public float mineCooldown = 1f;
 
     public Vector3 DropPoint
     {
@@ -27,15 +26,13 @@ public class Miner : Colonist, IReturnDrops
 
         var idle = new IdleState(animator);
         var getReady = new MinerBlinkInTheSunlightState(this);
-        var sleeping = new SleepState(this);
-        var operateMine = new OperateMineState(this, animator);
+        var operateMine = new OperateMineState(this, animator, soundPlayer);
         var walkToDropPoint = new WalkToDropPointState(this, navAgent, animator, soundPlayer);
         var dropInventory = new DropInventoryAtDropPointState(this, DropController.Instance);
         var walkHome = new WalkHomeState(this, navAgent, animator, soundPlayer);
 
         AT(idle, operateMine, HasBeenIdleForAWhile());
-        AT(operateMine, sleeping, HasBeenMiningForAWhile());
-        AT(sleeping, getReady, HasBeenSleepingForAWhile());
+        AT(operateMine, getReady, MiningFinished());
 
         AT(getReady, walkToDropPoint, InventoryIsNotEmpty());
         AT(getReady, idle, InventoryIsEmpty());
@@ -53,8 +50,7 @@ public class Miner : Colonist, IReturnDrops
         Func<bool> InventoryIsEmpty() => Inventory.IsEmpty;
         Func<bool> InventoryIsNotEmpty() => () => !Inventory.IsEmpty();
         Func<bool> HasBeenIdleForAWhile() => () => idle.TimeIdle >= idleTime;
-        Func<bool> HasBeenSleepingForAWhile() => () => sleeping.TimeAsleep >= sleepTime;
-        Func<bool> HasBeenMiningForAWhile() => () => operateMine.TimeMining >= miningTime;
+        Func<bool> MiningFinished() => () => operateMine.Finished;
     }
 
     protected override void Update()

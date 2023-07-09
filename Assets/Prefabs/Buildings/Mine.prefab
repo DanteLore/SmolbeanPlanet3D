@@ -183,7 +183,7 @@ NavMeshObstacle:
   serializedVersion: 3
   m_Shape: 1
   m_Extents: {x: 2, y: 5, z: 2}
-  m_MoveThreshold: 0.1
+  m_MoveThreshold: 0.05
   m_Carve: 1
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -207,6 +207,9 @@ MonoBehaviour:
   porterPrefab: {fileID: 7581404027262410325, guid: b522e60482e3d4bc284b1c320b8e85bd, type: 3}
   spawnPoint: {fileID: 8620811781803389415}
   dropPoint: {fileID: 1433819507790876408}
+  dropSpec: {fileID: 11400000, guid: 0f9b0f898ed5a495aab57be747c4a3ac, type: 2}
+  dropProbability: 0.3
+  tunnelTime: 3
 --- !u!1 &8620811781803389415
 GameObject:
   m_ObjectHideFlags: 0

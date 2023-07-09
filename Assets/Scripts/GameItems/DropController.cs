@@ -103,6 +103,11 @@ public class DropController : MonoBehaviour, IObjectGenerator
         return gameObject;
     }
 
+    public InventoryItem CreateInventoryItem(DropSpec spec, int quantity)
+    {
+        return new InventoryItem {dropSpec = spec, quantity = quantity};
+    }
+
     public InventoryItem Pickup(ItemStack stack)
     {
         // Add any logic here to handle an inability to pick up a whole stack, stack splitting etc etc

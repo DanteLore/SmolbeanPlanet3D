@@ -182,15 +182,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clips:
   - name: Chopping
-    clip: {fileID: 8300000, guid: aa8fbf99c1c064c6a842b6b98360fcfb, type: 3}
+    clip: {fileID: 8300000, guid: a58cdd4319c6e46e4a083772a299dd35, type: 3}
     loop: 1
     volume: 1
   - name: Chopped
-    clip: {fileID: 8300000, guid: 70004ba418ef2415e92faf8822d866e8, type: 3}
+    clip: {fileID: 8300000, guid: 2dd73430aae6a438fa1edb41719c73aa, type: 3}
     loop: 0
     volume: 1
   - name: Footsteps
     clip: {fileID: 8300000, guid: fe536c24d81564d2faf2711639d9b668, type: 3}
+    loop: 1
+    volume: 1
+  - name: MuffledFootsteps
+    clip: {fileID: 8300000, guid: 355ba0570cea34cb799a5c0fbb7ecf31, type: 3}
     loop: 1
     volume: 1
   mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
@@ -209,9 +213,9 @@ MonoBehaviour:
   natureLayer: Nature
   dropLayer: Drops
   destinationThreshold: 1
-  idleTime: 3
-  sleepTime: 1
-  miningTime: 6
+  idleTime: 1
+  sleepTime: 3
+  mineCooldown: 1
 --- !u!1001 &377112930599266902
 PrefabInstance:
   m_ObjectHideFlags: 0
