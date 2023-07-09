@@ -24,7 +24,7 @@ public class OperateMineState : IState
 
         mine = (Mine)miner.Home;
         
-        stateMachine = new StateMachine(shouldLog:true);
+        stateMachine = new StateMachine(shouldLog:false);
 
         var walkToJob = new WalkDownTunnelState(miner, soundPlayer);
         var doJob = new HarvestResourcesInMineState(miner, soundPlayer);

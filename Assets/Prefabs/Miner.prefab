@@ -213,8 +213,7 @@ MonoBehaviour:
   natureLayer: Nature
   dropLayer: Drops
   destinationThreshold: 1
-  idleTime: 1
-  sleepTime: 3
+  idleTime: 0.25
   mineCooldown: 1
 --- !u!1001 &377112930599266902
 PrefabInstance:

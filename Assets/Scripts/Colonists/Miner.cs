@@ -22,7 +22,7 @@ public class Miner : Colonist, IReturnDrops
     {
         base.Start();
 
-        stateMachine = new StateMachine(shouldLog:true);
+        stateMachine = new StateMachine(shouldLog:false);
 
         var idle = new IdleState(animator);
         var getReady = new MinerBlinkInTheSunlightState(this);
