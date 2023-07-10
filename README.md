@@ -17,6 +17,10 @@ Loads of work done to create new building types, drop types and state machine ba
 
 The state machine behaviours are SO much more reliable than the nasty linear methods, as they allow easier branching and management of unexpected conditions (like getting lost).  The game is MUCH more playable as a result.
 
+Here are the new Smeltery and Sawmill buildings, with the new Smelter and Sawyer professions (two new words there - only made one of them up). 
+
+![Screenshot](./Docs/Images/screenshot41.png)
+
 Here is a busy little town with three types of mine, a storehouse, woodcutters and a stone cutter.
 ![Screenshot](./Docs/Images/screenshot40.png)
 
