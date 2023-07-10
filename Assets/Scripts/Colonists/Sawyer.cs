@@ -26,6 +26,11 @@ public class Sawyer : Colonist, IReturnDrops
 
         var idle = new IdleState(animator);
 
+        // Wait until there are logs in the building inventory
+        // Go into building and saw the log until it turns into planks (as controlled by building)
+        // Take planks to the drop point
+        // Loop
+
         /*
         var getReady = new MinerBlinkInTheSunlightState(this);
         var operateMine = new OperateMineState(this, animator, soundPlayer);
