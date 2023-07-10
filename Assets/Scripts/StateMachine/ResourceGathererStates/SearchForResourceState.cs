@@ -18,6 +18,11 @@ public class SearchForResourceState : IState
 
     public void OnEnter()
     {
+        gatherer.Target = GetTargets(gatherer.transform.position)
+                                .Take(10)
+                                .ToList()
+                                .OrderBy(_ => Guid.NewGuid())
+                                .FirstOrDefault();
     }
 
     public void OnExit()
@@ -26,12 +31,7 @@ public class SearchForResourceState : IState
 
     public void Tick()
     {
-        if(gatherer.Target == null)
-            gatherer.Target = GetTargets(gatherer.transform.position)
-                                    .Take(10)
-                                    .ToList()
-                                    .OrderBy(_ => Guid.NewGuid())
-                                    .FirstOrDefault();
+        
     }
 
     private IEnumerable<GameObject> GetTargets(Vector3 pos)
@@ -50,6 +50,6 @@ public class SearchForResourceState : IState
     {
         return 
                 NavMesh.SamplePosition(obj.transform.position, out var hit, 10f, NavMesh.AllAreas)
-            &&  Vector3.SqrMagnitude(obj.transform.position - hit.position) <= 1f;
+            &&  Vector3.SqrMagnitude(obj.transform.position - hit.position) <= 2f;
     }
 }
