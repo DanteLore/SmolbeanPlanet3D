@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82318625a37943d3a4fec9d0e7e748b, type: 3}
+  m_Name: CoalDropSpec
+  m_EditorClassIdentifier: 
+  dropName: Coal
+  dropRate: 3
+  stackSize: 9
+  thumbnail: {fileID: 0}
+  singlePrefab: {fileID: 3560451800456948670, guid: 7653e0d5089e34dfbb3aece1dc95f626, type: 3}
+  somePrefab: {fileID: 174852686744523757, guid: 585d2e0e013de4940bd3d717e08cb560, type: 3}
+  lotsPrefab: {fileID: 4603475551841078637, guid: 965cce44ffdbb47cb9b030488101e566, type: 3}

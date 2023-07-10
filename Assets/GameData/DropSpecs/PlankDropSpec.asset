@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82318625a37943d3a4fec9d0e7e748b, type: 3}
+  m_Name: PlankDropSpec
+  m_EditorClassIdentifier: 
+  dropName: Wood Planks
+  dropRate: 3
+  stackSize: 9
+  thumbnail: {fileID: 2800000, guid: b18bc38121cbb4e7582b4eaf89bd41be, type: 3}
+  singlePrefab: {fileID: 3140500580838617638, guid: 793713d85bcef452996bca3712f4ce16, type: 3}
+  somePrefab: {fileID: 6403084177616489830, guid: b72b23f41fc694265a87192a4f7a5104, type: 3}
+  lotsPrefab: {fileID: 5199011049705438185, guid: 8b10c1391508c4cb486fe2d6f9214eee, type: 3}

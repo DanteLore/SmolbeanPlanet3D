@@ -13,6 +13,13 @@ Newest entries at the top :)
 
 ## New building types
 
+Loads of work done to create new building types, drop types and state machine based colonist behaviours - [thanks Jason Weimann](https://www.youtube.com/watch?v=V75hgcsCGOM).
+
+The state machine behaviours are SO much more reliable than the nasty linear methods, as they allow easier branching and management of unexpected conditions (like getting lost).  The game is MUCH more playable as a result.
+
+Here is a busy little town with three types of mine, a storehouse, woodcutters and a stone cutter.
+![Screenshot](./Docs/Images/screenshot40.png)
+
 Added a mine and a storehouse.  This gives me a chance to create new colonist jobs - and migrate over to proper state machines.
 ![Screenshot](./Docs/Images/screenshot39.png)
 
