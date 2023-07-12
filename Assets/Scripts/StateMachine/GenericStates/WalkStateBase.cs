@@ -41,7 +41,7 @@ public abstract class WalkStateBase : IState
 
     public void Tick()
     {
-        if(Vector3.SqrMagnitude(lastPosition - navAgent.transform.position) >= 1f)
+        if(Vector3.SqrMagnitude(lastPosition - navAgent.transform.position) >= 0.5f)
         {
             lastMoved = Time.time;
             lastPosition = navAgent.transform.position;
