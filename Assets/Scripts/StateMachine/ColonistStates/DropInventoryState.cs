@@ -25,7 +25,7 @@ public class DropInventoryAtDropPointState : IState
 
     public void Tick()
     {
-        var item = colonist.Inventory.DropFirst();
+        var item = colonist.Inventory.DropLast();
 
         if(item != null)
             DropController.Instance.Drop(item.dropSpec, colonist.DropPoint, item.quantity);

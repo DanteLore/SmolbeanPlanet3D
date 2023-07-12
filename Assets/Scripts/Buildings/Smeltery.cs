@@ -2,22 +2,18 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Smeltery : SmolbeanBuilding
+public class Smeltery : FactoryBuilding
 {
     public float spawnDelaySeconds = 5f;
     public GameObject spawnPoint;
     public GameObject dropPoint;
+    public GameObject fireObject;
     public GameObject smelterPrefab;
-    public DropSpec dropSpec;
-
-    public Inventory Inventory { get; private set; }
 
     protected override void Start()
     {
         base.Start();
-
-        Inventory = new Inventory();
-
+        fireObject.SetActive(false);
         StartCoroutine(CreateSmelter(spawnDelaySeconds));
     }
 
@@ -37,28 +33,18 @@ public class Smeltery : SmolbeanBuilding
     {
         return transform.position;
     }
-
-    public InventoryItem TryHarvest()
+    
+    public override void StartProcessing()
     {
-        return null;
-        /*
-        if(UnityEngine.Random.Range(0f, 1f) < dropProbability)
-        {
-            TunnelTime += tunnelLengthIncrementPerHarvest;
-            return DropController.Instance.CreateInventoryItem(dropSpec, dropSpec.dropRate);
-        }
-        else
-        {
-            return null;
-        }
-        */
+        base.StartProcessing();
+
+        fireObject.SetActive(true);
     }
 
-    public void StartSmelting()
+    public override DropSpec StopProcessing()
     {
-    }
+        fireObject.SetActive(false);
 
-    public void StopSmelting()
-    {
+        return base.StopProcessing();
     }
 }

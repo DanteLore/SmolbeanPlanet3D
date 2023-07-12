@@ -1,20 +1,16 @@
 using System.Collections;
 using UnityEngine;
 
-public class Sawmill : SmolbeanBuilding
+public class Sawmill : FactoryBuilding
 {
     public float spawnDelaySeconds = 5f;
     public GameObject spawnPoint;
     public GameObject dropPoint;
     public GameObject sawyerPrefab;
 
-    public Inventory Inventory { get; private set; }
-
     protected override void Start()
     {
         base.Start();
-
-        Inventory = new Inventory();
 
         StartCoroutine(CreateSawyer(spawnDelaySeconds));
     }

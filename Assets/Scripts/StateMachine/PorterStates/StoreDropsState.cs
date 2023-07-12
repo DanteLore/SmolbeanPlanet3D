@@ -27,7 +27,7 @@ public class StoreDropsState : IState
     {
         if(!porter.Inventory.IsEmpty())
         {
-            var item = porter.Inventory.DropFirst();
+            var item = porter.Inventory.DropLast();
             var storehouse = porter.Home as Storehouse;
             if(storehouse != null)
             {

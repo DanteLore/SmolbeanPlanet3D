@@ -18,6 +18,11 @@ public abstract class SmolbeanBuilding : MonoBehaviour
         InvokeRepeating("RegisterWear", 0.0f, 0.5f);
     }
 
+    protected virtual void Update()
+    {
+        
+    }
+
     protected virtual void OnDestroy()
     {
         CancelInvoke("RegisterWear");
