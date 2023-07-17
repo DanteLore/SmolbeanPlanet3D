@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class FactoryBuilding : SmolbeanBuilding
@@ -7,6 +9,8 @@ public abstract class FactoryBuilding : SmolbeanBuilding
     public Inventory Inventory { get; private set; }
     public bool IsFinished { get { return (Time.time  - startTime) >= recipe.craftingTime; } }
 
+    private Dictionary<Recipe.Ingredient, DeliveryRequest> deliveryRequests;
+
     private float startTime;
 
     protected override void Start()
@@ -14,6 +18,35 @@ public abstract class FactoryBuilding : SmolbeanBuilding
         base.Start();
 
         Inventory = new Inventory();
+        deliveryRequests = new Dictionary<Recipe.Ingredient, DeliveryRequest>();
+
+        StartCoroutine(UpdateDeliveryRequests());
+    }
+
+    private IEnumerator UpdateDeliveryRequests()
+    {
+        yield return new WaitForSeconds(5f);
+
+        while(true)
+        {
+            foreach(var key in deliveryRequests.Keys)
+            {
+                if(deliveryRequests[key].IsComplete)
+                    deliveryRequests.Remove(key);
+            }
+
+            foreach(var ingredient in recipe.ingredients)
+            {
+                if(!deliveryRequests.TryGetValue(ingredient, out var request) || request.IsComplete)
+                {
+                    deliveryRequests[ingredient] = DeliveryManager.Instance.CreateRequest(this, ingredient.item, ingredient.quantity);
+                }
+            }
+
+            Debug.Log("delivery requests " + deliveryRequests.Count);
+
+            yield return new WaitForSeconds(5f);
+        }
     }
 
     public bool HasResources()

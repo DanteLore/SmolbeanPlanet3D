@@ -234,6 +234,7 @@ MonoBehaviour:
   wearPattern: 1
   wearScale: {x: 1, y: 1}
   building: {fileID: 6545761948857642661}
+  recipe: {fileID: 11400000, guid: c29b6fd59b0cf40f8a35321e73c274b6, type: 2}
   spawnDelaySeconds: 5
   spawnPoint: {fileID: 6699879713496794779}
   dropPoint: {fileID: 1009612477567046326}

@@ -10,11 +10,18 @@ public class DeliveryRequest
     public int Quantity { get { return quantity; }}
     public int Priority { get { return priority; }}
 
+    public bool IsComplete { get; private set; }
+
     public DeliveryRequest(SmolbeanBuilding building, DropSpec item, int quantity, int priority)
     {
         this.building = building;
         this.item = item;
         this.quantity = quantity;
         this.priority = priority;
+    }
+
+    public void SetComplete(bool val)
+    {
+        IsComplete = true;
     }
 }

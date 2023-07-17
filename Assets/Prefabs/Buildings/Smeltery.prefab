@@ -204,11 +204,12 @@ MonoBehaviour:
   wearPattern: 0
   wearScale: {x: 1.1, y: 1.1}
   building: {fileID: 962766812587171540}
+  recipe: {fileID: 11400000, guid: 7f36b8c57616a452fb4af65d9b053461, type: 2}
   spawnDelaySeconds: 5
   spawnPoint: {fileID: 3393318389270043728}
   dropPoint: {fileID: 6126572693105457676}
+  fireObject: {fileID: 8031368001684976055}
   smelterPrefab: {fileID: 5678464011766705138, guid: 510fe4de2a2574962bfb211361206c48, type: 3}
-  dropSpec: {fileID: 11400000, guid: 76635aab163764279afe930a922b6659, type: 2}
 --- !u!1 &6126572693105457676
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +369,7 @@ GameObject:
   m_Component:
   - component: {fileID: 606781648271410140}
   m_Layer: 8
-  m_Name: ParticleEffects
+  m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

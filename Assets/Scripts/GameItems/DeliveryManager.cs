@@ -22,10 +22,11 @@ public class DeliveryManager : MonoBehaviour
         claimedRequests = new Dictionary<IDeliverDrops, DeliveryRequest>();
     }
 
-    public void CreateRequest(SmolbeanBuilding building, DropSpec item, int quantity, int priority)
+    public DeliveryRequest CreateRequest(SmolbeanBuilding building, DropSpec item, int quantity, int priority = 10)
     {
         var request = new DeliveryRequest(building, item, quantity, priority);
         unclaimedRequests.Add(request);
+        return request;
     }
 
     public DeliveryRequest ClaimNextRequest(IDeliverDrops porter)
