@@ -72,7 +72,7 @@ public abstract class Colonist : MonoBehaviour
         body.SetActive(true);
     }
 
-    protected bool CloseEnoughTo(Vector3 dest)
+    public bool CloseEnoughTo(Vector3 dest)
     {
         Vector3 v1 = new Vector3(transform.position.x, 0.0f, transform.position.z);
         Vector3 v2 = new Vector3(dest.x, 0.0f, dest.z);
@@ -80,7 +80,7 @@ public abstract class Colonist : MonoBehaviour
         return Vector3.SqrMagnitude(v1 - v2) < destinationThreshold;
     }
 
-    protected bool CloseEnoughTo(GameObject target)
+    public bool CloseEnoughTo(GameObject target)
     {
         var found = Physics.OverlapSphere(transform.position, destinationThreshold, LayerMask.GetMask(natureLayer, dropLayer));
         return found.Any(c => c.gameObject == target);

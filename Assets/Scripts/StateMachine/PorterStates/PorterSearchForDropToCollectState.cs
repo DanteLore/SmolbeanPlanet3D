@@ -3,12 +3,12 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public class SearchForPorterJobsState : IState
+public class PorterSearchForDropToCollectState : IState
 {
     private Porter porter;
     private string dropLayer;
 
-    public SearchForPorterJobsState(Porter porter, string dropLayer)
+    public PorterSearchForDropToCollectState(Porter porter, string dropLayer)
     {
         this.porter = porter;
         this.dropLayer = dropLayer;
@@ -26,7 +26,7 @@ public class SearchForPorterJobsState : IState
     {
         if(!porter.TargetDrop)
             porter.TargetDrop = GetDropTargets(porter.transform.position)
-                                    .Take(10)
+                                    .Take(3)
                                     .ToList()
                                     .OrderBy(_ => Guid.NewGuid())
                                     .FirstOrDefault();

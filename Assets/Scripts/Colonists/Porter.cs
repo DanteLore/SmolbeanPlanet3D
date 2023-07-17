@@ -8,6 +8,8 @@ public class Porter : Colonist, IGatherDrops, IDeliverDrops
 
     public GameObject TargetDrop { get; set; }
 
+    public DeliveryRequest DeliveryRequest { get; set; }
+
     private StateMachine stateMachine;
 
     protected override void Start()
@@ -19,34 +21,38 @@ public class Porter : Colonist, IGatherDrops, IDeliverDrops
         var idle = new IdleState(animator);
         var sleeping = new SleepState(this);
 
-        var searchForJob = new SearchForPorterJobsState(this, dropLayer);
-        var walkToJobStart = new WalkToDropState(this, navAgent, animator, soundPlayer);
-        var pickupDrops = new PickupDropsState(this, DropController.Instance);
-        var walkHome = new WalkHomeState(this, navAgent, animator, soundPlayer);
-        var storeDrops = new StoreDropsState(this, DropController.Instance);
+        var searchForDeliveryJob = new PorterClaimDeliveryRequest(this, DeliveryManager.Instance);
+        var searchForCollectionJob = new PorterSearchForDropToCollectState(this, dropLayer);
+        
+        var doDelivery = new PorterDoDeliveryRequestState(this, animator, navAgent, soundPlayer, DeliveryManager.Instance);
+        var fetchDrop = new PorterFetchDropsState(this, animator, navAgent, soundPlayer, dropLayer);
+        
+        AT(searchForDeliveryJob, doDelivery, DeliveryAssigned());
+        AT(searchForDeliveryJob, searchForCollectionJob, NoDeliveryToDo());
+        AT(doDelivery, idle, DeliveryComplete());
+        //AT(doDelivery, searchForCollectionJob, DeliveryFailed());
 
-        AT(searchForJob, walkToJobStart, DropFound());
-        AT(walkToJobStart, pickupDrops, IsCloseEnoughToDrop());
-        AT(pickupDrops, walkHome, NoDropFound());
-        AT(walkHome, storeDrops, IsAtSpawnPoint());
-        AT(storeDrops, sleeping, InventoryIsEmpty());
+        AT(searchForCollectionJob, fetchDrop, DropFound());
+        AT(searchForCollectionJob, idle, NoDropFound());
+        AT(fetchDrop, sleeping, FetchDropSucceeded());
+        AT(fetchDrop, searchForDeliveryJob, FetchDropFailed());
+
         AT(sleeping, idle, HasBeenSleepingForAWhile());
-        AT(idle, searchForJob, HasBeenIdleForAWhile());
+        AT(idle, searchForDeliveryJob, HasBeenIdleForAWhile());
 
-        AT(walkToJobStart, searchForJob, NoDropFound()); // Drop picked up or deleted while I was en route, find a new one
-        AT(walkToJobStart, walkHome, () => walkToJobStart.StuckTime > 2f); // Stuck
-
-        stateMachine.SetState(searchForJob);
+        stateMachine.SetState(idle);
 
         void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
 
         Func<bool> DropFound() => () => TargetDrop != null;
         Func<bool> NoDropFound() => () => TargetDrop == null;
-        Func<bool> IsCloseEnoughToDrop() => () => CloseEnoughTo(TargetDrop);
-        Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
-        Func<bool> InventoryIsEmpty() => Inventory.IsEmpty;
         Func<bool> HasBeenIdleForAWhile() => () => idle.TimeIdle >= idleTime;
         Func<bool> HasBeenSleepingForAWhile() => () => sleeping.TimeAsleep >= sleepTime;
+        Func<bool> FetchDropSucceeded() => () => fetchDrop.Finished && CloseEnoughTo(SpawnPoint);
+        Func<bool> FetchDropFailed() => () => fetchDrop.Finished && !CloseEnoughTo(SpawnPoint);
+        Func<bool> NoDeliveryToDo() => () => DeliveryRequest == null;
+        Func<bool> DeliveryAssigned() => () => DeliveryRequest != null;
+        Func<bool> DeliveryComplete() => () => doDelivery.Finished;
     }
 
     protected override void Update()

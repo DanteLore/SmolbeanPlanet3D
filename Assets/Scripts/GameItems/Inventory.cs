@@ -48,4 +48,11 @@ public class Inventory
 
         return item;
     }
+
+    public bool Contains(DropSpec itemSpec, int quantity)
+    {
+        var q = inventory.Where(i => i.dropSpec == itemSpec).Sum(i => i.quantity);
+
+        return q >= quantity;
+    }
 }

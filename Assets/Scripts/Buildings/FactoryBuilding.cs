@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,24 +29,39 @@ public abstract class FactoryBuilding : SmolbeanBuilding
 
         while(true)
         {
-            foreach(var key in deliveryRequests.Keys)
-            {
-                if(deliveryRequests[key].IsComplete)
-                    deliveryRequests.Remove(key);
-            }
+            RemoveCompletedRequests();
 
-            foreach(var ingredient in recipe.ingredients)
-            {
-                if(!deliveryRequests.TryGetValue(ingredient, out var request) || request.IsComplete)
-                {
-                    deliveryRequests[ingredient] = DeliveryManager.Instance.CreateRequest(this, ingredient.item, ingredient.quantity);
-                }
-            }
-
-            Debug.Log("delivery requests " + deliveryRequests.Count);
+            RequestIngedients();
 
             yield return new WaitForSeconds(5f);
         }
+    }
+
+    private void RequestIngedients()
+    {
+        foreach (var ingredient in recipe.ingredients)
+        {
+            // If we don't have enough of the resource in the inventory
+            if(!Inventory.Contains(ingredient.item, ingredient.quantity))
+            {
+                RaiseRequestIfNoneExists(ingredient);
+            }
+        }
+    }
+
+    private void RaiseRequestIfNoneExists(Recipe.Ingredient ingredient)
+    {
+        if (!deliveryRequests.TryGetValue(ingredient, out var request) || request.IsComplete)
+        {
+            deliveryRequests[ingredient] = DeliveryManager.Instance.CreateRequest(this, ingredient.item, ingredient.quantity);
+        }
+    }
+
+    private void RemoveCompletedRequests()
+    {
+        var toRemove = deliveryRequests.Where(kv => kv.Value.IsComplete).Select(kv => kv.Key).ToList();
+        foreach (var key in toRemove)
+            deliveryRequests.Remove(key);
     }
 
     public bool HasResources()

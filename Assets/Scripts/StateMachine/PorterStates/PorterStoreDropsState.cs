@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StoreDropsState : IState
+public class PorterStoreDropsState : IState
 {
     
     private Porter porter;
     private DropController dropController;
 
-    public StoreDropsState(Porter porter, DropController dropController)
+    public PorterStoreDropsState(Porter porter, DropController dropController)
     {
         this.porter = porter;
         this.dropController = dropController;
