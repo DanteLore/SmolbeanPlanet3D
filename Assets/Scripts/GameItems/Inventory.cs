@@ -35,7 +35,7 @@ public class Inventory
         return inventory.Where(i => i.dropSpec == drop).Sum(i => i.quantity);
     }
 
-    internal InventoryItem Take(DropSpec itemSpec, int quantity)
+    public InventoryItem Take(DropSpec itemSpec, int quantity)
     {
         var item = inventory.FirstOrDefault(i => i.dropSpec == itemSpec);
 
