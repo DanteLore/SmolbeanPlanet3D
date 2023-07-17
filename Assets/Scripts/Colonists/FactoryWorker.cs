@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FactoryWorker : Colonist
+public class FactoryWorker : Colonist, IReturnDrops
 {
     public float idleTime = 1f;
 
@@ -20,43 +21,36 @@ public class FactoryWorker : Colonist
     {
         base.Start();
 
-        stateMachine = new StateMachine(shouldLog:false);
+        Debug.Log("HELLO!");
+
+        stateMachine = new StateMachine(shouldLog:true);
+
+        var factory = (FactoryBuilding)this.Home;
 
         var idle = new IdleState(animator);
-
-        // Wait until there are logs in the building inventory
-        // Go into building and saw the log until it turns into planks (as controlled by building)
-        // Take planks to the drop point
-        // Loop
-
-        /*
-        var getReady = new MinerBlinkInTheSunlightState(this);
-        var operateMine = new OperateMineState(this, animator, soundPlayer);
+        var walkHome = new WalkHomeState(this, navAgent, animator, soundPlayer);
+        var pickupIngredients = new FactoryWorkerPickupIngredientsState(factory);
+        var doJob = new FactoryWorkerDoJobState(this, factory, soundPlayer, DropController.Instance);
         var walkToDropPoint = new WalkToDropPointState(this, navAgent, animator, soundPlayer);
         var dropInventory = new DropInventoryAtDropPointState(this, DropController.Instance);
-        var walkHome = new WalkHomeState(this, navAgent, animator, soundPlayer);
 
-        AT(idle, operateMine, HasBeenIdleForAWhile());
-        AT(operateMine, getReady, MiningFinished());
+        AT(idle, pickupIngredients, IngredientsPresent());
+        AT(pickupIngredients, doJob, FactoryReady());
+        AT(doJob, walkToDropPoint, JobDone());
+        AT(walkToDropPoint, dropInventory, AtDropPoint());
+        AT(dropInventory, walkHome, InventoryEmpty());
+        AT(walkHome, idle, AtSpawnPoint());
 
-        AT(getReady, walkToDropPoint, InventoryIsNotEmpty());
-        AT(getReady, idle, InventoryIsEmpty());
+        stateMachine.SetState(idle);
 
-        AT(walkToDropPoint, dropInventory, IsAtDropPoint());
-        AT(dropInventory, walkHome, InventoryIsEmpty());
-        AT(walkHome, idle, IsAtSpawnPoint());
-
-        stateMachine.SetState(getReady);
+        Func<bool> AtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
+        Func<bool> AtDropPoint() => () => CloseEnoughTo(DropPoint);
+        Func<bool> IngredientsPresent() => factory.HasResources;
+        Func<bool> InventoryEmpty() => Inventory.IsEmpty;
+        Func<bool> FactoryReady() =>() => factory.IsReadyToStart;
+        Func<bool> JobDone() => () => factory.IsFinished;
 
         void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
-
-        Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
-        Func<bool> IsAtDropPoint() => () => CloseEnoughTo(DropPoint);
-        Func<bool> InventoryIsEmpty() => Inventory.IsEmpty;
-        Func<bool> InventoryIsNotEmpty() => () => !Inventory.IsEmpty();
-        Func<bool> HasBeenIdleForAWhile() => () => idle.TimeIdle >= idleTime;
-        Func<bool> MiningFinished() => () => operateMine.Finished;
-        */
     }
 
     protected override void Update()

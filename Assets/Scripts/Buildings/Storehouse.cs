@@ -8,13 +8,9 @@ public class Storehouse : SmolbeanBuilding
     public GameObject spawnPoint;
     public GameObject porterPrefab;
 
-    public Inventory Inventory { get; private set; }
-
     protected override void Start()
     {
         base.Start();
-
-        Inventory = new Inventory();
 
         StartCoroutine(CreatePorter(spawnDelaySeconds));
     }

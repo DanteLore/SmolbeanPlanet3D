@@ -6,8 +6,8 @@ using UnityEngine;
 public abstract class FactoryBuilding : SmolbeanBuilding
 {
     public Recipe recipe;
-    public Inventory Inventory { get; private set; }
     public bool IsFinished { get { return (Time.time  - startTime) >= recipe.craftingTime; } }
+    public bool IsReadyToStart { get; private set; }
 
     private Dictionary<Recipe.Ingredient, DeliveryRequest> deliveryRequests;
 
@@ -17,7 +17,6 @@ public abstract class FactoryBuilding : SmolbeanBuilding
     {
         base.Start();
 
-        Inventory = new Inventory();
         deliveryRequests = new Dictionary<Recipe.Ingredient, DeliveryRequest>();
 
         StartCoroutine(UpdateDeliveryRequests());
@@ -85,12 +84,15 @@ public abstract class FactoryBuilding : SmolbeanBuilding
             Inventory.Take(ingredient.item, ingredient.quantity);
         }
 
+        IsReadyToStart = true;
+
         return true;
     }
 
     public virtual void StartProcessing()
     {
         startTime = Time.time;
+        IsReadyToStart = false;
     }
 
     public virtual DropSpec StopProcessing()

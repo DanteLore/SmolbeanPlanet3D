@@ -15,7 +15,7 @@ MonoBehaviour:
   dropName: Coal
   dropRate: 3
   stackSize: 9
-  thumbnail: {fileID: 0}
+  thumbnail: {fileID: 2800000, guid: 5878771c1177440539f6a6ae1c4f1f35, type: 3}
   singlePrefab: {fileID: 3560451800456948670, guid: 7653e0d5089e34dfbb3aece1dc95f626, type: 3}
   somePrefab: {fileID: 174852686744523757, guid: 585d2e0e013de4940bd3d717e08cb560, type: 3}
   lotsPrefab: {fileID: 4603475551841078637, guid: 965cce44ffdbb47cb9b030488101e566, type: 3}

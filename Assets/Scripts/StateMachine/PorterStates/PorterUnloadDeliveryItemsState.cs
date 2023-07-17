@@ -23,12 +23,11 @@ public class PorterUnloadDeliveryItemsState : IState
 
         if(porter.Inventory.Contains(delivery.Item, delivery.Quantity))
         {
-            var storehouse = (Storehouse)porter.Home;
             var item = porter.Inventory.Take(delivery.Item, delivery.Quantity);
 
             if(item != null)
             {
-                storehouse.Inventory.PickUp(item);
+                delivery.Building.Inventory.PickUp(item);
                 deliveryManager.LogFinished(porter, porter.DeliveryRequest);
             }
         }

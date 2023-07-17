@@ -28,8 +28,6 @@ public class DeliveryManager : MonoBehaviour
         var request = new DeliveryRequest(building, item, quantity, priority);
         unclaimedRequests.Add(request);
 
-        LogContents();
-
         return request;
     }
 
@@ -47,8 +45,6 @@ public class DeliveryManager : MonoBehaviour
             claimedRequests[porter] = request;
         }
 
-        LogContents();
-
         return request;
     }
 
@@ -57,20 +53,5 @@ public class DeliveryManager : MonoBehaviour
         request.SetComplete(true);
         unclaimedRequests.Remove(request);
         claimedRequests.Remove(owner);
-
-        LogContents();
-    }
-
-    private void LogContents()
-    {
-        Debug.Log("Delivery Requests:");
-        foreach(var req in unclaimedRequests)
-        {
-            Debug.Log($"[ ]: {req.Item.dropName} x {req.Quantity}");
-        }
-        foreach(var req in claimedRequests.Values)
-        {
-            Debug.Log($"[X]: {req.Item.dropName} x {req.Quantity}");
-        }
     }
 }

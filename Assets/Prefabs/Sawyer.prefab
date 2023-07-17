@@ -212,9 +212,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   natureLayer: Nature
   dropLayer: Drops
-  destinationThreshold: 1
+  destinationThreshold: 2
   idleTime: 1
-  mineCooldown: 1
 --- !u!1001 &502959277502828767
 PrefabInstance:
   m_ObjectHideFlags: 0

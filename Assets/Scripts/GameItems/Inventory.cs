@@ -55,4 +55,9 @@ public class Inventory
 
         return q >= quantity;
     }
+
+    public override string ToString()
+    {
+        return String.Join("\n", inventory.Select(i => i.ToString()));
+    }
 }
