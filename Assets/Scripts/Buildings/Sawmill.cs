@@ -29,6 +29,6 @@ public class Sawmill : FactoryBuilding
 
     public override Vector3 GetDropPoint()
     {
-        return transform.position;
+        return dropPoint.transform.position;
     }
 }

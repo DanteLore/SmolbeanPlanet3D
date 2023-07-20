@@ -30,6 +30,8 @@ public abstract class SmolbeanBuilding : MonoBehaviour
     protected virtual void OnDestroy()
     {
         CancelInvoke("RegisterWear");
+
+        DeliveryManager.Instance.BuildingDestroyed(this);
     }
 
     private void RegisterWear()

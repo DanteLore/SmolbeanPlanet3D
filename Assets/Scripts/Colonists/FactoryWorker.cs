@@ -21,8 +21,6 @@ public class FactoryWorker : Colonist, IReturnDrops
     {
         base.Start();
 
-        Debug.Log("HELLO!");
-
         stateMachine = new StateMachine(shouldLog:true);
 
         var factory = (FactoryBuilding)this.Home;

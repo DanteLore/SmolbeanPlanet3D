@@ -54,4 +54,22 @@ public class DeliveryManager : MonoBehaviour
         unclaimedRequests.Remove(request);
         claimedRequests.Remove(owner);
     }
+
+    public void BuildingDestroyed(SmolbeanBuilding building)
+    {
+        var unclaimedToRemove = unclaimedRequests.Where(r => r.Building == building).ToList();
+        var claimedToRemove = claimedRequests.Where(kv => kv.Value.Building == building).Select(kv => kv.Key).ToList();
+
+        foreach(var request in unclaimedToRemove)
+        {
+            request.SetComplete(true);
+            unclaimedRequests.Remove(request);
+        }
+
+        foreach(var owner in claimedToRemove)
+        {
+            claimedRequests[owner].SetComplete(true);
+            claimedRequests.Remove(owner);
+        }
+    }
 }

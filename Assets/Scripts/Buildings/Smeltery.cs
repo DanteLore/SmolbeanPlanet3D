@@ -31,7 +31,7 @@ public class Smeltery : FactoryBuilding
 
     public override Vector3 GetDropPoint()
     {
-        return transform.position;
+        return dropPoint.transform.position;
     }
     
     public override void StartProcessing()

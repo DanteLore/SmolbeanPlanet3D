@@ -27,22 +27,30 @@ public class PorterDoDeliveryRequestState : IState
         var goToStorehouse = new WalkHomeState(porter, navAgent, animator, soundPlayer);
         var pickupStuff = new PorterLoadDeliveryItemsState(porter);
         var dropStuff = new PorterUnloadDeliveryItemsState(porter, DeliveryManager.Instance);
+        var putStuffBack = new PorterStoreDropsState(porter, DropController.Instance);
 
-        AT(goToStorehouse, pickupStuff, IsAtStorehouse());
+        AT(goToStorehouse, pickupStuff, IsAtStorehouseAndReadyToPickup());
+        AT(goToStorehouse, putStuffBack, IsAtStorehouseAndReadyToDropOff());
+        AT(putStuffBack, finished, InventoryEmpty());
         AT(pickupStuff, walkToDestination, HasStuffInInventory());
         AT(pickupStuff, finished, DidNotGetTheStuff());
         AT(walkToDestination, dropStuff, IsAtDestinationBuilding());
         AT(dropStuff, finished, DeliveryIsFinished());
+
+        stateMachine.AddAnyTransition(goToStorehouse, DeliveryRequestCancelled());
 
         startState = goToStorehouse;
 
         void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
 
         Func<bool> IsAtDestinationBuilding() => () => porter.CloseEnoughTo(porter.DeliveryRequest.Building.GetSpawnPoint());
-        Func<bool> IsAtStorehouse() => () => porter.CloseEnoughTo(porter.SpawnPoint);
+        Func<bool> IsAtStorehouseAndReadyToPickup() => () => porter.CloseEnoughTo(porter.SpawnPoint) && porter.DeliveryRequest != null && porter.DeliveryRequest.IsComplete == false;
+        Func<bool> IsAtStorehouseAndReadyToDropOff() => () => porter.CloseEnoughTo(porter.SpawnPoint) && (porter.DeliveryRequest == null || porter.DeliveryRequest.IsComplete);
         Func<bool> HasStuffInInventory() => () => porter.Inventory.Contains(porter.DeliveryRequest.Item, porter.DeliveryRequest.Quantity);
         Func<bool> DidNotGetTheStuff() => () => !porter.Inventory.Contains(porter.DeliveryRequest.Item, porter.DeliveryRequest.Quantity);
         Func<bool> DeliveryIsFinished() => () => porter.DeliveryRequest == null || porter.DeliveryRequest.IsComplete;
+        Func<bool> DeliveryRequestCancelled() => () => DeliveryIsFinished().Invoke() && HasStuffInInventory().Invoke();
+        Func<bool> InventoryEmpty() => () => porter.Inventory.IsEmpty();
     }
 
     public void SetFinished(bool val)
