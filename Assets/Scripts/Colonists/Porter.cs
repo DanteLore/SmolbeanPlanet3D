@@ -16,7 +16,7 @@ public class Porter : Colonist, IGatherDrops, IDeliverDrops
     {
         base.Start();
 
-        stateMachine = new StateMachine(shouldLog:false);
+        stateMachine = new StateMachine(shouldLog:true);
 
         var idle = new IdleState(animator);
         var sleeping = new SleepState(this);
@@ -31,7 +31,7 @@ public class Porter : Colonist, IGatherDrops, IDeliverDrops
         AT(searchForDeliveryJob, searchForCollectionJob, NoDeliveryToDo());
         AT(doDelivery, idle, DeliveryComplete());
         //AT(doDelivery, searchForCollectionJob, DeliveryFailed());
-
+        
         AT(searchForCollectionJob, fetchDrop, DropFound());
         AT(searchForCollectionJob, idle, NoDropFound());
         AT(fetchDrop, sleeping, FetchDropSucceeded());

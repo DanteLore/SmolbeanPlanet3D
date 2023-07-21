@@ -20,10 +20,10 @@ public class PorterDoDeliveryRequestState : IState
         this.soundPlayer = soundPlayer;
         this.deliveryManager = deliveryManager;
 
-        stateMachine = new StateMachine(shouldLog:false);
+        stateMachine = new StateMachine(shouldLog:true);
 
         var walkToDestination = new PorterWalkToBuildingState(porter, navAgent, animator, soundPlayer);
-        var finished = new PorterFinishedDeliveryRequestState(this);
+        var finished = new PorterFinishedDeliveryRequestState(this, porter);
         var goToStorehouse = new WalkHomeState(porter, navAgent, animator, soundPlayer);
         var pickupStuff = new PorterLoadDeliveryItemsState(porter);
         var dropStuff = new PorterUnloadDeliveryItemsState(porter, DeliveryManager.Instance);
@@ -37,7 +37,9 @@ public class PorterDoDeliveryRequestState : IState
         AT(walkToDestination, dropStuff, IsAtDestinationBuilding());
         AT(dropStuff, finished, DeliveryIsFinished());
 
-        stateMachine.AddAnyTransition(goToStorehouse, DeliveryRequestCancelled());
+        AT(pickupStuff, finished, DeliveryRequestCancelled());
+        AT(walkToDestination, goToStorehouse, DeliveryRequestCancelled());
+        AT(dropStuff, goToStorehouse, DeliveryRequestCancelled());
 
         startState = goToStorehouse;
 

@@ -11,6 +11,7 @@ public class PorterClaimDeliveryRequest : IState
 
     public void OnEnter()
     {
+        porter.DeliveryRequest = deliveryManager.ClaimNextRequest(porter, ((Storehouse)porter.Home).Inventory);
     }
 
     public void OnExit()
@@ -19,7 +20,5 @@ public class PorterClaimDeliveryRequest : IState
 
     public void Tick()
     {
-        if(porter.DeliveryRequest == null)
-            porter.DeliveryRequest = deliveryManager.ClaimNextRequest(porter, ((Storehouse)porter.Home).Inventory);
     }
 }

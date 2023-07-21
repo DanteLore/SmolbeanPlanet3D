@@ -73,7 +73,7 @@ MonoBehaviour:
   wearScale: {x: 0.5, y: 0.5}
   building: {fileID: 6719174780933112508}
   spawnDelaySeconds: 5
-  portersToSpawn: 5
+  portersToSpawn: 1
   spawnPoint: {fileID: 4461010311040620285}
   porterPrefab: {fileID: 5678464011766705138, guid: fd07e7047b08443eab281c57cf0ff590, type: 3}
 --- !u!208 &7554533456020058687
