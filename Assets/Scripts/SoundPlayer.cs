@@ -16,6 +16,8 @@ public class SoundPlayer : MonoBehaviour
 
         [Range(0f, 1f)]
         public float volume = 1f;
+
+        public bool ignoreGamePause = false;
     }
 
     public SoundClipSpec[] clips;
@@ -45,8 +47,13 @@ public class SoundPlayer : MonoBehaviour
         audioSource.rolloffMode = AudioRolloffMode.Linear;
         audioSource.minDistance = 10f;
         audioSource.maxDistance = 60f;
-        audioSource.spatialBlend = 1;
         audioSource.volume = clip.volume;
+
+        audioSource.spatialBlend = 1f;
+        audioSource.dopplerLevel = 0f;
+        audioSource.bypassEffects = true;
+
+        audioSource.ignoreListenerPause = clip.ignoreGamePause;
 
         players.Add(clip.name, audioSource);
         return audioSource;
@@ -62,16 +69,28 @@ public class SoundPlayer : MonoBehaviour
 
     public void Play(string clipName)
     {
-        AudioSource player;
-        if(!players.TryGetValue(clipName, out player))
-        {
-            player = CreateAudioSource(clipName);
-        }
-
+        AudioSource player = GetPlayer(clipName);
         if(player)
         {
             player.Play();
         }
+    }
+
+    private AudioSource GetPlayer(string clipName)
+    {
+        AudioSource player;
+        if (!players.TryGetValue(clipName, out player))
+        {
+            player = CreateAudioSource(clipName);
+        }
+
+        return player;
+    }
+
+    public bool IsPlaying(string clipName)
+    {
+        var player = GetPlayer(clipName);
+        return player == null ? false : player.isPlaying;
     }
 
     public void PlayOneShot(string clipName)
