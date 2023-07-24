@@ -20,12 +20,16 @@ public class GameStateManager : MonoBehaviour
     public void Pause()
     {
         IsPaused = true;
+        Time.timeScale = 0;
+        AudioListener.pause = true;
         GamePauseStateChanged?.Invoke(this, IsPaused);
     }
 
     public void Resume()
     {
         IsPaused = false;
+        Time.timeScale = 1;
+        AudioListener.pause = false;
         GamePauseStateChanged?.Invoke(this, IsPaused);
     }
 }
