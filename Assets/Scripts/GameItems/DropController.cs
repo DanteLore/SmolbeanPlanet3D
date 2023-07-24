@@ -161,4 +161,9 @@ public class DropController : MonoBehaviour, IObjectGenerator
             quantity = stack.quantity
         };
     }
+
+    public DropSpec DropSpecByName(string name)
+    {
+        return dropSpecLookup[name];
+    }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class BuildingObjectSaveData
@@ -8,4 +9,5 @@ public class BuildingObjectSaveData
     public float positionZ;
     public float rotationY;
     public int prefabIndex;
+    public IEnumerable<InventoryItemSaveData> inventory;
 }

@@ -200,9 +200,13 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     private void InstantiateBuilding(BuildingObjectSaveData saveData)
     {
         Vector3 pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
+       
+        var buildingObject = Instantiate(buildings[saveData.prefabIndex].prefab, pos, Quaternion.Euler(0f, saveData.rotationY, 0f), transform);
+        var building = buildingObject.GetComponent<SmolbeanBuilding>();
+        building.PrefabIndex = saveData.prefabIndex;
 
-        var building = Instantiate(buildings[saveData.prefabIndex].prefab, pos, Quaternion.Euler(0f, saveData.rotationY, 0f), transform);
-        building.GetComponent<SmolbeanBuilding>().PrefabIndex = saveData.prefabIndex;
+        if(saveData.inventory != null)
+            building.Inventory.LoadFrom(saveData.inventory);
     }
 
     private bool CheckEmpty(Vector3 center)
@@ -267,7 +271,8 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
                 positionY = b.transform.position.y,
                 positionZ = b.transform.position.z,
                 rotationY = b.transform.rotation.eulerAngles.y,
-                prefabIndex = b.PrefabIndex
+                prefabIndex = b.PrefabIndex,
+                inventory = b.Inventory.GetSaveData()
             })
             .ToList();
     }

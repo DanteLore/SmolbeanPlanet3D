@@ -188,7 +188,7 @@ MonoBehaviour:
   - name: Working
     clip: {fileID: 8300000, guid: 42c27295ce51b48c7830fe9c16cc5c35, type: 3}
     loop: 1
-    volume: 1
+    volume: 0.5
   mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
 --- !u!114 &1372385318150365270
 MonoBehaviour:

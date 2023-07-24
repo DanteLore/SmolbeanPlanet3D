@@ -15,11 +15,14 @@ public abstract class SmolbeanBuilding : MonoBehaviour
     public abstract Vector3 GetSpawnPoint();
     public abstract Vector3 GetDropPoint();
 
+    protected virtual void Awake()
+    {
+        Inventory = new Inventory();
+    }
+
     protected virtual void Start()
     {
         InvokeRepeating("RegisterWear", 0.0f, 0.5f);
-
-        Inventory = new Inventory();
     }
 
     protected virtual void Update()

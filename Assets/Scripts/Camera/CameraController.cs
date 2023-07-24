@@ -212,23 +212,18 @@ public class CameraController : MonoBehaviour
     {
         cameraActions.Disable();
 
-        try
-        {
-            targetPosition = Vector3.zero;
-            horizontalVelocity = Vector3.zero;
+        targetPosition = Vector3.zero;
+        horizontalVelocity = Vector3.zero;
 
-            transform.position = new Vector3(cameraData.positionX, cameraData.positionY, cameraData.positionZ);
-            transform.rotation = Quaternion.Euler(cameraData.rotationX, cameraData.rotationY, cameraData.rotationZ);
+        transform.position = new Vector3(cameraData.positionX, cameraData.positionY, cameraData.positionZ);
+        transform.rotation = Quaternion.Euler(cameraData.rotationX, cameraData.rotationY, cameraData.rotationZ);
 
-            lastPosition = transform.position;
-            
-            cameraTransform.localPosition = new Vector3(cameraData.cameraPositionX, cameraData.cameraPositionY, cameraData.cameraPositionZ);
-            cameraTransform.localRotation = Quaternion.Euler(cameraData.cameraRotationX, cameraData.cameraRotationY, cameraData.cameraRotationZ);
-            zoomHeight = cameraData.zoomHeight;
-        }
-        finally
-        {        
-            cameraActions.Enable();
-        }
+        lastPosition = transform.position;
+        
+        cameraTransform.localPosition = new Vector3(cameraData.cameraPositionX, cameraData.cameraPositionY, cameraData.cameraPositionZ);
+        cameraTransform.localRotation = Quaternion.Euler(cameraData.cameraRotationX, cameraData.cameraRotationY, cameraData.cameraRotationZ);
+        zoomHeight = cameraData.zoomHeight;
+
+        cameraActions.Enable();
     }
 }

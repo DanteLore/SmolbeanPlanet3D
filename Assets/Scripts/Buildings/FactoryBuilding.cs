@@ -50,12 +50,8 @@ public abstract class FactoryBuilding : SmolbeanBuilding
 
     private void RaiseRequestIfNoneExists(Recipe.Ingredient ingredient)
     {
-        foreach(var req in deliveryRequests)
-            Debug.Log($"Request {req.Key}: {req.Value.Item.dropName} x {req.Value.Quantity} Complete={req.Value.IsComplete}");
-
         if (!deliveryRequests.TryGetValue(ingredient, out var request) || request.IsComplete)
         {
-            Debug.Log("Requesting " + ingredient.item.dropName);
             deliveryRequests[ingredient] = DeliveryManager.Instance.CreateRequest(this, ingredient.item, ingredient.quantity);
         }
     }

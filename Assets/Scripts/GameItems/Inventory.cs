@@ -12,6 +12,16 @@ public class Inventory
         inventory = new List<InventoryItem>();
     }
 
+    public IEnumerable<InventoryItemSaveData> GetSaveData()
+    {
+        return inventory.Select(i => new InventoryItemSaveData { dropSpecName = i.dropSpec.dropName, quantity = i.quantity });
+    }
+
+    public void LoadFrom(IEnumerable<InventoryItemSaveData> saveData)
+    {
+        inventory = saveData.Select(s => new InventoryItem { dropSpec = DropController.Instance.DropSpecByName(s.dropSpecName), quantity = s.quantity }).ToList();
+    }
+
     public void PickUp(InventoryItem item)
     {
         Assert.IsNotNull(item);
