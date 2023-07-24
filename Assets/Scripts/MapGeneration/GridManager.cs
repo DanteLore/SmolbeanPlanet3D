@@ -74,7 +74,6 @@ public class GridManager : MonoBehaviour
 
     private void UpdateNavMesh()
     {
-        Debug.Log("Updating nav mesh");
         var surface = Ground.GetComponent<NavMeshSurface>();
         surface.BuildNavMesh();
     }

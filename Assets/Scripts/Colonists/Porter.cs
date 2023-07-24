@@ -16,7 +16,7 @@ public class Porter : Colonist, IGatherDrops, IDeliverDrops
     {
         base.Start();
 
-        stateMachine = new StateMachine(shouldLog:true);
+        stateMachine = new StateMachine(shouldLog:false);
 
         var idle = new IdleState(animator);
         var sleeping = new SleepState(this);

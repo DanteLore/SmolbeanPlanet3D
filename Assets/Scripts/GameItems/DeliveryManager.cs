@@ -38,11 +38,17 @@ public class DeliveryManager : MonoBehaviour
 
     public DeliveryRequest ClaimNextRequest(IDeliverDrops porter, Inventory sourceInventory)
     {
+        Debug.Log("Delivery requested.  I have " + unclaimedRequests.Count + " requests on the unclaimed queue");
         var request = unclaimedRequests.Where(req => CanFulfilFrom(req, sourceInventory)).OrderBy(r => r.Priority).FirstOrDefault();
         if(request != null)
         {
+            Debug.Log("Assigning request for " + request.Quantity + " x " + request.Item.dropName);
             unclaimedRequests.Remove(request);
             claimedRequests[porter] = request;
+        }
+        else
+        {
+            Debug.Log("Could not find a suitable request");
         }
 
         return request;

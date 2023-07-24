@@ -20,7 +20,7 @@ public class PorterDoDeliveryRequestState : IState
         this.soundPlayer = soundPlayer;
         this.deliveryManager = deliveryManager;
 
-        stateMachine = new StateMachine(shouldLog:true);
+        stateMachine = new StateMachine(shouldLog:false);
 
         var walkToDestination = new PorterWalkToBuildingState(porter, navAgent, animator, soundPlayer);
         var finished = new PorterFinishedDeliveryRequestState(this, porter);
