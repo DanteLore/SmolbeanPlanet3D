@@ -8,12 +8,14 @@ public class Smeltery : FactoryBuilding
     public GameObject spawnPoint;
     public GameObject dropPoint;
     public GameObject fireObject;
+    public ParticleSystem smokeParticleSystem;
     public GameObject smelterPrefab;
 
     protected override void Start()
     {
         base.Start();
         fireObject.SetActive(false);
+        smokeParticleSystem.Stop();
         StartCoroutine(CreateSmelter(spawnDelaySeconds));
     }
 
@@ -39,11 +41,13 @@ public class Smeltery : FactoryBuilding
         base.StartProcessing();
 
         fireObject.SetActive(true);
+        smokeParticleSystem.Play();
     }
 
     public override DropSpec StopProcessing()
     {
         fireObject.SetActive(false);
+        smokeParticleSystem.Stop();
 
         return base.StopProcessing();
     }

@@ -208,7 +208,8 @@ MonoBehaviour:
   spawnDelaySeconds: 5
   spawnPoint: {fileID: 3393318389270043728}
   dropPoint: {fileID: 6126572693105457676}
-  fireObject: {fileID: 8031368001684976055}
+  fireObject: {fileID: 6919524366760482725}
+  smokeParticleSystem: {fileID: 7862884398460389280}
   smelterPrefab: {fileID: 5678464011766705138, guid: 510fe4de2a2574962bfb211361206c48, type: 3}
 --- !u!1 &6126572693105457676
 GameObject:
@@ -453,6 +454,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e9b5352e6c5a407b85701ff6dad12c9, type: 3}
+--- !u!198 &7862884398460389280 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8229637925370370038, guid: 5e9b5352e6c5a407b85701ff6dad12c9, type: 3}
+  m_PrefabInstance: {fileID: 2245923629684084822}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7971611879800533362 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8181850166927728932, guid: 5e9b5352e6c5a407b85701ff6dad12c9, type: 3}
