@@ -9,6 +9,8 @@ public abstract class SmolbeanBuilding : MonoBehaviour
     public BuildingWearPattern wearPattern = BuildingWearPattern.Rectangle;
     public Vector2 wearScale = Vector2.one;
     public GameObject building;
+    public float itemDropRadius = 2f;
+    public float itemDropHeight = 1f;
 
     public Inventory Inventory { get; private set; }
 
@@ -33,6 +35,17 @@ public abstract class SmolbeanBuilding : MonoBehaviour
     protected virtual void OnDestroy()
     {
         CancelInvoke("RegisterWear");
+
+        while(!Inventory.IsEmpty())
+        {
+            var item = Inventory.DropLast();
+
+            Vector3 upPos = Vector3.up * itemDropHeight;
+            Vector3 outPos = Vector3.left * UnityEngine.Random.Range(0f, itemDropRadius);
+            outPos = Quaternion.Euler(0f, UnityEngine.Random.Range(0f, 360f), 0f) * outPos;
+
+            DropController.Instance.Drop(item.dropSpec, transform.position + upPos + outPos, item.quantity);
+        }
 
         DeliveryManager.Instance.BuildingDestroyed(this);
     }
