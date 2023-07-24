@@ -179,6 +179,7 @@ Transform:
   - {fileID: 5977453418137258766}
   - {fileID: 2821555851298388066}
   - {fileID: 9110419610424380244}
+  - {fileID: 5993525221834706536}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -239,3 +240,75 @@ MonoBehaviour:
   spawnPoint: {fileID: 6699879713496794779}
   dropPoint: {fileID: 1009612477567046326}
   sawyerPrefab: {fileID: 5678464011766705138, guid: f7e318657fb26425eba14eae1560439b, type: 3}
+  sawingParticleSystem: {fileID: 9205586744282983436}
+--- !u!1001 &6818276419722694196
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2860623197514059505}
+    m_Modifications:
+    - target: {fileID: 986892123388444764, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 986892123388444764, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 986892123388444764, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 986892123388444764, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 986892123388444764, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 986892123388444764, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 986892123388444764, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 986892123388444764, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 986892123388444764, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 986892123388444764, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 986892123388444764, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8802167031000175445, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+      propertyPath: m_Name
+      value: SawyerPS
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+--- !u!4 &5993525221834706536 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 986892123388444764, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+  m_PrefabInstance: {fileID: 6818276419722694196}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &9205586744282983436 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2404836548831240760, guid: c0b3cfda50b6d4f32b18d8ed0544f635, type: 3}
+  m_PrefabInstance: {fileID: 6818276419722694196}
+  m_PrefabAsset: {fileID: 0}

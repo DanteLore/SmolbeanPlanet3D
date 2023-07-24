@@ -7,10 +7,13 @@ public class Sawmill : FactoryBuilding
     public GameObject spawnPoint;
     public GameObject dropPoint;
     public GameObject sawyerPrefab;
+    public ParticleSystem sawingParticleSystem;
 
     protected override void Start()
     {
         base.Start();
+        
+        sawingParticleSystem.Stop();
 
         StartCoroutine(CreateSawyer(spawnDelaySeconds));
     }
@@ -30,5 +33,19 @@ public class Sawmill : FactoryBuilding
     public override Vector3 GetDropPoint()
     {
         return dropPoint.transform.position;
+    }
+
+    public override void StartProcessing()
+    {
+        base.StartProcessing();
+
+        sawingParticleSystem.Play();
+    }
+
+    public override DropSpec StopProcessing()
+    {
+        sawingParticleSystem.Stop();
+
+        return base.StopProcessing();
     }
 }
