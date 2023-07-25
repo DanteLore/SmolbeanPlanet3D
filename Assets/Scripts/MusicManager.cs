@@ -19,13 +19,13 @@ public class MusicManager : MonoBehaviour
     {
         while(true)
         {
-            yield return new WaitForSeconds(8f);
-
             if(!soundPlayer.IsPlaying(currentTrack))
             {
                 currentTrack = RandomTrackName();
                 soundPlayer.Play(currentTrack);
             }
+
+            yield return new WaitForSeconds(8f);
         }
     }
 

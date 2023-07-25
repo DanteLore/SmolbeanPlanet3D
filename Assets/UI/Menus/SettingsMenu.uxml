@@ -1,7 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
     <ui:VisualElement name="VisualElement" class="menuContainer" style="flex-grow: 1;">
-        <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" class="title" />
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 100%; width: 80%; min-width: 600px;">
+            <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" class="title" />
+            <ui:Slider picking-mode="Ignore" label="Music Volume" value="42" high-value="1" show-input-field="false" name="musicSlider" low-value="0.0001" />
+            <ui:Slider picking-mode="Ignore" label="SFX Volume" value="42" high-value="1" name="sfxSlider" low-value="0.0001" />
+            <ui:Slider picking-mode="Ignore" label="Ambient Volume" value="42" high-value="1" name="ambientSlider" low-value="0.0001" />
+        </ui:VisualElement>
         <ui:VisualElement name="VisualElement" style="flex-direction: row-reverse; width: 100%;">
             <ui:Button text="Done" display-tooltip-when-elided="true" name="doneButton" style="width: 100px; height: 30px;" />
         </ui:VisualElement>

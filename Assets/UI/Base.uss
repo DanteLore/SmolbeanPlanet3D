@@ -102,3 +102,13 @@ VisualElement {
     font-size: 32px;
     margin-bottom: 10px;
 }
+
+Slider {
+    max-width: 500px;
+    min-width: 300px;
+}
+
+.unity-base-field:focus .unity-label {
+    -unity-font-style: normal;
+    color: rgb(255, 255, 255);
+}
