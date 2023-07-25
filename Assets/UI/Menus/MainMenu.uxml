@@ -6,6 +6,7 @@
         <ui:Button text="New Game..." display-tooltip-when-elided="true" name="newGameButton" />
         <ui:Button text="Save Game..." display-tooltip-when-elided="true" name="saveGameButton" />
         <ui:Button text="Load Game..." display-tooltip-when-elided="true" name="loadGameButton" />
+        <ui:Button text="Settings..." display-tooltip-when-elided="true" name="settingsButton" />
         <ui:Button text="Quit" display-tooltip-when-elided="true" name="quitButton" />
     </ui:VisualElement>
 </ui:UXML>

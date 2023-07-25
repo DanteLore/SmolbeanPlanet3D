@@ -22,8 +22,16 @@ public class MainMenuController : MonoBehaviour
         var loadGameButton = document.rootVisualElement.Q<Button>("loadGameButton");
         loadGameButton.clicked += LoadGameButtonClicked;
         
+        var settingsButton = document.rootVisualElement.Q<Button>("settingsButton");
+        settingsButton.clicked += SettingsButtonClicked;
+        
         var quitButton = document.rootVisualElement.Q<Button>("quitButton");
         quitButton.clicked += QuitButtonClicked;
+    }
+
+    private void SettingsButtonClicked()
+    {
+        MenuController.Instance.ShowMenu("SettingsMenu");
     }
 
     private void LoadGameButtonClicked()
