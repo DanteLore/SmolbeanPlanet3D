@@ -39,6 +39,13 @@ public class SettingsMenuController : MonoBehaviour
         {
             PrefsManager.Instance.AmbientVolume = v.newValue;
         });
+
+        var grassToggle = document.rootVisualElement.Q<Toggle>("grassToggle");
+        grassToggle.value = PrefsManager.Instance.GrassRenderingEnabled;
+        grassToggle.RegisterValueChangedCallback(v => 
+        {
+            PrefsManager.Instance.GrassRenderingEnabled = v.newValue;
+        });
     }
 
     private void DoneButtonClicked()
