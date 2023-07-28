@@ -70,8 +70,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wearPattern: 1
-  wearScale: {x: 0.5, y: 0.5}
+  wearScale: {x: 0.6, y: 0.6}
   building: {fileID: 6719174780933112508}
+  itemDropRadius: 2
+  itemDropHeight: 1
   spawnDelaySeconds: 5
   portersToSpawn: 4
   spawnPoint: {fileID: 4461010311040620285}

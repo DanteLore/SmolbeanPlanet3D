@@ -202,8 +202,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wearPattern: 0
-  wearScale: {x: 1.1, y: 1.1}
+  wearScale: {x: 1.2, y: 1.2}
   building: {fileID: 962766812587171540}
+  itemDropRadius: 2
+  itemDropHeight: 1
   recipe: {fileID: 11400000, guid: 7f36b8c57616a452fb4af65d9b053461, type: 2}
   spawnDelaySeconds: 5
   spawnPoint: {fileID: 3393318389270043728}

@@ -50,6 +50,6 @@ public class SearchForResourceState : IState
     {
         return 
                 NavMesh.SamplePosition(obj.transform.position, out var hit, 10f, NavMesh.AllAreas)
-            &&  Vector3.SqrMagnitude(obj.transform.position - hit.position) <= 2f;
+            &&  Vector3.SqrMagnitude(obj.transform.position - hit.position) <= 2.5f;
     }
 }

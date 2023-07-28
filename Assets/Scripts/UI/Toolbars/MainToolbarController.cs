@@ -20,6 +20,9 @@ public class MainToolbarController : MonoBehaviour
         
         var mapButton = document.rootVisualElement.Q<Button>("mapButton");
         mapButton.clicked += MapButtonClicked;
+        
+        var inventoryButton = document.rootVisualElement.Q<Button>("inventoryButton");
+        inventoryButton.clicked += InventoryButtonClicked;
     }
 
     private void MainMenuButtonClicked()
@@ -35,5 +38,10 @@ public class MainToolbarController : MonoBehaviour
     private void MapButtonClicked()
     {
         MenuController.Instance.ShowMenu("MapMenu");
+    }
+
+    private void InventoryButtonClicked()
+    {
+        MenuController.Instance.ShowMenu("InventoryMenu");
     }
 }
