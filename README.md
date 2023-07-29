@@ -11,6 +11,17 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Inventory
+
+Added a global inventory menu, showing what items are stored in buildings.  Useful for debugging if nothing else!
+
+![Screenshot](./Docs/Images/screenshot43.png)
+
+Also I finally found a map seed with a bridge!
+
+![Screenshot](./Docs/Images/screenshot42.png)
+
+
 ## New building types
 
 Loads of work done to create new building types, drop types and state machine based colonist behaviours - [thanks Jason Weimann](https://www.youtube.com/watch?v=V75hgcsCGOM).
