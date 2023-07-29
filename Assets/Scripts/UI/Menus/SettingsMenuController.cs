@@ -8,9 +8,7 @@ using UnityEngine.Audio;
 public class SettingsMenuController : MonoBehaviour
 {
     public AudioMixer mixer;
-
     private UIDocument document;
-    private string[] files;
 
     void OnEnable()
     {

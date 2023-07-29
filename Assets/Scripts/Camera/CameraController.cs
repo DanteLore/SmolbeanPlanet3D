@@ -121,7 +121,14 @@ public class CameraController : MonoBehaviour
         else
         {
             horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.deltaTime * damping);
-            transform.position += horizontalVelocity * Time.deltaTime;
+            try
+            {
+                transform.position += horizontalVelocity * Time.deltaTime;
+            }
+            catch
+            {
+                transform.position = Vector3.zero;
+            }            
         }
 
         targetPosition = Vector3.zero;
@@ -143,6 +150,9 @@ public class CameraController : MonoBehaviour
 
     private void ZoomCamera(InputAction.CallbackContext inputValue)
     {
+        if(GameStateManager.Instance.IsPaused)
+            return;
+            
         float value = -inputValue.ReadValue<Vector2>().y / 100.0f;
 
         if(Mathf.Abs(value) > 0.1f)

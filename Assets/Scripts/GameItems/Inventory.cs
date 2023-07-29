@@ -7,6 +7,24 @@ public class Inventory
 {
     private List<InventoryItem> inventory;
 
+    public int Count { get { return inventory.Count; }}
+
+    public IReadOnlyCollection<InventoryItem> Items { get { return inventory; }}
+
+    public IReadOnlyCollection<InventoryItem> Totals
+    {
+        get
+        {
+            return inventory
+                .GroupBy(l => l.dropSpec)
+                .Select(grouped => new InventoryItem
+                    {
+                        dropSpec = grouped.First().dropSpec,
+                        quantity = grouped.Sum(x => x.quantity)
+                    }).ToList();
+        }
+    }
+
     public Inventory()
     {
         inventory = new List<InventoryItem>();
