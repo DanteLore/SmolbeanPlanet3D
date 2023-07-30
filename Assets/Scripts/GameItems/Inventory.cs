@@ -84,10 +84,13 @@ public class Inventory
             return null;
 
         // If it's the right size, return it
-        if(item.quantity == requiredQuantity)    
+        if(item.quantity == requiredQuantity)
+        {
+            inventory.Remove(item);
             return item;
+        }
 
-        // Must be to big, so split it
+        // Must be too big, so split it
         item.quantity -= requiredQuantity;
         return new InventoryItem
         {
