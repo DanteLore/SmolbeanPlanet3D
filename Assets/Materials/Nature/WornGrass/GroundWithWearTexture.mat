@@ -65,6 +65,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ambientOcclusion: 0.6
+    - _verticalWearCutoff: 0.6
     m_Colors:
     - _mapOffset: {r: -0.4995, g: -0.4995, b: 0, a: 0}
     - _mapSize: {r: 404, g: 404, b: 0, a: 0}
