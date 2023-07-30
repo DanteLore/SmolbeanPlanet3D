@@ -1,12 +1,14 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
     <ui:VisualElement name="VisualElement" class="menuContainer" style="flex-grow: 1;">
-        <ui:Label tabindex="-1" text="Save Game" display-tooltip-when-elided="true" class="title" />
-        <ui:TextField picking-mode="Ignore" label="Save File Name:" name="filenameTextField" style="width: 100%;" />
-        <ui:ListView focusable="true" name="fileListView" show-border="true" show-bound-collection-size="false" reorderable="false" style="flex-grow: 1;" />
-        <ui:VisualElement name="VisualElement" style="flex-direction: row-reverse; width: 100%;">
-            <ui:Button text="Save" display-tooltip-when-elided="true" name="saveGameButton" style="-unity-text-align: middle-center; width: 100px; height: 30px;" />
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;">
+            <ui:Label tabindex="-1" text="Save Game" display-tooltip-when-elided="true" class="title" />
+            <ui:TextField picking-mode="Ignore" label="Save File Name:" name="filenameTextField" style="width: 100%;" />
+            <ui:ListView focusable="true" name="fileListView" show-border="true" show-bound-collection-size="false" reorderable="false" style="flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="dialogButtonContainer">
             <ui:Button text="Cancel" display-tooltip-when-elided="true" name="cancelButton" style="width: 100px; height: 30px;" />
+            <ui:Button text="Save" display-tooltip-when-elided="true" name="saveGameButton" style="-unity-text-align: middle-center; width: 100px; height: 30px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

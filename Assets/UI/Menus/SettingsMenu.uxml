@@ -12,7 +12,7 @@
                 <ui:Toggle label="Grass Enabled" name="grassToggle" />
             </ui:GroupBox>
         </ui:VisualElement>
-        <ui:VisualElement name="VisualElement" style="flex-direction: row-reverse; width: 100%;">
+        <ui:VisualElement name="dialogButtonContainer">
             <ui:Button text="Done" display-tooltip-when-elided="true" name="doneButton" style="width: 100px; height: 30px;" />
         </ui:VisualElement>
     </ui:VisualElement>

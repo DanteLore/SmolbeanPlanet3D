@@ -121,14 +121,9 @@ public class CameraController : MonoBehaviour
         else
         {
             horizontalVelocity = Vector3.Lerp(horizontalVelocity, Vector3.zero, Time.deltaTime * damping);
-            try
-            {
-                transform.position += horizontalVelocity * Time.deltaTime;
-            }
-            catch
-            {
-                transform.position = Vector3.zero;
-            }            
+            Vector3 v = horizontalVelocity * Time.deltaTime;
+            if(!(float.IsNaN(v.x) || float.IsNaN(v.z) || float.IsNaN(v.z)))
+                transform.position += v;       
         }
 
         targetPosition = Vector3.zero;
@@ -152,7 +147,7 @@ public class CameraController : MonoBehaviour
     {
         if(GameStateManager.Instance.IsPaused)
             return;
-            
+
         float value = -inputValue.ReadValue<Vector2>().y / 100.0f;
 
         if(Mathf.Abs(value) > 0.1f)
