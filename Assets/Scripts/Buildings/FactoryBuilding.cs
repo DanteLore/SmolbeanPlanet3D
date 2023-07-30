@@ -52,7 +52,7 @@ public abstract class FactoryBuilding : SmolbeanBuilding
     {
         if (!deliveryRequests.TryGetValue(ingredient, out var request) || request.IsComplete)
         {
-            deliveryRequests[ingredient] = DeliveryManager.Instance.CreateRequest(this, ingredient.item, ingredient.quantity);
+            deliveryRequests[ingredient] = DeliveryManager.Instance.CreateDeliveryRequest(this, ingredient.item, ingredient.quantity);
         }
     }
 

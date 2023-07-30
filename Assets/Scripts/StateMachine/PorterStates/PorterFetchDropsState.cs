@@ -24,7 +24,7 @@ public class PorterFetchDropsState : IState
         var pickupDrops = new PickupDropsState(porter, DropController.Instance);
         var walkHome = new WalkHomeState(porter, navAgent, animator, soundPlayer);
         var storeDrops = new PorterStoreDropsState(porter, DropController.Instance);
-        var finished = new PorterFetchDropsFinished(this);
+        var finished = new PorterFetchDropsFinished(this, porter);
 
         AT(walkToJobStart, pickupDrops, IsCloseEnoughToDrop());
         AT(pickupDrops, walkHome, NoTargetDropAssigned());
@@ -32,7 +32,7 @@ public class PorterFetchDropsState : IState
         AT(storeDrops, finished, InventoryIsEmpty());
 
         AT(walkToJobStart, finished, NoTargetDropAssigned()); // Drop picked up or deleted while I was en route, go home
-        AT(walkToJobStart, finished, () => walkToJobStart.StuckTime > 2f); // Stuck
+        AT(walkToJobStart, walkHome, () => walkToJobStart.StuckTime > 2f); // Stuck
 
         startState = walkToJobStart;
 

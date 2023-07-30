@@ -24,12 +24,19 @@ public class PorterSearchForDropToCollectState : IState
 
     public void Tick()
     {
-        if(!porter.TargetDrop)
-            porter.TargetDrop = GetDropTargets(porter.transform.position)
-                                    .Take(3)
-                                    .ToList()
-                                    .OrderBy(_ => Guid.NewGuid())
-                                    .FirstOrDefault();
+        if (!porter.TargetDrop)
+            ClaimCollectionJob();
+    }
+
+    private void ClaimCollectionJob()
+    {
+        porter.TargetDrop = GetDropTargets(porter.transform.position)
+                                            .Take(3)
+                                            .ToList()
+                                            .OrderBy(_ => Guid.NewGuid())
+                                            .FirstOrDefault();
+        if(porter.TargetDrop)
+            DeliveryManager.Instance.ClaimCollection(porter.TargetDrop.GetComponent<ItemStack>(), porter);
     }
 
     private IEnumerable<GameObject> GetDropTargets(Vector3 pos)
@@ -37,6 +44,7 @@ public class PorterSearchForDropToCollectState : IState
         return Physics.OverlapSphere(pos, 500f, LayerMask.GetMask(dropLayer))
             .Select(c => c.gameObject.GetComponent<ItemStack>())
             .Where(i => i != null)
+            .Where(i => !DeliveryManager.Instance.IsCollectionClaimed(i))
             .Select(i => i.gameObject)
             .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - porter.transform.position))
             .ToList();

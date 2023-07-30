@@ -11,7 +11,7 @@ public class PorterClaimDeliveryRequest : IState
 
     public void OnEnter()
     {
-        porter.DeliveryRequest = deliveryManager.ClaimNextRequest(porter, ((Storehouse)porter.Home).Inventory);
+        porter.DeliveryRequest = deliveryManager.ClaimNextDeliveryRequest(porter, ((Storehouse)porter.Home).Inventory);
     }
 
     public void OnExit()

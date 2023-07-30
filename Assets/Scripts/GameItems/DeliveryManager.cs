@@ -6,8 +6,9 @@ using System;
 public class DeliveryManager : MonoBehaviour
 {
     public static DeliveryManager Instance { get; private set; }
-    private List<DeliveryRequest> unclaimedRequests;
-    private Dictionary<IDeliverDrops, DeliveryRequest> claimedRequests;
+    private List<DeliveryRequest> unclaimedDeliveryRequests;
+    private Dictionary<IDeliverDrops, DeliveryRequest> claimedDeliveryRequests;
+    private List<CollectionRequest> collections;
 
     void Awake()
     {
@@ -19,57 +20,73 @@ public class DeliveryManager : MonoBehaviour
 
     void Start()
     {
-        unclaimedRequests = new List<DeliveryRequest>();
-        claimedRequests = new Dictionary<IDeliverDrops, DeliveryRequest>();
+        unclaimedDeliveryRequests = new List<DeliveryRequest>();
+        claimedDeliveryRequests = new Dictionary<IDeliverDrops, DeliveryRequest>();
+        collections = new List<CollectionRequest>();
     }
 
-    public DeliveryRequest CreateRequest(SmolbeanBuilding building, DropSpec item, int quantity, int priority = 10)
+    public DeliveryRequest CreateDeliveryRequest(SmolbeanBuilding building, DropSpec item, int quantity, int priority = 10)
     {
         var request = new DeliveryRequest(building, item, quantity, priority);
-        unclaimedRequests.Add(request);
+        unclaimedDeliveryRequests.Add(request);
 
         return request;
     }
 
-    private bool CanFulfilFrom(DeliveryRequest request, Inventory inventory)
+    private bool CanFulfilDeliveryRequestFrom(DeliveryRequest request, Inventory inventory)
     {
         return inventory.Contains(request.Item, request.Quantity);
     }
 
-    public DeliveryRequest ClaimNextRequest(IDeliverDrops porter, Inventory sourceInventory)
+    public DeliveryRequest ClaimNextDeliveryRequest(IDeliverDrops porter, Inventory sourceInventory)
     {
-        var request = unclaimedRequests.Where(req => CanFulfilFrom(req, sourceInventory)).OrderBy(r => r.Priority).FirstOrDefault();
+        var request = unclaimedDeliveryRequests.Where(req => CanFulfilDeliveryRequestFrom(req, sourceInventory)).OrderBy(r => r.Priority).FirstOrDefault();
         if(request != null)
         {
-            unclaimedRequests.Remove(request);
-            claimedRequests[porter] = request;
+            unclaimedDeliveryRequests.Remove(request);
+            claimedDeliveryRequests[porter] = request;
         }
 
         return request;
     }
 
-    public void LogFinished(IDeliverDrops owner, DeliveryRequest request)
+    public void CompleteDelivery(IDeliverDrops owner, DeliveryRequest request)
     {
         request.SetComplete(true);
-        unclaimedRequests.Remove(request);
-        claimedRequests.Remove(owner);
+        unclaimedDeliveryRequests.Remove(request);
+        claimedDeliveryRequests.Remove(owner);
     }
 
     public void BuildingDestroyed(SmolbeanBuilding building)
     {
-        var unclaimedToRemove = unclaimedRequests.Where(r => r.Building == building).ToList();
-        var claimedToRemove = claimedRequests.Where(kv => kv.Value.Building == building).Select(kv => kv.Key).ToList();
+        var unclaimedToRemove = unclaimedDeliveryRequests.Where(r => r.Building == building).ToList();
+        var claimedToRemove = claimedDeliveryRequests.Where(kv => kv.Value.Building == building).Select(kv => kv.Key).ToList();
 
         foreach(var request in unclaimedToRemove)
         {
             request.SetComplete(true);
-            unclaimedRequests.Remove(request);
+            unclaimedDeliveryRequests.Remove(request);
         }
 
         foreach(var owner in claimedToRemove)
         {
-            claimedRequests[owner].SetComplete(true);
-            claimedRequests.Remove(owner);
+            claimedDeliveryRequests[owner].SetComplete(true);
+            claimedDeliveryRequests.Remove(owner);
         }
+    }
+
+    public bool IsCollectionClaimed(ItemStack itemStack)
+    {
+        return collections.Any(c => c.item == itemStack);
+    }
+
+    public void ClaimCollection(ItemStack itemStack, IDeliverDrops porter)
+    {
+        collections.Add(new CollectionRequest { item = itemStack, porter = porter });
+    }
+
+    public void CompleteCollectionJob(IDeliverDrops porter)
+    {
+        collections.RemoveAll(c => c.porter == porter);
     }
 }
