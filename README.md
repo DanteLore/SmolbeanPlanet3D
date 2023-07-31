@@ -11,6 +11,19 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Building of buildings
+
+The next big task is the building of buildings - which might help transform Smolbean from a demo to a game...
+
+First step - create a building for builders to spawn at.  Since building is required right at the start, the builder's building
+needs to be present when the game starts - so I have created the shipwreck, which will eventually be placed on all maps as the 
+initial spawn point for colonists - containing a few resources and a handful of people.
+
+For now, it's a building you can place, which a builder will pop out of.
+
+![Screenshot](./Docs/Images/screenshot44.png)
+
+
 ## Inventory
 
 Added a global inventory menu, showing what items are stored in buildings.  Useful for debugging if nothing else!
