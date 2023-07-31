@@ -13,10 +13,10 @@ public class Shipwreck : SmolbeanBuilding
     {
         base.Start();
         
-        //StartCoroutine(CreateWoodcutter(spawnDelaySeconds));
+        StartCoroutine(CreateBuilder(spawnDelaySeconds));
     }
 
-    private IEnumerator CreateWoodcutter(float delayTime)
+    private IEnumerator CreateBuilder(float delayTime)
     {
         yield return new WaitForSeconds(delayTime);
 
