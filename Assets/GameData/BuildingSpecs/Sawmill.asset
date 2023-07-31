@@ -15,3 +15,7 @@ MonoBehaviour:
   buildingName: Sawmill
   prefab: {fileID: 7265107237162424148, guid: eea95178a73154f63aff1ede9ead098b, type: 3}
   thumbnail: {fileID: 2800000, guid: 8bb62a877f93241d6a5b9ed1dbbc9d5a, type: 3}
+  ingredients:
+  - item: {fileID: 11400000, guid: edeccd8bca67e4f46b70aeec6790c583, type: 2}
+    quantity: 18
+  buildTime: 24

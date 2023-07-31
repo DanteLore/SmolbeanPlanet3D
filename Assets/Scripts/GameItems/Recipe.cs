@@ -4,13 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Recipe", menuName = "Smolbean/Recipe", order = 2)]
 public class Recipe : ScriptableObject
 {
-    [Serializable]
-    public struct Ingredient
-    {
-        public DropSpec item;
-        public int quantity;
-    }
-
     public Ingredient[] ingredients;
     public float craftingTime = 8f;
     public DropSpec createdItem;

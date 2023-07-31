@@ -6,8 +6,8 @@ using UnityEngine;
 public class BuildingSpec : ScriptableObject
 {
     public string buildingName;
-
     public GameObject prefab;
-
     public Texture2D thumbnail;
+    public Ingredient[] ingredients;
+    public float buildTime = 24f;
 }

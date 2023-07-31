@@ -9,7 +9,7 @@ public abstract class FactoryBuilding : SmolbeanBuilding
     public bool IsFinished { get { return (Time.time  - startTime) >= recipe.craftingTime; } }
     public bool IsReadyToStart { get; private set; }
 
-    private Dictionary<Recipe.Ingredient, DeliveryRequest> deliveryRequests;
+    private Dictionary<Ingredient, DeliveryRequest> deliveryRequests;
 
     private float startTime;
 
@@ -17,7 +17,7 @@ public abstract class FactoryBuilding : SmolbeanBuilding
     {
         base.Start();
 
-        deliveryRequests = new Dictionary<Recipe.Ingredient, DeliveryRequest>();
+        deliveryRequests = new Dictionary<Ingredient, DeliveryRequest>();
 
         StartCoroutine(UpdateDeliveryRequests());
     }
@@ -48,7 +48,7 @@ public abstract class FactoryBuilding : SmolbeanBuilding
         }
     }
 
-    private void RaiseRequestIfNoneExists(Recipe.Ingredient ingredient)
+    private void RaiseRequestIfNoneExists(Ingredient ingredient)
     {
         if (!deliveryRequests.TryGetValue(ingredient, out var request) || request.IsComplete)
         {
