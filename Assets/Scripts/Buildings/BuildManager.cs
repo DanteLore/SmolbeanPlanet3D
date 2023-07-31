@@ -199,7 +199,8 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
             positionY = pos.y,
             positionZ = pos.z,
             rotationY = 0,
-            prefabIndex = selectedBuildingIndex
+            prefabIndex = selectedBuildingIndex,
+            complete = false
         };
 
         InstantiateBuilding(saveData);
@@ -209,8 +210,10 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     {
         Vector3 pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
         Vector2Int worldPos = gridManager.GetGameSquareFromWorldCoords(pos);
+
+        var prefab = saveData.complete ? buildings[saveData.prefabIndex].prefab : buildings[saveData.prefabIndex].sitePrefab;
        
-        var buildingObject = Instantiate(buildings[saveData.prefabIndex].prefab, pos, Quaternion.Euler(0f, saveData.rotationY, 0f), transform);
+        var buildingObject = Instantiate(prefab, pos, Quaternion.Euler(0f, saveData.rotationY, 0f), transform);
         var building = buildingObject.GetComponent<SmolbeanBuilding>();
         building.PrefabIndex = saveData.prefabIndex;
         building.BuildingSpec = buildings[saveData.prefabIndex];
@@ -283,7 +286,8 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
                 positionZ = b.transform.position.z,
                 rotationY = b.transform.rotation.eulerAngles.y,
                 prefabIndex = b.PrefabIndex,
-                inventory = b.Inventory.GetSaveData()
+                inventory = b.Inventory.GetSaveData(),
+                complete = !(b is BuildingSite)
             })
             .ToList();
     }
