@@ -54,10 +54,12 @@ MonoBehaviour:
   building: {fileID: 2706048682174353356}
   itemDropRadius: 2
   itemDropHeight: 1
+  spawnDelaySeconds: 5
+  portersToSpawn: 2
   spawnPoint: {fileID: 3667666061171474278}
+  porterPrefab: {fileID: 5678464011766705138, guid: fd07e7047b08443eab281c57cf0ff590, type: 3}
   dropPoint: {fileID: 5407928120888342913}
   builderPrefab: {fileID: 5678464011766705138, guid: 2f9ee2d0122c2493baa6e760b40aae85, type: 3}
-  spawnDelaySeconds: 5
 --- !u!65 &2038859958326261303
 BoxCollider:
   m_ObjectHideFlags: 0
