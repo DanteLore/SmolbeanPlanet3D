@@ -206,6 +206,44 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
         InstantiateBuilding(saveData);
     }
 
+    public void CompleteBuild(BuildingSite site)
+    {
+        BuildingObjectSaveData saveData = new BuildingObjectSaveData
+        {
+            positionX = site.transform.position.x,
+            positionY = site.transform.position.y,
+            positionZ = site.transform.position.z,
+            rotationY = site.transform.rotation.eulerAngles.y,
+            prefabIndex = site.PrefabIndex,
+            complete = true
+        };
+
+        DestroyImmediate(site.gameObject);
+        InstantiateBuilding(saveData);
+    }
+
+    public void PlaceBuildingOnSquare(BuildingSpec spec, int x, int y, IEnumerable<InventoryItemSaveData> startingInventory = null)
+    {
+        var bounds = gridManager.GetSquareBounds(x, y);
+
+        float worldX = bounds.center.x;
+        float worldZ = bounds.center.y;
+        float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
+
+        BuildingObjectSaveData saveData = new BuildingObjectSaveData
+        {
+            positionX = worldX,
+            positionY = worldY,
+            positionZ = worldZ,
+            rotationY = 0,
+            prefabIndex = Array.IndexOf(buildings, spec),
+            complete = true,
+            inventory = startingInventory
+        };
+
+        InstantiateBuilding(saveData);
+    }
+
     private void InstantiateBuilding(BuildingObjectSaveData saveData)
     {
         Vector3 pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
@@ -222,22 +260,6 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
 
         if(saveData.inventory != null)
             building.Inventory.LoadFrom(saveData.inventory);
-    }
-
-    public void CompleteBuild(BuildingSite site)
-    {
-        BuildingObjectSaveData saveData = new BuildingObjectSaveData
-        {
-            positionX = site.transform.position.x,
-            positionY = site.transform.position.y,
-            positionZ = site.transform.position.z,
-            rotationY = site.transform.rotation.eulerAngles.y,
-            prefabIndex = site.PrefabIndex,
-            complete = true
-        };
-
-        DestroyImmediate(site.gameObject);
-        InstantiateBuilding(saveData);
     }
 
     private bool CheckEmpty(Vector3 center)

@@ -44,11 +44,7 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
             Rect squareBounds = gridManager.GetSquareBounds(x, z);
             bool boxFull = Physics.CheckBox(squareBounds.center, new Vector3(squareBounds.width / 2f, 100f, squareBounds.height / 2f), Quaternion.identity, LayerMask.GetMask(natureLayer));
 
-            if(boxFull)
-            {
-                Debug.Log("Square already looking busy, finding a different one");
-            }
-            else
+            if(!boxFull)
             {
                 int rockCount = UnityEngine.Random.Range(0, maxRocksPerSquare);
 
