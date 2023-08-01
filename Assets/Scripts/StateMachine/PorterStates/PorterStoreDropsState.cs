@@ -28,7 +28,6 @@ public class PorterStoreDropsState : IState
         if(!porter.Inventory.IsEmpty())
         {
             var item = porter.Inventory.DropLast();
-            Debug.Log("Dropped stack of " + item.quantity + " " + item.dropSpec.dropName);
             var storehouse = (Storehouse)porter.Home;
             storehouse.Inventory.PickUp(item);
         }

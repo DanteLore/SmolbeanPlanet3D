@@ -200,7 +200,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
             positionZ = pos.z,
             rotationY = 0,
             prefabIndex = selectedBuildingIndex,
-            complete = false
+            complete = buildings[selectedBuildingIndex].instantBuild
         };
 
         InstantiateBuilding(saveData);
@@ -211,7 +211,8 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
         Vector3 pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
         Vector2Int worldPos = gridManager.GetGameSquareFromWorldCoords(pos);
 
-        var prefab = saveData.complete ? buildings[saveData.prefabIndex].prefab : buildings[saveData.prefabIndex].sitePrefab;
+        var spec = buildings[saveData.prefabIndex];
+        var prefab = saveData.complete ? spec.prefab : spec.sitePrefab;
        
         var buildingObject = Instantiate(prefab, pos, Quaternion.Euler(0f, saveData.rotationY, 0f), transform);
         var building = buildingObject.GetComponent<SmolbeanBuilding>();
@@ -221,6 +222,22 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
 
         if(saveData.inventory != null)
             building.Inventory.LoadFrom(saveData.inventory);
+    }
+
+    public void CompleteBuild(BuildingSite site)
+    {
+        BuildingObjectSaveData saveData = new BuildingObjectSaveData
+        {
+            positionX = site.transform.position.x,
+            positionY = site.transform.position.y,
+            positionZ = site.transform.position.z,
+            rotationY = site.transform.rotation.eulerAngles.y,
+            prefabIndex = site.PrefabIndex,
+            complete = true
+        };
+
+        DestroyImmediate(site.gameObject);
+        InstantiateBuilding(saveData);
     }
 
     private bool CheckEmpty(Vector3 center)

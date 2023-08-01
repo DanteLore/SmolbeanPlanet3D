@@ -141,6 +141,11 @@ public class Inventory
         return q >= quantity;
     }
 
+    public void Empty()
+    {
+        inventory.Clear();
+    }
+
     public override string ToString()
     {
         return "ItemCount: " + inventory.Count + "\n" + String.Join("\n", inventory.Select(i => i.ToString()));
