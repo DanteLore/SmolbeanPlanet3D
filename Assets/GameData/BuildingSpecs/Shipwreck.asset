@@ -19,3 +19,4 @@ MonoBehaviour:
   instantBuild: 1
   ingredients: []
   buildTime: 24
+  showInToolbar: 0

@@ -12,4 +12,5 @@ public class BuildingSpec : ScriptableObject
     public bool instantBuild = false;
     public Ingredient[] ingredients;
     public float buildTime = 24f;
+    public bool showInToolbar = true;
 }
