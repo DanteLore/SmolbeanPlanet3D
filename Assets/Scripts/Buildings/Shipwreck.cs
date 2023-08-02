@@ -12,6 +12,16 @@ public class Shipwreck : Storehouse
         base.Start();
         
         StartCoroutine(CreateBuilder(spawnDelaySeconds));
+        //StartCoroutine(LogDeliveryRequests());
+    }
+
+    private IEnumerator LogDeliveryRequests()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(10f);
+            Debug.Log(DeliveryManager.Instance);
+        }
     }
 
     private IEnumerator CreateBuilder(float delayTime)

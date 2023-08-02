@@ -27,6 +27,8 @@ public class DeliveryManager : MonoBehaviour
 
     public DeliveryRequest CreateDeliveryRequest(SmolbeanBuilding building, DropSpec item, int quantity, int priority = 10)
     {
+        Debug.Assert(quantity <= item.stackSize, "You can not order more than one stack per delivery request");
+
         var request = new DeliveryRequest(building, item, quantity, priority);
         unclaimedDeliveryRequests.Add(request);
 
@@ -88,5 +90,13 @@ public class DeliveryManager : MonoBehaviour
     public void CompleteCollectionJob(IDeliverDrops porter)
     {
         collections.RemoveAll(c => c.porter == porter);
+    }
+
+    public override string ToString()
+    {
+        return "Claimed Requests:\n" +
+            String.Join("\n - ", claimedDeliveryRequests.Values.Select(x => x.ToString())) +
+            "\nUnclaimed Requests:\n" +
+            String.Join("\n - ", unclaimedDeliveryRequests.Select(x => x.ToString()));
     }
 }

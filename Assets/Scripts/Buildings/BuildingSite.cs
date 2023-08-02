@@ -68,8 +68,16 @@ public class BuildingSite : SmolbeanBuilding
     {
         foreach(var ingredient in BuildingSpec.ingredients)
         {
-            if(!Inventory.Contains(ingredient.item, ingredient.quantity))
-                DeliveryManager.Instance.CreateDeliveryRequest(this, ingredient.item, ingredient.quantity);
+            int toOrder = ingredient.quantity - Inventory.ItemCount(ingredient.item);
+            Debug.Log($"Need {toOrder} of {ingredient.item.dropName}:");
+
+            while(toOrder > 0)
+            {
+                int ammt = Mathf.Min(toOrder, ingredient.item.stackSize);
+                var dr = DeliveryManager.Instance.CreateDeliveryRequest(this, ingredient.item, ammt);
+                toOrder -= ammt;
+                Debug.Log(dr);
+            }
         }
     }
 

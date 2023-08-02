@@ -157,8 +157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31529d809adf74bbc8cacd28b40e9eff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wearPattern: 1
-  wearScale: {x: 1, y: 1}
+  wearPattern: 0
+  wearScale: {x: 1.2, y: 1.2}
   building: {fileID: 7508032985849850800}
   itemDropRadius: 2
   itemDropHeight: 1

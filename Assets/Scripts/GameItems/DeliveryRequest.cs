@@ -24,4 +24,9 @@ public class DeliveryRequest
     {
         IsComplete = true;
     }
+
+    public override string ToString()
+    {
+        return $"DeliveryRequest for {quantity} of {item.dropName} at p={priority}";
+    }
 }

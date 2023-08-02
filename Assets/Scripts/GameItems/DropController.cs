@@ -61,7 +61,7 @@ public class DropController : MonoBehaviour, IObjectGenerator
 
         if(inaccessible.Count > 0)
         {
-            Debug.Log("Destroying inaccessible drops x " + inaccessible.Count);
+            //Debug.Log("Destroying inaccessible drops x " + inaccessible.Count);
 
             foreach(var child in inaccessible)
                 Destroy(child);
