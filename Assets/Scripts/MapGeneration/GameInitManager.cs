@@ -6,8 +6,9 @@ using System.Linq;
 public class StartingShipwreckManager : MonoBehaviour, IObjectGenerator
 {
     public BuildingSpec shipwreckSpec;
-
     public Ingredient[] startingInventory;
+    public float shipwreckClearingRadius = 6f;
+    public string natureLayer = "Nature";
 
     public int Priority { get { return 200; } }
 
@@ -18,25 +19,39 @@ public class StartingShipwreckManager : MonoBehaviour, IObjectGenerator
 
     public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        Debug.Log("GAME INIT!");
-
         // Don't do this at design time
-        if(!Application.isPlaying)
+        if (!Application.isPlaying)
             return;
+        PlaceShipwreck(gameMapWidth, gameMapHeight);
 
+    }
+
+    private void PlaceShipwreck(int gameMapWidth, int gameMapHeight)
+    {
         // Does a shipwreck exist?
-        if(BuildManager.Instance.Buildings.Any(b => b is Shipwreck))
+        if (BuildManager.Instance.Buildings.Any(b => b is Shipwreck))
             return;
-
-        // Find a square near water with no nature objects on it
-        int x = gameMapWidth / 2;
-        int y = gameMapHeight / 2;
+        Vector2Int mapPos = FindShipwreckLocation(gameMapWidth, gameMapHeight);
 
         // Generate the inventory
-        var inventory = startingInventory.Select(i => new InventoryItemSaveData { dropSpecName = i.item.dropName, quantity = i.quantity } );
+        var inventory = startingInventory.Select(i => new InventoryItemSaveData { dropSpecName = i.item.dropName, quantity = i.quantity });
 
         // Place the shipwreck
-        BuildManager.Instance.PlaceBuildingOnSquare(shipwreckSpec, x, y, inventory);
+        var building = BuildManager.Instance.PlaceBuildingOnSquare(shipwreckSpec, mapPos.x, mapPos.y, inventory);
 
+        // Clear some space
+        ClearNatureObjectsAround(building.transform.position);
+    }
+
+    private static Vector2Int FindShipwreckLocation(int gameMapWidth, int gameMapHeight)
+    {
+        // Find a square near water with no nature objects on it
+        return new Vector2Int(gameMapWidth / 2, gameMapHeight / 2);
+    }
+
+    private void ClearNatureObjectsAround(Vector3 pos)
+    {
+        foreach(var obj in Physics.OverlapSphere(pos, shipwreckClearingRadius, LayerMask.GetMask(natureLayer)))
+            Destroy(obj.gameObject);
     }
 }

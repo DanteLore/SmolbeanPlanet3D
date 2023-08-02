@@ -206,7 +206,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
         InstantiateBuilding(saveData);
     }
 
-    public void CompleteBuild(BuildingSite site)
+    public SmolbeanBuilding CompleteBuild(BuildingSite site)
     {
         BuildingObjectSaveData saveData = new BuildingObjectSaveData
         {
@@ -219,10 +219,10 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
         };
 
         DestroyImmediate(site.gameObject);
-        InstantiateBuilding(saveData);
+        return InstantiateBuilding(saveData);
     }
 
-    public void PlaceBuildingOnSquare(BuildingSpec spec, int x, int y, IEnumerable<InventoryItemSaveData> startingInventory = null)
+    public SmolbeanBuilding PlaceBuildingOnSquare(BuildingSpec spec, int x, int y, IEnumerable<InventoryItemSaveData> startingInventory = null)
     {
         var bounds = gridManager.GetSquareBounds(x, y);
 
@@ -241,10 +241,10 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
             inventory = startingInventory
         };
 
-        InstantiateBuilding(saveData);
+        return InstantiateBuilding(saveData);
     }
 
-    private void InstantiateBuilding(BuildingObjectSaveData saveData)
+    private SmolbeanBuilding InstantiateBuilding(BuildingObjectSaveData saveData)
     {
         Vector3 pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
         Vector2Int worldPos = gridManager.GetGameSquareFromWorldCoords(pos);
@@ -254,12 +254,15 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
        
         var buildingObject = Instantiate(prefab, pos, Quaternion.Euler(0f, saveData.rotationY, 0f), transform);
         var building = buildingObject.GetComponent<SmolbeanBuilding>();
+        building.transform.position = pos; // Need to do this to allow access to position on same frame
         building.PrefabIndex = saveData.prefabIndex;
         building.BuildingSpec = buildings[saveData.prefabIndex];
         building.name = $"{buildings[saveData.prefabIndex].buildingName} ({worldPos.y}N {worldPos.x}E)";
 
         if(saveData.inventory != null)
             building.Inventory.LoadFrom(saveData.inventory);
+
+        return building;
     }
 
     private bool CheckEmpty(Vector3 center)

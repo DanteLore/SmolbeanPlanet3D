@@ -115,10 +115,7 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         var rotation = Quaternion.Euler(data.rotationX, data.rotationY, data.rotationZ);
         var scale = new Vector3(data.scaleX, data.scaleY, data.scaleZ);
 
-        GameObject tree = Instantiate(treeData[data.prefabIndex].prefab);
-        tree.transform.parent = transform;
-        tree.transform.position = position;
-        tree.transform.rotation = rotation;
+        GameObject tree = Instantiate(treeData[data.prefabIndex].prefab, position, rotation, transform);
         tree.transform.localScale = scale;
         tree.GetComponent<SmolbeanTree>().saveData = data;
     }
