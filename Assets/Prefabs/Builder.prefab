@@ -204,23 +204,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clips:
-  - name: Chopping
-    clip: {fileID: 8300000, guid: 4bb6c9a033b6142018eac2ca072cdba3, type: 3}
+  - name: Footsteps
+    clip: {fileID: 8300000, guid: fe536c24d81564d2faf2711639d9b668, type: 3}
     loop: 1
     volume: 1
     ignoreGamePause: 0
-  - name: Chopped
-    clip: {fileID: 8300000, guid: 08eebd7104c6e46bc8bff2094acd3d32, type: 3}
-    loop: 0
-    volume: 1
-    ignoreGamePause: 0
-  - name: Falling
-    clip: {fileID: 8300000, guid: 104bc6411797349e7afadf1b571900e3, type: 3}
-    loop: 0
-    volume: 1
-    ignoreGamePause: 0
-  - name: Footsteps
-    clip: {fileID: 8300000, guid: fe536c24d81564d2faf2711639d9b668, type: 3}
+  - name: Working
+    clip: {fileID: 8300000, guid: 71d4512e3320e498cb7b970afcac2b5d, type: 3}
     loop: 1
     volume: 1
     ignoreGamePause: 0
@@ -240,6 +230,8 @@ MonoBehaviour:
   natureLayer: Nature
   dropLayer: Drops
   destinationThreshold: 1
+  buildingLayer: Buildings
+  sleepTime: 5
 --- !u!1001 &502959277502828767
 PrefabInstance:
   m_ObjectHideFlags: 0
