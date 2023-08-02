@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class StartingShipwreckManager : MonoBehaviour, IObjectGenerator
 {
@@ -22,16 +23,17 @@ public class StartingShipwreckManager : MonoBehaviour, IObjectGenerator
         // Don't do this at design time
         if (!Application.isPlaying)
             return;
-        PlaceShipwreck(gameMapWidth, gameMapHeight);
+        PlaceShipwreck(gameMap, gameMapWidth, gameMapHeight);
 
     }
 
-    private void PlaceShipwreck(int gameMapWidth, int gameMapHeight)
+    private void PlaceShipwreck(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
         // Does a shipwreck exist?
         if (BuildManager.Instance.Buildings.Any(b => b is Shipwreck))
             return;
-        Vector2Int mapPos = FindShipwreckLocation(gameMapWidth, gameMapHeight);
+
+        Vector2Int mapPos = FindShipwreckLocation(gameMap, gameMapWidth, gameMapHeight);
 
         // Generate the inventory
         var inventory = startingInventory.Select(i => new InventoryItemSaveData { dropSpecName = i.item.dropName, quantity = i.quantity });
@@ -43,10 +45,36 @@ public class StartingShipwreckManager : MonoBehaviour, IObjectGenerator
         ClearNatureObjectsAround(building.transform.position);
     }
 
-    private static Vector2Int FindShipwreckLocation(int gameMapWidth, int gameMapHeight)
+    private static Vector2Int FindShipwreckLocation(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        // Find a square near water with no nature objects on it
+        for(int y = 1; y < gameMapHeight - 1; y++)
+        {
+            for(int x = 1; x < gameMapWidth - 1; x++)
+            {
+                if(SquareLooksGood(gameMap, x, y, gameMapWidth, gameMapHeight))
+                {
+                    return new Vector2Int(x, y);
+                }
+            }
+        }
+
+        Debug.LogWarning("Could not find a suitable square to place the shipwreck");
         return new Vector2Int(gameMapWidth / 2, gameMapHeight / 2);
+    }
+
+    private static bool SquareLooksGood(List<int> gameMap, int centerX, int centerY, int gameMapWidth, int gameMapHeight)
+    {
+        var levels = new int[3] {0, 0, 0};
+        for(int y = centerY - 1; y <= centerY + 1; y++)
+        {
+            for(int x = centerX - 1; x <= centerX + 1; x++)
+            {
+                int level = gameMap[y * gameMapWidth + x];
+                levels[level]++;
+            }
+        }
+
+        return levels[0] > 0 && levels[1] >= 6;
     }
 
     private void ClearNatureObjectsAround(Vector3 pos)
