@@ -13,7 +13,7 @@ public class BuildingSite : SmolbeanBuilding
     private float buildingWorkDone;
     private bool buildingInProgress;
 
-    public bool IsComplete
+    public override bool IsComplete
     {
         get
         {

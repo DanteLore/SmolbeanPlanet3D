@@ -34,7 +34,7 @@ public class InventoryMenu : MonoBehaviour
             var buildingIcon = new Button();
             buildingHeader.AddToClassList("buildingIcon");
             buildingIcon.style.backgroundColor = new Color(0, 0, 0, 0);
-            buildingIcon.style.backgroundImage = building.BuildingSpec.thumbnail;
+            buildingIcon.style.backgroundImage = building.IsComplete ? building.BuildingSpec.thumbnail : building.BuildingSpec.siteThumbnail;
             buildingHeader.Add(buildingIcon);
 
             var buildingTitle = new Label();

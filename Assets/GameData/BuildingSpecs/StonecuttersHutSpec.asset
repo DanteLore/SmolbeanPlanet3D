@@ -16,9 +16,13 @@ MonoBehaviour:
   prefab: {fileID: 7127336335192020291, guid: 886ad075998a542109a8ac96bf797615, type: 3}
   sitePrefab: {fileID: 6115743314038843104, guid: 0af61dd21b9e34a08814ff8289a34213, type: 3}
   thumbnail: {fileID: 2800000, guid: 3b18fc93b31a14a3cb547b10f6cc63c4, type: 3}
+  siteThumbnail: {fileID: 2800000, guid: 5b19e04c048e44240b58658e5885a7e8, type: 3}
+  instantBuild: 0
   ingredients:
   - item: {fileID: 11400000, guid: edeccd8bca67e4f46b70aeec6790c583, type: 2}
     quantity: 4
   - item: {fileID: 11400000, guid: 0f9b0f898ed5a495aab57be747c4a3ac, type: 2}
     quantity: 8
   buildTime: 24
+  showInToolbar: 1
+  deleteAllowed: 1

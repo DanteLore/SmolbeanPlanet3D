@@ -15,6 +15,8 @@ public abstract class SmolbeanBuilding : MonoBehaviour
 
     public Inventory Inventory { get; private set; }
 
+    public virtual bool IsComplete { get { return true; } }
+
     public abstract Vector3 GetSpawnPoint();
     public abstract Vector3 GetDropPoint();
 

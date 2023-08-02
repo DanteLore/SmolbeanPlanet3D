@@ -9,6 +9,7 @@ public class BuildingSpec : ScriptableObject
     public GameObject prefab;
     public GameObject sitePrefab;
     public Texture2D thumbnail;
+    public Texture2D siteThumbnail;
     public bool instantBuild = false;
     public Ingredient[] ingredients;
     public float buildTime = 24f;
