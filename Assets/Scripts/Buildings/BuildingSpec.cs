@@ -13,4 +13,5 @@ public class BuildingSpec : ScriptableObject
     public Ingredient[] ingredients;
     public float buildTime = 24f;
     public bool showInToolbar = true;
+    public bool deleteAllowed = true;
 }

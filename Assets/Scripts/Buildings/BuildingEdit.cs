@@ -12,6 +12,17 @@ public class BuildingEdit : MonoBehaviour
     public Action BuildingDelete;
     private List<GameObject> allWidgets;
     private Transform cameraTransform;
+    public bool AllowDelete
+    {
+        get
+        {
+            return deleteWidget.activeSelf;
+        }
+        set
+        {
+            deleteWidget.SetActive(value);
+        }
+    }
 
     void Start()
     {

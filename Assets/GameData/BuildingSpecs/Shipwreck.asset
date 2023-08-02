@@ -20,3 +20,4 @@ MonoBehaviour:
   ingredients: []
   buildTime: 24
   showInToolbar: 0
+  deleteAllowed: 0

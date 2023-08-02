@@ -80,7 +80,9 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
         IsEditing = true;
         editTargetTransform = target;
         buildingEditWidget = Instantiate(buildingEditWidgetPrefab, target.position, target.rotation, target);
-        buildingEditWidget.GetComponent<BuildingEdit>().BuildingDelete += DeleteTargetBuilding;
+        var edit = buildingEditWidget.GetComponent<BuildingEdit>();
+        edit.BuildingDelete += DeleteTargetBuilding;
+        edit.AllowDelete = target.gameObject.GetComponent<SmolbeanBuilding>().BuildingSpec.deleteAllowed;
     }
 
     private void EndEdit()
