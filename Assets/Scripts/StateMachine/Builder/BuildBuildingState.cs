@@ -24,8 +24,12 @@ public class BuildBuildingState : IState
     {
         builder.Show();
         soundPlayer.Stop("Working");
-        soundPlayer.Play("Thud");
-        builder.TargetBuilding.EndBuild();
+        
+        if(builder.TargetBuilding != null)
+        {
+            soundPlayer.Play("Thud");
+            builder.TargetBuilding.EndBuild();
+        }
     }
 
     public void Tick()

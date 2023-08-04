@@ -35,6 +35,8 @@ public class Builder : Colonist
         AT(walkToSite, walkHome, IsStuck());
         AT(walkToSite, walkHome, TargetNotFound());
 
+        AT(buildBuilding, walkHome, TargetNotFound());
+
         stateMachine.SetState(idle);
 
         Func<bool> IdleForAWhile() => () => idle.TimeIdle > 8f;
