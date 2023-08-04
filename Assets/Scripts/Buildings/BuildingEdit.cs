@@ -61,7 +61,7 @@ public class BuildingEdit : MonoBehaviour
 
     private void DeleteTarget()
     {
-        Debug.Log("Delete clicked");
+        //Debug.Log("Delete clicked");
         BuildingDelete?.Invoke();
     }
 

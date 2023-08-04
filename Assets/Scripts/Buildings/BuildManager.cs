@@ -16,6 +16,9 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     public string buildingLayer = "Buildings";
     public string widgetLayer = "Widgets";
     public string[] collisionLayers = { "Nature", "Buildings", "Creatures" };
+    public ParticleSystem buildingPlacedParticleSystem;
+    public ParticleSystem buildingDeletedParticleSystem;
+
     private GridManager gridManager;
     private GameMapGenerator gameMapGenerator;
     private GameObject mapCursor;
@@ -191,7 +194,9 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
 
     private void DeleteTargetBuilding()
     {
+        Instantiate(buildingDeletedParticleSystem, editTargetTransform.position, editTargetTransform.rotation);
         Destroy(editTargetTransform.gameObject); 
+        soundPlayer.Play("Demolish");
         EndEdit();
     }
 
@@ -210,6 +215,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
         InstantiateBuilding(saveData);
 
         soundPlayer.Play("Thud");
+        Instantiate(buildingPlacedParticleSystem, pos, Quaternion.identity);
     }
 
     public SmolbeanBuilding CompleteBuild(BuildingSite site)

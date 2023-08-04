@@ -27,7 +27,6 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
 
     public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        Debug.Log("Gonna genrate some ROCK!!!!");
         Clear();
         var gridManager = GameObject.FindAnyObjectByType<GridManager>();
 
