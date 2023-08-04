@@ -28,7 +28,7 @@ public class DropController : MonoBehaviour, IObjectGenerator
     {
         inaccessibleThreshold = inaccessibleDistance * inaccessibleDistance;
         dropSpecLookup = dropSpecs.ToDictionary(x => x.dropName, x => x);
-        print("Loaded " + dropSpecLookup.Count() + " drop specs");
+        //print("Loaded " + dropSpecLookup.Count() + " drop specs");
         
         StartCoroutine(CleanUp());
     }

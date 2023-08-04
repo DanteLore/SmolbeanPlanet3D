@@ -87,7 +87,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         mapBounds = FindAnyObjectByType<GridManager>().GetIslandBounds();
         float area = mapBounds.size.x * mapBounds.size.y;
         int instanceCount = Mathf.CeilToInt(instanceAttemptsPerSquareMeter * area);
-        Debug.Log($"Map area {area}sqm => {instanceCount} instance attempts total");
+        //Debug.Log($"Map area {area}sqm => {instanceCount} instance attempts total");
         
         List<Vector3> grassBlades = new List<Vector3>();
 
@@ -99,7 +99,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
             }
         }
 
-        Debug.Log($"Actually created {grassBlades.Count} grass blades");
+        //Debug.Log($"Actually created {grassBlades.Count} grass blades");
 
         // Batch collapse performance
         // No batch collapse:       ~5.3ms      (Fixed batch grid based on BATCH_SIZE and number of blades per m2)
@@ -110,9 +110,9 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
         batches = CreateBatchesBinarySplit(mapBounds, grassBlades);
 
-        Debug.Log("Batches created by quad tree: " + batches.Count());
-        Debug.Log(string.Join(",", batches.Select(b => b.batchData.Count)));
-        Debug.Log($"Setup grass instance data in {(System.DateTime.Now - start).Seconds}s");
+        //Debug.Log("Batches created by quad tree: " + batches.Count());
+        //Debug.Log(string.Join(",", batches.Select(b => b.batchData.Count)));
+        //Debug.Log($"Setup grass instance data in {(System.DateTime.Now - start).Seconds}s");
     }
 
     private List<Batch> CreateBatchesBinarySplit(Bounds bounds, List<Vector3> grassBlades, bool splitHorizontal = true)
@@ -226,137 +226,4 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
             }
         }
     }
-
-//****************************
-/*
-
-
-    private void TheOldWay(System.DateTime start, int instanceCount)
-    {
-        // Basically take the optimistic view that we can place grass everywhere we want to, and never want to go over the 1024 batch size limit.
-        // In reality this doesn't happen very often - but we can't predict that, so aim to collapse batches at the end.
-        int desiredBatchCount = instanceCount / BATCH_SIZE;
-        float sqrt = Mathf.Sqrt(desiredBatchCount);
-        int xSlices = Mathf.FloorToInt(sqrt);
-        int zSlices = Mathf.CeilToInt(sqrt);
-        int batchCount = xSlices * zSlices;
-
-        Debug.Log($"Dividing the map {xSlices}x{zSlices} == {batchCount} batches == {batchCount * BATCH_SIZE} objects.");
-
-        batches = new List<Batch>();
-        int itemAdded = 0;
-
-        foreach (var subBounds in SplitBounds(mapBounds, xSlices, zSlices))
-        {
-            var currentBatch = new Batch();
-            currentBatch.bounds = subBounds;
-            batches.Add(currentBatch);
-
-            for (int i = 0; i < BATCH_SIZE; i++)
-                if (CreateItemIfPossible(currentBatch.batchData, subBounds))
-                    itemAdded++;
-        }
-
-        Debug.Log("Actual instances added: " + itemAdded);
-        Debug.Log("Batches created: " + batches.Count());
-
-        batches = batches.Where(b => b.batchData.Count() >= BATCH_SIZE / 20).ToList();
-
-        Debug.Log("Batches kept (large enough): " + batches.Count());
-        Debug.Log("Average batch size pre-merge (max 1024): " + itemAdded / batches.Count());
-
-
-        batches = CollapseAdjacentBatchesQuadStyle(batches);
-
-        Debug.Log("Batches after merge: " + batches.Count());
-        Debug.Log("Average batch size post-merge (max 1024): " + itemAdded / batches.Count());
-        Debug.Log($"Setup grass instance data in {(System.DateTime.Now - start).Seconds}s");
-    }
-
-    private List<Batch> CollapseAdjacentBatchesQuadStyle(List<Batch> batches)
-    {
-        return batches;
-    }
-
-    private List<Batch> CollapseAdjacentBatches(List<Batch> batches)
-    {
-        List<Batch> result = new List<Batch>();
-
-        if(batches.Count() <= 1)
-            return result;
-
-        int i = 0;
-        while(i < batches.Count - 1)
-        {
-            var current = batches[i];
-
-            int j = i + 1;
-            while(
-                    j < batches.Count
-                    && AreAdjacent(current, batches[j]) 
-                    && current.batchData.Count + batches[j].batchData.Count <= BATCH_SIZE 
-                )
-            {
-                current = MergeBatches(current, batches[j]);
-                j++;
-            }
-        
-            result.Add(current);
-            i = j;
-        }
-
-        return result;
-    }
-
-    private Batch MergeBatches(Batch b1, Batch b2)
-    {
-        var newBounds = b1.bounds;
-        newBounds.Encapsulate(b2.bounds);
-
-        var newData = b1.batchData.Concat(b2.batchData).ToList();
-
-        return new Batch { batchData = newData, bounds = newBounds };
-    }
-
-    private bool AreAdjacent(Batch current, Batch next)
-    {
-        var p1 = current.bounds.ClosestPoint(next.bounds.center);
-        var p2 = next.bounds.ClosestPoint(p1);
-
-        return Vector3.SqrMagnitude(p1 - p2) < 1f;
-    }
-
-
-
-    private bool CreateItemIfPossible(List<Matrix4x4> batch, Bounds subBounds)
-    {
-        float posX = Random.Range(subBounds.min.x, subBounds.max.x);
-        float posZ = Random.Range(subBounds.min.z, subBounds.max.z);
-
-        Ray ray = new Ray(new Vector3(posX, 100f, posZ), Vector3.down);
-        if (!Physics.Raycast(ray, out RaycastHit hit, 200f, rayLayerMask))
-            return false;
-
-        var posY = hit.point.y;
-        if (hit.transform.gameObject.layer != groundLayerNum || posY < minHeight)
-            return false;
-
-        float angle = Vector3.Angle(Vector3.up, hit.normal);
-        if (angle > maxSlopeAngle)
-            return false;
-
-        float noise = Mathf.PerlinNoise((posX + xNoiseOffset) / (mapBounds.size.x * noiseScale), (posZ + yNoiseOffset) / (mapBounds.size.z * noiseScale));
-        if(Random.Range(0.1f, 1.0f) > noise)
-            return false;
-
-        var pos = new Vector3(posX, posY, posZ);
-        var rot = new Vector3(Random.Range(-maxTilt, maxTilt), Random.Range(0f, 360f), Random.Range(-maxTilt, maxTilt));
-        float s = Mathf.Lerp(minScale, maxScale, noise);
-        var scale = new Vector3(s, s, s);
-
-        var matrix = Matrix4x4.TRS(pos, Quaternion.Euler(rot), scale);
-        batch.Add(matrix);
-        return true;
-    }
-    //*/
 }
