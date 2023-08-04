@@ -41,11 +41,14 @@ public class PorterDoDeliveryRequestState : IState
         AT(walkToDestination, goToStorehouse, DeliveryRequestCancelled());
         AT(dropStuff, goToStorehouse, DeliveryRequestCancelled());
 
+        // Handle delection of destination building
+        AT(walkToDestination, goToStorehouse, BuildingDeleted());
+
         startState = goToStorehouse;
 
         void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
 
-        Func<bool> IsAtDestinationBuilding() => () => porter.CloseEnoughTo(porter.DeliveryRequest.Building.GetSpawnPoint());
+        Func<bool> IsAtDestinationBuilding() => () => porter.DeliveryRequest.Building != null && porter.CloseEnoughTo(porter.DeliveryRequest.Building.GetSpawnPoint());
         Func<bool> IsAtStorehouseAndReadyToPickup() => () => porter.CloseEnoughTo(porter.SpawnPoint) && porter.DeliveryRequest != null && porter.DeliveryRequest.IsComplete == false;
         Func<bool> IsAtStorehouseAndReadyToDropOff() => () => porter.CloseEnoughTo(porter.SpawnPoint) && (porter.DeliveryRequest == null || porter.DeliveryRequest.IsComplete);
         Func<bool> HasStuffInInventory() => () => porter.Inventory.Contains(porter.DeliveryRequest.Item, porter.DeliveryRequest.Quantity);
@@ -53,6 +56,7 @@ public class PorterDoDeliveryRequestState : IState
         Func<bool> DeliveryIsFinished() => () => porter.DeliveryRequest == null || porter.DeliveryRequest.IsComplete;
         Func<bool> DeliveryRequestCancelled() => () => DeliveryIsFinished().Invoke() && HasStuffInInventory().Invoke();
         Func<bool> InventoryEmpty() => () => porter.Inventory.IsEmpty();
+        Func<bool> BuildingDeleted() => () => porter.DeliveryRequest == null || porter.DeliveryRequest.Building == null;
     }
 
     public void SetFinished(bool val)

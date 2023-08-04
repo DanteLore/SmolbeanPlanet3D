@@ -32,17 +32,19 @@ public class Builder : Colonist
         AT(buildBuilding, walkHome, BuildingComplete());
         AT(walkHome, idle, CloseEnoughToHome());
 
-        AT(walkToSite, walkHome, () => walkToSite.StuckTime >= 2f);
+        AT(walkToSite, walkHome, IsStuck());
+        AT(walkToSite, walkHome, TargetNotFound());
 
         stateMachine.SetState(idle);
 
         Func<bool> IdleForAWhile() => () => idle.TimeIdle > 8f;
         Func<bool> SleepingForAWhile() => () => sleep.TimeAsleep > sleepTime;
-        Func<bool> CloseEnoughToSite() => () => CloseEnoughTo(TargetBuilding.GetSpawnPoint());
+        Func<bool> CloseEnoughToSite() => () => TargetBuilding != null && CloseEnoughTo(TargetBuilding.GetSpawnPoint());
         Func<bool> TargetFound() => () => TargetBuilding != null;
         Func<bool> TargetNotFound() => () => TargetBuilding == null;
         Func<bool> CloseEnoughToHome() => () => CloseEnoughTo(SpawnPoint);
         Func<bool> BuildingComplete() => () => TargetBuilding.IsComplete;
+        Func<bool> IsStuck() => () => walkToSite.StuckTime >= 2f;
 
         void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
     }
