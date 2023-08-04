@@ -214,6 +214,11 @@ MonoBehaviour:
     loop: 1
     volume: 1
     ignoreGamePause: 0
+  - name: Thud
+    clip: {fileID: 8300000, guid: a460e6fb5fb464b6b94c081ab7658f52, type: 3}
+    loop: 0
+    volume: 1
+    ignoreGamePause: 0
   mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
 --- !u!114 &7089248491168452796
 MonoBehaviour:

@@ -78,8 +78,7 @@ public class SoundPlayer : MonoBehaviour
 
     private AudioSource GetPlayer(string clipName)
     {
-        AudioSource player;
-        if (!players.TryGetValue(clipName, out player))
+        if (!players.TryGetValue(clipName, out var player))
         {
             player = CreateAudioSource(clipName);
         }
@@ -95,9 +94,15 @@ public class SoundPlayer : MonoBehaviour
 
     public void PlayOneShot(string clipName)
     {
-        if(players.TryGetValue(clipName, out var player))
+        PlayOneShot(clipName, transform.position);
+    }
+
+    public void PlayOneShot(string clipName, Vector3 position)
+    {
+        if(clipLookup.TryGetValue(clipName, out var clip))
         {
-            AudioSource.PlayClipAtPoint(player.clip, transform.position, player.volume);
+            Debug.Log(clipName);
+            AudioSource.PlayClipAtPoint(clip.clip, position, clip.volume);
         }
     }
 

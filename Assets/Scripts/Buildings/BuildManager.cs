@@ -28,6 +28,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     private Transform editTargetTransform;
     private int selectedBuildingIndex;
     private GameObject buildingEditWidget;
+    private SoundPlayer soundPlayer;
 
     public IEnumerable<SmolbeanBuilding> Buildings
     {
@@ -55,6 +56,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
         gridManager = FindObjectOfType<GridManager>();
         gameMapGenerator = FindObjectOfType<GameMapGenerator>();
         currentSquare = new Vector2Int(int.MaxValue, int.MaxValue);
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
 
         mapCursor = Instantiate(mapCursorPrefab, Vector3.zero, Quaternion.identity, transform.parent);
         mapCursor.SetActive(false);
@@ -206,6 +208,8 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
         };
 
         InstantiateBuilding(saveData);
+
+        soundPlayer.Play("Thud");
     }
 
     public SmolbeanBuilding CompleteBuild(BuildingSite site)
