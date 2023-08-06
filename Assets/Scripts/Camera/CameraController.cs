@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -27,10 +25,6 @@ public class CameraController : MonoBehaviour
     public float minTilt = 10.0f;
     public float maxTilt = 80.0f;
 
-    [Header("Screen Edge Movement")]
-    public float edgeTolerance = 0.01f;
-    private bool useScreenEdge = true;
-
     private Vector3 targetPosition;
     private float zoomHeight;
     private float zoomVectorMaxLength;
@@ -46,9 +40,6 @@ public class CameraController : MonoBehaviour
 
     void OnEnable()
     {
-        if(Application.isEditor)
-            useScreenEdge = false; // Disabe bump scroll in editor
-
         zoomHeight = 0.5f;
         zoomVectorMaxLength = cameraTransform.localPosition.magnitude * 2;
         cameraTransform.LookAt(transform);
@@ -65,6 +56,7 @@ public class CameraController : MonoBehaviour
         cameraActions.Disable();
         cameraActions.Camera.RotateCamera.performed -= RotateCamera;
         cameraActions.Camera.ZoomCamera.performed -= ZoomCamera;
+        cameraActions.Camera.Disable();
     }
 
     void Update()
@@ -72,7 +64,6 @@ public class CameraController : MonoBehaviour
         if(!GameStateManager.Instance.IsPaused)
         {
             GetKeyboardMovement();
-            CheckMouseAtScreenEdge();
             UpdateVelocity();
             UpdateBasePosition();
             UpdateCameraPosition();
@@ -161,36 +152,6 @@ public class CameraController : MonoBehaviour
     {
         var zoomTarget = (cameraTransform.localPosition).normalized * zoomHeight * zoomVectorMaxLength;
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.deltaTime * zoomSpeed);
-    }
-
-    private void CheckMouseAtScreenEdge()
-    {
-        bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
-        if(!useScreenEdge || isOverUI)
-            return;
-
-        Vector2 mousePosition = Mouse.current.position.ReadValue();
-        Vector3 moveDirection = Vector3.zero;
-
-        if(mousePosition.x < edgeTolerance * Screen.width)
-        {
-            moveDirection += -GetCameraRight();
-        }
-        else if(mousePosition.x > (1.0f - edgeTolerance) * Screen.width)
-        {
-            moveDirection += GetCameraRight();
-        }
-
-        if(mousePosition.y < edgeTolerance * Screen.height)
-        {
-            moveDirection += -GetCameraForward();
-        }
-        else if(mousePosition.y > (1.0f - edgeTolerance) * Screen.height)
-        {
-            moveDirection += GetCameraForward();
-        }
-
-        targetPosition += moveDirection;
     }
 
     public CameraSaveData GetSaveData()
