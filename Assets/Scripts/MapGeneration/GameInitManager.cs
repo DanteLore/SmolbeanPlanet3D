@@ -6,6 +6,7 @@ using System;
 
 public class StartingShipwreckManager : MonoBehaviour, IObjectGenerator
 {
+    public CameraController cameraController;
     public BuildingSpec shipwreckSpec;
     public Ingredient[] startingInventory;
     public float shipwreckClearingRadius = 6f;
@@ -23,15 +24,20 @@ public class StartingShipwreckManager : MonoBehaviour, IObjectGenerator
         // Don't do this at design time
         if (!Application.isPlaying)
             return;
-        PlaceShipwreck(gameMap, gameMapWidth, gameMapHeight);
 
+        var pos = PlaceShipwreck(gameMap, gameMapWidth, gameMapHeight);
+
+        ClearNatureObjectsAround(pos);
+        
+        cameraController.MoveTo(pos);
     }
 
-    private void PlaceShipwreck(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    private Vector3 PlaceShipwreck(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        // Does a shipwreck exist?
-        if (BuildManager.Instance.Buildings.Any(b => b is Shipwreck))
-            return;
+        // Does a shipwreck already exist?
+        var shipwreck = BuildManager.Instance.Buildings.FirstOrDefault(b => b is Shipwreck);
+        if (shipwreck != null)
+            return shipwreck.transform.position;
 
         Vector2Int mapPos = FindShipwreckLocation(gameMap, gameMapWidth, gameMapHeight);
 
@@ -39,10 +45,9 @@ public class StartingShipwreckManager : MonoBehaviour, IObjectGenerator
         var inventory = startingInventory.Select(i => new InventoryItemSaveData { dropSpecName = i.item.dropName, quantity = i.quantity });
 
         // Place the shipwreck
-        var building = BuildManager.Instance.PlaceBuildingOnSquare(shipwreckSpec, mapPos.x, mapPos.y, inventory);
+        shipwreck = BuildManager.Instance.PlaceBuildingOnSquare(shipwreckSpec, mapPos.x, mapPos.y, inventory);
 
-        // Clear some space
-        ClearNatureObjectsAround(building.transform.position);
+        return shipwreck.transform.position;
     }
 
     private static Vector2Int FindShipwreckLocation(List<int> gameMap, int gameMapWidth, int gameMapHeight)
