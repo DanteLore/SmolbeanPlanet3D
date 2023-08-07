@@ -9,9 +9,9 @@ public class CameraController : MonoBehaviour
     private Transform cameraTransform;
 
     [Header("Horizontal Movement")]
-    public float maxSpeed = 5f;
-    public float acceleration = 10f;
-    public float keyboardMoveDistance = 10f;
+    public float maxSpeed = 100f;
+    public float acceleration = 20f;
+    public float decelleraion = 40f;
     private float speed;
 
     [Header("Zoom")]
@@ -26,9 +26,10 @@ public class CameraController : MonoBehaviour
     public float maxTilt = 80.0f;
 
     private Vector3 targetPosition;
+    private Vector3 targetDirection;
+    private bool movingToPoint;
     private float zoomHeight;
     private float zoomVectorMaxLength;
-    private Vector3 lastPosition;
 
     void Awake()
     {
@@ -42,11 +43,14 @@ public class CameraController : MonoBehaviour
         zoomVectorMaxLength = cameraTransform.localPosition.magnitude * 2;
         cameraTransform.LookAt(transform);
 
-        lastPosition = transform.position;
         movement = cameraActions.Camera.Movement;
         cameraActions.Camera.RotateCamera.performed += RotateCamera;
         cameraActions.Camera.ZoomCamera.performed += ZoomCamera;
         cameraActions.Camera.Enable();
+
+        movingToPoint = false;
+        targetPosition = Vector3.zero;
+        targetDirection = Vector3.zero;
     }
 
     void OnDisable()
@@ -69,6 +73,7 @@ public class CameraController : MonoBehaviour
     {
         if(!GameStateManager.Instance.IsPaused)
         {
+            UpdateSpeed();
             UpdateBasePosition();
             UpdateCameraPosition();
         }
@@ -76,12 +81,20 @@ public class CameraController : MonoBehaviour
 
     private void GetKeyboardMovement()
     {
-        Vector3 inputValue = movement.ReadValue<Vector2>().x * GetCameraRight() + movement.ReadValue<Vector2>().y * GetCameraForward();
-        inputValue = inputValue.normalized;
-
-        if(inputValue.sqrMagnitude > 0.5f)
+        if(movement.inProgress)
         {
-            targetPosition = transform.position + inputValue * keyboardMoveDistance;
+            if(movingToPoint)
+            {
+                targetPosition = Vector3.zero;
+                movingToPoint = false;
+            }
+
+            Vector3 inputValue = movement.ReadValue<Vector2>().x * GetCameraRight() + movement.ReadValue<Vector2>().y * GetCameraForward();
+
+            // Account for sudden changes in direction
+            speed *= (Vector3.Dot(inputValue.normalized, targetDirection) + 1) / 2;
+
+            targetDirection = inputValue.normalized;
         }
     }
 
@@ -99,20 +112,28 @@ public class CameraController : MonoBehaviour
         return forward;
     }
 
+    private void UpdateSpeed()
+    {
+        if (movement.inProgress || movingToPoint && MoreThanASecondToGetToDestination())
+            speed = Mathf.Min(maxSpeed, speed + Time.fixedDeltaTime * acceleration);
+        else
+            speed = Mathf.Max(0f, speed - Time.fixedDeltaTime * decelleraion);
+    }
+
+    private bool MoreThanASecondToGetToDestination()
+    {
+        return (transform.position - targetPosition).magnitude / speed > 1f;
+    }
+
     private void UpdateBasePosition()
     {
-        Vector3 delta = targetPosition - transform.position;
+        if(movingToPoint && (transform.position - targetPosition).sqrMagnitude < 1f)
+        {
+            movingToPoint = false;
+            targetPosition = Vector3.zero;
+        }
 
-        if(delta.sqrMagnitude > 1f)
-        {
-            speed = Mathf.Lerp(speed, maxSpeed, Time.fixedDeltaTime * acceleration);
-            transform.position += delta.normalized * speed * Time.fixedDeltaTime;
-        }
-        else
-        {
-            speed = 0f;
-            targetPosition = transform.position;
-        }
+        transform.position += targetDirection * speed * Time.fixedDeltaTime;
     }
     
     private void RotateCamera(InputAction.CallbackContext inputValue)
@@ -152,6 +173,8 @@ public class CameraController : MonoBehaviour
     public void MoveTo(Vector3 target)
     {
         targetPosition = target;
+        targetDirection = (target - transform.position).normalized;
+        movingToPoint = true;
     }
 
     public CameraSaveData GetSaveData()
@@ -181,8 +204,9 @@ public class CameraController : MonoBehaviour
         transform.position = new Vector3(cameraData.positionX, cameraData.positionY, cameraData.positionZ);
         transform.rotation = Quaternion.Euler(cameraData.rotationX, cameraData.rotationY, cameraData.rotationZ);
 
-        lastPosition = transform.position;
-        targetPosition = transform.position;
+        targetPosition = Vector3.zero;
+        targetDirection = Vector3.zero;
+        movingToPoint = false;
         
         cameraTransform.localPosition = new Vector3(cameraData.cameraPositionX, cameraData.cameraPositionY, cameraData.cameraPositionZ);
         cameraTransform.localRotation = Quaternion.Euler(cameraData.cameraRotationX, cameraData.cameraRotationY, cameraData.cameraRotationZ);
