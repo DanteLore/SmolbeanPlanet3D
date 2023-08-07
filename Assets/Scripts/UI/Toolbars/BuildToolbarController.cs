@@ -24,17 +24,32 @@ public class BuildToolbarController : MonoBehaviour
             button.style.backgroundImage = spec.thumbnail;
             button.userData = spec;
             buttonContainer.Add(button);
+
+            var recipePopup = new VisualElement();
+            recipePopup.AddToClassList("ingredientTooltip");
+            recipePopup.visible = false;
+
+            foreach(var ingredient in spec.ingredients)
+            {
+                var listItem = new VisualElement();
+                listItem.AddToClassList("ingredientListItem");
+                recipePopup.Add(listItem);
+
+                var btn = new Button();
+                btn.style.backgroundColor = new Color(0, 0, 0, 0);
+                btn.style.backgroundImage = ingredient.item.thumbnail;
+                listItem.Add(btn);
+
+                var label = new Label();
+                label.text = "x " + ingredient.quantity;
+                listItem.Add(label);
+            }
+            
+            button.Add(recipePopup);
+            button.style.overflow = Overflow.Visible;
+            button.RegisterCallback<MouseEnterEvent>((e) => { recipePopup.visible = true; Debug.Log("Mouse over"); } );
+            button.RegisterCallback<MouseLeaveEvent>((e) => { recipePopup.visible = false; Debug.Log("Mouse out"); });
         }
-    }
-
-    private void DeleteButtonClicked()
-    {
-
-    }
-
-    private void RotateButtonClicked()
-    {
-        
     }
 
     private void BuildButtonClicked(EventBase eventBase)

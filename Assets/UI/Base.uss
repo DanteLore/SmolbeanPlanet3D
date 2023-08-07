@@ -558,7 +558,6 @@ GroupBox {
     -unity-background-image-tint-color: rgb(255, 255, 255);
 }
 
-
 .unity-toggle:focus > .unity-toggle__input:checked > .unity-toggle__checkmark {
     background-color: rgb(0, 0, 0);
     border-left-color: rgb(255, 255, 255);
@@ -574,4 +573,36 @@ GroupBox {
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
     -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+.ingredientTooltip {
+    position: absolute;
+    justify-content: flex-end;
+    bottom: 70px;
+    flex-direction: column-reverse;
+    background-color: rgba(0, 0, 0, 0.78);
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    flex-grow: 1;
+}
+
+.ingredientListItem {
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.ingredientListItem Button {
+    flex-direction: row;
+    width: 32px;
+    height: 32px;
+    max-width: 32px;
+    max-height: 32px;
+    min-width: 32px;
+    min-height: 32px;
 }
