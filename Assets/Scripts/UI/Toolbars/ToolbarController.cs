@@ -20,7 +20,7 @@ public class ToolbarController : MonoBehaviour
     {
         GameStateManager.Instance.GamePauseStateChanged += GamePauseStateChanged;
 
-        ShowToolbar();
+        CloseAll();
     }
 
     private void GamePauseStateChanged(object sender, bool isPaused)

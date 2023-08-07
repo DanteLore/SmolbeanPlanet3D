@@ -13,8 +13,10 @@ public class MainMenuController : MonoBehaviour
         var newGameButton = document.rootVisualElement.Q<Button>("newGameButton");
         newGameButton.clicked += NewGameButtonClicked;
         
-        var startGameButton = document.rootVisualElement.Q<Button>("resumeButton");
-        startGameButton.clicked += ResumeButtonClicked;
+        var resumeButton = document.rootVisualElement.Q<Button>("resumeButton");
+        resumeButton.clicked += ResumeButtonClicked;
+        resumeButton.visible = GameStateManager.Instance.IsStarted;
+        GameStateManager.Instance.GameStarted += (o, started) => resumeButton.visible = started;
         
         var saveGameButton = document.rootVisualElement.Q<Button>("saveGameButton");
         saveGameButton.clicked += SaveGameButtonClicked;

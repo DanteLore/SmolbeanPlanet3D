@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public class StartingShipwreckManager : MonoBehaviour, IObjectGenerator
+public class GameInitManager : MonoBehaviour, IObjectGenerator
 {
     public CameraController cameraController;
     public BuildingSpec shipwreckSpec;
@@ -24,6 +24,8 @@ public class StartingShipwreckManager : MonoBehaviour, IObjectGenerator
         // Don't do this at design time
         if (!Application.isPlaying)
             return;
+
+        GameStateManager.Instance.StartGame();
 
         var pos = PlaceShipwreck(gameMap, gameMapWidth, gameMapHeight);
 

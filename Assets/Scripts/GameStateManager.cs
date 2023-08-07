@@ -5,7 +5,9 @@ public class GameStateManager : MonoBehaviour
 {
     public static GameStateManager Instance { get; private set; }
     public bool IsPaused { get; private set; }
+    public bool IsStarted { get; private set;}
     public event EventHandler<bool> GamePauseStateChanged;
+    public event EventHandler<bool> GameStarted;
 
     void Awake()
     {
@@ -15,6 +17,7 @@ public class GameStateManager : MonoBehaviour
             Instance = this;
 
         IsPaused = false;
+        IsStarted = false;
     }
 
     public void Pause()
@@ -31,5 +34,11 @@ public class GameStateManager : MonoBehaviour
         Time.timeScale = 1;
         AudioListener.pause = false;
         GamePauseStateChanged?.Invoke(this, IsPaused);
+    }
+
+    public void StartGame()
+    {
+        IsStarted = true;
+        GameStarted?.Invoke(this, IsStarted);
     }
 }

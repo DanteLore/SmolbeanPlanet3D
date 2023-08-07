@@ -19,12 +19,12 @@ public class MenuController : MonoBehaviour
 
     void Start()
     {
-        CloseAll();
+        ShowMenu();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && GameStateManager.Instance.IsStarted)
         {
             if(isVisible)
                 CloseAll();
