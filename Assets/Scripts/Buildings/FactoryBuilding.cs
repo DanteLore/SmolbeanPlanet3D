@@ -19,21 +19,13 @@ public abstract class FactoryBuilding : SmolbeanBuilding
 
         deliveryRequests = new Dictionary<Ingredient, DeliveryRequest>();
 
-        StartCoroutine(UpdateDeliveryRequests());
+        InvokeRepeating("UpdateDeliveryRequests", 5.0f, 5.0f);
     }
 
-    private IEnumerator UpdateDeliveryRequests()
+    private void UpdateDeliveryRequests()
     {
-        yield return new WaitForSeconds(5f);
-
-        while(true)
-        {
-            RemoveCompletedRequests();
-
-            RequestIngedients();
-
-            yield return new WaitForSeconds(5f);
-        }
+        RemoveCompletedRequests();
+        RequestIngedients();
     }
 
     private void RequestIngedients()
