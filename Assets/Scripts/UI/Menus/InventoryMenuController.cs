@@ -4,10 +4,13 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
 
-public class InventoryMenu : MonoBehaviour
+public class InventoryMenu : SmolbeanMenu
 {
+
     private UIDocument document;
     private string[] files;
+
+    VisualElement buildingListContainer;
 
     void OnEnable()
     {
@@ -16,7 +19,18 @@ public class InventoryMenu : MonoBehaviour
         var closeButton = document.rootVisualElement.Q<Button>("closeButton");
         closeButton.clicked += CloseButtonClicked;
         
-        var buildingListContainer = document.rootVisualElement.Q<VisualElement>("buildingListContainer");
+        buildingListContainer = document.rootVisualElement.Q<VisualElement>("buildingListContainer");
+
+        InvokeRepeating("RefreshBuildingsList", 0.1f, 2.0f);
+    }
+
+    void OnDisable()
+    {
+        CancelInvoke("RefreshBuildingsList");
+    }
+
+    private void RefreshBuildingsList()
+    {
         buildingListContainer.Clear();
 
         var buildings = BuildManager.Instance.Buildings.Where(b => b.Inventory.Count > 0).OrderByDescending(b => b.Inventory.Count);
@@ -49,7 +63,6 @@ public class InventoryMenu : MonoBehaviour
             {
                 Button button = new Button();
                 button.text = item.quantity.ToString();
-                //button.clickable.clickedWithEventInfo += BuildButtonClicked;
                 button.style.backgroundColor = new Color(0, 0, 0, 0);
                 button.style.backgroundImage = item.dropSpec.thumbnail;
                 button.userData = item.dropSpec;

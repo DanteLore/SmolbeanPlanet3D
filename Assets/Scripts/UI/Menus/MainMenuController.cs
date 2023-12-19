@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class MainMenuController : MonoBehaviour
+public class MainMenuController : SmolbeanMenu
 {
     UIDocument document;
 

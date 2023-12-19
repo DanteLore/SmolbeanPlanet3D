@@ -5,7 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.Audio;
 
-public class SettingsMenuController : MonoBehaviour
+public class SettingsMenuController : SmolbeanMenu
 {
     public AudioMixer mixer;
     private UIDocument document;

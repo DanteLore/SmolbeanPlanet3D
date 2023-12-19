@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 using System.Linq;
 using System;
 
-public class LoadGameMenuController : MonoBehaviour
+public class LoadGameMenuController : SmolbeanMenu
 {
     UIDocument document;
     private ListView fileListView;

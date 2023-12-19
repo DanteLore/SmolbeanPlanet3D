@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 using System.Linq;
 using System.Collections.Generic;
 
-public class SaveGameMenuController : MonoBehaviour
+public class SaveGameMenuController : SmolbeanMenu
 {
     UIDocument document;
     private TextField filenameTextField;

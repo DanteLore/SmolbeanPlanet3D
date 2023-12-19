@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class NewGameMenuController : MonoBehaviour
+public class NewGameMenuController : SmolbeanMenu
 {
     UIDocument document;
     GameMapGenerator mapGenerator;

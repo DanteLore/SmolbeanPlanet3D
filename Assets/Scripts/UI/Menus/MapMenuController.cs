@@ -4,7 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System;
 
-public class MapMenuController : MonoBehaviour
+public class MapMenuController : SmolbeanMenu
 {
     [Serializable]
     public class GameObjectMapEntry
@@ -25,6 +25,7 @@ public class MapMenuController : MonoBehaviour
     public Color[] mapLevelColors;
 
     public Texture2D groundTexture;
+    Texture2D mapTexture;
     public float mapWidth = 404f;
     public float mapHeight = 404f;
     public float mapOffsetX = -202f;
@@ -41,17 +42,23 @@ public class MapMenuController : MonoBehaviour
         var closeButton = document.rootVisualElement.Q<Button>("closeButton");
         closeButton.clicked += CloseButtonClicked;
 
-        Texture2D mapTexture = new Texture2D(groundTexture.width, groundTexture.height);
+        mapTexture = new Texture2D(groundTexture.width, groundTexture.height);
         mapTexture.filterMode = FilterMode.Point;
+        mapBox.style.backgroundImage = mapTexture;
+        InvokeRepeating("GenerateMapTexture", 0.1f, 5.0f);
+    }
+
+    void OnDisable()
+    {
+        CancelInvoke("GenerateMapTexture");
+    }
+
+    private void GenerateMapTexture()
+    {
+        Debug.Log("Drawing map");
 
         DrawMap(mapTexture);
 
-        foreach(var entry in mapEntries)
-        {
-            DrawNatureObjects(mapTexture, entry.parentObject.transform, entry.color, entry.radius);
-        }
-
-        mapBox.style.backgroundImage = mapTexture;
         mapTexture.Apply();
     }
 
@@ -60,6 +67,7 @@ public class MapMenuController : MonoBehaviour
         int width = groundTexture.width;
         int height = groundTexture.height;
 
+        // Map
         for(int y = 0; y < height; y++)
         {
             for(int x = 0; x < width; x++) 
@@ -71,6 +79,12 @@ public class MapMenuController : MonoBehaviour
                 
                 mapTexture.SetPixel(x, y, c);
             }
+        }
+
+        // Objects
+        foreach(var entry in mapEntries)
+        {
+            DrawNatureObjects(mapTexture, entry.parentObject.transform, entry.color, entry.radius);
         }
     }
 
