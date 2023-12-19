@@ -44,6 +44,10 @@ public class BuildToolbarController : MonoBehaviour
                 label.text = "x " + ingredient.quantity;
                 listItem.Add(label);
             }
+
+            var title = new Label();
+            title.text = spec.buildingName;
+            recipePopup.Add(title);
             
             button.Add(recipePopup);
             button.style.overflow = Overflow.Visible;
