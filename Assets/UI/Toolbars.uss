@@ -1,0 +1,75 @@
+.toolbarContainer {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.78);
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 10px;
+    flex-direction: row;
+    min-height: 70px;
+    height: 70px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    justify-content: flex-start;
+}
+
+.toolbarContainer Button {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    min-width: 50px;
+    min-height: 50px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.toolbarContainer Button:hover {
+    scale: 1.2 1.2;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+}
+
+.ingredientTooltip {
+    position: absolute;
+    justify-content: flex-end;
+    bottom: 70px;
+    flex-direction: column-reverse;
+    background-color: rgba(0, 0, 0, 0.78);
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    flex-grow: 1;
+}
+
+.ingredientListItem {
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.ingredientListItem Button {
+    flex-direction: row;
+    width: 32px;
+    height: 32px;
+    max-width: 32px;
+    max-height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+}
