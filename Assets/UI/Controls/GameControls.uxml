@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
+    <ui:VisualElement name="gameControlsContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.89); flex-direction: row; overflow: hidden; height: 32px; min-height: 32px; align-items: center; top: 10px; bottom: auto; align-self: auto;">
+        <ui:Button text="x1" display-tooltip-when-elided="true" name="gameSpeed1Button" focusable="false" />
+        <ui:Button text="x2" display-tooltip-when-elided="true" name="gameSpeed2Button" focusable="false" />
+        <ui:Button text="x4" display-tooltip-when-elided="true" name="gameSpeed3Button" focusable="false" />
+        <ui:Button text="x8" display-tooltip-when-elided="true" name="gameSpeed4Button" focusable="false" />
+    </ui:VisualElement>
+</ui:UXML>

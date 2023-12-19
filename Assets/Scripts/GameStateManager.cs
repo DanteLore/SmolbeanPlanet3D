@@ -9,15 +9,15 @@ public class GameStateManager : MonoBehaviour
     public event EventHandler<float> GameSpeedChanged;
     public event EventHandler<bool> GamePauseStateChanged;
     public event EventHandler<bool> GameStarted;
-    private float selectedTimeScale = 1.0f;
-    public float SelectedTimeScale 
+    private float selectedGameSpeed = 1.0f;
+    public float SelectedGameSpeed 
     {
-        get { return selectedTimeScale; }
-        private set
+        get { return selectedGameSpeed; }
+        set
         {
-            selectedTimeScale = value;
-            Debug.Log("Time scale set to: " + selectedTimeScale);
-            GameSpeedChanged?.Invoke(this, selectedTimeScale);
+            selectedGameSpeed = value;
+            Debug.Log("Time scale set to: " + selectedGameSpeed);
+            GameSpeedChanged?.Invoke(this, selectedGameSpeed);
         }
     }
 
@@ -43,7 +43,7 @@ public class GameStateManager : MonoBehaviour
     public void Resume()
     {
         IsPaused = false;
-        Time.timeScale = SelectedTimeScale;
+        Time.timeScale = SelectedGameSpeed;
         AudioListener.pause = false;
         GamePauseStateChanged?.Invoke(this, IsPaused);
     }
@@ -60,15 +60,15 @@ public class GameStateManager : MonoBehaviour
             return;
 
         if(Input.GetKeyDown("1"))
-            SelectedTimeScale = 1.0f;
+            SelectedGameSpeed = 1.0f;
         else if(Input.GetKeyDown("2"))
-            SelectedTimeScale = 2.0f;
+            SelectedGameSpeed = 2.0f;
         else if(Input.GetKeyDown("3"))
-            SelectedTimeScale = 4.0f;
+            SelectedGameSpeed = 4.0f;
         else if(Input.GetKeyDown("4"))
-            SelectedTimeScale = 8.0f;
+            SelectedGameSpeed = 8.0f;
 
-        if(SelectedTimeScale != Time.timeScale)
-            Time.timeScale = SelectedTimeScale;
+        if(SelectedGameSpeed != Time.timeScale)
+            Time.timeScale = SelectedGameSpeed;
     }
 }

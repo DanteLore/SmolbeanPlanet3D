@@ -606,3 +606,77 @@ GroupBox {
     min-width: 32px;
     min-height: 32px;
 }
+
+#gameControlsContainer Button {
+    width: 24px;
+    height: 24px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    max-width: 24px;
+    max-height: 24px;
+    min-height: 24px;
+    min-width: 24px;
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    font-size: 12px;
+    -unity-font-style: bold;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#gameControlsContainer {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.78);
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 10px;
+    flex-direction: row;
+    min-height: 70px;
+    height: 70px;
+    flex-grow: 1;
+    flex-shrink: 1;
+    justify-content: flex-start;
+    width: 133px;
+}
+
+#gameControlsContainer Button:hover {
+    scale: 1.2 1.2;
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+}
+
+#gameControlsContainer .selectedSpeedButton {
+    border-left-color: rgb(255, 255, 255);
+    border-right-color: rgb(255, 255, 255);
+    border-top-color: rgb(255, 255, 255);
+    border-bottom-color: rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+}
