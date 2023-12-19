@@ -5,8 +5,6 @@ using System.Linq;
 
 public class BuildingSite : SmolbeanBuilding
 {
-    public GameObject spawnPoint;
-    public GameObject dropPoint;
     public GameObject plans;
     public ParticleSystem buildParticleSystem;
 
@@ -42,17 +40,7 @@ public class BuildingSite : SmolbeanBuilding
             plans.GetComponent<Renderer>().material.mainTexture = value.thumbnail;
         }
     }
-
-    public override Vector3 GetSpawnPoint()
-    {
-        return spawnPoint.transform.position;
-    }
-
-    public override Vector3 GetDropPoint()
-    {
-        return dropPoint.transform.position;
-    }
-
+    
     protected override void Start()
     {
         base.Start();

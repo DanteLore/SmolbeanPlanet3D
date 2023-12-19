@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class WoodcuttersHut : SmolbeanBuilding
 {
-    public GameObject spawnPoint;
-    public GameObject dropPoint;
     public GameObject woodcutterPrefab;
     public float spawnDelaySeconds = 5f;
     private GameObject woodcutter;
@@ -23,15 +21,5 @@ public class WoodcuttersHut : SmolbeanBuilding
         yield return new WaitForSeconds(delayTime);
 
         woodcutter = Instantiate(woodcutterPrefab, spawnPoint.transform.position, Quaternion.identity, transform);
-    }
-
-    public override Vector3 GetSpawnPoint()
-    {
-        return spawnPoint.transform.position;
-    }
-
-    public override Vector3 GetDropPoint()
-    {
-        return dropPoint.transform.position;
     }
 }

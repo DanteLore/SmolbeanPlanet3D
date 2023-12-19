@@ -1,10 +1,16 @@
 using System;
+using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
 
 public enum BuildingWearPattern { Circle, Rectangle }
 
 public abstract class SmolbeanBuilding : MonoBehaviour
 {
+    public string dropLayer = "Drops";
+    public GameObject spawnPoint;
+    public GameObject dropPoint;
+
     public int PrefabIndex {get; set;}
     public virtual BuildingSpec BuildingSpec {get; set;}
     public BuildingWearPattern wearPattern = BuildingWearPattern.Rectangle;
@@ -17,8 +23,15 @@ public abstract class SmolbeanBuilding : MonoBehaviour
 
     public virtual bool IsComplete { get { return true; } }
 
-    public abstract Vector3 GetSpawnPoint();
-    public abstract Vector3 GetDropPoint();
+    public virtual Vector3 GetSpawnPoint()
+    {
+        return spawnPoint.transform.position;
+    }
+
+    public virtual Vector3 GetDropPoint()
+    {
+        return ((dropPoint != null) ? dropPoint : spawnPoint).transform.position;
+    }
 
     protected virtual void Awake()
     {
@@ -58,4 +71,10 @@ public abstract class SmolbeanBuilding : MonoBehaviour
         GroundWearManager.Instance.BuildingOn(building.GetComponent<Renderer>().bounds, wearPattern, wearScale);
     }
 
+    public List<ItemStack> DropPointContents(float radius = 2.0f)
+    {
+        return Physics.OverlapSphere(GetDropPoint(), radius, LayerMask.GetMask(dropLayer))
+            .Select(c => c.gameObject.GetComponent<ItemStack>())
+            .ToList();
+    }
 }

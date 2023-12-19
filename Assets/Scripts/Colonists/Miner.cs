@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class Miner : Colonist, IReturnDrops
 {
     public float idleTime = 1f;
     public float mineCooldown = 1f;
+    public int maxStacks = 3;
+    public float sleepTime = 5.0f;
 
     public Vector3 DropPoint
     {
@@ -31,7 +34,7 @@ public class Miner : Colonist, IReturnDrops
         var dropInventory = new DropInventoryAtDropPointState(this, DropController.Instance);
         var walkHome = new WalkHomeState(this, navAgent, animator, soundPlayer);
 
-        AT(idle, operateMine, HasBeenIdleForAWhile());
+        AT(idle, operateMine, ReadyToGo());
         AT(operateMine, getReady, MiningFinished());
 
         AT(getReady, walkToDropPoint, InventoryIsNotEmpty());
@@ -49,8 +52,8 @@ public class Miner : Colonist, IReturnDrops
         Func<bool> IsAtDropPoint() => () => CloseEnoughTo(DropPoint);
         Func<bool> InventoryIsEmpty() => Inventory.IsEmpty;
         Func<bool> InventoryIsNotEmpty() => () => !Inventory.IsEmpty();
-        Func<bool> HasBeenIdleForAWhile() => () => idle.TimeIdle >= idleTime;
         Func<bool> MiningFinished() => () => operateMine.Finished;
+        Func<bool> ReadyToGo() => () => idle.TimeIdle >= idleTime && Home.DropPointContents().Where(s => s.IsFull()).Count() < maxStacks;
     }
 
     protected override void Update()
@@ -60,3 +63,4 @@ public class Miner : Colonist, IReturnDrops
         stateMachine.Tick();
     }
 }
+;

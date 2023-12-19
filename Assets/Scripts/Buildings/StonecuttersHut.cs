@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class StonecuttersHut : SmolbeanBuilding
 {
-    public GameObject spawnPoint;
-    public GameObject dropPoint;
     public GameObject stonecutterPrefab;
     public float spawnDelaySeconds = 5f;
     private GameObject stonecutter;
@@ -22,15 +20,5 @@ public class StonecuttersHut : SmolbeanBuilding
         yield return new WaitForSeconds(delayTime);
 
         stonecutter = Instantiate(stonecutterPrefab, spawnPoint.transform.position, Quaternion.identity, transform);
-    }
-
-    public override Vector3 GetSpawnPoint()
-    {
-        return spawnPoint.transform.position;
-    }
-
-    public override Vector3 GetDropPoint()
-    {
-        return dropPoint.transform.position;
     }
 }

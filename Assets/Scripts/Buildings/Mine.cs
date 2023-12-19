@@ -6,8 +6,6 @@ public class Mine : SmolbeanBuilding
 {
     public float spawnDelaySeconds = 5f;
     public GameObject porterPrefab;
-    public GameObject spawnPoint;
-    public GameObject dropPoint;
     public DropSpec dropSpec;
     public float dropProbability = 0.2f;
     public float startingTunnelTime = 2f;
@@ -32,17 +30,6 @@ public class Mine : SmolbeanBuilding
         yield return new WaitForSeconds(delayTime);
 
         Instantiate(porterPrefab, spawnPoint.transform.position, Quaternion.identity, transform);
-    }
-
-
-    public override Vector3 GetSpawnPoint()
-    {
-        return spawnPoint.transform.position;
-    }
-
-    public override Vector3 GetDropPoint()
-    {
-        return dropPoint.transform.position;
     }
 
     public InventoryItem TryHarvest()

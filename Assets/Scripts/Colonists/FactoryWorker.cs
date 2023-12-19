@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FactoryWorker : Colonist, IReturnDrops
 {
     public float idleTime = 1f;
+    public int maxStacks = 5;
 
     public Vector3 DropPoint
     {
@@ -32,7 +34,7 @@ public class FactoryWorker : Colonist, IReturnDrops
         var walkToDropPoint = new WalkToDropPointState(this, navAgent, animator, soundPlayer);
         var dropInventory = new DropInventoryAtDropPointState(this, DropController.Instance);
 
-        AT(idle, pickupIngredients, IngredientsPresent());
+        AT(idle, pickupIngredients, ReadyToMake());
         AT(pickupIngredients, doJob, FactoryReady());
         AT(doJob, walkToDropPoint, JobDone());
         AT(walkToDropPoint, dropInventory, AtDropPoint());
@@ -43,7 +45,7 @@ public class FactoryWorker : Colonist, IReturnDrops
 
         Func<bool> AtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
         Func<bool> AtDropPoint() => () => CloseEnoughTo(DropPoint);
-        Func<bool> IngredientsPresent() => factory.HasResources;
+        Func<bool> ReadyToMake() => () => factory.HasResources() && Home.DropPointContents().Where(s => s.IsFull()).Count() < maxStacks;
         Func<bool> InventoryEmpty() => Inventory.IsEmpty;
         Func<bool> FactoryReady() =>() => factory.IsReadyToStart;
         Func<bool> JobDone() => () => factory.IsFinished;

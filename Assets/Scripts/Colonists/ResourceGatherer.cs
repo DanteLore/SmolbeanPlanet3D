@@ -8,6 +8,7 @@ public abstract class ResourceGatherer : Colonist, IGatherDrops, IReturnDrops
     public float hitCooldown = 1f;
     public float idleTime = 1f;
     public float sleepTime = 2f;
+    public int maxStacks = 3;
     public DropSpec dropSpec;
     private StateMachine stateMachine;
 
@@ -63,6 +64,8 @@ public abstract class ResourceGatherer : Colonist, IGatherDrops, IReturnDrops
         AT(walkToDrop,      walkHome,   () => walkToDrop.StuckTime > 5f);
         AT(walkToDropPoint, walkHome,   () => walkToDropPoint.StuckTime > 5f);
 
+        AT(idle, searchForResources, ReadyToGo());
+
         AT(searchForResources,  walkToResource,     HasTarget());
         AT(walkToResource,      harvestResource,    IsCloseEnoughToTarget());
         AT(harvestResource,     waitForTargetToDie, TargetIsDying());
@@ -80,7 +83,6 @@ public abstract class ResourceGatherer : Colonist, IGatherDrops, IReturnDrops
         AT(searchForDrops,  walkHome,           NoDropsFound());
         AT(walkHome,        sleeping,           IsAtSpawnPoint());
         AT(sleeping,        idle,               HasBeenSleepingForAWhile());
-        AT(idle,            searchForResources, HasBeenIdleForAWhile());
 
         stateMachine.SetState(searchForResources);
 
@@ -96,7 +98,7 @@ public abstract class ResourceGatherer : Colonist, IGatherDrops, IReturnDrops
         Func<bool> InventoryNotEmpty() => () => !Inventory.IsEmpty();
         Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
         Func<bool> IsAtDropPoint() => () => CloseEnoughTo(DropPoint);
-        Func<bool> HasBeenIdleForAWhile() => () => idle.TimeIdle >= idleTime;
+        Func<bool> ReadyToGo() => () => idle.TimeIdle >= idleTime && Home.DropPointContents().Where(s => s.IsFull()).Count() < maxStacks;
         Func<bool> HasBeenSleepingForAWhile() => () => sleeping.TimeAsleep >= sleepTime;
     }
 

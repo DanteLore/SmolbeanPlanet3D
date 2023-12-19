@@ -13,4 +13,9 @@ public class ItemStack : MonoBehaviour
     {
         CreateTime = Time.time;
     }
+
+    public bool IsFull()
+    {
+        return quantity >= dropSpec.stackSize;
+    }
 }

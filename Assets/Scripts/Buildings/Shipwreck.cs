@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class Shipwreck : Storehouse
 {
-    public GameObject dropPoint;
     public GameObject builderPrefab;
     private GameObject builder;
 

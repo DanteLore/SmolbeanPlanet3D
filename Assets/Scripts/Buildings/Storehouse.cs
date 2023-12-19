@@ -5,7 +5,6 @@ public class Storehouse : SmolbeanBuilding
 {
     public float spawnDelaySeconds = 5f;
     public int portersToSpawn = 5;
-    public GameObject spawnPoint;
     public GameObject porterPrefab;
 
     protected override void Start()
@@ -24,15 +23,5 @@ public class Storehouse : SmolbeanBuilding
             Instantiate(porterPrefab, spawnPoint.transform.position, Quaternion.identity, transform);
             yield return new WaitForSeconds(delayTime);
         }
-    }
-
-    public override Vector3 GetSpawnPoint()
-    {
-        return spawnPoint.transform.position;
-    }
-
-    public override Vector3 GetDropPoint()
-    {
-        return transform.position;
     }
 }
