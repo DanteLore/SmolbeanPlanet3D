@@ -47,8 +47,8 @@ public class BuildToolbarController : MonoBehaviour
             
             button.Add(recipePopup);
             button.style.overflow = Overflow.Visible;
-            //button.RegisterCallback<MouseEnterEvent>((e) => { recipePopup.visible = true; Debug.Log("Mouse over"); } );
-            //button.RegisterCallback<MouseLeaveEvent>((e) => { recipePopup.visible = false; Debug.Log("Mouse out"); });
+            button.RegisterCallback<MouseEnterEvent>((e) => { recipePopup.visible = true; } );
+            button.RegisterCallback<MouseLeaveEvent>((e) => { recipePopup.visible = false; });
         }
     }
 
