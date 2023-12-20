@@ -19,7 +19,7 @@ public abstract class FactoryBuilding : SmolbeanBuilding
 
         deliveryRequests = new Dictionary<Ingredient, DeliveryRequest>();
 
-        InvokeRepeating("UpdateDeliveryRequests", 5.0f, 5.0f);
+        InvokeRepeating("UpdateDeliveryRequests", 1.0f, 0.5f);
     }
 
     private void UpdateDeliveryRequests()

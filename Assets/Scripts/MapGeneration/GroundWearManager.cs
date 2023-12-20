@@ -11,7 +11,8 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     public Material grassMaterial;
     public int wearStrength = 2;
     public float updateThreshold = 0.5f;
-    public int squaresToGrowBackEachFrame = 50;
+    public int squaresToGrowBackEachFrame = 1024;
+    public float grassGrowthWeight = 0.5f;
     public int wearRadius = 3;
 
     public float mapWidth = 400f;
@@ -40,9 +41,14 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         InvokeRepeating("UpdateTexture", 1.0f, 0.5f);
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        float amount = wearStrength / 128f;
+        GrowGrass();
+    }
+
+    private void GrowGrass()
+    {
+        float amount = (wearStrength * Time.deltaTime) * grassGrowthWeight;
         for(int i = 0; i < squaresToGrowBackEachFrame; i++)
         {
             int x = UnityEngine.Random.Range(0, textureWidth);
@@ -110,7 +116,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
             {
                 float dist = Vector2.Distance(new Vector2(x, y), center);
                 
-                float c = wearStrength * ((radius - dist) / 256f);
+                float c = wearStrength * Time.deltaTime * ((radius - dist) / 256f);
                 var px = wearTexture.GetPixel(x, y);
                 px.r = Mathf.Clamp01(px.r + c); // Wear is on the RED channel
                 wearTexture.SetPixel(x, y, px);
