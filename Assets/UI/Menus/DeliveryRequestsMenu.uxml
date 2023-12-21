@@ -4,19 +4,9 @@
     <Style src="project://database/Assets/UI/DeliveryRequestsMenu.uss?fileID=7433441132597879392&amp;guid=10e3c6aba5850471c94b00ccd8b09b1f&amp;type=3#DeliveryRequestsMenu" />
     <ui:VisualElement name="VisualElement" class="menuContainer" style="flex-grow: 1;">
         <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 100%; width: 80%; min-width: 600px;">
-            <ui:Label tabindex="-1" text="Inventory" display-tooltip-when-elided="true" class="title" />
+            <ui:Label tabindex="-1" text="Delivery Requests" display-tooltip-when-elided="true" class="title" />
             <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="height: 100%; display: flex;">
-                <ui:VisualElement name="buildingListContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start; white-space: nowrap; flex-wrap: nowrap; flex-direction: column; justify-content: flex-start; align-self: stretch; flex-shrink: 0;">
-                    <ui:VisualElement name="VisualElement" class="buildingRow" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-wrap: nowrap; position: relative; overflow: hidden; flex-shrink: 0;">
-                        <ui:VisualElement class="buildingHeader" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-                            <ui:VisualElement class="buildingIcon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/UI/Toolbar/Images/Buildings/Sawmill.png?fileID=2800000&amp;guid=8bb62a877f93241d6a5b9ed1dbbc9d5a&amp;type=3#Sawmill&apos;);" />
-                            <ui:Label tabindex="-1" text="Sawmill 123" display-tooltip-when-elided="true" />
-                        </ui:VisualElement>
-                        <ui:VisualElement class="inventoryContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-                            <ui:Button text="22" display-tooltip-when-elided="true" />
-                        </ui:VisualElement>
-                    </ui:VisualElement>
-                </ui:VisualElement>
+                <ui:VisualElement name="listContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start; white-space: nowrap; flex-wrap: nowrap; flex-direction: column; justify-content: flex-start; align-self: stretch; flex-shrink: 0;" />
             </ui:ScrollView>
         </ui:VisualElement>
         <ui:VisualElement name="dialogButtonContainer" style="flex-direction: row-reverse; width: 100%;">

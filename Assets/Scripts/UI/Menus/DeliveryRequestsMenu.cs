@@ -7,9 +7,8 @@ using System.Linq;
 public class DeliveryRequestsMenu : SmolbeanMenu
 {
     private UIDocument document;
-    private string[] files;
 
-    VisualElement buildingListContainer;
+    VisualElement listContainer;
 
     void OnEnable()
     {
@@ -18,56 +17,54 @@ public class DeliveryRequestsMenu : SmolbeanMenu
         var closeButton = document.rootVisualElement.Q<Button>("closeButton");
         closeButton.clicked += CloseButtonClicked;
         
-        buildingListContainer = document.rootVisualElement.Q<VisualElement>("buildingListContainer");
+        listContainer = document.rootVisualElement.Q<VisualElement>("listContainer");
 
-        InvokeRepeating("RefreshBuildingsList", 0.1f, 2.0f);
+        InvokeRepeating("RefreshList", 0.1f, 2.0f);
     }
 
     void OnDisable()
     {
-        CancelInvoke("RefreshBuildingsList");
+        CancelInvoke("RefreshList");
     }
 
-    private void RefreshBuildingsList()
+    private void RefreshList()
     {
-        buildingListContainer.Clear();
+        listContainer.Clear();
 
-        var buildings = BuildManager.Instance.Buildings.Where(b => b.Inventory.Count > 0).OrderByDescending(b => b.Inventory.Count);
+        foreach(var request in DeliveryManager.Instance.ClaimedDeliveryRequests)
+            AddRow(request, false);
+            
+        foreach(var request in DeliveryManager.Instance.UnclaimedDeliveryRequests)
+            AddRow(request, true);
+    }
 
-        foreach(var building in buildings)
-        {
-            var buildingRow = new VisualElement();
-            buildingRow.AddToClassList("buildingRow");
-            buildingListContainer.Add(buildingRow);
+    private void AddRow(DeliveryRequest request, bool waiting)
+    {
+        var row = new VisualElement();
+        row.AddToClassList("deliveryRow");
+        listContainer.Add(row);
 
-            var buildingHeader = new VisualElement();
-            buildingHeader.AddToClassList("buildingHeader");
-            buildingRow.Add(buildingHeader);
+        row.Add(new Label { text = $"P{request.Priority}" });
 
-            var buildingIcon = new Button();
-            buildingHeader.AddToClassList("buildingIcon");
-            buildingIcon.style.backgroundColor = new Color(0, 0, 0, 0);
-            buildingIcon.style.backgroundImage = building.IsComplete ? building.BuildingSpec.thumbnail : building.BuildingSpec.siteThumbnail;
-            buildingHeader.Add(buildingIcon);
+        var buildingIcon = new Button();
+        buildingIcon.AddToClassList("buildingIcon");
+        buildingIcon.style.backgroundColor = new Color(0, 0, 0, 0);
+        buildingIcon.style.backgroundImage = request.Building.IsComplete ? request.Building.BuildingSpec.thumbnail : request.Building.BuildingSpec.siteThumbnail;
+        row.Add(buildingIcon);
 
-            var buildingTitle = new Label();
-            buildingTitle.text = building.name;
-            buildingHeader.Add(buildingTitle);
+        row.Add(new Label { text = request.Building.name });
 
-            var inventoryContainer = new VisualElement();
-            inventoryContainer.AddToClassList("inventoryContainer");
-            buildingRow.Add(inventoryContainer);
+        var resourceIcon = new Button();
+        resourceIcon.AddToClassList("resourceIcon");
+        resourceIcon.style.backgroundColor = new Color(0, 0, 0, 0);
+        resourceIcon.style.backgroundImage = request.Item.thumbnail;
+        row.Add(resourceIcon);
 
-            foreach(var item in building.Inventory.Totals.OrderBy(i => i.dropSpec.dropName))
-            {
-                Button button = new Button();
-                button.text = item.quantity.ToString();
-                button.style.backgroundColor = new Color(0, 0, 0, 0);
-                button.style.backgroundImage = item.dropSpec.thumbnail;
-                button.userData = item.dropSpec;
-                inventoryContainer.Add(button);
-            }
-        }
+        row.Add(new Label { text = request.Item.dropName });
+
+        row.Add(new Label { text = $"x {request.Quantity}" });
+
+        row.Add(new Label { text = waiting ? "Pending" : "In transit" });
     }
 
     private void CloseButtonClicked()

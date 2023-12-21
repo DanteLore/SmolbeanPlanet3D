@@ -1,0 +1,54 @@
+.listContainer {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    width: 100%;
+    margin-left: 24px;
+}
+
+.deliveryRow {
+    flex-direction: row;
+    align-self: auto;
+    align-items: center;
+}
+
+.deliveryRow Button {
+    width: 40px;
+    height: 40px;
+    -unity-text-align: lower-right;
+    -unity-font-style: bold;
+    font-size: 14px;
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.buildingIcon {
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+}
+
+.resourceIcon {
+    width: 640px;
+    height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+}

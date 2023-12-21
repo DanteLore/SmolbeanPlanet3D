@@ -10,6 +10,9 @@ public class DeliveryManager : MonoBehaviour
     private Dictionary<IDeliverDrops, DeliveryRequest> claimedDeliveryRequests;
     private List<CollectionRequest> collections;
 
+    public IEnumerable<DeliveryRequest> ClaimedDeliveryRequests { get { return claimedDeliveryRequests.Values; } }
+    public IEnumerable<DeliveryRequest> UnclaimedDeliveryRequests { get { return unclaimedDeliveryRequests; } }
+
     void Awake()
     {
         if(Instance != null && Instance != this)
