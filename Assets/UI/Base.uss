@@ -229,6 +229,10 @@ GroupBox {
     border-bottom-right-radius: 4px;
 }
 
+.unity-text-field {
+    flex-direction: column;
+}
+
 .unity-base-text-field__input {
     border-left-color: rgb(255, 255, 255);
     border-right-color: rgb(255, 255, 255);

@@ -1,6 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,11 +9,7 @@ public class NewGameMenuController : SmolbeanMenu
     UIDocument document;
     GameMapGenerator mapGenerator;
     GridManager gridManager;
-    TreeGenerator treeGenerator;
-    RockGenerator rockGenerator;
-    private GrassInstancer grassInstancer;
     VisualElement previewPane;
-    private Toggle randomToggle;
     private TextField seedTextField;
     private List<int> map;
 
@@ -26,21 +22,25 @@ public class NewGameMenuController : SmolbeanMenu
         var startGameButton = document.rootVisualElement.Q<Button>("startGameButton");
         startGameButton.clicked += StartGameClicked;
 
-        var newMapButton = document.rootVisualElement.Q<Button>("newMapButton");
-        newMapButton.clicked += NewMapButtonClicked;
+        var randomButton = document.rootVisualElement.Q<Button>("randomButton");
+        randomButton.clicked += RandomButtonClicked;
 
         var cancelButton = document.rootVisualElement.Q<Button>("cancelButton");
         cancelButton.clicked += CancelButtonClicked;
 
-        randomToggle = document.rootVisualElement.Q<Toggle>("randomToggle");
-        randomToggle.RegisterValueChangedCallback(OnRandomToggleChanged);
         seedTextField = document.rootVisualElement.Q<TextField>("seedTextField");
-        previewPane = document.rootVisualElement.Q<VisualElement>("newMapPreview");
+        seedTextField.RegisterCallback<ChangeEvent<string>>(TextChanged);
+        seedTextField.value = mapGenerator.Seed.ToString();
 
-        randomToggle.value = true;
-        seedTextField.SetEnabled(false);
+        previewPane = document.rootVisualElement.Q<VisualElement>("newMapPreview");
         
         map = gridManager.GameMap;
+        DrawMap();
+    }
+
+    private void TextChanged(ChangeEvent<string> evt)
+    {
+        GenerateMap();
         DrawMap();
     }
 
@@ -55,27 +55,18 @@ public class NewGameMenuController : SmolbeanMenu
         MenuController.Instance.CloseAll();
     }
 
-    private void NewMapButtonClicked()
+    private void RandomButtonClicked()
     {
-        GenerateMap();
-        DrawMap();
+        int seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+        seedTextField.value = seed.ToString();
     }
 
     private void GenerateMap()
     {
-        int seed = 0;
-        if (!randomToggle.value && int.TryParse(seedTextField.value, out int val))
+        if (int.TryParse(seedTextField.value, out int seed))
         {
-            seed = val;
+            map = mapGenerator.GenerateMap(seed);
         }
-        else
-        {
-            seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
-        }
-
-        seedTextField.value = seed.ToString();
-
-        map = mapGenerator.GenerateMap(seed);
     }
 
     private void DrawMap()
@@ -108,17 +99,5 @@ public class NewGameMenuController : SmolbeanMenu
         previewPane.style.backgroundImage = texture;
 
         texture.Apply();
-    }
-
-    private void OnRandomToggleChanged(ChangeEvent<bool> evt)
-    {
-        if(randomToggle.value)
-        {
-            seedTextField.SetEnabled(false);
-        }
-        else
-        {
-            seedTextField.SetEnabled(true);
-        }
     }
 }
