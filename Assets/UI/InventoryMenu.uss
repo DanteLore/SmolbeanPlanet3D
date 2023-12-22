@@ -13,8 +13,8 @@
 }
 
 .inventoryContainer Button {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     -unity-text-align: lower-right;
     -unity-font-style: bold;
     font-size: 14px;
@@ -37,7 +37,7 @@
 
 .inventoryContainer {
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     padding-left: 5px;
     padding-right: 5px;
     padding-top: 5px;
@@ -62,17 +62,17 @@
 }
 
 .buildingIcon {
-    width: 60px;
-    height: 60px;
-    max-width: 60px;
-    max-height: 60px;
-    min-width: 60px;
-    min-height: 60px;
+    width: 50px;
+    height: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    min-width: 50px;
+    min-height: 50px;
 }
 
 .buildingHeader Button {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     -unity-text-align: lower-right;
     -unity-font-style: bold;
     font-size: 14px;

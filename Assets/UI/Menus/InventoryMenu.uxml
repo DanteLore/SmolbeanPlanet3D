@@ -12,7 +12,17 @@
                             <ui:VisualElement class="buildingIcon" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); background-image: url(&apos;project://database/Assets/UI/Toolbar/Images/Buildings/Sawmill.png?fileID=2800000&amp;guid=8bb62a877f93241d6a5b9ed1dbbc9d5a&amp;type=3#Sawmill&apos;);" />
                             <ui:Label tabindex="-1" text="Sawmill 123" display-tooltip-when-elided="true" />
                         </ui:VisualElement>
-                        <ui:VisualElement class="inventoryContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                        <ui:VisualElement class="inventoryContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-wrap: wrap;">
+                            <ui:Button text="22" display-tooltip-when-elided="true" />
+                            <ui:Button text="22" display-tooltip-when-elided="true" />
+                            <ui:Button text="22" display-tooltip-when-elided="true" />
+                            <ui:Button text="22" display-tooltip-when-elided="true" />
+                            <ui:Button text="22" display-tooltip-when-elided="true" />
+                            <ui:Button text="22" display-tooltip-when-elided="true" />
+                            <ui:Button text="22" display-tooltip-when-elided="true" />
+                            <ui:Button text="22" display-tooltip-when-elided="true" />
+                            <ui:Button text="22" display-tooltip-when-elided="true" />
+                            <ui:Button text="22" display-tooltip-when-elided="true" />
                             <ui:Button text="22" display-tooltip-when-elided="true" />
                         </ui:VisualElement>
                     </ui:VisualElement>
