@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
@@ -7,6 +5,7 @@ public class BuildingSite : SmolbeanBuilding
 {
     public GameObject plans;
     public ParticleSystem buildParticleSystem;
+    public int ingredientDeliveryPriority = 5;
 
     private float buildingWorkDone;
     private bool buildingInProgress;
@@ -61,7 +60,7 @@ public class BuildingSite : SmolbeanBuilding
             while(toOrder > 0)
             {
                 int ammt = Mathf.Min(toOrder, ingredient.item.stackSize);
-                DeliveryManager.Instance.CreateDeliveryRequest(this, ingredient.item, ammt);
+                DeliveryManager.Instance.CreateDeliveryRequest(this, ingredient.item, ammt, minimum:ammt, priority:ingredientDeliveryPriority);
                 toOrder -= ammt;
             }
         }

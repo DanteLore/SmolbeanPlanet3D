@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.Linq;
 
 public class DeliveryRequestsMenu : SmolbeanMenu
 {
@@ -66,7 +63,10 @@ public class DeliveryRequestsMenu : SmolbeanMenu
 
         row.Add(new Label { text = request.Item.dropName });
 
-        row.Add(new Label { text = $"x {request.Quantity}" });
+        if(request.Quantity == request.Minimum)
+            row.Add(new Label { text = $"x {request.Quantity}" });
+        else
+            row.Add(new Label { text = $"x {request.Minimum} → {request.Quantity}" });
 
         row.Add(new Label { text = waiting ? "Pending" : "In transit" });
     }

@@ -10,6 +10,7 @@ public abstract class FactoryBuilding : SmolbeanBuilding
     public bool IsReadyToStart { get; private set; }
 
     public int orderMultiplier = 3;
+    public int ingredientDeliveryPriority = 8;
 
     private List<DeliveryRequest> deliveryRequests;
 
@@ -57,7 +58,7 @@ public abstract class FactoryBuilding : SmolbeanBuilding
         {
             int ammt = Mathf.Min(toOrder, ingredient.item.stackSize);
             int min = Mathf.Min(ingredient.quantity, ingredient.item.stackSize);
-            var dr = DeliveryManager.Instance.CreateDeliveryRequest(this, ingredient.item, ammt, minimum:min);
+            var dr = DeliveryManager.Instance.CreateDeliveryRequest(this, ingredient.item, ammt, minimum:min, priority:ingredientDeliveryPriority);
             deliveryRequests.Add(dr);
             toOrder -= ammt;
         }

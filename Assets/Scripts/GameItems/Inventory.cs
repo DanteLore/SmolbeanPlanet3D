@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 public class Inventory
@@ -102,7 +103,8 @@ public class Inventory
     public InventoryItem TakeAtLeast(DropSpec itemSpec, int minimum, int maximum)
     {
         int count = ItemCount(itemSpec);
-        Assert.IsTrue(count >= minimum, $"Requested {minimum} - {maximum} items, only {count} available");
+        if(count < minimum)
+           return null;
         return Take(itemSpec, Math.Min(maximum, count));
     }
 
