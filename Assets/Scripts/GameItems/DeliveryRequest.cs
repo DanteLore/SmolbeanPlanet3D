@@ -4,20 +4,23 @@ public class DeliveryRequest
     private DropSpec item;
     private int quantity;
     private int priority;
+    private int minimum;
 
     public SmolbeanBuilding Building { get { return building; }}
     public DropSpec Item { get { return item; }}
     public int Quantity { get { return quantity; }}
     public int Priority { get { return priority; }}
+    public int Minimum { get { return minimum; }}
     
     public bool IsComplete { get; private set; }
 
-    public DeliveryRequest(SmolbeanBuilding building, DropSpec item, int quantity, int priority)
+    public DeliveryRequest(SmolbeanBuilding building, DropSpec item, int quantity, int priority, int minimum = -1)
     {
         this.building = building;
         this.item = item;
         this.quantity = quantity;
         this.priority = priority;
+        this.minimum = minimum > 0 ? minimum : quantity;
     }
 
     public void SetComplete(bool val)

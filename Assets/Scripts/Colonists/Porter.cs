@@ -19,7 +19,6 @@ public class Porter : Colonist, IGatherDrops, IDeliverDrops
         stateMachine = new StateMachine(shouldLog:false);
 
         var idle = new IdleState(animator);
-        var sleeping = new SleepState(this);
 
         var searchForDeliveryJob = new PorterClaimDeliveryRequest(this, DeliveryManager.Instance);
         var searchForCollectionJob = new PorterSearchForDropToCollectState(this, dropLayer);
@@ -30,14 +29,12 @@ public class Porter : Colonist, IGatherDrops, IDeliverDrops
         AT(searchForDeliveryJob, doDelivery, DeliveryAssigned());
         AT(searchForDeliveryJob, searchForCollectionJob, NoDeliveryToDo());
         AT(doDelivery, idle, DeliveryComplete());
-        //AT(doDelivery, searchForCollectionJob, DeliveryFailed());
         
         AT(searchForCollectionJob, fetchDrop, DropFound());
         AT(searchForCollectionJob, idle, NoDropFound());
-        AT(fetchDrop, sleeping, FetchDropSucceeded());
+        AT(fetchDrop, idle, FetchDropSucceeded());
         AT(fetchDrop, searchForDeliveryJob, FetchDropFailed());
 
-        AT(sleeping, idle, HasBeenSleepingForAWhile());
         AT(idle, searchForDeliveryJob, HasBeenIdleForAWhile());
 
         stateMachine.SetState(idle);
@@ -47,7 +44,6 @@ public class Porter : Colonist, IGatherDrops, IDeliverDrops
         Func<bool> DropFound() => () => TargetDrop != null;
         Func<bool> NoDropFound() => () => TargetDrop == null;
         Func<bool> HasBeenIdleForAWhile() => () => idle.TimeIdle >= idleTime;
-        Func<bool> HasBeenSleepingForAWhile() => () => sleeping.TimeAsleep >= sleepTime;
         Func<bool> FetchDropSucceeded() => () => fetchDrop.Finished && CloseEnoughTo(SpawnPoint);
         Func<bool> FetchDropFailed() => () => fetchDrop.Finished && !CloseEnoughTo(SpawnPoint);
         Func<bool> NoDeliveryToDo() => () => DeliveryRequest == null;

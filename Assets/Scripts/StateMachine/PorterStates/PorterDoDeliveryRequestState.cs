@@ -23,25 +23,27 @@ public class PorterDoDeliveryRequestState : IState
         stateMachine = new StateMachine(shouldLog:false);
 
         var walkToDestination = new PorterWalkToBuildingState(porter, navAgent, animator, soundPlayer);
-        var finished = new PorterFinishedDeliveryRequestState(this, porter);
+        var succeeded = new PorterFinishedDeliveryRequestState(this, porter, DeliveryManager.Instance);
+        var failed = new PorterFailedDeliveryRequestState(this, porter, DeliveryManager.Instance);
         var goToStorehouse = new WalkHomeState(porter, navAgent, animator, soundPlayer);
         var pickupStuff = new PorterLoadDeliveryItemsState(porter);
-        var dropStuff = new PorterUnloadDeliveryItemsState(porter, DeliveryManager.Instance);
+        var unloadStuff = new PorterUnloadDeliveryItemsState(porter);
         var putStuffBack = new PorterStoreDropsState(porter, DropController.Instance);
 
         AT(goToStorehouse, pickupStuff, IsAtStorehouseAndReadyToPickup());
         AT(goToStorehouse, putStuffBack, IsAtStorehouseAndReadyToDropOff());
-        AT(putStuffBack, finished, InventoryEmpty());
+        AT(putStuffBack, failed, InventoryEmpty());
         AT(pickupStuff, walkToDestination, HasStuffInInventory());
-        AT(pickupStuff, finished, DidNotGetTheStuff());
-        AT(walkToDestination, dropStuff, IsAtDestinationBuilding());
-        AT(dropStuff, finished, DeliveryIsFinished());
+        AT(walkToDestination, unloadStuff, IsAtDestinationBuilding());
+        AT(unloadStuff, succeeded, DeliveryIsFinished());
 
-        AT(pickupStuff, finished, DeliveryRequestCancelled());
+        AT(pickupStuff, failed, DidNotGetTheStuff());
+        AT(pickupStuff, failed, DeliveryRequestCancelled());
+        
         AT(walkToDestination, goToStorehouse, DeliveryRequestCancelled());
-        AT(dropStuff, goToStorehouse, DeliveryRequestCancelled());
+        AT(unloadStuff, goToStorehouse, DeliveryRequestCancelled());
 
-        // Handle delection of destination building
+        // Handle deletion of destination building
         AT(walkToDestination, goToStorehouse, BuildingDeleted());
 
         startState = goToStorehouse;

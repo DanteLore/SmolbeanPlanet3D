@@ -9,7 +9,6 @@ public class DeliveryManager : MonoBehaviour
     private List<DeliveryRequest> unclaimedDeliveryRequests;
     private Dictionary<IDeliverDrops, DeliveryRequest> claimedDeliveryRequests;
     private List<CollectionRequest> collections;
-
     public IEnumerable<DeliveryRequest> ClaimedDeliveryRequests { get { return claimedDeliveryRequests.Values; } }
     public IEnumerable<DeliveryRequest> UnclaimedDeliveryRequests { get { return unclaimedDeliveryRequests; } }
 
@@ -28,11 +27,11 @@ public class DeliveryManager : MonoBehaviour
         collections = new List<CollectionRequest>();
     }
 
-    public DeliveryRequest CreateDeliveryRequest(SmolbeanBuilding building, DropSpec item, int quantity, int priority = 10)
+    public DeliveryRequest CreateDeliveryRequest(SmolbeanBuilding building, DropSpec item, int quantity, int minimum = -1, int priority = 10)
     {
         Debug.Assert(quantity <= item.stackSize, "You can not order more than one stack per delivery request");
 
-        var request = new DeliveryRequest(building, item, quantity, priority);
+        var request = new DeliveryRequest(building, item, quantity, priority, minimum);
         unclaimedDeliveryRequests.Add(request);
 
         return request;
@@ -40,7 +39,7 @@ public class DeliveryManager : MonoBehaviour
 
     private bool CanFulfilDeliveryRequestFrom(DeliveryRequest request, Inventory inventory)
     {
-        return inventory.Contains(request.Item, request.Quantity);
+        return inventory.Contains(request.Item, request.Minimum);
     }
 
     public DeliveryRequest ClaimNextDeliveryRequest(IDeliverDrops porter, Inventory sourceInventory)
@@ -60,6 +59,12 @@ public class DeliveryManager : MonoBehaviour
         request.SetComplete(true);
         unclaimedDeliveryRequests.Remove(request);
         claimedDeliveryRequests.Remove(owner);
+    }
+
+    public void ReturnDelivery(Porter porter, DeliveryRequest deliveryRequest)
+    {
+        claimedDeliveryRequests.Remove(porter);
+        unclaimedDeliveryRequests.Add(deliveryRequest);
     }
 
     public void BuildingDestroyed(SmolbeanBuilding building)

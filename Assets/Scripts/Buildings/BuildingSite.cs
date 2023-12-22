@@ -57,14 +57,12 @@ public class BuildingSite : SmolbeanBuilding
         foreach(var ingredient in BuildingSpec.ingredients)
         {
             int toOrder = ingredient.quantity - Inventory.ItemCount(ingredient.item);
-            //Debug.Log($"Need {toOrder} of {ingredient.item.dropName}:");
 
             while(toOrder > 0)
             {
                 int ammt = Mathf.Min(toOrder, ingredient.item.stackSize);
-                var dr = DeliveryManager.Instance.CreateDeliveryRequest(this, ingredient.item, ammt);
+                DeliveryManager.Instance.CreateDeliveryRequest(this, ingredient.item, ammt);
                 toOrder -= ammt;
-                //Debug.Log(dr);
             }
         }
     }
@@ -79,7 +77,6 @@ public class BuildingSite : SmolbeanBuilding
         if(buildingInProgress)
             return;
 
-        Debug.Log("Building started");
         buildingInProgress = true;
         buildParticleSystem.Play();
         Inventory.Empty();
@@ -90,7 +87,6 @@ public class BuildingSite : SmolbeanBuilding
         if(!buildingInProgress)
             return;
 
-        Debug.Log("Building complete");
         buildingInProgress = false;
         buildParticleSystem.Stop();
 

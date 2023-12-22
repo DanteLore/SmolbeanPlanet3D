@@ -99,6 +99,13 @@ public class Inventory
         };
     }
 
+    public InventoryItem TakeAtLeast(DropSpec itemSpec, int minimum, int maximum)
+    {
+        int count = ItemCount(itemSpec);
+        Assert.IsTrue(count >= minimum, $"Requested {minimum} - {maximum} items, only {count} available");
+        return Take(itemSpec, Math.Min(maximum, count));
+    }
+
     private void MergeStacks()
     {
         foreach(var items in inventory.GroupBy(i => i.dropSpec, i => i, (k, g) => g.ToList()))

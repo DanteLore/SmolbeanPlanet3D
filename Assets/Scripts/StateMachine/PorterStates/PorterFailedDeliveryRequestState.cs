@@ -1,10 +1,14 @@
-public class PorterFinishedDeliveryRequestState : IState
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PorterFailedDeliveryRequestState : IState
 {
     private PorterDoDeliveryRequestState parent;
     private Porter porter;
     private readonly DeliveryManager deliveryManager;
 
-    public PorterFinishedDeliveryRequestState(PorterDoDeliveryRequestState parent, Porter porter, DeliveryManager deliveryManager)
+    public PorterFailedDeliveryRequestState(PorterDoDeliveryRequestState parent, Porter porter, DeliveryManager deliveryManager)
     {
         this.parent = parent;
         this.porter = porter;
@@ -13,9 +17,9 @@ public class PorterFinishedDeliveryRequestState : IState
 
     public void OnEnter()
     {
-        deliveryManager.CompleteDelivery(porter, porter.DeliveryRequest);
+        deliveryManager.ReturnDelivery(porter, porter.DeliveryRequest);
         porter.DeliveryRequest = null;
-        parent.SetFinished(true);
+        parent.SetFinished(true); 
     }
 
     public void OnExit()

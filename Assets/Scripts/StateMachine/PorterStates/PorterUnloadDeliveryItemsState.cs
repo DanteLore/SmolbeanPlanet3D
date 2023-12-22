@@ -1,12 +1,10 @@
 public class PorterUnloadDeliveryItemsState : IState
 {
     private Porter porter;
-    private readonly DeliveryManager deliveryManager;
 
-    public PorterUnloadDeliveryItemsState(Porter porter, DeliveryManager deliveryManager)
+    public PorterUnloadDeliveryItemsState(Porter porter)
     {
         this.porter = porter;
-        this.deliveryManager = deliveryManager;
     }
 
     public void OnEnter()
@@ -24,6 +22,6 @@ public class PorterUnloadDeliveryItemsState : IState
         var item = porter.Inventory.Take(delivery.Item, delivery.Quantity);
         delivery.Building.Inventory.PickUp(item);
 
-        deliveryManager.CompleteDelivery(porter, porter.DeliveryRequest);
+        delivery.SetComplete(true);
     }
 }

@@ -9,7 +9,9 @@ public abstract class FactoryBuilding : SmolbeanBuilding
     public bool IsFinished { get { return (Time.time  - startTime) >= recipe.craftingTime; } }
     public bool IsReadyToStart { get; private set; }
 
-    private Dictionary<Ingredient, DeliveryRequest> deliveryRequests;
+    public int orderMultiplier = 3;
+
+    private List<DeliveryRequest> deliveryRequests;
 
     private float startTime;
 
@@ -17,7 +19,7 @@ public abstract class FactoryBuilding : SmolbeanBuilding
     {
         base.Start();
 
-        deliveryRequests = new Dictionary<Ingredient, DeliveryRequest>();
+        deliveryRequests = new List<DeliveryRequest>();
 
         InvokeRepeating("UpdateDeliveryRequests", 1.0f, 0.5f);
     }
@@ -35,24 +37,37 @@ public abstract class FactoryBuilding : SmolbeanBuilding
             // If we don't have enough of the resource in the inventory
             if(!Inventory.Contains(ingredient.item, ingredient.quantity))
             {
-                RaiseRequestIfNoneExists(ingredient);
+                OrderMaterials(ingredient);
             }
         }
     }
 
-    private void RaiseRequestIfNoneExists(Ingredient ingredient)
+    private void OrderMaterials(Ingredient ingredient)
     {
-        if (!deliveryRequests.TryGetValue(ingredient, out var request) || request.IsComplete)
+        if (deliveryRequests.Count(dr => !dr.IsComplete && dr.Item == ingredient.item) == 0)
         {
-            deliveryRequests[ingredient] = DeliveryManager.Instance.CreateDeliveryRequest(this, ingredient.item, ingredient.quantity);
+            RaiseDeliveryRequests(ingredient);
+        }
+    }
+
+    private void RaiseDeliveryRequests(Ingredient ingredient)
+    {
+        int toOrder = ingredient.quantity * orderMultiplier;
+        while (toOrder > 0)
+        {
+            int ammt = Mathf.Min(toOrder, ingredient.item.stackSize);
+            int min = Mathf.Min(ingredient.quantity, ingredient.item.stackSize);
+            var dr = DeliveryManager.Instance.CreateDeliveryRequest(this, ingredient.item, ammt, minimum:min);
+            deliveryRequests.Add(dr);
+            toOrder -= ammt;
         }
     }
 
     private void RemoveCompletedRequests()
     {
-        var toRemove = deliveryRequests.Where(kv => kv.Value.IsComplete).Select(kv => kv.Key).ToList();
-        foreach (var key in toRemove)
-            deliveryRequests.Remove(key);
+        var toRemove = deliveryRequests.Where(dr => dr.IsComplete).ToList();
+        foreach (var dr in toRemove)
+            deliveryRequests.Remove(dr);
     }
 
     public bool HasResources()

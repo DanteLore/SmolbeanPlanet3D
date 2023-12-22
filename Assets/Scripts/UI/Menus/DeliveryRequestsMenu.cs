@@ -40,6 +40,10 @@ public class DeliveryRequestsMenu : SmolbeanMenu
 
     private void AddRow(DeliveryRequest request, bool waiting)
     {
+        // Building deleted!
+        if(request.Building == null)
+            return;
+
         var row = new VisualElement();
         row.AddToClassList("deliveryRow");
         listContainer.Add(row);
