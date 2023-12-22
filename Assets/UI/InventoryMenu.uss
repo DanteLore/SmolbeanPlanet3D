@@ -1,3 +1,16 @@
+.menuContainer {
+    top: 10%;
+    right: 10%;
+    position: relative;
+    height: 80%;
+    min-height: 80%;
+    max-height: 80%;
+    align-self: flex-end;
+    width: 500px;
+    max-width: 500px;
+    min-width: 500px;
+    align-items: flex-start;
+}
 
 .inventoryContainer Button {
     width: 60px;
@@ -29,7 +42,6 @@
     padding-right: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
-    width: 100%;
     margin-left: 24px;
 }
 
@@ -46,6 +58,7 @@
     margin-right: 0;
     margin-top: 0;
     margin-bottom: 24px;
+    width: 100%;
 }
 
 .buildingIcon {

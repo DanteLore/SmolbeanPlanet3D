@@ -1,10 +1,6 @@
-
 .menuContainer {
-    left: 10%;
     top: 10%;
-    right: 10%;
-    position: absolute;
-    bottom: 10%;
+    position: relative;
     background-color: rgba(0, 0, 0, 0.78);
     padding-left: 20px;
     padding-right: 20px;
@@ -16,7 +12,13 @@
     border-bottom-right-radius: 5px;
     flex-grow: 1;
     align-items: center;
-    align-self: stretch;
+    align-self: center;
+    width: 800px;
+    height: 600px;
+    max-width: 800px;
+    max-height: 600px;
+    min-width: 600px;
+    min-height: 450px;
 }
 
 .menuContainer Button {

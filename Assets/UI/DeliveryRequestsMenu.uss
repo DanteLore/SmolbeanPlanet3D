@@ -1,3 +1,21 @@
+.menuContainer {
+    top: 10%;
+    right: 10%;
+    position: relative;
+    align-self: flex-end;
+    align-items: flex-start;
+    width: 500px;
+    max-width: 500px;
+    min-width: 500px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    max-height: 80%;
+    min-height: 80%;
+    height: 80%;
+}
+
 .listContainer {
     flex-direction: row;
     flex-wrap: nowrap;
@@ -5,7 +23,6 @@
     padding-right: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
-    width: 100%;
     margin-left: 24px;
 }
 
@@ -45,7 +62,7 @@
 }
 
 .resourceIcon {
-    width: 640px;
+    width: 40px;
     height: 40px;
     max-width: 40px;
     max-height: 40px;

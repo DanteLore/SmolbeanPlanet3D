@@ -2,8 +2,8 @@
     <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
     <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
     <Style src="project://database/Assets/UI/DeliveryRequestsMenu.uss?fileID=7433441132597879392&amp;guid=10e3c6aba5850471c94b00ccd8b09b1f&amp;type=3#DeliveryRequestsMenu" />
-    <ui:VisualElement name="VisualElement" class="menuContainer" style="flex-grow: 1;">
-        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 100%; width: 80%; min-width: 600px;">
+    <ui:VisualElement name="VisualElement" class="menuContainer">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
             <ui:Label tabindex="-1" text="Delivery Requests" display-tooltip-when-elided="true" class="title" />
             <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="height: 100%; display: flex;">
                 <ui:VisualElement name="listContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start; white-space: nowrap; flex-wrap: nowrap; flex-direction: column; justify-content: flex-start; align-self: stretch; flex-shrink: 0;" />
