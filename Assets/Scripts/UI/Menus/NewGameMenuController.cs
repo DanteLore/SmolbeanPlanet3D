@@ -83,15 +83,7 @@ public class NewGameMenuController : SmolbeanMenu
 
                 Color color = Color.blue;
 
-                if (i == 2)
-                {
-                    color = new Color(0f, 1.0f, 0f);
-                }
-                else if (i == 1)
-                {
-                    color = new Color(0f, 0.75f, 0f);
-                }
-
+                color = (i == 0) ? Color.blue : new Color(0f, 1.0f / (i - 1), 0f);
                 texture.SetPixel(x, y, color);
             }
         }

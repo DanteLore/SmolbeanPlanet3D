@@ -28,7 +28,9 @@ public class TTerrainDataEditor : Editor
                 string assetFile = "Assets" + filename.Substring(Application.dataPath.Length);
                 LoadMeshes(assetFile);
 
-                ((TerrainData)target).neighbourData = new NeighbourSelector(FuzzyEdgeFactor, ((TerrainData)target).meshData).SelectNeighbours().ToArray();
+                TerrainData td = (TerrainData)target;
+
+                td.neighbourData = new NeighbourSelector(FuzzyEdgeFactor, td.meshData, td.levelMeshHeight).SelectNeighbours().ToArray();
 
                 EditorUtility.SetDirty(target);
             }

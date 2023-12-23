@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 public class MapSquareOptions
 {
@@ -31,11 +32,16 @@ public class MapSquareOptions
     public bool Restrict(IEnumerable<int> allowed)
     {
         int cnt = options.Count;
-        options = options.Intersect(allowed).ToList();
+        var newOptions = options.Intersect(allowed).ToList();
 
         if(options.Count == 0)
+        {
+            Debug.Log($"Options[{options.Count()}] {string.Join(", ", options)}");
+            Debug.Log($"Allowed[{allowed.Count()}] {string.Join(", ", allowed)}");
             throw new Exception("Wave function collapse failed - impossible tile combination found");
+        }
 
+        options = newOptions;
         return cnt != options.Count;
     }
 }

@@ -5,12 +5,15 @@ using System.Collections.Generic;
 public class NeighbourSelector
 {
     private float fuzzyEdgeFactor = 0.01f;
+    private float levelMeshHeight; 
+
     private IEnumerable<MeshData> meshData;
 
-    public NeighbourSelector(float fuzzyEdgeFactor, IEnumerable<MeshData> meshData)
+    public NeighbourSelector(float fuzzyEdgeFactor, IEnumerable<MeshData> meshData, float levelMeshHeight)
     {
         this.fuzzyEdgeFactor = fuzzyEdgeFactor;
         this.meshData = meshData;
+        this.levelMeshHeight = levelMeshHeight;
     }
 
     public IEnumerable<NeighbourData> SelectNeighbours()
@@ -39,13 +42,11 @@ public class NeighbourSelector
 
     private int[] GetCornerLevelData(MeshData target)
     {
-        float meshHeight = 2.0f;
-
         return new int[] {
-            Mathf.FloorToInt((target.backLeftHeight) / meshHeight) + 1,
-            Mathf.FloorToInt((target.backRightHeight) / meshHeight) + 1,
-            Mathf.FloorToInt((target.frontLeftHeight) / meshHeight) + 1,
-            Mathf.FloorToInt((target.frontRightHeight) / meshHeight) + 1
+            Mathf.FloorToInt(target.backLeftHeight / levelMeshHeight) + 1,
+            Mathf.FloorToInt(target.backRightHeight / levelMeshHeight) + 1,
+            Mathf.FloorToInt(target.frontLeftHeight / levelMeshHeight) + 1,
+            Mathf.FloorToInt(target.frontRightHeight / levelMeshHeight) + 1
         };
     }
 
@@ -71,7 +72,7 @@ public class NeighbourSelector
 
     private float DistanceFromPointToEdge(Vector3 point, Edge edge)
     {
-        var line = (edge.end - edge.start);
+        var line = edge.end - edge.start;
         var len = line.magnitude;
         line.Normalize();
     
