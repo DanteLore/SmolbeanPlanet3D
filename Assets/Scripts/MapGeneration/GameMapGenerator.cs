@@ -11,6 +11,8 @@ public class GameMapGenerator : MonoBehaviour
     public float noiseScale1 = 0.3f;
     public float noiseScale2 = 0.1f;
 
+    public int maxLevelNumber = 3;
+
     public int Seed { get; private set; }
 
     void Awake()
@@ -27,7 +29,7 @@ public class GameMapGenerator : MonoBehaviour
         Random.InitState(Seed);
 
         var noise = GenerateNoiseMap();
-        return noise.Select(s => Mathf.FloorToInt(Mathf.Lerp(0.0f, 3f, s))).Select(x => x > 2 ? 2 : x).ToList();
+        return noise.Select(s => Mathf.FloorToInt(Mathf.Lerp(0.0f, maxLevelNumber + 1.0f, s))).Select(x => Mathf.Min(maxLevelNumber, x)).ToList();
     }
 
     private List<float> GenerateNoiseMap()
