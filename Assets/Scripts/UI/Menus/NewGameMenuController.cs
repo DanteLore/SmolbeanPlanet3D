@@ -30,7 +30,7 @@ public class NewGameMenuController : SmolbeanMenu
 
         seedTextField = document.rootVisualElement.Q<TextField>("seedTextField");
         seedTextField.RegisterCallback<ChangeEvent<string>>(TextChanged);
-        seedTextField.value = mapGenerator.Seed.ToString();
+        seedTextField.value = mapGenerator.seed.ToString();
 
         previewPane = document.rootVisualElement.Q<VisualElement>("newMapPreview");
         

@@ -13,20 +13,15 @@ public class GameMapGenerator : MonoBehaviour
 
     public int maxLevelNumber = 3;
 
-    public int Seed { get; private set; }
-
-    void Awake()
-    {
-        Seed = 696809784;
-    }
+    public int seed = 696809784;
 
     public List<int> GenerateMap(int seed = 0)
     {
         if(seed != 0)
         {
-            Seed = seed;
+            this.seed = seed;
         }
-        Random.InitState(Seed);
+        Random.InitState(seed);
 
         var noise = GenerateNoiseMap();
         return noise.Select(s => Mathf.FloorToInt(Mathf.Lerp(0.0f, maxLevelNumber + 1.0f, s))).Select(x => Mathf.Min(maxLevelNumber, x)).ToList();
