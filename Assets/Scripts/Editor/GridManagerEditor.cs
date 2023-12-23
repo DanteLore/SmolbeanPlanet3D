@@ -15,7 +15,7 @@ public class GridManagerEditor : Editor
         {
             var generator = GameObject.FindAnyObjectByType<GameMapGenerator>();
 
-            var newMap = generator.GenerateMap();
+            var newMap = generator.GenerateMap(generator.seed);
             gridManager.mapData.GameMap = newMap.ToArray();
             gridManager.mapData.GameMapWidth = generator.mapWidth;
             gridManager.mapData.GameMapHeight = generator.mapHeight;

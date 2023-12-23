@@ -8,10 +8,17 @@ public class GameMapGenerator : MonoBehaviour
     public int mapHeight = 100;
     public int mapWidth = 100;
 
-    public float noiseScale1 = 0.3f;
-    public float noiseScale2 = 0.1f;
+    [Range(0.0f, 0.5f)] public float noiseScale1 = 0.3f;
+    [Range(0.0f, 0.5f)] public float noiseScale2 = 0.1f;
+    [Range(0.0f, 0.5f)] public float noiseScale3 = 0.05f;
 
-    public int maxLevelNumber = 3;
+    [Range(0.0f, 1.0f)] public float noiseStength1 = 0.8f;
+    [Range(0.0f, 1.0f)] public float noiseStength2 = 0.5f;
+    [Range(0.0f, 1.0f)] public float noiseStength3 = 0.1f;
+
+    [Range(-0.5f, 0.5f)] public float heightBias = 0.0f;
+
+    [Range(1, 5)] public int maxLevelNumber = 3;
 
     public int seed = 696809784;
 
@@ -34,8 +41,12 @@ public class GameMapGenerator : MonoBehaviour
         var noiseMap = new List<float>();
 
         // Offset the perlin noise, because otherwise it's the same every run!
-        float xOffset = UnityEngine.Random.Range(0.0f, 1000.0f);
-        float yOffset = UnityEngine.Random.Range(0.0f, 1000.0f);
+        float xOffset1 = UnityEngine.Random.Range(0.0f, 1000.0f);
+        float yOffset1 = UnityEngine.Random.Range(0.0f, 1000.0f);
+        float xOffset2 = UnityEngine.Random.Range(0.0f, 1000.0f);
+        float yOffset2 = UnityEngine.Random.Range(0.0f, 1000.0f);
+        float xOffset3 = UnityEngine.Random.Range(0.0f, 1000.0f);
+        float yOffset3 = UnityEngine.Random.Range(0.0f, 1000.0f);
 
         // Generate noise
         float max = 0f;
@@ -43,9 +54,12 @@ public class GameMapGenerator : MonoBehaviour
         {
             for (int x = 0; x < mapHeight; x++)
             {
-                // Two layers of Perlin noise
-                float sample = Mathf.PerlinNoise((x + xOffset) / (mapWidth * noiseScale1), (y + yOffset) / (mapHeight * noiseScale1));
-                sample += Mathf.PerlinNoise((x + xOffset) / (mapWidth * noiseScale2), (y + yOffset) / (mapHeight * noiseScale2));
+                // Three layers of Perlin noise
+                float part1 = Mathf.PerlinNoise((x + xOffset1) / (mapWidth * noiseScale1), (y + yOffset1) / (mapHeight * noiseScale1));
+                float part2 = Mathf.PerlinNoise((x + xOffset2) / (mapWidth * noiseScale2), (y + yOffset2) / (mapHeight * noiseScale2));
+                float part3 = Mathf.PerlinNoise((x + xOffset3) / (mapWidth * noiseScale3), (y + yOffset3) / (mapHeight * noiseScale3));
+
+                float sample = heightBias + (noiseStength1 * part1 + noiseStength2 * part2 + noiseStength3 * part3);
 
                 // Dropoff from centre
                 var pos = new Vector2(x, y);
