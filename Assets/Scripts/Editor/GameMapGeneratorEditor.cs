@@ -25,8 +25,8 @@ public class GameMapGeneratorEditor : Editor
         {
             for (int x = 0; x < mapGenerator.mapWidth; x++)
             {
-                float i = map[y * mapGenerator.mapWidth + x];
-                Color color = (i == 0) ? Color.blue : new Color(0f, 1.0f / (i - 1), 0f);
+                int i = map[y * mapGenerator.mapWidth + x];
+                Color color = (i == 0) ? Color.blue : new Color(0f, (mapGenerator.maxLevelNumber + 1 - i) / (mapGenerator.maxLevelNumber - 1.0f), 0f);
                 texture.SetPixel(x, y, color);
             }
         }

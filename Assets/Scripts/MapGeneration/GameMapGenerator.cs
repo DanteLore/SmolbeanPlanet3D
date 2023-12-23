@@ -16,9 +16,9 @@ public class GameMapGenerator : MonoBehaviour
     [Range(0.0f, 1.0f)] public float noiseStength2 = 0.5f;
     [Range(0.0f, 1.0f)] public float noiseStength3 = 0.1f;
 
-    [Range(-0.5f, 0.5f)] public float heightBias = 0.0f;
+    [Range(-1.0f, 0.5f)] public float heightBias = 0.0f;
 
-    [Range(1, 5)] public int maxLevelNumber = 3;
+    [Range(1, 10)] public int maxLevelNumber = 3;
 
     public int seed = 696809784;
 
@@ -59,7 +59,8 @@ public class GameMapGenerator : MonoBehaviour
                 float part2 = Mathf.PerlinNoise((x + xOffset2) / (mapWidth * noiseScale2), (y + yOffset2) / (mapHeight * noiseScale2));
                 float part3 = Mathf.PerlinNoise((x + xOffset3) / (mapWidth * noiseScale3), (y + yOffset3) / (mapHeight * noiseScale3));
 
-                float sample = heightBias + (noiseStength1 * part1 + noiseStength2 * part2 + noiseStength3 * part3);
+                float sample = noiseStength1 * part1 + noiseStength2 * part2 + noiseStength3 * part3;
+                sample += heightBias;
 
                 // Dropoff from centre
                 var pos = new Vector2(x, y);
