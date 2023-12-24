@@ -9,10 +9,23 @@
                     <ui:VisualElement name="newMapPreview" style="width: 250px; height: 250px; color: rgb(0, 0, 0); background-color: rgb(0, 0, 0); flex-shrink: 0;" />
                 </ui:VisualElement>
                 <ui:VisualElement class="controlsFrame" style="flex-direction: column; width: 600px; min-height: 300px; align-items: flex-start;">
-                    <ui:VisualElement style="width: 100%; flex-direction: row; align-items: center; flex-wrap: wrap; flex-grow: 0; align-self: auto;">
-                        <ui:TextField picking-mode="Ignore" label="Seed" name="seedTextField" style="overflow: hidden;" />
-                        <ui:Button text="Random" display-tooltip-when-elided="true" name="randomButton" style="margin-top: 20px; width: 64px; height: 24px; align-self: flex-end; padding-left: 3px; padding-right: 3px; padding-top: 3px; padding-bottom: 3px;" />
-                    </ui:VisualElement>
+                    <ui:GroupBox text="Random Seed">
+                        <ui:VisualElement style="width: 100%; flex-direction: row; align-items: center; flex-wrap: wrap; flex-grow: 0; align-self: auto;">
+                            <ui:TextField picking-mode="Ignore" label="Seed" name="seedTextField" style="overflow: hidden;" />
+                            <ui:Button text="Random" display-tooltip-when-elided="true" name="randomButton" style="margin-top: 20px; width: 64px; height: 24px; align-self: flex-end; padding-left: 3px; padding-right: 3px; padding-top: 3px; padding-bottom: 3px;" />
+                        </ui:VisualElement>
+                    </ui:GroupBox>
+                    <ui:GroupBox text="Bumpiness Settings">
+                        <ui:Slider picking-mode="Ignore" label="Scale 1" value="42" high-value="1" show-input-field="false" name="noiseScale1Slider" low-value="0.0001" />
+                        <ui:Slider picking-mode="Ignore" label="Scale 2" value="42" high-value="1" name="noiseScale2Slider" low-value="0.0001" />
+                        <ui:Slider picking-mode="Ignore" label="Scale 3" value="42" high-value="1" name="noiseScale3Slider" low-value="0.0001" />
+                        <ui:Slider picking-mode="Ignore" label="Strength 1" value="42" high-value="1" show-input-field="false" name="noiseStrength1Slider" low-value="0.0001" />
+                        <ui:Slider picking-mode="Ignore" label="Strength 2" value="42" high-value="1" name="noiseStrength2Slider" low-value="0.0001" />
+                        <ui:Slider picking-mode="Ignore" label="Strength 3" value="42" high-value="1" name="noiseStrength3Slider" low-value="0.0001" />
+                    </ui:GroupBox>
+                    <ui:GroupBox text="Sea Level Settings">
+                        <ui:Slider picking-mode="Ignore" label="Height Adjust" value="42" high-value="1" show-input-field="false" name="heightAdjustSlider" low-value="0.0001" />
+                    </ui:GroupBox>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>

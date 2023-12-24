@@ -8,9 +8,9 @@ public class GameMapGenerator : MonoBehaviour
     public int mapHeight = 100;
     public int mapWidth = 100;
 
-    [Range(0.0f, 0.5f)] public float noiseScale1 = 0.3f;
-    [Range(0.0f, 0.5f)] public float noiseScale2 = 0.1f;
-    [Range(0.0f, 0.5f)] public float noiseScale3 = 0.05f;
+    [Range(0.001f, 0.5f)] public float noiseScale1 = 0.3f;
+    [Range(0.001f, 0.5f)] public float noiseScale2 = 0.1f;
+    [Range(0.001f, 0.5f)] public float noiseScale3 = 0.05f;
 
     [Range(0.0f, 1.0f)] public float noiseStength1 = 0.8f;
     [Range(0.0f, 1.0f)] public float noiseStength2 = 0.5f;
@@ -41,12 +41,12 @@ public class GameMapGenerator : MonoBehaviour
         var noiseMap = new List<float>();
 
         // Offset the perlin noise, because otherwise it's the same every run!
-        float xOffset1 = UnityEngine.Random.Range(0.0f, 1000.0f);
-        float yOffset1 = UnityEngine.Random.Range(0.0f, 1000.0f);
-        float xOffset2 = UnityEngine.Random.Range(0.0f, 1000.0f);
-        float yOffset2 = UnityEngine.Random.Range(0.0f, 1000.0f);
-        float xOffset3 = UnityEngine.Random.Range(0.0f, 1000.0f);
-        float yOffset3 = UnityEngine.Random.Range(0.0f, 1000.0f);
+        float xOffset1 = Random.Range(0.0f, 1000.0f);
+        float yOffset1 = Random.Range(0.0f, 1000.0f);
+        float xOffset2 = Random.Range(0.0f, 1000.0f);
+        float yOffset2 = Random.Range(0.0f, 1000.0f);
+        float xOffset3 = Random.Range(0.0f, 1000.0f);
+        float yOffset3 = Random.Range(0.0f, 1000.0f);
 
         // Generate noise
         float max = 0f;
