@@ -11,6 +11,32 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Return to Wave Function Collapse
+
+It's Christmas.  I couldn't resist returning to the WFC code and meshes.  First I added a variable number of levels - from a hard coded 3 to now a max of 7, dictated by the meshes available.  Then I added multi-level meshes which allow non-adjacent levels to join - for example, where TopLeft=1, TopRight=2, BottomLeft=3 and BottomRight=2.  This means maps with higher frequency noise can be generated, which makes things more interesting.
+
+![Screenshot](./Docs/Images/screenshot45.png)
+
+I also spent some time making map generation more fun at design time.
+
+![Screenshot](./Docs/Images/screenshot46.png)
+
+## Menu Overhaul
+
+The new UI system is a wonderful idea that's been executed very poorly.  Either way, I battled it long enough to add some new menus to the game.
+
+![Screenshot](./Docs/Images/screenshot47.png)
+
+![Screenshot](./Docs/Images/screenshot48.png)
+
+![Screenshot](./Docs/Images/screenshot49.png)
+
+## Game speed
+
+Just to make testing easier, and gameplay less boring, I added four buttons to increase game speed - 1x, 2x, 4x and 8x.
+
+Most things just worked, others needed a `Time.deltaTime` call... and the unity NavMesh started acting weird at higher speeds.  I think one day I'm going to write my own.
+
 ## Building of buildings
 
 The next big task is the building of buildings - which might help transform Smolbean from a demo to a game...

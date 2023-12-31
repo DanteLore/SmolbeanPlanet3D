@@ -16,7 +16,7 @@
     width: 800px;
     height: 700px;
     max-width: 800px;
-    max-height: 700px;
+    max-height: 90%;
     min-width: 600px;
     min-height: 600px;
 }
