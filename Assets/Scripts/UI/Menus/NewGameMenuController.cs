@@ -130,7 +130,8 @@ public class NewGameMenuController : SmolbeanMenu
             for (int x = 0; x < mapGenerator.mapWidth; x++)
             {
                 int i = map[y * mapGenerator.mapWidth + x];
-                Color color = (i == 0) ? Color.blue : new Color(0f, (mapGenerator.maxLevelNumber + 1 - i) / (mapGenerator.maxLevelNumber - 1.0f), 0f);
+                float g = (mapGenerator.maxLevelNumber + 1.0f - i) / (mapGenerator.maxLevelNumber + 1.0f);
+                Color color = (i == 0) ? Color.blue : new Color(0f, Mathf.Lerp(0.1f, 1.0f, g), 0f);
                 texture.SetPixel(x, y, color);
             }
         }
