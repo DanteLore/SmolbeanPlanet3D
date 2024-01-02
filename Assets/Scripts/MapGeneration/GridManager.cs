@@ -13,9 +13,6 @@ public class GridManager : MonoBehaviour
     public float fuzzyEdgeFactor = 0.01f;
     public float tileSize = 4.0f;
 
-    [Range(0.0f, 1.0f)]
-    public float coastRadius = 0.8f;
-
     public string groundLayer = "Ground";
 
     public bool addMeshDebugGizmos = false;
@@ -60,7 +57,7 @@ public class GridManager : MonoBehaviour
         var meshData = terrainData.meshData.ToList();
         var neighbourData = terrainData.neighbourData.ToDictionary(nd => nd.id, nd => nd);
         
-        map = new MapGenerator(GameMapWidth, GameMapHeight, coastRadius, meshData, neighbourData).GenerateMap(GameMap);
+        map = new MapGenerator(GameMapWidth, GameMapHeight, meshData, neighbourData).GenerateMap(GameMap);
 
         DrawMap();
 

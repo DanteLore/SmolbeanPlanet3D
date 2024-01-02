@@ -27,7 +27,7 @@ As well as some work to make mountains more realistic, with larger plains region
 
 ## Menu Overhaul
 
-The new UI system is a wonderful idea that's been executed very poorly.  Either way, I battled it long enough to add some new menus to the game.
+Unity's new UI system is a wonderful idea that's been executed very poorly - or at least not finished.  Either way, I battled it long enough to add some new menus to the game.
 
 ![Screenshot](./Docs/Images/screenshot47.png)
 

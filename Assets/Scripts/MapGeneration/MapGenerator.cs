@@ -9,24 +9,24 @@ public class MapGenerator
     private int drawMapHeight;
     private int gameMapWidth;
     private int gameMapHeight;
-    private float coastRadius = 0.8f;
     private Dictionary<String, MeshData> meshData;
     private Dictionary<int, NeighbourData> neighbourData;
     private List<int> allTileOptions;
+    private List<int> seabedOptions;
     private Vector2 mapCentre;
     MapSquareOptions[] drawMap;
 
-    public MapGenerator(int gameMapWidth, int gameMapHeight, float coastRadius, List<MeshData> meshData, Dictionary<int, NeighbourData> neighbourData)
+    public MapGenerator(int gameMapWidth, int gameMapHeight, List<MeshData> meshData, Dictionary<int, NeighbourData> neighbourData)
     {
         this.gameMapWidth = gameMapWidth;
         this.gameMapHeight = gameMapHeight;
         this.drawMapWidth = gameMapWidth + 1;
         this.drawMapHeight = gameMapHeight + 1;
-        this.coastRadius = coastRadius;
         this.meshData = meshData.ToDictionary(md => md.name, md => md);
         this.neighbourData = neighbourData;
 
         allTileOptions = neighbourData.Keys.ToList();
+        seabedOptions = this.meshData.Values.Where(x => x.name == "Seabed").Select(x => x.id).ToList();
         mapCentre = new Vector2(drawMapWidth / 2.0f, drawMapHeight / 2.0f);
     }
 
@@ -34,7 +34,7 @@ public class MapGenerator
     {
         drawMap = InitialiseMap();
 
-        AddOcean();
+        //AddOcean(gameMap);
 
         ApplyGameMapRestrictions(gameMap);
 
@@ -57,6 +57,7 @@ public class MapGenerator
     private void ApplyGameMapRestrictions(List<int> gameMap)
     {
         var recurseInto = new List<MapSquareOptions>();
+
         for(int y = 0; y < gameMapHeight; y++)
         {
             for(int x = 0; x < gameMapWidth; x++)
@@ -86,44 +87,21 @@ public class MapGenerator
             CollapseAt(square);
     }
 
-    private float DistanceFromMapCentre(MapSquareOptions ms)
-    {
-        return (new Vector2(ms.X, ms.Y) - mapCentre).magnitude;
-    }
-
     private MapSquareOptions[] InitialiseMap()
     {
         var drawMap = new MapSquareOptions[drawMapHeight * drawMapWidth];
         for (int y = 0; y < drawMapHeight; y++)
-            for (int x = 0; x < drawMapWidth; x++)
-                drawMap[y * drawMapWidth + x] = new MapSquareOptions(x, y, allTileOptions);
-        return drawMap;
-    }
-
-    private void AddOcean()
-    {
-        float radius = (Mathf.Min(drawMapHeight, drawMapWidth) / 2) * coastRadius;
-        var squaresToCollapse = new List<MapSquareOptions>();
-
-        var seabed = meshData.Values.First(x => x.name == "Seabed").id;
-
-        for (int y = 0; y < drawMapHeight; y++)
         {
             for (int x = 0; x < drawMapWidth; x++)
             {
-                Vector2 pos = new Vector2(x, y);
-
-                if (Vector2.Distance(pos, mapCentre) > radius)
-                {
-                    var target = drawMap[y * drawMapWidth + x];
-                    target.Choose(seabed);
-                    squaresToCollapse.Add(target);
-                }
+                // Force the edges of the map to be seabed
+                if(x == 0 || y == 0 || x == drawMapWidth - 1 || y == drawMapHeight - 1)
+                    drawMap[y * drawMapWidth + x] = new MapSquareOptions(x, y, seabedOptions);
+                else
+                    drawMap[y * drawMapWidth + x] = new MapSquareOptions(x, y, allTileOptions);
             }
         }
-
-        foreach(var square in squaresToCollapse)
-            CollapseAt(square);
+        return drawMap;
     }
 
     private int SelectRandomTile(MapSquareOptions target)
