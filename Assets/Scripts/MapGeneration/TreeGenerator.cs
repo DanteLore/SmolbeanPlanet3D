@@ -14,6 +14,8 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
     public int Priority { get { return 10; } }
 
     public TreeData[] treeData;
+    public int maxTreesPerSquare = 4;
+    public float minimumTreeAltitude = 1.0f;
     public float scaleMax = 1.2f;
     public float scaleMin = 0.8f;
     public float tiltMaxDegrees = 6.0f;
@@ -21,6 +23,7 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
     public float noiseScale = 0.1f;
     public float noiseThreshold = 0.5f;
     public MapData mapData;
+    public string groundLayer = "Ground";
 
     private GridManager gridManager;
 
@@ -54,18 +57,35 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
             {
                 if(gameMap[z * mapWidth + x] > 0)
                 {
-                    float sample = Mathf.PerlinNoise((x + xOffset) / (mapWidth * noiseScale), (z + yOffset) / (mapHeight * noiseScale));
-
-                    if(sample > noiseThreshold)
+                    for(int t = 0; t < maxTreesPerSquare; t++)
                     {
-                        var data = GenerateTreeData(z, x);
-                        treeData.Add(data);
+                        float sample = Mathf.PerlinNoise((x + xOffset) / (mapWidth * noiseScale), (z + yOffset) / (mapHeight * noiseScale));
+
+                        if(sample > noiseThreshold)
+                        {
+                            var data = GenerateTreeData(z, x);
+                            if(TreeNotInTheSea(data))
+                                treeData.Add(data);
+                        }
                     }
                 }
             }
         }
 
         treeData.ForEach(InstantiateTree);
+    }
+
+    private bool TreeNotInTheSea(NatureObjectSaveData data)
+    {
+        Ray ray = new Ray(new Vector3(data.positionX, 100f, data.positionZ), Vector3.down);
+        if (Physics.Raycast(ray, out RaycastHit hit, 200f, LayerMask.GetMask(groundLayer)))
+        {
+            return hit.point.y > minimumTreeAltitude;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private NatureObjectSaveData GenerateTreeData(int z, int x)
