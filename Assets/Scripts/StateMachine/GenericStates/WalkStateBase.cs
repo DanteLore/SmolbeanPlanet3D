@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,6 +9,7 @@ public abstract class WalkStateBase : IState
     protected SoundPlayer soundPlayer;
     private Vector3 lastPosition;
     private float lastMoved;
+    private static readonly float gameSpeedNavJumpSize = 0.5f;
     
     public float StuckTime { get { return Time.time - lastMoved; } }
 
@@ -49,10 +51,32 @@ public abstract class WalkStateBase : IState
 
         if(Time.time - lastMoved > 1f)
         {
-            // Kick the nav agent after small amount of
+            // Kick the nav agent after small amount of inactivity
             navAgent.isStopped = true;
             navAgent.SetDestination(GetDestination());
             navAgent.isStopped = false;
+        }
+
+        if(Time.timeScale > 1.0f)
+            CheckSteeringTargetPosition();
+    }
+
+    private float distanceSteeringTarget;
+    private void CheckSteeringTargetPosition()
+    {
+        float d = Vector3.Distance(navAgent.transform.position, navAgent.steeringTarget);
+        float jumpThreshold = gameSpeedNavJumpSize * Time.timeScale;
+
+        if(d <= jumpThreshold)
+        {
+            if(distanceSteeringTarget < d)
+            {
+                navAgent.transform.position = navAgent.steeringTarget;
+            }
+            else
+            {
+                distanceSteeringTarget = d;
+            }
         }
     }
 }
