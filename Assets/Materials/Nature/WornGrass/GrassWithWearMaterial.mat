@@ -66,6 +66,6 @@ Material:
     m_Colors:
     - _baseColor: {r: 0.3803922, g: 0.79215693, b: 0.3254902, a: 0}
     - _mapOffset: {r: -0.4995, g: -0.4995, b: 0, a: 0}
-    - _mapSize: {r: 404, g: 404, b: 0, a: 0}
+    - _mapSize: {r: 648, g: 648, b: 0, a: 0}
     - _wornColor: {r: 0.7924528, g: 0.7040658, b: 0.5420078, a: 1}
   m_BuildTextureStacks: []

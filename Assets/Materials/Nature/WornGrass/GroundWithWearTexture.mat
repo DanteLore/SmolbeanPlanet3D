@@ -68,6 +68,6 @@ Material:
     - _verticalWearCutoff: 0.6
     m_Colors:
     - _mapOffset: {r: -0.4995, g: -0.4995, b: 0, a: 0}
-    - _mapSize: {r: 404, g: 404, b: 0, a: 0}
+    - _mapSize: {r: 648, g: 648, b: 0, a: 0}
     - _wornColor: {r: 0.7921569, g: 0.7058824, b: 0.5411765, a: 0}
   m_BuildTextureStacks: []
