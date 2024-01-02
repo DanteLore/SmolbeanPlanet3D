@@ -21,6 +21,10 @@ I also spent some time making map generation more fun at design time.
 
 ![Screenshot](./Docs/Images/screenshot46.png)
 
+As well as some work to make mountains more realistic, with larger plains regions.
+
+![Screenshot](./Docs/Images/screenshot50.png)
+
 ## Menu Overhaul
 
 The new UI system is a wonderful idea that's been executed very poorly.  Either way, I battled it long enough to add some new menus to the game.

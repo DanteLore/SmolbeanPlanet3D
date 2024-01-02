@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 public class GameMapGenerator : MonoBehaviour
 {
     public AnimationCurve islandFalloff;
+    public AnimationCurve mountainCurve;
     public int mapHeight = 100;
     public int mapWidth = 100;
     public int seed = 696809784;
@@ -33,6 +34,7 @@ public class GameMapGenerator : MonoBehaviour
         Random.InitState(seed);
 
         var noise = GenerateNoiseMap();
+        noise = ApplySlopeAdjustment(noise);
         var map = MapToLevels(noise);
         map = CleanMap(map);
 
@@ -44,6 +46,11 @@ public class GameMapGenerator : MonoBehaviour
         (0, -1),           (0, 1), 
         (1, -1),  (1, 0),  (1, 1) 
     };
+
+    private List<float> ApplySlopeAdjustment(List<float> map)
+    {
+        return map.Select(x => mountainCurve.Evaluate(x)).ToList();
+    }
 
     private List<int> CleanMap(List<int> m)
     {
