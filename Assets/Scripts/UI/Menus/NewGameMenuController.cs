@@ -27,53 +27,53 @@ public class NewGameMenuController : SmolbeanMenu
         randomButton.clicked += RandomButtonClicked;
 
         var slider = document.rootVisualElement.Q<Slider>("noiseScale1Slider");
-        slider.value = mapGenerator.noiseScale1;
         slider.RegisterValueChangedCallback(v => { mapGenerator.noiseScale1 = v.newValue; SettingChanged(); });
         var range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.noiseScale1)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
+        slider.value = mapGenerator.noiseScale1;
 
         slider = document.rootVisualElement.Q<Slider>("noiseScale2Slider");
-        slider.value = mapGenerator.noiseScale2;
         slider.RegisterValueChangedCallback(v => { mapGenerator.noiseScale2 = v.newValue; SettingChanged(); });
         range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.noiseScale2)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
+        slider.value = mapGenerator.noiseScale2;
 
         slider = document.rootVisualElement.Q<Slider>("noiseScale3Slider");
-        slider.value = mapGenerator.noiseScale3;
         slider.RegisterValueChangedCallback(v => { mapGenerator.noiseScale3 = v.newValue; SettingChanged(); });
         range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.noiseScale3)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
+        slider.value = mapGenerator.noiseScale3;
 
         slider = document.rootVisualElement.Q<Slider>("noiseStrength1Slider");
-        slider.value = mapGenerator.noiseStength1;
         slider.RegisterValueChangedCallback(v => { mapGenerator.noiseStength1 = v.newValue; SettingChanged(); });
         range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.noiseStength1)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
+        slider.value = mapGenerator.noiseStength1;
 
         slider = document.rootVisualElement.Q<Slider>("noiseStrength2Slider");
-        slider.value = mapGenerator.noiseStength2;
         slider.RegisterValueChangedCallback(v => { mapGenerator.noiseStength2 = v.newValue; SettingChanged(); });
         range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.noiseStength2)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
+        slider.value = mapGenerator.noiseStength2;
 
         slider = document.rootVisualElement.Q<Slider>("noiseStrength3Slider");
-        slider.value = mapGenerator.noiseStength3;
         slider.RegisterValueChangedCallback(v => { mapGenerator.noiseStength3 = v.newValue; SettingChanged(); });
         range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.noiseStength3)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
+        slider.value = mapGenerator.noiseStength3;
 
         slider = document.rootVisualElement.Q<Slider>("heightAdjustSlider");
-        slider.value = mapGenerator.heightBias;
         slider.RegisterValueChangedCallback(v => { mapGenerator.heightBias = v.newValue; SettingChanged(); });
         range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.heightBias)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
+        slider.value = mapGenerator.heightBias;
 
         var cancelButton = document.rootVisualElement.Q<Button>("cancelButton");
         cancelButton.clicked += CancelButtonClicked;

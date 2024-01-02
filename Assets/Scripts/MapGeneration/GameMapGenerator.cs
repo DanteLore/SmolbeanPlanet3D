@@ -1,16 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class GameMapGenerator : MonoBehaviour
 {
     public AnimationCurve islandFalloff;
     public int mapHeight = 100;
     public int mapWidth = 100;
+    public int seed = 696809784;
 
-    [Range(0.001f, 0.5f)] public float noiseScale1 = 0.3f;
-    [Range(0.001f, 0.5f)] public float noiseScale2 = 0.1f;
-    [Range(0.001f, 0.5f)] public float noiseScale3 = 0.05f;
+    [Range(0.01f, 0.8f)] public float noiseScale1 = 0.5f;
+    [Range(0.01f, 0.5f)] public float noiseScale2 = 0.1f;
+    [Range(0.01f, 0.2f)] public float noiseScale3 = 0.05f;
 
     [Range(0.0f, 1.0f)] public float noiseStength1 = 0.8f;
     [Range(0.0f, 1.0f)] public float noiseStength2 = 0.5f;
@@ -19,18 +21,64 @@ public class GameMapGenerator : MonoBehaviour
     [Range(-1.0f, 0.5f)] public float heightBias = 0.0f;
 
     [Range(1, 10)] public int maxLevelNumber = 3;
-
-    public int seed = 696809784;
+    [Min(1)]
+    public int maxInterLayerStep = 1;
 
     public List<int> GenerateMap(int seed = 0)
     {
-        if(seed != 0)
+        if (seed != 0)
         {
             this.seed = seed;
         }
         Random.InitState(seed);
 
         var noise = GenerateNoiseMap();
+        var map = MapToLevels(noise);
+        map = CleanMap(map);
+
+        return map;
+    }
+    private static readonly (int x, int y)[] neighbours = new(int, int)[] 
+    { 
+        (-1, -1), (-1, 0), (-1, 1), 
+        (0, -1),           (0, 1), 
+        (1, -1),  (1, 0),  (1, 1) 
+    };
+
+    private List<int> CleanMap(List<int> m)
+    {
+        var map = new List<int>(m);
+        while(true)
+        {
+            int errorsFound = 0;
+
+            for (int centerY = 1; centerY < mapWidth - 1; centerY++)
+            {
+                for (int centerX = 1; centerX < mapHeight - 1; centerX++)
+                {
+                    int centerHeight = map[(centerY * mapWidth) + centerX];
+
+                    foreach(var (x, y) in neighbours.Select(n => (centerX + n.x, centerY + n.y)))
+                    {
+                        int neighbourHeight = map[(y * mapWidth) + x];
+                        if(centerHeight - neighbourHeight > maxInterLayerStep)
+                        {
+                            errorsFound++;
+                            map[(centerY * mapWidth) + centerX] = Mathf.Max(1, centerHeight - 1); // Lower center square by one, to flatten this area out
+                        }
+                    }
+                }
+            }
+
+            if(errorsFound == 0)
+                break;
+        }
+
+        return map;
+    }
+
+    private List<int> MapToLevels(List<float> noise)
+    {
         return noise.Select(s => Mathf.FloorToInt(Mathf.Lerp(0.0f, maxLevelNumber + 1.0f, s))).Select(x => Mathf.Min(maxLevelNumber, x)).ToList();
     }
 
