@@ -18,6 +18,7 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     public string[] collisionLayers = { "Nature", "Buildings", "Creatures" };
     public ParticleSystem buildingPlacedParticleSystem;
     public ParticleSystem buildingDeletedParticleSystem;
+    public float allowedHeightDifferential = 0.2f;
 
     private GridManager gridManager;
     private GameMapGenerator gameMapGenerator;
@@ -288,7 +289,6 @@ public class BuildManager : MonoBehaviour, IObjectGenerator
     private bool CheckFlat(Rect bounds)
     {
         float marginSize = 0.05f;
-        float allowedHeightDifferential = 0.2f;
         float rayStartHeight = 1000f;
 
         float rayLength = 2.0f * rayStartHeight;
