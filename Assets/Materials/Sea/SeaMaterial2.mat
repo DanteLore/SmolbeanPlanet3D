@@ -79,9 +79,9 @@ Material:
     - _Wavelength: 10
     m_Colors:
     - _DeepWaterColor: {r: 0.09692026, g: 0.15812954, b: 0.62264144, a: 0.5803922}
-    - _HorizonColor: {r: 1, g: 0.80529636, b: 0.5707547, a: 1}
+    - _HorizonColor: {r: 0.7568628, g: 0.8745099, b: 0.9176471, a: 1}
     - _ShallowWaterColor: {r: 0.31278914, g: 0.6925052, b: 0.9339623, a: 0.5568628}
-    - _ShimmerColor: {r: 0.4292453, g: 0.9658024, b: 1, a: 1}
+    - _ShimmerColor: {r: 0.427451, g: 0.8311589, b: 1, a: 1}
     - _WaveDirections: {r: 0.1, g: 0.2, b: 0.4, a: 0.9}
   m_BuildTextureStacks: []
 --- !u!114 &4682196336493210084
