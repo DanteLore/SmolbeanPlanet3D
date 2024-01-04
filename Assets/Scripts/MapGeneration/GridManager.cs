@@ -61,7 +61,7 @@ public class GridManager : MonoBehaviour
 
         DrawMap();
 
-        foreach(var gen in GetComponentsInChildren<IObjectGenerator>().OrderBy(g => g.Priority))
+        foreach(var gen in FindObjectsOfType<MonoBehaviour>(true).OfType<IObjectGenerator>().OrderBy(g => g.Priority))
             gen.Generate(GameMap, GameMapWidth, GameMapHeight);
 
         InvokeRepeating("UpdateNavMesh", 0.0f, 300.0f);

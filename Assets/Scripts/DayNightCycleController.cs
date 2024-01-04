@@ -1,23 +1,51 @@
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteAlways]
-public class DayNightCycleController : MonoBehaviour
+public class DayNightCycleController : MonoBehaviour, IObjectGenerator
 {
     public Gradient ambientLightColor;
     public Gradient directionalLight;
     public Gradient fog;
     public AnimationCurve seasonCurve;
     public Light sunLight;
+    public float hourLengthSeconds = 12f;
+
+    [Range(0f, 24f)]
+    public float gameStartTime = 7f;
 
     [Range(0f, 24f)]
     public float timeOfDay;
+
+    public int Priority { get { return 1; } }
+
+    public void Clear()
+    {
+        Debug.Log("DayNightCycleController.Generate");
+        timeOfDay = gameStartTime;
+    }
+
+    public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    {
+        Debug.Log("DayNightCycleController.Generate");
+        timeOfDay = gameStartTime;
+    }
+
+    public TimeOfDaySaveData GetSaveData()
+    {
+        return new TimeOfDaySaveData { timeOfDay = timeOfDay };
+    }
+
+    public void LoadState(TimeOfDaySaveData loadedData)
+    {
+        timeOfDay = loadedData.timeOfDay;
+    }
 
     void Update()
     {
         if(Application.isPlaying)
         {
-            timeOfDay += Time.deltaTime;
+            timeOfDay += Time.deltaTime / hourLengthSeconds;
             timeOfDay %= 24f;
         }
 

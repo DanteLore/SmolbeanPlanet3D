@@ -11,6 +11,15 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Day and Night
+
+Been working on a simple day and night cycle.  There's LOTS more to do to make it look good... but so far it's promising....
+
+![Screenshot](./Docs/Images/screenshot51.png)
+
+![Screenshot](./Docs/Images/screenshot51.png)
+
+
 ## Return to Wave Function Collapse
 
 It's Christmas.  I couldn't resist returning to the WFC code and meshes.  First I added a variable number of levels - from a hard coded 3 to now a max of 7, dictated by the meshes available.  Then I added multi-level meshes which allow non-adjacent levels to join - for example, where TopLeft=1, TopRight=2, BottomLeft=3 and BottomRight=2.  This means maps with higher frequency noise can be generated, which makes things more interesting.

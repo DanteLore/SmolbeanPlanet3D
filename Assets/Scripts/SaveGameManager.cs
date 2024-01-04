@@ -15,6 +15,7 @@ public class SaveFileData
     public List<BuildingObjectSaveData> buildingData;
     public List<DropItemSaveData> dropItemData;
     public CameraSaveData cameraData;
+    public TimeOfDaySaveData timeData;
 }
 
 public class SaveGameManager : MonoBehaviour
@@ -30,6 +31,7 @@ public class SaveGameManager : MonoBehaviour
     private BuildManager buildManager;
     private DropController dropController;
     private CameraController cameraController;
+    private DayNightCycleController dayNightController;
 
     void Awake()
     {
@@ -47,6 +49,7 @@ public class SaveGameManager : MonoBehaviour
         buildManager = GameObject.FindAnyObjectByType<BuildManager>();
         dropController = GameObject.FindAnyObjectByType<DropController>();
         cameraController = GameObject.FindAnyObjectByType<CameraController>();
+        dayNightController = GameObject.FindAnyObjectByType<DayNightCycleController>();
     }
 
     public void SaveGame(string name)
@@ -66,7 +69,8 @@ public class SaveGameManager : MonoBehaviour
             rockData = rockGenerator.GetSaveData(),
             buildingData = buildManager.GetSaveData(),
             dropItemData = dropController.GetSaveData(),
-            cameraData = cameraController.GetSaveData()
+            cameraData = cameraController.GetSaveData(),
+            timeData = dayNightController.GetSaveData()
         };
 
         using (StreamWriter file = File.CreateText(filename))
@@ -130,6 +134,8 @@ public class SaveGameManager : MonoBehaviour
             dropController.LoadDrops(saveData.dropItemData);
         if(saveData.cameraData != null)
             cameraController.LoadState(saveData.cameraData);
+        if(saveData.timeData != null)
+            dayNightController.LoadState(saveData.timeData);
 
         string pngFilename = GetPngFilename(filename);
         if(File.Exists(pngFilename) && groundTexture != null)
