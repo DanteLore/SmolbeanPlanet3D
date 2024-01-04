@@ -40,6 +40,7 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 0
     - _BUILTIN_QueueOffset: 0
+    - _coronaSizeMultiplier: 1.2
     - _dayNight: 0
     - _horizonOffset: 0.07
     - _skyColorBlend: 0.26
@@ -52,5 +53,5 @@ Material:
     - _skyColor: {r: 0, g: 0.32785606, b: 1, a: 1}
     - _skyColorDay: {r: 0, g: 0.32785606, b: 1, a: 1}
     - _skyColorNight: {r: 0.101911955, g: 0, b: 0.25471696, a: 1}
-    - _sunColor: {r: 3.9999998, g: 3.887938, b: 2.6636083, a: 1}
+    - _sunColor: {r: 2.7237353, g: 1.4172604, b: 0.96498036, a: 1}
   m_BuildTextureStacks: []
