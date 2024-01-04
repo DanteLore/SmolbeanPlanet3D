@@ -13,6 +13,8 @@ Newest entries at the top :)
 
 ## Day and Night
 
+Added a new skybox shader, following these video tutorials for inspiration: https://www.youtube.com/@iDigvijaysinhG
+
 Been working on a simple day and night cycle.  There's LOTS more to do to make it look good... but so far it's promising....
 
 ![Screenshot](./Docs/Images/screenshot51.png)

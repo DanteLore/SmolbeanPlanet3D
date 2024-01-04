@@ -59,8 +59,8 @@ Material:
     - _DepthRefractionScale: 0.003
     - _DepthRefractionSpeed: 0.1
     - _DepthRefractionStrength: 0.002
-    - _HorizonDistance: 20
-    - _HorizonTintStength: 0.247
+    - _HorizonDistance: 50
+    - _HorizonTintStength: 0.2
     - _IntersectionFoamDepth: 1
     - _IntersectionFoamFade: 0.2
     - _IntersectionFoamScale: 10000

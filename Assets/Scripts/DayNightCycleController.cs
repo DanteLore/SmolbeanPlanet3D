@@ -5,10 +5,12 @@ using UnityEngine;
 public class DayNightCycleController : MonoBehaviour, IObjectGenerator
 {
     public Gradient ambientLightColor;
+    [GradientUsage(hdr:true)] public Gradient sunColor;
     public Gradient directionalLight;
     public Gradient fog;
     public AnimationCurve seasonCurve;
     public Light sunLight;
+    public Material skyboxMaterial;
     public float hourLengthSeconds = 12f;
 
     [Range(0f, 24f)]
@@ -56,5 +58,8 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
         RenderSettings.fogColor = fog.Evaluate(tod);
         sunLight.color = directionalLight.Evaluate(tod);
         sunLight.transform.rotation = Quaternion.Euler(angle, -90f, 0f);
+
+        skyboxMaterial.SetVector("_sunDirection", sunLight.transform.forward);
+        skyboxMaterial.SetVector("_sunColor", sunColor.Evaluate(tod));
     }
 }
