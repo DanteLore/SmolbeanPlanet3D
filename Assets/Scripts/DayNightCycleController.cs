@@ -56,8 +56,11 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
 
         RenderSettings.ambientLight = ambientLightColor.Evaluate(tod);
         RenderSettings.fogColor = fog.Evaluate(tod);
+
+        transform.rotation = Quaternion.Euler(0f, -90f, 30f);
+
         sunLight.color = directionalLight.Evaluate(tod);
-        sunLight.transform.rotation = Quaternion.Euler(angle, -90f, 0f);
+        sunLight.transform.localRotation = Quaternion.Euler(angle, 0f, 0f);
 
         skyboxMaterial.SetVector("_sunDirection", sunLight.transform.forward);
         skyboxMaterial.SetVector("_sunColor", sunColor.Evaluate(tod));
