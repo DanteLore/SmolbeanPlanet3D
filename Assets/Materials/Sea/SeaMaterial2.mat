@@ -78,6 +78,7 @@ Material:
     - _WaveSpeed: 1
     - _WaveSteepness: 0.1
     - _Wavelength: 10
+    - _ambientDimmingUpperLimit: 0.5
     m_Colors:
     - _DeepWaterColor: {r: 0.09692026, g: 0.15812954, b: 0.62264144, a: 0.5803922}
     - _HorizonColor: {r: 0.7568628, g: 0.8745099, b: 0.9176471, a: 1}
