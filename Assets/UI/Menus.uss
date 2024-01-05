@@ -13,12 +13,12 @@
     flex-grow: 1;
     align-items: center;
     align-self: center;
-    width: 800px;
-    height: 700px;
+    width: auto;
+    height: auto;
     max-width: 800px;
     max-height: 90%;
-    min-width: 600px;
-    min-height: 600px;
+    min-width: 500px;
+    min-height: 400px;
 }
 
 .menuContainer Button {
@@ -52,7 +52,7 @@
 }
 
 .title {
-    font-size: 32px;
+    font-size: 24px;
     margin-bottom: 10px;
 }
 

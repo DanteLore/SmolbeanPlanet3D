@@ -1,4 +1,4 @@
-#gameControlsContainer Button {
+.gameControlsContainer Button {
     width: 24px;
     height: 24px;
     border-left-width: 1px;
@@ -32,7 +32,7 @@
     background-color: rgba(0, 0, 0, 0);
 }
 
-#gameControlsContainer {
+.gameControlsContainer {
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 5px;
@@ -42,20 +42,27 @@
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     background-color: rgba(0, 0, 0, 0.78);
-    position: absolute;
+    position: relative;
     left: 10%;
-    right: 10%;
-    bottom: 10px;
+    right: auto;
+    bottom: auto;
     flex-direction: row;
-    min-height: 70px;
-    height: 70px;
+    min-height: 36px;
+    height: 36px;
     flex-grow: 1;
     flex-shrink: 1;
     justify-content: flex-start;
     width: 133px;
+    max-height: 36px;
+    margin-top: 0;
+    margin-right: 5px;
+    margin-bottom: 0;
+    margin-left: 5px;
+    align-items: center;
+    align-self: center;
 }
 
-#gameControlsContainer Button:hover {
+.gameControlsContainer Button:hover {
     scale: 1.2 1.2;
     border-left-color: rgb(255, 255, 255);
     border-right-color: rgb(255, 255, 255);
@@ -63,11 +70,20 @@
     border-bottom-color: rgb(255, 255, 255);
 }
 
-#gameControlsContainer .selectedSpeedButton {
+.gameControlsContainer .selectedSpeedButton {
     border-left-color: rgb(255, 255, 255);
     border-right-color: rgb(255, 255, 255);
     border-top-color: rgb(255, 255, 255);
     border-bottom-color: rgb(255, 255, 255);
     background-color: rgb(255, 255, 255);
     color: rgb(0, 0, 0);
+}
+
+.gameControlsContainer Label {
+    height: 24px;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-text-align: middle-left;
+    max-height: 24px;
+    min-height: 24px;
+    margin-right: 10px;
 }
