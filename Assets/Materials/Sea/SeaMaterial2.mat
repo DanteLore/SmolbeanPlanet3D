@@ -75,16 +75,20 @@ Material:
     - _ShimmerFalloff: 7
     - _ShimmerStength: 0.2
     - _Smoothness: 0.1
+    - _WaveNoiseScale: 50
+    - _WaveNoiseSpeed: 0.004
+    - _WaveNoiseStrength: 1
+    - _WaveSize: 4
     - _WaveSpeed: 1
     - _WaveSteepness: 0.1
-    - _Wavelength: 10
+    - _Wavelength: 5
     - _ambientDimmingUpperLimit: 0.5
     m_Colors:
     - _DeepWaterColor: {r: 0.09692026, g: 0.15812954, b: 0.62264144, a: 0.5803922}
     - _HorizonColor: {r: 0.7568628, g: 0.8745099, b: 0.9176471, a: 1}
     - _ShallowWaterColor: {r: 0.31278914, g: 0.6925052, b: 0.9339623, a: 0.5568628}
     - _ShimmerColor: {r: 0.427451, g: 0.8311589, b: 1, a: 1}
-    - _WaveDirections: {r: 0.1, g: 0.2, b: 0.4, a: 0.9}
+    - _WaveDirections: {r: 0.1, g: 0.2, b: 0.4, a: 0.5}
   m_BuildTextureStacks: []
 --- !u!114 &4682196336493210084
 MonoBehaviour:
