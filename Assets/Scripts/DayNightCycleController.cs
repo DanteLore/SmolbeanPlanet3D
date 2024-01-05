@@ -4,6 +4,7 @@ using UnityEngine;
 [ExecuteAlways]
 public class DayNightCycleController : MonoBehaviour, IObjectGenerator
 {
+    public static DayNightCycleController Instance { get; private set; }
     public Gradient ambientLightColor;
     [GradientUsage(hdr:true)] public Gradient sunColor;
     public Gradient directionalLight;
@@ -19,28 +20,65 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     [Range(0f, 24f)]
     public float timeOfDay;
 
+    public int day = 1;
+
     public int Priority { get { return 1; } }
+
+    public string DisplayTime
+    {
+        get
+        {
+            int hour = Mathf.FloorToInt(timeOfDay);
+            float d = timeOfDay % 1f;
+
+            if(d <= 0.25)
+                return $"{hour}";
+            if(d <= 0.50)
+                return $"{hour}.¼";
+            if(d <= 0.75)
+                return $"{hour}.½";
+            else
+                return $"{hour}.¾";
+        }
+    }
+
+    public string DisplayDay
+    {
+        get
+        {
+            return $"{day} ☼";
+        }
+    }
+
+    void Awake()
+    {
+        if(Instance != null && Instance != this)
+            Destroy(this);
+        else
+            Instance = this;
+    }
 
     public void Clear()
     {
-        Debug.Log("DayNightCycleController.Generate");
         timeOfDay = gameStartTime;
+        day = 1;
     }
 
     public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        Debug.Log("DayNightCycleController.Generate");
         timeOfDay = gameStartTime;
+        day = 1;
     }
 
     public TimeOfDaySaveData GetSaveData()
     {
-        return new TimeOfDaySaveData { timeOfDay = timeOfDay };
+        return new TimeOfDaySaveData { timeOfDay = timeOfDay, day = day };
     }
 
     public void LoadState(TimeOfDaySaveData loadedData)
     {
         timeOfDay = loadedData.timeOfDay;
+        day = loadedData.day;
     }
 
     void Update()
@@ -48,7 +86,12 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
         if(Application.isPlaying)
         {
             timeOfDay += Time.deltaTime / hourLengthSeconds;
-            timeOfDay %= 24f;
+            
+            if(timeOfDay > 24f)
+            {
+                day++;
+                timeOfDay %= 24f;
+            }
         }
 
         float tod = seasonCurve.Evaluate(timeOfDay / 24f);

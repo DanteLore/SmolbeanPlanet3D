@@ -1,0 +1,14 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
+    <Style src="project://database/Assets/UI/GameControls.uss?fileID=7433441132597879392&amp;guid=334dd8ec426a145ba9561e6ccafddaa1&amp;type=3#GameControls" />
+    <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; flex-wrap: nowrap; position: absolute; left: 5%; top: 10px;">
+        <ui:VisualElement name="gameSpeedControlsContainer" class="gameControlsContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.89); height: 32px; width: 220px; justify-content: center;">
+            <ui:Label tabindex="-1" text="13:42" parse-escape-sequences="true" display-tooltip-when-elided="true" name="timeLabel" style="width: 32px; max-width: 32px; min-width: 32px;" />
+            <ui:Label tabindex="-1" text="day 1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="dayLabel" style="width: 32px; max-width: 32px; min-width: 32px;" />
+            <ui:Button text="x1" display-tooltip-when-elided="true" name="gameSpeed1Button" focusable="false" />
+            <ui:Button text="x2" display-tooltip-when-elided="true" name="gameSpeed2Button" focusable="false" />
+            <ui:Button text="x4" display-tooltip-when-elided="true" name="gameSpeed3Button" focusable="false" />
+            <ui:Button text="x8" display-tooltip-when-elided="true" name="gameSpeed4Button" focusable="false" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -4,4 +4,5 @@ using System;
 public class TimeOfDaySaveData
 {
     public float timeOfDay;
+    public int day;
 }
