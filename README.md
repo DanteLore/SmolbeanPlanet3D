@@ -25,7 +25,7 @@ These pics show the difference, with red grass to make it easier to see the diff
 
 ## Day and Night
 
-![Screenshot](./Docs/Images/sunset.gif)
+<img src="./Docs/Images/sunset.gif">
 
 Added a new skybox shader, following these video tutorials for inspiration: https://www.youtube.com/@iDigvijaysinhG
 
