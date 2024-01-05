@@ -11,7 +11,21 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Niiiiice grass transitions
+
+So the grass system GPU instances a LOT of grass blades and is probably the biggest overhead in thw whole game.  To keep this under control, only batches of grass close to the camera are sent for rendering.  The issue then is that if you make the render distance short, you see nasty square edges on the edges of the batches - which means the render distance needs to stay large and GPU cost high.  
+
+Anyway, today I realised I can do something cool with transparency on the blades of grass themselves - basicallt smoothing them to complete invisibility as they get further away.  This gives a perfect, rounded, soft edge to the grassy areas, which is much less easy to see and feels way more natural.  I can also crank down the render distance and save some power for other shaders.
+
+These pics show the difference, with red grass to make it easier to see the difference...
+
+![Screenshot](./Docs/Images/screenshot53.png)
+
+![Screenshot](./Docs/Images/screenshot54.png)
+
 ## Day and Night
+
+![Screenshot](./Docs/Images/sunset.gif)
 
 Added a new skybox shader, following these video tutorials for inspiration: https://www.youtube.com/@iDigvijaysinhG
 
@@ -19,7 +33,7 @@ Been working on a simple day and night cycle.  There's LOTS more to do to make i
 
 ![Screenshot](./Docs/Images/screenshot51.png)
 
-![Screenshot](./Docs/Images/screenshot51.png)
+![Screenshot](./Docs/Images/screenshot52.png)
 
 
 ## Return to Wave Function Collapse

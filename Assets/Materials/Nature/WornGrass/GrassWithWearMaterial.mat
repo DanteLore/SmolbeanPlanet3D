@@ -60,6 +60,8 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _fadeEndDistance: 80
+    - _fadeStartDistance: 60
     - _windScale: 0.005
     - _windSpeed: 0.02
     - _windStrength: 0.76
