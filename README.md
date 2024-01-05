@@ -25,7 +25,7 @@ These pics show the difference, with red grass to make it easier to see the diff
 
 ## Day and Night
 
-<img src="[./Docs/Images/sunset.gif](https://github.com/DanteLore/SmolbeanPlanet3D/blob/master/Docs/Images/sunset3.gif?raw=true)">
+<img src="https://github.com/DanteLore/SmolbeanPlanet3D/blob/master/Docs/Images/sunset3.gif?raw=true">
 
 Added a new skybox shader, following these video tutorials for inspiration: https://www.youtube.com/@iDigvijaysinhG
 
