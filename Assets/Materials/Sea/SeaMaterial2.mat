@@ -52,13 +52,13 @@ Material:
     m_Floats:
     - _BUILTIN_QueueControl: 1
     - _BUILTIN_QueueOffset: 0
-    - _ColorRefractionScale: 0.003
-    - _ColorRefractionSpeed: 0.1
-    - _ColorRefractionStrength: 0.003
-    - _DepthFadeDistance: 0.4
+    - _ColorRefractionScale: 0.002
+    - _ColorRefractionSpeed: 0.05
+    - _ColorRefractionStrength: 0.008
+    - _DepthFadeDistance: 0.7
     - _DepthRefractionScale: 0.003
-    - _DepthRefractionSpeed: 0.1
-    - _DepthRefractionStrength: 0.002
+    - _DepthRefractionSpeed: 0.05
+    - _DepthRefractionStrength: 0.008
     - _HorizonDistance: 50
     - _HorizonTintStength: 0.2
     - _IntersectionFoamDepth: 1
