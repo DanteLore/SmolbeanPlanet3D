@@ -19,7 +19,11 @@ public class DebugMesh : MonoBehaviour {
 
 	// Update is called once per frame
 	void OnDrawGizmos() {
-		if (!filter) return;
+		if (!filter) 
+		{
+			Debug.LogWarning("DebugMesh: No mesh");
+			return;
+		}
 
 		Vector3[] verts = filter.sharedMesh.vertices;
 		Vector4[] tangents = filter.sharedMesh.tangents;
@@ -33,7 +37,7 @@ public class DebugMesh : MonoBehaviour {
 				Gizmos.DrawLine(verts[i], verts[i] + transform.rotation * norms[i] * length);
 			}
 
-			if (showTangents) {
+			if (showTangents && tangents.Length >= i) {
 				if (tangents[i].w > 0) {
 					Gizmos.color = Color.yellow;
 					Gizmos.DrawLine(verts[i], verts[i] + transform.rotation * tangents[i] * length);

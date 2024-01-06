@@ -52,20 +52,23 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _alphaMultiplier: 0.8
     - _ambientDimmingUpperLimit: 1
     - _cloudDropoff: 1
     - _cloudScale: 10
-    - _cloudStrength: 1
+    - _cloudStrength: 1.2
     - _cloudbaseAltitude: 10
     - _cloudbaseFade: 50
     - _curveMultiplier: 0.0094
-    - _cutoff: 0.5
+    - _cutoff: 0.3
+    - _displacementStrength: -100
     - _noiseBias: 0.5
-    - _noiseScale: 50
+    - _noiseScale: 100
     - _noiseScale1: 10
     - _noiseScale2: 50
     - _noiseSpeed: 0.001
-    - _noiseStrength: 1
+    - _noiseStrength: 0.5
+    - _transparencyMultiplier: 0
     - _windSpeed: 0.0001
     m_Colors:
     - _cloudColor: {r: 1, g: 1, b: 1, a: 1}
