@@ -11,7 +11,7 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     public Gradient fog;
     public AnimationCurve seasonCurve;
     public Light sunLight;
-    public Material skyboxMaterial;
+    public Material[] sunSensitiveMaterials;
     public float hourLengthSeconds = 12f;
 
     [Range(0f, 24f)]
@@ -97,15 +97,22 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
         float tod = seasonCurve.Evaluate(timeOfDay / 24f);
         float angle = 360f * tod - 90f;
 
-        RenderSettings.ambientLight = ambientLightColor.Evaluate(tod);
+        var ambientLight = ambientLightColor.Evaluate(tod);
+        RenderSettings.ambientLight = ambientLight;
         RenderSettings.fogColor = fog.Evaluate(tod);
 
         transform.rotation = Quaternion.Euler(0f, -90f, 30f);
 
-        sunLight.color = directionalLight.Evaluate(tod);
+        var directionalLightColor = directionalLight.Evaluate(tod);
+        sunLight.color = directionalLightColor;
         sunLight.transform.localRotation = Quaternion.Euler(angle, 0f, 0f);
 
-        skyboxMaterial.SetVector("_sunDirection", sunLight.transform.forward);
-        skyboxMaterial.SetVector("_sunColor", sunColor.Evaluate(tod));
+        foreach(var mat in sunSensitiveMaterials)
+        {
+            mat.SetVector("_sunDirection", sunLight.transform.forward);
+            mat.SetVector("_sunColor", sunColor.Evaluate(tod));
+            mat.SetVector("_ambientLightColor", ambientLight);
+            mat.SetVector("_directionalLightColor", ambientLight);
+        }
     }
 }

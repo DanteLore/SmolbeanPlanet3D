@@ -53,5 +53,5 @@ Material:
     - _skyColor: {r: 0, g: 0.32785606, b: 1, a: 1}
     - _skyColorDay: {r: 0, g: 0.32785606, b: 1, a: 1}
     - _skyColorNight: {r: 0.101911955, g: 0, b: 0.25471696, a: 1}
-    - _sunColor: {r: 3.9999998, g: 3.8901763, b: 2.6666398, a: 1}
+    - _sunColor: {r: 3.150454, g: 2.2440858, b: 1.5339388, a: 1}
   m_BuildTextureStacks: []
