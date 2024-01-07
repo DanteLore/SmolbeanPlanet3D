@@ -1,9 +1,7 @@
-using System;
-using UnityEngine;
 using UnityEngine.UIElements;
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine.Audio;
+using UnityEngine;
+using System.Linq;
 
 public class SettingsMenuController : SmolbeanMenu
 {
@@ -43,6 +41,34 @@ public class SettingsMenuController : SmolbeanMenu
         grassToggle.RegisterValueChangedCallback(v => 
         {
             PrefsManager.Instance.GrassRenderingEnabled = v.newValue;
+        });
+
+        var cloudsToggle = document.rootVisualElement.Q<Toggle>("cloudsToggle");
+        cloudsToggle.value = PrefsManager.Instance.CloudsEnabled;
+        cloudsToggle.RegisterValueChangedCallback(v => 
+        {
+            PrefsManager.Instance.CloudsEnabled = v.newValue;
+        });
+
+        var fullscreenToggle = document.rootVisualElement.Q<Toggle>("fullscreenToggle");
+        fullscreenToggle.value = Screen.fullScreen;
+        cloudsToggle.RegisterValueChangedCallback(v => 
+        {
+            Resolution res = v.newValue ? Screen.resolutions.Last() : Screen.resolutions.First(r => r.width == 1024);
+            Screen.SetResolution(res.width, res.height, v.newValue ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
+        });
+
+        var resolutionDropdown = document.rootVisualElement.Q<DropdownField>("resolutionDropdown");
+        var resolutions = Screen.resolutions.Select(r => $"{r.width}x{r.height}").ToList();
+        var currentResolutionIndex = Screen.resolutions.ToList().IndexOf(Screen.currentResolution);
+        resolutionDropdown.choices = resolutions;
+        resolutionDropdown.index = currentResolutionIndex;
+        resolutionDropdown.RegisterValueChangedCallback(v => 
+        {
+            var newRes = Screen.resolutions[resolutionDropdown.choices.IndexOf(v.newValue)];
+            Screen.SetResolution(newRes.width, newRes.height, Screen.fullScreenMode);
+
+            fullscreenToggle.value = Screen.fullScreen;
         });
     }
 

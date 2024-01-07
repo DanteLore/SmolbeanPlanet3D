@@ -4,10 +4,11 @@ using UnityEngine.Audio;
 public class PrefsManager : MonoBehaviour
 {
     public AudioMixer mixer;
+    public GameObject clouds;
 
     public static PrefsManager Instance { get; private set; }
 
-    private GrassInstancer grassInstancer;
+    private GrassInstancer grassInstancer; 
 
     public float MusicVolume
     {
@@ -61,6 +62,19 @@ public class PrefsManager : MonoBehaviour
         }
     }
 
+    public bool CloudsEnabled
+    {
+        get 
+        { 
+            return PlayerPrefs.GetInt("CloudsEnabled", 1) == 1;
+        }
+        set 
+        {
+            PlayerPrefs.SetInt("CloudsEnabled", value ? 1 : 0);
+            clouds.SetActive(value);
+        }
+    }
+
     void Awake()
     {
         if(Instance != null && Instance != this)
@@ -71,6 +85,7 @@ public class PrefsManager : MonoBehaviour
 
     void Start()
     {
+        grassInstancer = GameObject.FindFirstObjectByType<GrassInstancer>();
         grassInstancer = GameObject.FindFirstObjectByType<GrassInstancer>();
 
         MusicVolume = MusicVolume; // Not sure how I feel about this... 😵‍💫

@@ -4,7 +4,8 @@
     <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; flex-wrap: nowrap; position: absolute; left: 5%; top: 10px;">
         <ui:VisualElement name="gameSpeedControlsContainer" class="gameControlsContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.89); height: 32px; width: 220px; justify-content: center;">
             <ui:Label tabindex="-1" text="13:42" parse-escape-sequences="true" display-tooltip-when-elided="true" name="timeLabel" style="width: 32px; max-width: 32px; min-width: 32px;" />
-            <ui:Label tabindex="-1" text="day 1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="dayLabel" style="width: 32px; max-width: 32px; min-width: 32px;" />
+            <ui:VisualElement style="flex-grow: 1; background-image: url(&apos;project://database/Assets/UI/Controls/Images/sunny_FILL0_wght400_GRAD0_opsz24.png?fileID=2800000&amp;guid=3d1538de164024cf6aafe5d7cc14fbb0&amp;type=3#sunny_FILL0_wght400_GRAD0_opsz24&apos;); height: 16px; max-height: 16px; min-height: 16px; min-width: 16px; max-width: 16px; width: 16px; justify-content: flex-start; margin-top: 4px; margin-right: 0; margin-bottom: 4px; margin-left: 0;" />
+            <ui:Label tabindex="-1" text="1" parse-escape-sequences="true" display-tooltip-when-elided="true" name="dayLabel" style="width: 20px; max-width: 20px; min-width: 20px;" />
             <ui:Button text="x1" display-tooltip-when-elided="true" name="gameSpeed1Button" focusable="false" />
             <ui:Button text="x2" display-tooltip-when-elided="true" name="gameSpeed2Button" focusable="false" />
             <ui:Button text="x4" display-tooltip-when-elided="true" name="gameSpeed3Button" focusable="false" />

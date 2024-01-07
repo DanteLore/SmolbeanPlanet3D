@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
     <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
     <ui:VisualElement name="VisualElement" class="menuContainer" style="flex-grow: 1;">
-        <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" name="ScrollView" style="width: 100%; height: 100%; flex-wrap: nowrap; overflow: hidden; max-width: 100%;">
+        <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" name="ScrollView" style="width: 100%; height: 90%; flex-wrap: nowrap; overflow: hidden; max-width: 100%; max-height: 90%; min-height: 90%; flex-grow: 1;">
             <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-wrap: nowrap; max-width: 80%; align-self: center;">
                 <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" class="title" />
                 <ui:GroupBox text="Sound Settings">
@@ -12,6 +12,9 @@
                 </ui:GroupBox>
                 <ui:GroupBox text="Graphics Settings">
                     <ui:Toggle label="Grass Enabled" name="grassToggle" />
+                    <ui:Toggle label="Clouds Enabled" name="cloudsToggle" />
+                    <ui:DropdownField label="Screen Resolution" index="-1" name="resolutionDropdown" />
+                    <ui:Toggle label="Fullscreen" name="fullscreenToggle" />
                 </ui:GroupBox>
             </ui:VisualElement>
         </ui:ScrollView>

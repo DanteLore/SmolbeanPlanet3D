@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,7 +8,7 @@ public class DebugControls : MonoBehaviour
 
     private Label fpsLabel;
     
-    void Start()
+    void OnEnable()
     {
         var document = GetComponent<UIDocument>();
         
@@ -16,8 +17,15 @@ public class DebugControls : MonoBehaviour
 
     void Update()
     {
-        deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
-        float fps = Time.timeScale / deltaTime;
-        fpsLabel.text = Mathf.Ceil(fps).ToString() + " fps";
+        try
+        {
+            deltaTime += (Time.deltaTime - deltaTime) * 0.1f;
+            float fps = Time.timeScale / deltaTime;
+            fpsLabel.text = Mathf.Ceil(fps).ToString() + " fps";
+        }
+        catch(Exception ex)
+        {
+            fpsLabel.text = ex.Message;
+        }
     }
 }

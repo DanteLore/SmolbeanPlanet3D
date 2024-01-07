@@ -46,7 +46,7 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     {
         get
         {
-            return $"{day} ☼";
+            return day.ToString();
         }
     }
 
