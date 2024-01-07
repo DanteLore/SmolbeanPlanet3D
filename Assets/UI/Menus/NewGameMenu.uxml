@@ -5,28 +5,30 @@
         <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 100%;">
             <ui:Label text="Create your island" display-tooltip-when-elided="true" name="title" class="title" />
             <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 100%; align-items: flex-start; justify-content: center; flex-direction: row;">
-                <ui:VisualElement name="VisualElement" class="controlsFrame" style="flex-grow: 1; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; overflow: hidden; width: 300px; height: 300px; justify-content: center; align-items: center; max-width: 300px; max-height: 300px; min-width: 300px; min-height: 300px;">
-                    <ui:VisualElement name="newMapPreview" style="width: 250px; height: 250px; color: rgb(0, 0, 0); background-color: rgb(0, 0, 0); flex-shrink: 0;" />
+                <ui:VisualElement name="VisualElement" class="controlsFrame" style="flex-grow: 1; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; overflow: visible; width: 270px; height: 270px; justify-content: flex-end; align-items: flex-end; max-width: 270px; max-height: 270px; min-width: 270px; min-height: 270px; visibility: visible; flex-direction: column; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; opacity: 1; align-self: auto;">
+                    <ui:VisualElement name="newMapPreview" style="width: 250px; height: 250px; background-color: rgb(255, 0, 255); max-width: 250px; max-height: 250px; min-width: 250px; min-height: 250px; flex-grow: 0; flex-shrink: 0;" />
                 </ui:VisualElement>
-                <ui:VisualElement class="controlsFrame" style="flex-direction: column; width: 600px; min-height: 300px; align-items: flex-start;">
-                    <ui:GroupBox text="Random Seed">
-                        <ui:VisualElement style="width: 100%; flex-direction: row; align-items: center; flex-wrap: wrap; flex-grow: 0; align-self: auto;">
-                            <ui:TextField picking-mode="Ignore" label="Seed" name="seedTextField" style="overflow: hidden;" />
-                            <ui:Button text="Random" display-tooltip-when-elided="true" name="randomButton" style="margin-top: 20px; width: 64px; height: 24px; align-self: flex-end; padding-left: 3px; padding-right: 3px; padding-top: 3px; padding-bottom: 3px;" />
-                        </ui:VisualElement>
-                    </ui:GroupBox>
-                    <ui:GroupBox text="Bumpiness Settings">
-                        <ui:Slider picking-mode="Ignore" label="Scale 1" value="42" high-value="1" show-input-field="false" name="noiseScale1Slider" low-value="0.0001" />
-                        <ui:Slider picking-mode="Ignore" label="Scale 2" value="42" high-value="1" name="noiseScale2Slider" low-value="0.0001" />
-                        <ui:Slider picking-mode="Ignore" label="Scale 3" value="42" high-value="1" name="noiseScale3Slider" low-value="0.0001" />
-                        <ui:Slider picking-mode="Ignore" label="Strength 1" value="42" high-value="1" show-input-field="false" name="noiseStrength1Slider" low-value="0.0001" />
-                        <ui:Slider picking-mode="Ignore" label="Strength 2" value="42" high-value="1" name="noiseStrength2Slider" low-value="0.0001" />
-                        <ui:Slider picking-mode="Ignore" label="Strength 3" value="42" high-value="1" name="noiseStrength3Slider" low-value="0.0001" />
-                    </ui:GroupBox>
-                    <ui:GroupBox text="Sea Level Settings">
-                        <ui:Slider picking-mode="Ignore" label="Height Adjust" value="42" high-value="1" show-input-field="false" name="heightAdjustSlider" low-value="0.0001" />
-                    </ui:GroupBox>
-                </ui:VisualElement>
+                <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="width: 400px; max-height: 95%; height: 95%;">
+                    <ui:VisualElement class="controlsFrame">
+                        <ui:GroupBox text="Random Seed">
+                            <ui:VisualElement style="width: 100%; flex-direction: row; align-items: center; flex-wrap: wrap; flex-grow: 0; align-self: auto;">
+                                <ui:TextField picking-mode="Ignore" label="Seed" name="seedTextField" style="overflow: hidden;" />
+                                <ui:Button text="Random" display-tooltip-when-elided="true" name="randomButton" style="margin-top: 20px; width: 64px; height: 24px; align-self: flex-end; padding-left: 3px; padding-right: 3px; padding-top: 3px; padding-bottom: 3px;" />
+                            </ui:VisualElement>
+                        </ui:GroupBox>
+                        <ui:GroupBox text="Bumpiness Settings">
+                            <ui:Slider picking-mode="Ignore" label="Scale 1" value="42" high-value="1" show-input-field="false" name="noiseScale1Slider" low-value="0.0001" />
+                            <ui:Slider picking-mode="Ignore" label="Scale 2" value="42" high-value="1" name="noiseScale2Slider" low-value="0.0001" />
+                            <ui:Slider picking-mode="Ignore" label="Scale 3" value="42" high-value="1" name="noiseScale3Slider" low-value="0.0001" />
+                            <ui:Slider picking-mode="Ignore" label="Strength 1" value="42" high-value="1" show-input-field="false" name="noiseStrength1Slider" low-value="0.0001" />
+                            <ui:Slider picking-mode="Ignore" label="Strength 2" value="42" high-value="1" name="noiseStrength2Slider" low-value="0.0001" />
+                            <ui:Slider picking-mode="Ignore" label="Strength 3" value="42" high-value="1" name="noiseStrength3Slider" low-value="0.0001" />
+                        </ui:GroupBox>
+                        <ui:GroupBox text="Sea Level Settings">
+                            <ui:Slider picking-mode="Ignore" label="Height Adjust" value="42" high-value="1" show-input-field="false" name="heightAdjustSlider" low-value="0.0001" />
+                        </ui:GroupBox>
+                    </ui:VisualElement>
+                </ui:ScrollView>
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="dialogButtonContainer" style="flex-direction: row-reverse; width: 100%; flex-grow: 1;">
