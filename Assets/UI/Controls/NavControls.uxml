@@ -3,7 +3,8 @@
     <Style src="project://database/Assets/UI/GameControls.uss?fileID=7433441132597879392&amp;guid=334dd8ec426a145ba9561e6ccafddaa1&amp;type=3#GameControls" />
     <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; flex-wrap: nowrap; position: absolute; left: 300px; top: 10px; white-space: nowrap; -unity-text-align: upper-left; justify-content: center;">
         <ui:VisualElement name="gameInfoControlsContainer" class="gameControlsContainer" style="flex-grow: 1; justify-content: center;">
-            <ui:Label tabindex="-1" text="21λ 14φ" parse-escape-sequences="true" display-tooltip-when-elided="true" name="positionLabel" />
+            <ui:Label tabindex="-1" text="21λ 14φ" parse-escape-sequences="true" display-tooltip-when-elided="true" name="positionLabel" style="width: 75px; max-width: 75px; min-width: 75px;" />
+            <ui:Label tabindex="-1" text="🜝" parse-escape-sequences="true" display-tooltip-when-elided="true" name="directionLabel" style="height: 20px; max-height: 20px; min-height: 20px; max-width: 20px; min-width: 20px; width: 20px; font-size: 18px; rotate: -48deg; transform-origin: center; flex-grow: 0; flex-shrink: 0; align-self: center; -unity-text-align: middle-center; -unity-font: url(&apos;project://database/Assets/UI/Fonts/NotoSansSymbols-Regular.ttf?fileID=12800000&amp;guid=96e32fe508410474b8b72399fd1900db&amp;type=3#NotoSansSymbols-Regular&apos;); -unity-font-definition: url(&apos;project://database/Assets/UI/Fonts/NotoSansSymbols-Regular%20SDF.asset?fileID=11400000&amp;guid=e1b9bd0e12df34d13b2ce078e8d03963&amp;type=2#NotoSansSymbols-Regular SDF&apos;);" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

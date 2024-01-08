@@ -2147,11 +2147,13 @@ MonoBehaviour:
     m_MarkToBaseAdjustmentRecords: []
     m_MarkToMarkAdjustmentRecords: []
   m_FallbackFontAssetTable:
-  - {fileID: 11400000, guid: 138323d211fef46e4a6ac2f077759d49, type: 2}
-  - {fileID: 11400000, guid: a9e6a1732b7ac465da6fee8f9e155619, type: 2}
-  - {fileID: 11400000, guid: 631d2a56e7af84863ad94432ee06be0d, type: 2}
   - {fileID: 11400000, guid: fbfca0ecf33e64a0885ddbfa55617ba0, type: 2}
   - {fileID: 11400000, guid: 50b82a52dd34c46a2879c92e644dc952, type: 2}
+  - {fileID: 11400000, guid: e1b9bd0e12df34d13b2ce078e8d03963, type: 2}
+  - {fileID: 11400000, guid: e1b9bd0e12df34d13b2ce078e8d03963, type: 2}
+  - {fileID: 11400000, guid: 5414358fe842c4cbb962d8db34237b58, type: 2}
+  - {fileID: 11400000, guid: 634373dffeec748cf8429e236e072555, type: 2}
+  - {fileID: 11400000, guid: 54a97c60067f34d18963d4a01f5fda35, type: 2}
   m_FontWeightTable:
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
