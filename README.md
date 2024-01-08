@@ -19,11 +19,21 @@ I feel like I'd rather use symbols that are universally unfamiliar than standard
 
 ![Screenshot](./Docs/Images/screenshot55.png)
 
-[This one looks fun too](https://fonts.google.com/noto/specimen/Noto+Sans+Linear+A)
+Other cool fonts to look at:
+* [Noto Sans Linear A](https://fonts.google.com/noto/specimen/Noto+Sans+Linear+A)
+* [Noto Sans Linear B](https://fonts.google.com/noto/specimen/Noto+Sans+Linear+B)
+* [Noto Sans Symbols 2](https://fonts.google.com/specimen/Noto+Sans+Symbols+2)
+* [Noto Sans Anatolian Hieroglyphs](https://fonts.google.com/noto/specimen/Noto+Sans+Anatolian+Hieroglyphs/glyphs)
+* [Noto Sans Egyptian Hyroglyphs](https://fonts.google.com/noto/specimen/Noto+Sans+Egyptian+Hieroglyphs/glyphs)
+* [Noto Sans SignWriting](https://fonts.google.com/noto/specimen/Noto+Sans+SignWriting/glyphs)
+* [Noto Emoji](https://fonts.google.com/noto/specimen/Noto+Emoji/glyphs)
+
+In the end I decided to use fonts instead of bitmaps for all the icons on the game screen - and it looks GREAT.
+![Screenshot](./Docs/Images/screenshot56.png)
 
 ## Niiiiice grass transitions
 
-So the grass system GPU instances a LOT of grass blades and is probably the biggest overhead in thw whole game.  To keep this under control, only batches of grass close to the camera are sent for rendering.  The issue then is that if you make the render distance short, you see nasty square edges on the edges of the batches - which means the render distance needs to stay large and GPU cost high.  
+So the grass system GPU instances a LOT of grass blades and is probably the biggest overhead in the whole game.  To keep this under control, only batches of grass close to the camera are sent for rendering.  The issue then is that if you make the render distance short, you see nasty square edges on the edges of the batches - which means the render distance needs to stay large and GPU cost high.  
 
 Anyway, today I realised I can do something cool with transparency on the blades of grass themselves - basicallt smoothing them to complete invisibility as they get further away.  This gives a perfect, rounded, soft edge to the grassy areas, which is much less easy to see and feels way more natural.  I can also crank down the render distance and save some power for other shaders.
 

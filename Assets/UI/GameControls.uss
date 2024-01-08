@@ -43,7 +43,6 @@
     border-bottom-right-radius: 8px;
     background-color: rgba(0, 0, 0, 0.78);
     position: relative;
-    left: 10%;
     right: auto;
     bottom: auto;
     flex-direction: row;

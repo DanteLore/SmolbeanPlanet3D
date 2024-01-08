@@ -12,9 +12,6 @@ public class MainToolbarController : MonoBehaviour
     {
         document = GetComponent<UIDocument>();
         
-        var mainMenuButton = document.rootVisualElement.Q<Button>("mainMenuButton");
-        mainMenuButton.clicked += MainMenuButtonClicked;
-        
         var buildToolbarButton = document.rootVisualElement.Q<Button>("buildToolbarButton");
         buildToolbarButton.clicked += BuildToolbarButtonClicked;
         
@@ -23,11 +20,6 @@ public class MainToolbarController : MonoBehaviour
         
         var inventoryButton = document.rootVisualElement.Q<Button>("inventoryButton");
         inventoryButton.clicked += InventoryButtonClicked;
-    }
-
-    private void MainMenuButtonClicked()
-    {
-        MenuController.Instance.ShowMenu();
     }
 
     private void BuildToolbarButtonClicked()
