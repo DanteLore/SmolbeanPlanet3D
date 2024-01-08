@@ -24,7 +24,6 @@ public class GameSpeedControls : MonoBehaviour
         speed4Button.clicked += () => GameStateManager.Instance.SelectedGameSpeed = 8.0f;
 
         timeLabel = document.rootVisualElement.Q<Label>("timeLabel");
-        dayLabel = document.rootVisualElement.Q<Label>("dayLabel");
 
         UpdateButtons(GameStateManager.Instance.SelectedGameSpeed);
         GameStateManager.Instance.GameSpeedChanged += GameSpeedChanged;
@@ -32,8 +31,7 @@ public class GameSpeedControls : MonoBehaviour
 
     void Update()
     {
-        timeLabel.text = DayNightCycleController.Instance.DisplayTime;
-        dayLabel.text = DayNightCycleController.Instance.DisplayDay;
+        timeLabel.text = DayNightCycleController.Instance.DisplayTimeAndDay;
     }
 
     private void GameSpeedChanged(object sender, float speed)

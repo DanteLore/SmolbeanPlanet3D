@@ -11,6 +11,16 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Fun with fonts
+
+Alchemical symbols are included in the unicode spec, and contained in this free font from Google: [Noto Sans Symbols](https://fonts.google.com/noto/specimen/Noto+Sans+Symbols/glyphs).  I also added [Roboto](https://fonts.google.com/specimen/Roboto) so I could use some greek letters.
+
+I feel like I'd rather use symbols that are universally unfamiliar than standard ones that only make sense to people of one culture or language.  I quite like the idea that the player will need to work out what the values mean.
+
+![Screenshot](./Docs/Images/screenshot55.png)
+
+[This one looks fun too](https://fonts.google.com/noto/specimen/Noto+Sans+Linear+A)
+
 ## Niiiiice grass transitions
 
 So the grass system GPU instances a LOT of grass blades and is probably the biggest overhead in thw whole game.  To keep this under control, only batches of grass close to the camera are sent for rendering.  The issue then is that if you make the render distance short, you see nasty square edges on the edges of the batches - which means the render distance needs to stay large and GPU cost high.  

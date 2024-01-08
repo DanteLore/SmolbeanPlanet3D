@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
+    <Style src="project://database/Assets/UI/GameControls.uss?fileID=7433441132597879392&amp;guid=334dd8ec426a145ba9561e6ccafddaa1&amp;type=3#GameControls" />
+    <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; flex-wrap: nowrap; position: absolute; left: 300px; top: 10px; white-space: nowrap; -unity-text-align: upper-left; justify-content: center;">
+        <ui:VisualElement name="gameInfoControlsContainer" class="gameControlsContainer" style="flex-grow: 1; justify-content: center;">
+            <ui:Label tabindex="-1" text="21λ 14φ" parse-escape-sequences="true" display-tooltip-when-elided="true" name="positionLabel" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -32,13 +32,13 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
             float d = timeOfDay % 1f;
 
             if(d <= 0.25)
-                return $"{hour}";
+                return $"🜚 {hour}";
             if(d <= 0.50)
-                return $"{hour}.¼";
+                return $"🜚 {hour}.¼";
             if(d <= 0.75)
-                return $"{hour}.½";
+                return $"🜚 {hour}.½";
             else
-                return $"{hour}.¾";
+                return $"🜚 {hour}.¾";
         }
     }
 
@@ -46,7 +46,15 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     {
         get
         {
-            return day.ToString();
+            return $"🜳 {day}";
+        }
+    }
+
+    public string DisplayTimeAndDay
+    {
+        get
+        {
+            return $"{DisplayDay}   {DisplayTime}";
         }
     }
 

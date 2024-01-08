@@ -14,6 +14,7 @@ public class GridManager : MonoBehaviour
     public float tileSize = 4.0f;
 
     public string groundLayer = "Ground";
+    public string seaLayer = "Sea";
 
     public bool addMeshDebugGizmos = false;
 
@@ -92,7 +93,7 @@ public class GridManager : MonoBehaviour
                 tileObj.AddComponent<MeshRenderer>();
                 var meshFilter = tileObj.AddComponent<MeshFilter>();
                 meshFilter.sharedMesh = meshData.mesh;
-                var collider = tileObj.AddComponent<MeshCollider>();
+                tileObj.AddComponent<MeshCollider>();
                 tileObj.GetComponent<Renderer>().sharedMaterial = meshMaterial;
 
                 if(meshData.name.Contains("Sea"))
@@ -109,6 +110,7 @@ public class GridManager : MonoBehaviour
 
         // Seabed can be merged to a single mesh
         MergeMeshes(Seabed);
+        Seabed.layer = LayerMask.NameToLayer(seaLayer);
     }
 
     private void ClearMap()
@@ -198,8 +200,8 @@ public class GridManager : MonoBehaviour
 
     public Vector2Int GetGameSquareFromWorldCoords(Vector3 point)
     {
-        float x = point.x + ((DrawMapWidth * tileSize) / 2.0f);
-        float y = point.z + ((DrawMapHeight * tileSize) / 2.0f);
+        float x = point.x + (DrawMapWidth * tileSize / 2.0f);
+        float y = point.z + (DrawMapHeight * tileSize / 2.0f);
 
         x /= tileSize;
         y /= tileSize;
