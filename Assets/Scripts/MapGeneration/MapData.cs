@@ -6,4 +6,5 @@ public class MapData : ScriptableObject
     public int[] GameMap;
     public int GameMapWidth;
     public int GameMapHeight;
+    public int MaxLevelNumber;
 }

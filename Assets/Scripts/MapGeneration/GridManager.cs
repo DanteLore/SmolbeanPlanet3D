@@ -25,6 +25,7 @@ public class GridManager : MonoBehaviour
     public List<int> GameMap {get; private set;}
     public int GameMapWidth { get; private set; }
     public int GameMapHeight { get; private set; }
+    public int MaxLevelNumber { get; private set; }
     public int DrawMapWidth { get { return GameMapWidth + 1; }}
     public int DrawMapHeight { get { return GameMapHeight + 1; }}
 
@@ -39,6 +40,7 @@ public class GridManager : MonoBehaviour
         {
             GameMapWidth = mapData.GameMapWidth;
             GameMapHeight = mapData.GameMapWidth;
+            MaxLevelNumber = mapData.MaxLevelNumber;
             GameMap = mapData.GameMap.ToList();
         }
     }
@@ -49,6 +51,7 @@ public class GridManager : MonoBehaviour
 
         GameMapWidth = width;
         GameMapHeight = height;
+        MaxLevelNumber = gameMap.Max();
         GameMap = gameMap;
 
         UnityEngine.Random.InitState(1);

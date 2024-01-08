@@ -19,6 +19,7 @@ public class GridManagerEditor : Editor
             gridManager.mapData.GameMap = newMap.ToArray();
             gridManager.mapData.GameMapWidth = generator.mapWidth;
             gridManager.mapData.GameMapHeight = generator.mapHeight;
+            gridManager.mapData.MaxLevelNumber = generator.maxLevelNumber;
             EditorUtility.SetDirty(gridManager.mapData);
             AssetDatabase.SaveAssetIfDirty(gridManager.mapData);
 

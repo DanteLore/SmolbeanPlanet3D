@@ -3,48 +3,45 @@ using UnityEngine.UIElements;
 using System.Linq;
 using System.Collections.Generic;
 using System;
+using UnityEngine.Rendering;
 
 public class MapMenuController : SmolbeanMenu
 {
-    [Serializable]
-    public class GameObjectMapEntry
-    {
-        public GameObject parentObject;
-        public Color color;
-        public int radius = 3;
-    }
+    public Texture2D groundTexture;
+    public Material mapMaterial;
+    public int natureLayerResolution = 256;
+    public Color treeColor;
+    public Color rockColor;
+    public Color seaColor;
+    public GridManager gridManager;
+    public GameObject trees;
+    public GameObject rocks;
 
-    private GridManager gridManager;
     private UIDocument document;
     private VisualElement mapBox;
-
-    public Color wornGroundColor;
-    
-    public GameObjectMapEntry[] mapEntries;
-
-    public Color[] mapLevelColors;
-
-    public Texture2D groundTexture;
-    Texture2D mapTexture;
-    public float mapWidth = 404f;
-    public float mapHeight = 404f;
-    public float mapOffsetX = -202f;
-    public float mapOffsetY = -202f;
+    private Texture2D mapTexture;
+    private float width;
+    private float height;
+    private float xOffset;
+    private float zOffset;
 
     void OnEnable()
     {
-        gridManager = FindObjectOfType<GridManager>();
-        
         document = GetComponent<UIDocument>();
-
         mapBox = document.rootVisualElement.Q<VisualElement>("mapBox");
         
         var closeButton = document.rootVisualElement.Q<Button>("closeButton");
-        closeButton.clicked += CloseButtonClicked;
+        closeButton.clicked += () => { MenuController.Instance.CloseAll(); };
 
-        mapTexture = new Texture2D(groundTexture.width, groundTexture.height);
-        mapTexture.filterMode = FilterMode.Point;
-        mapBox.style.backgroundImage = mapTexture;
+        mapTexture = new Texture2D(groundTexture.width, groundTexture.height) { filterMode = FilterMode.Point };
+
+        mapMaterial.SetTexture("_mapTexture", DrawMap());
+
+        width = gridManager.tileSize * gridManager.DrawMapWidth;
+        height = gridManager.tileSize * gridManager.DrawMapHeight;
+        xOffset = (width + gridManager.tileSize) / 2f;
+        zOffset = (height + gridManager.tileSize) / 2f;
+
         InvokeRepeating("GenerateMapTexture", 0.1f, 5.0f);
     }
 
@@ -55,77 +52,62 @@ public class MapMenuController : SmolbeanMenu
 
     private void GenerateMapTexture()
     {
-        Debug.Log("Drawing map");
+        mapMaterial.SetTexture("_natureTexture", DrawNature());
 
-        DrawMap(mapTexture);
-
+        RenderTexture r = new RenderTexture(groundTexture.width, groundTexture.height, 16);
+        Graphics.Blit(groundTexture, r, mapMaterial);
+        RenderTexture.active = r;
+        mapTexture.ReadPixels(new Rect(0, 0, r.width, r.height), 0, 0);
         mapTexture.Apply();
+
+        mapBox.style.backgroundImage = mapTexture;
     }
 
-    private void DrawMap(Texture2D mapTexture)
+    private Texture2D DrawMap()
     {
-        int width = groundTexture.width;
-        int height = groundTexture.height;
+        var tex = new Texture2D(gridManager.GameMapWidth, gridManager.GameMapWidth);
 
         // Map
-        for(int y = 0; y < height; y++)
+        for(int y = 0; y < gridManager.GameMapWidth; y++)
         {
-            for(int x = 0; x < width; x++) 
+            for(int x = 0; x < gridManager.GameMapWidth; x++) 
             {
-                float wear = groundTexture.GetPixel(x, y).r;
-
-                Color baseColor = GetMapColorAt((x * 1f) / width, (y * 1f) / height);
-                Color c = Color.Lerp(baseColor, wornGroundColor, wear);
-                
-                mapTexture.SetPixel(x, y, c);
+                int val = gridManager.GameMap[y * gridManager.GameMapWidth + x];
+                float g = (gridManager.MaxLevelNumber + 1.0f - val) / (gridManager.MaxLevelNumber + 1.0f);
+                Color c = (val == 0) ? seaColor : new Color(0f, g, 0f);
+                tex.SetPixel(x, y, c);
             }
         }
 
-        // Objects
-        foreach(var entry in mapEntries)
+        tex.Apply();
+        
+        return tex;
+    }
+
+    private Texture2D DrawNature()
+    {
+        var tex = new Texture2D(natureLayerResolution, natureLayerResolution);
+        var pixels = Enumerable.Repeat(new Color(0f, 0f, 0f, 0f), natureLayerResolution * natureLayerResolution).ToArray();
+        tex.SetPixels(pixels);
+
+        foreach(var rock in rocks.GetComponentsInChildren<SmolbeanRock>())
         {
-            DrawNatureObjects(mapTexture, entry.parentObject.transform, entry.color, entry.radius);
-        }
-    }
+            int x = Mathf.FloorToInt((rock.transform.position.x + xOffset) * natureLayerResolution / width);
+            int y = Mathf.FloorToInt((rock.transform.position.z + zOffset) * natureLayerResolution / height);
 
-    private void DrawNatureObjects(Texture2D mapTexture, Transform parent, Color color, int radius)
-    {
-        foreach(Transform child in parent)
+            tex.SetPixel(x, y, rockColor);
+        }
+
+        foreach(var tree in trees.GetComponentsInChildren<SmolbeanTree>())
         {
-            var pos = child.position;
+            int x = Mathf.FloorToInt((tree.transform.position.x + xOffset) * natureLayerResolution / width);
+            int y = Mathf.FloorToInt((tree.transform.position.z + zOffset) * natureLayerResolution / height);
 
-            float mapX = (pos.x - mapOffsetX) / mapWidth;
-            float mapY = (pos.z - mapOffsetY) / mapHeight;
-
-            int centerX = Mathf.RoundToInt(mapTexture.width * mapX);
-            int centerY = Mathf.RoundToInt(mapTexture.height * mapY);
-
-            Vector2Int center = new Vector2Int(centerX, centerY);
-
-            for (int y = centerY - radius; y < centerY + radius; y++)
-            {
-                for (int x = centerX - radius; x < centerX + radius; x++)
-                {
-                    float dist = Vector2.Distance(new Vector2(x, y), center);
-                    
-                    mapTexture.SetPixel(x, y, color);
-                }
-            }
+            tex.SetPixel(x, y, treeColor);
         }
-    }
 
-    private Color GetMapColorAt(float dX, float dY)
-    {
-        int x = Mathf.RoundToInt(Mathf.Clamp01(dX) * (gridManager.GameMapWidth - 1));
-        int y = Mathf.RoundToInt(Mathf.Clamp01(dY) * (gridManager.GameMapHeight - 1));
-
-        int val = gridManager.GameMap[y * gridManager.GameMapWidth + x];
-
-        return mapLevelColors[val];
-    }
-
-    private void CloseButtonClicked()
-    {
-        MenuController.Instance.CloseAll();
+        tex.Apply();
+        
+        return tex;
     }
 }
