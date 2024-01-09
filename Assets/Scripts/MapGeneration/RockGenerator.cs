@@ -30,15 +30,15 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
         Clear();
         var gridManager = GameObject.FindAnyObjectByType<GridManager>();
 
-        int numberOfRocksToGenerate = Mathf.FloorToInt(gameMap.Count(sq => sq > 0) * rocksPerGridSquareFactor);
+        int numberOfRocksToGenerate = Mathf.FloorToInt(gameMapWidth * gameMapHeight * rocksPerGridSquareFactor);
         
         while(numberOfRocksToGenerate > 0)
         {
             int x = UnityEngine.Random.Range(0, gameMapWidth);
             int z = UnityEngine.Random.Range(0, gameMapHeight);
 
-            if(gameMap[z * gameMapWidth + x] == 0)
-                continue;
+            //if(gameMap[z * gameMapWidth + x] == 0)
+            //    continue;
 
             Rect squareBounds = gridManager.GetSquareBounds(x, z);
             bool boxFull = Physics.CheckBox(squareBounds.center, new Vector3(squareBounds.width / 2f, 100f, squareBounds.height / 2f), Quaternion.identity, LayerMask.GetMask(natureLayer));

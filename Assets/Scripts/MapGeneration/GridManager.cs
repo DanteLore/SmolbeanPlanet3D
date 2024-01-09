@@ -113,6 +113,9 @@ public class GridManager : MonoBehaviour
 
         // Seabed can be merged to a single mesh
         MergeMeshes(Seabed);
+        var seaNmm = Seabed.AddComponent<NavMeshModifier>();
+        seaNmm.overrideArea = true;
+        seaNmm.area = NavMesh.GetAreaFromName("Not Walkable");
         Seabed.layer = LayerMask.NameToLayer(seaLayer);
     }
 
@@ -191,7 +194,7 @@ public class GridManager : MonoBehaviour
     public float GetGridHeightAt(float worldX, float worldZ)
     { 
         Ray ray = new Ray(new Vector3(worldX, 100f, worldZ), Vector3.down);
-        if(Physics.Raycast(ray, out RaycastHit hit, 200f, LayerMask.GetMask(groundLayer))) 
+        if(Physics.Raycast(ray, out RaycastHit hit, 200f, LayerMask.GetMask(groundLayer, seaLayer))) 
         {
             return hit.point.y;
         }
