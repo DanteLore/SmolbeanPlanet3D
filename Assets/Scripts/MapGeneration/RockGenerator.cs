@@ -22,6 +22,7 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
     public float scaleMin = 0.8f;
     public float tiltMaxDegrees = 6.0f;
     public string natureLayer = "Nature";
+    public bool rocksInWaterEnabled = false;
 
     public MapData mapData;
 
@@ -37,8 +38,8 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
             int x = UnityEngine.Random.Range(0, gameMapWidth);
             int z = UnityEngine.Random.Range(0, gameMapHeight);
 
-            //if(gameMap[z * gameMapWidth + x] == 0)
-            //    continue;
+            if(!rocksInWaterEnabled && gameMap[z * gameMapWidth + x] == 0)
+                continue;
 
             Rect squareBounds = gridManager.GetSquareBounds(x, z);
             bool boxFull = Physics.CheckBox(squareBounds.center, new Vector3(squareBounds.width / 2f, 100f, squareBounds.height / 2f), Quaternion.identity, LayerMask.GetMask(natureLayer));
