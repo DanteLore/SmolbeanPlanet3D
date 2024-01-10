@@ -81,7 +81,7 @@ public class GridManager : MonoBehaviour
 
     private void DrawMap()
     {
-        Vector3 offset = new Vector3((DrawMapWidth * tileSize) / 2.0f, 0.0f, (DrawMapHeight * tileSize) / 2.0f);
+        Vector3 offset = new Vector3(DrawMapWidth * tileSize / 2.0f, 0f, DrawMapHeight * tileSize / 2.0f);
 
         for (int x = 0; x < DrawMapWidth; x++)
         {
@@ -92,7 +92,8 @@ public class GridManager : MonoBehaviour
 
                 var tileObj = new GameObject($"({x}, 0, {z}) {meshData.name}");
                 tileObj.layer = LayerMask.NameToLayer(groundLayer);
-                tileObj.transform.position = pos - offset;
+                tileObj.transform.position = pos - offset + meshData.translation;
+                tileObj.transform.rotation = Quaternion.Euler(meshData.rotationAngles);
                 tileObj.AddComponent<MeshRenderer>();
                 var meshFilter = tileObj.AddComponent<MeshFilter>();
                 meshFilter.sharedMesh = meshData.mesh;

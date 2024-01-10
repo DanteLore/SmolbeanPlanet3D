@@ -26,7 +26,7 @@ public class MapGenerator
         this.neighbourData = neighbourData;
 
         allTileOptions = neighbourData.Keys.ToList();
-        seabedOptions = this.meshData.Values.Where(x => x.name == "Seabed").Select(x => x.id).ToList();
+        seabedOptions = this.meshData.Values.Where(x => x.name.StartsWith("Seabed")).Select(x => x.id).ToList();
         mapCentre = new Vector2(drawMapWidth / 2.0f, drawMapHeight / 2.0f);
     }
 
@@ -68,6 +68,8 @@ public class MapGenerator
                 var backRight = drawMap[(y + 1) * drawMapWidth + x + 1];
                 var frontLeft = drawMap[y * drawMapWidth + x];
                 var frontRight = drawMap[y * drawMapWidth + x + 1];
+
+                //Debug.Log($"x={x} y={y} level={level} options={allTileOptions.Count}");
 
                 if(backLeft.Restrict(allTileOptions.Where(t => neighbourData[t].frontRightLevel == level)))
                     recurseInto.Add(backLeft);

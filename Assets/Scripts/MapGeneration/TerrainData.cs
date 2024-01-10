@@ -6,8 +6,8 @@ using UnityEngine;
 public class TerrainData : ScriptableObject
 {
     [SerializeField] public float fuzzyEdgeFactor = 0.01f;
-    [SerializeField] public float flatnessThreshold = 0.5f;
-    [SerializeField] public float levelMeshHeight = 2.0f; 
+    [SerializeField] public float levelMeshHeight = 4.0f; 
+    [SerializeField] public int MaxLevelNumber = 10;
     [SerializeField] public NeighbourData[] neighbourData;
     [SerializeField] public MeshData[] meshData;
 }
