@@ -65,6 +65,23 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         WearCircle(WorldToTexture(position), wearRadius);
     }
 
+    public void BuildingOn(Bounds bounds, BuildingWearPattern wearPattern, Vector2 wearScale)
+    {
+        if (wearPattern == BuildingWearPattern.Rectangle)
+            WearRectangle(bounds, wearScale);
+        else
+            WearCircle(bounds, wearScale);
+    }
+
+    private void WearCircle(Bounds bounds, Vector2 wearScale)
+    {
+        var min = WorldToTexture(bounds.min);
+        var center = WorldToTexture(bounds.center);
+        int radius = Mathf.RoundToInt(Vector2Int.Distance(min, center) * Mathf.Min(wearScale.x, wearScale.y));
+
+        WearCircle(center, radius);
+    }
+
     private void WearCircle(Vector2Int center, int radius)
     {
         for (int y = Mathf.Max(center.y - radius, 0); y < Mathf.Min(center.y + radius, textureHeight); y++)
@@ -84,39 +101,25 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         }
     }
 
-    public void BuildingOn(Bounds bounds, BuildingWearPattern wearPattern, Vector2 wearScale)
+    private void WearRectangle(Bounds bounds, Vector2 wearScale)
     {
         var min = WorldToTexture(bounds.min);
         var max = WorldToTexture(bounds.max);
         var center = WorldToTexture(bounds.center);
 
-        if(wearPattern == BuildingWearPattern.Rectangle)
-        {
-            int dx = Mathf.RoundToInt((max.x - min.x) * Mathf.Clamp01(1f - wearScale.x));
-            int dy = Mathf.RoundToInt((max.y - min.y) * Mathf.Clamp01(1f - wearScale.y));
-            min = new Vector2Int(min.x + dx, min.y + dy);
-            max = new Vector2Int(max.x + dx, max.y + dy);
+        float radiusX = (max.x - min.x) / 2;
+        float radiusY = (max.y - min.y) / 2;
 
-            WearRectangle(min, max, center);
-        }
-        else // Circle 
-        {
-            int radius = Mathf.RoundToInt(Vector2Int.Distance(min, center) * Mathf.Min(wearScale.x, wearScale.y));
-            WearCircle(center, radius);
-        }
-    }
+        int startX = Mathf.RoundToInt(center.x - radiusX * wearScale.x);
+        int endX = Mathf.RoundToInt(center.x + radiusX * wearScale.x);
+        int startY = Mathf.RoundToInt(center.y - radiusY * wearScale.y);
+        int endY = Mathf.RoundToInt(center.y + radiusY * wearScale.y);
 
-    private void WearRectangle(Vector2Int min, Vector2Int max, Vector2Int center)
-    {
-        float radius = Vector2Int.Distance(min, center);
-
-        for (int y = min.y; y < max.y; y++)
+        for (int y = startY; y < endY; y++)
         {
-            for (int x = min.x; x < max.x; x++)
+            for (int x = startX; x < endX; x++)
             {
-                float dist = Vector2.Distance(new Vector2(x, y), center);
-                
-                float c = wearStrength * Time.deltaTime * ((radius - dist) / 256f);
+                float c = wearStrength * Time.deltaTime;
                 var px = wearTexture.GetPixel(x, y);
                 px.r = Mathf.Clamp01(px.r + c); // Wear is on the RED channel
                 wearTexture.SetPixel(x, y, px);
