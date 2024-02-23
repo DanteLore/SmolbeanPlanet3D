@@ -59,6 +59,7 @@ Material:
     - _grassColor: {r: 0, g: 0.18867916, b: 0.009817625, a: 1}
     - _wearColor: {r: 0.6037736, g: 0.50584054, b: 0.36739054, a: 1}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &654372233466579835
 MonoBehaviour:
   m_ObjectHideFlags: 11
@@ -71,4 +72,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 7
+  version: 9

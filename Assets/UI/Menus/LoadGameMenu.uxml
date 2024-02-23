@@ -3,7 +3,7 @@
     <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
     <ui:VisualElement name="VisualElement" class="menuContainer" style="flex-grow: 1;">
         <ui:Label tabindex="-1" text="Load Game" display-tooltip-when-elided="true" class="title" style="width: 100%;" />
-        <ui:ListView focusable="true" name="fileListView" show-border="true" show-bound-collection-size="false" reorderable="false" picking-mode="Ignore" style="flex-grow: 1; width: 80%; max-width: 80%; min-width: 80%; align-items: center; align-self: center;" />
+        <ui:ListView focusable="true" name="fileListView" show-border="true" show-bound-collection-size="false" reorderable="false" picking-mode="Ignore" style="flex-grow: 1; width: 80%; max-width: 80%; min-width: 80%; align-items: stretch; align-self: center;" />
         <ui:VisualElement name="dialogButtonContainer">
             <ui:Button text="Load" display-tooltip-when-elided="true" name="loadGameButton" style="width: 100px; height: 30px;" />
             <ui:Button text="Cancel" display-tooltip-when-elided="true" name="cancelButton" style="width: 100px; height: 30px;" />

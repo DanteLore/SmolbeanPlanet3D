@@ -5,8 +5,6 @@ VisualElement {
     -unity-font-definition: url('project://database/Assets/UI/Fonts/Acme-Regular%20SDF.asset?fileID=11400000&guid=188be3c69c8cc496c90c64d17f6c8bb4&type=2#Acme-Regular SDF');
 }
 
-
-
 .unity-base-field:focus .unity-label {
     -unity-font-style: normal;
     color: rgb(255, 255, 255);
