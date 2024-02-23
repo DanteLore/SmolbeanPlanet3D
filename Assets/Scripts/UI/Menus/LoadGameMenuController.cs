@@ -10,6 +10,7 @@ public class LoadGameMenuController : SmolbeanMenu
     UIDocument document;
     private ListView fileListView;
     private string[] files;
+    private Button loadGameButton;
 
     void OnEnable()
     {
@@ -19,28 +20,33 @@ public class LoadGameMenuController : SmolbeanMenu
         
         var cancelButton = document.rootVisualElement.Q<Button>("cancelButton");
         cancelButton.clicked += CancelButtonClicked;
-     
+        
+        loadGameButton = document.rootVisualElement.Q<Button>("loadGameButton");
+        loadGameButton.clicked += LoadButtonClicked;
+        loadGameButton.SetEnabled(false);
+
         fileListView = document.rootVisualElement.Q<ListView>("fileListView");
         fileListView.itemsSource = files;
-        fileListView.makeItem = () => new Button();
-        fileListView.bindItem = (e, i) =>
-        {
-            string filename = files[i];
-            (e as Button).text = filename;
-            (e as Button).clicked += () => LoadButtonClicked(filename);
-
-        };
-        fileListView.selectionType = SelectionType.None;
+        fileListView.makeItem = () => new Label();
+        fileListView.bindItem = (e, i) => (e as Label).text = files[i];
+        fileListView.selectionType = SelectionType.Single;
+        fileListView.selectionChanged += FileSelectedFromList;
+        fileListView.itemsChosen += _ => { }; // Both methods need to be hooked up, or neither works :facepalm:
     }
 
-    private void LoadButtonClicked(string filename)
+    private void LoadButtonClicked()
     {
-        SaveGameManager.Instance.LoadGame(filename);
+        SaveGameManager.Instance.LoadGame((string)fileListView.selectedItem);
         MenuController.Instance.CloseAll();
     }
 
     private void CancelButtonClicked()
     {
         MenuController.Instance.ShowMenu();
+    }
+
+    private void FileSelectedFromList(IEnumerable<object> items)
+    {
+         loadGameButton.SetEnabled(fileListView.selectedItem != null);
     }
 }
