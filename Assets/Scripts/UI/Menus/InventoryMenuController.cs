@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
@@ -33,7 +32,7 @@ public class InventoryMenu : SmolbeanMenu
     {
         buildingListContainer.Clear();
 
-        var buildings = BuildManager.Instance.Buildings.Where(b => b.Inventory.Count > 0).OrderByDescending(b => b.Inventory.Count);
+        var buildings = BuildingController.Instance.Buildings.Where(b => b.Inventory.Count > 0).OrderByDescending(b => b.Inventory.Count);
 
         foreach(var building in buildings)
         {

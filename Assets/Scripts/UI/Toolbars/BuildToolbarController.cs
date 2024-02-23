@@ -16,7 +16,7 @@ public class BuildToolbarController : MonoBehaviour
         var buttonContainer = document.rootVisualElement.Q<VisualElement>("buildingButtonContainer");
         buttonContainer.Clear();
 
-        foreach(var spec in BuildManager.Instance.buildings.Where(b => b.showInToolbar))
+        foreach(var spec in BuildingController.Instance.buildings.Where(b => b.showInToolbar))
         {
             Button button = new Button();
             button.clickable.clickedWithEventInfo += BuildButtonClicked;

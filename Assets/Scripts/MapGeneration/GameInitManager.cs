@@ -37,7 +37,7 @@ public class GameInitManager : MonoBehaviour, IObjectGenerator
     private Vector3 PlaceShipwreck(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
         // Does a shipwreck already exist?
-        var shipwreck = BuildManager.Instance.Buildings.FirstOrDefault(b => b is Shipwreck);
+        var shipwreck = BuildingController.Instance.Buildings.FirstOrDefault(b => b is Shipwreck);
         if (shipwreck != null)
             return shipwreck.transform.position;
 
@@ -47,7 +47,7 @@ public class GameInitManager : MonoBehaviour, IObjectGenerator
         var inventory = startingInventory.Select(i => new InventoryItemSaveData { dropSpecName = i.item.dropName, quantity = i.quantity });
 
         // Place the shipwreck
-        shipwreck = BuildManager.Instance.PlaceBuildingOnSquare(shipwreckSpec, mapPos.x, mapPos.y, inventory);
+        shipwreck = BuildingController.Instance.PlaceBuildingOnSquare(shipwreckSpec, mapPos.x, mapPos.y, inventory);
 
         return shipwreck.transform.position;
     }

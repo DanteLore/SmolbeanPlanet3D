@@ -28,7 +28,7 @@ public class SaveGameManager : MonoBehaviour
     private GridManager gridManager;
     private TreeGenerator treeGenerator;
     private RockGenerator rockGenerator;
-    private BuildManager buildManager;
+    private BuildingController buildingController;
     private DropController dropController;
     private CameraController cameraController;
     private DayNightCycleController dayNightController;
@@ -46,7 +46,7 @@ public class SaveGameManager : MonoBehaviour
         gridManager = GameObject.FindAnyObjectByType<GridManager>();
         treeGenerator = GameObject.FindAnyObjectByType<TreeGenerator>();
         rockGenerator = GameObject.FindAnyObjectByType<RockGenerator>();
-        buildManager = GameObject.FindAnyObjectByType<BuildManager>();
+        buildingController = GameObject.FindAnyObjectByType<BuildingController>();
         dropController = GameObject.FindAnyObjectByType<DropController>();
         cameraController = GameObject.FindAnyObjectByType<CameraController>();
         dayNightController = GameObject.FindAnyObjectByType<DayNightCycleController>();
@@ -67,7 +67,7 @@ public class SaveGameManager : MonoBehaviour
             gameMap = gridManager.GameMap,
             treeData = treeGenerator.GetSaveData(),
             rockData = rockGenerator.GetSaveData(),
-            buildingData = buildManager.GetSaveData(),
+            buildingData = buildingController.GetSaveData(),
             dropItemData = dropController.GetSaveData(),
             cameraData = cameraController.GetSaveData(),
             timeData = dayNightController.GetSaveData()
@@ -129,7 +129,7 @@ public class SaveGameManager : MonoBehaviour
         if(saveData.rockData != null)
             rockGenerator.LoadRocks(saveData.rockData);
         if(saveData.buildingData != null)
-            buildManager.LoadBuildings(saveData.buildingData);
+            buildingController.LoadBuildings(saveData.buildingData);
         if(saveData.dropItemData != null)
             dropController.LoadDrops(saveData.dropItemData);
         if(saveData.cameraData != null)
