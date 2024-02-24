@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public abstract class ResourceGatherer : Colonist, IGatherDrops, IReturnDrops
+public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturnDrops
 {
     public float damage = 20f;
     public float hitCooldown = 1f;

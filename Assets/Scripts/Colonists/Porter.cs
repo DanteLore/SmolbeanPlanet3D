@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Porter : Colonist, IGatherDrops, IDeliverDrops
+public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
 {    
     public float idleTime = 1f;
     public float sleepTime = 2f;

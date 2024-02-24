@@ -42,7 +42,7 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
 
     public void Generate(List<int> gameMap, int mapWidth, int mapHeight)
     {
-        gridManager = GameObject.FindAnyObjectByType<GridManager>();
+        gridManager = FindAnyObjectByType<GridManager>();
 
         var treeData = new List<NatureObjectSaveData>();
 

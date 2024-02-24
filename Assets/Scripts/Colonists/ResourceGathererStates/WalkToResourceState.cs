@@ -1,0 +1,18 @@
+using UnityEngine;
+using UnityEngine.AI;
+
+public class WalkToResourceState : WalkStateBase
+{
+    private ResourceGatherer gatherer;
+
+    public WalkToResourceState(ResourceGatherer gatherer, NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer) 
+        : base(navAgent, animator, soundPlayer)
+    {
+        this.gatherer = gatherer;
+    }
+
+    protected override Vector3 GetDestination()
+    {
+        return (gatherer != null && gatherer.Target != null) ? gatherer.Target.transform.position : gatherer.transform.position;
+    }
+}

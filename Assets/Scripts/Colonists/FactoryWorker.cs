@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class FactoryWorker : Colonist, IReturnDrops
+public class FactoryWorker : SmolbeanColonist, IReturnDrops
 {
     public float idleTime = 1f;
     public int maxStacks = 5;

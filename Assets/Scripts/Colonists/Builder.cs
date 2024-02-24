@@ -1,6 +1,6 @@
 using System;
 
-public class Builder : Colonist
+public class Builder : SmolbeanColonist
 {
     private StateMachine stateMachine;
 

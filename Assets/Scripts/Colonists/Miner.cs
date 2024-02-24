@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class Miner : Colonist, IReturnDrops
+public class Miner : SmolbeanColonist, IReturnDrops
 {
     public float idleTime = 1f;
     public float mineCooldown = 1f;

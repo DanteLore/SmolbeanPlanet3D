@@ -76,7 +76,7 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
         float scaleY = UnityEngine.Random.Range(scaleMin, scaleMax);
         float scaleZ = UnityEngine.Random.Range(scaleMin, scaleMax);
 
-        var saveData = new NatureObjectSaveData
+        return new NatureObjectSaveData
         {
             positionX = worldX,
             positionY = worldY,
@@ -89,7 +89,6 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
             scaleZ = scaleZ,
             prefabIndex = rockIndex
         };
-        return saveData;
     }
 
     private void InstantiateRock(NatureObjectSaveData saveData)
