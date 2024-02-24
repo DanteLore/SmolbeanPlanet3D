@@ -17,8 +17,8 @@ public class NewGameMenuController : SmolbeanMenu
     void OnEnable()
     {
         document = GetComponent<UIDocument>();
-        mapGenerator = FindObjectOfType<GameMapGenerator>();
-        gridManager = FindObjectOfType<GridManager>();
+        mapGenerator = FindFirstObjectByType<GameMapGenerator>();
+        gridManager = FindFirstObjectByType<GridManager>();
         
         var startGameButton = document.rootVisualElement.Q<Button>("startGameButton");
         startGameButton.clicked += StartGameClicked;

@@ -38,12 +38,14 @@ public class BuildManager : MonoBehaviour
 
     void Start()
     {
-        gridManager = FindObjectOfType<GridManager>();
+        gridManager = FindFirstObjectByType<GridManager>();
         currentSquare = new Vector2Int(int.MaxValue, int.MaxValue);
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
 
         mapCursor = Instantiate(mapCursorPrefab, Vector3.zero, Quaternion.identity, transform.parent);
         mapCursor.SetActive(false);
+
+        GameStateManager.Instance.GamePauseStateChanged += GamePauseStateChanged;
     }
 
     public void BeginBuild(BuildingSpec spec)
@@ -89,10 +91,10 @@ public class BuildManager : MonoBehaviour
 
     void Update()
     {
-        if (GameStateManager.Instance.IsPaused)
+        if (Mouse.current.rightButton.wasPressedThisFrame)
         {
             EndEdit();
-            return;
+            EndBuild();
         }
 
         bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
@@ -106,6 +108,15 @@ public class BuildManager : MonoBehaviour
             UpdateBuildMode();
         else 
             UpdateSelectBuildingMode();
+    }
+
+    private void GamePauseStateChanged(object sender, bool isPaused)
+    {
+        if (isPaused)
+        {
+            EndEdit();
+            EndBuild();
+        }
     }
 
     private void UpdateSelectBuildingMode()
@@ -168,13 +179,17 @@ public class BuildManager : MonoBehaviour
             float worldX = bounds.center.x;
             float worldZ = bounds.center.y;
             float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
-            center = new Vector3(worldX, worldY, worldZ);
-            okToBuild = CheckFlat(bounds) && CheckEmpty(center);
 
-            Color color = okToBuild ? Color.blue : Color.red;
-            mapCursor.transform.position = center;
-            mapCursor.GetComponent<Renderer>().material.SetColor("_baseColor", color);
-            mapCursor.SetActive(true);
+            if (!float.IsNaN(worldY))
+            {
+                center = new Vector3(worldX, worldY, worldZ);
+                okToBuild = CheckFlat(bounds) && CheckEmpty(center);
+
+                Color color = okToBuild ? Color.blue : Color.red;
+                mapCursor.transform.position = center;
+                mapCursor.GetComponent<Renderer>().material.SetColor("_baseColor", color);
+                mapCursor.SetActive(true);
+            }
         }
     }
 

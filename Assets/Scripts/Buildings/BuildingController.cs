@@ -29,7 +29,7 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
 
     void Start()
     {
-        gridManager = FindObjectOfType<GridManager>();
+        gridManager = FindFirstObjectByType<GridManager>();
     }
 
     public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)

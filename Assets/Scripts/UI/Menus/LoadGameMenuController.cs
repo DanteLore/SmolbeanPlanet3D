@@ -23,7 +23,7 @@ public class LoadGameMenuController : SmolbeanMenu
         
         loadGameButton = document.rootVisualElement.Q<Button>("loadGameButton");
         loadGameButton.clicked += LoadButtonClicked;
-        loadGameButton.SetEnabled(false);
+        loadGameButton.SetEnabled(false); 
 
         fileListView = document.rootVisualElement.Q<ListView>("fileListView");
         fileListView.itemsSource = files;
