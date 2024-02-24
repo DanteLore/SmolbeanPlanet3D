@@ -18,12 +18,12 @@ Spent a very enjoyable Saturday sat at my desk with my newly fixed Mac, adding D
 Dodos wander around eating grass, causing wear to the ground and looking silly as they don't yet have animation set up.  They have hunger and health hooked up
 and will die if they don't eat for very long.
 
-![Screenshot](./Docs/Images/screenshot57.png)
+![Screenshot](./Docs/Images/screenshot58.png)
 
 Since I want to have a couple of hundred animals roaming the island in the end, I have also had to do a bunch of optimisation.  The upshot of this is that I now
 have hit 1440p 60FPS on my M1 Mac for the first time.  Check out the following screenshot full size...
 
-![Screenshot](./Docs/Images/screenshot56.png)
+![Screenshot](./Docs/Images/screenshot57.png)
 
 ## Fun with fonts
 
