@@ -173,8 +173,8 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         float posZ = Random.Range(bounds.min.z, bounds.max.z);
         pos = Vector3.zero;
 
-        Ray ray = new Ray(new Vector3(posX, 100f, posZ), Vector3.down);
-        if (!Physics.Raycast(ray, out RaycastHit hit, 200f, rayLayerMask))
+        Ray ray = new Ray(new Vector3(posX, 1000f, posZ), Vector3.down);
+        if (!Physics.Raycast(ray, out RaycastHit hit, 2000f, rayLayerMask))
             return false;
 
         var posY = hit.point.y;

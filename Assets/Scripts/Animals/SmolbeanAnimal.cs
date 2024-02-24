@@ -19,8 +19,8 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     protected SoundPlayer soundPlayer;
 
     protected StateMachine stateMachine;
-
     public AnimalSpec species;
+    public Vector3 target;
 
     private GameObject body;
 

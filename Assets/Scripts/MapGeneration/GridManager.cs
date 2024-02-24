@@ -195,8 +195,8 @@ public class GridManager : MonoBehaviour
 
     public float GetGridHeightAt(float worldX, float worldZ)
     { 
-        Ray ray = new Ray(new Vector3(worldX, 100f, worldZ), Vector3.down);
-        if(Physics.Raycast(ray, out RaycastHit hit, 200f, LayerMask.GetMask(groundLayer, seaLayer))) 
+        Ray ray = new Ray(new Vector3(worldX, 1000f, worldZ), Vector3.down);
+        if(Physics.Raycast(ray, out RaycastHit hit, 2000f, LayerMask.GetMask(groundLayer, seaLayer))) 
         {
             return hit.point.y;
         }

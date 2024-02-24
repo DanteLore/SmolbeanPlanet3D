@@ -22,7 +22,7 @@ public abstract class WalkStateBase : IState
 
     protected abstract Vector3 GetDestination();
 
-    public void OnEnter()
+    public virtual void OnEnter()
     {        
         navAgent.SetDestination(GetDestination());
         navAgent.isStopped = false;
@@ -30,15 +30,15 @@ public abstract class WalkStateBase : IState
         lastPosition = navAgent.transform.position;
         lastMoved = Time.time;
 
-        animator.SetBool("IsWalking", true);
-        soundPlayer.Play("Footsteps");
+        animator?.SetBool("IsWalking", true);
+        soundPlayer?.Play("Footsteps");
     }
 
-    public void OnExit()
+    public virtual void OnExit()
     {
         navAgent.isStopped = true;
-        animator.SetBool("IsWalking", false);
-        soundPlayer.Stop("Footsteps");
+        animator?.SetBool("IsWalking", false);
+        soundPlayer?.Stop("Footsteps");
     }
 
     public void Tick()

@@ -77,8 +77,8 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
 
     private bool TreeNotInTheSea(NatureObjectSaveData data)
     {
-        Ray ray = new Ray(new Vector3(data.positionX, 100f, data.positionZ), Vector3.down);
-        if (Physics.Raycast(ray, out RaycastHit hit, 200f, LayerMask.GetMask(groundLayer)))
+        Ray ray = new Ray(new Vector3(data.positionX, 1000f, data.positionZ), Vector3.down);
+        if (Physics.Raycast(ray, out RaycastHit hit, 2000f, LayerMask.GetMask(groundLayer)))
         {
             return hit.point.y > minimumTreeAltitude;
         }
