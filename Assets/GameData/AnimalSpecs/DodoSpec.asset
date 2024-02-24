@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: DodoSpec
   m_EditorClassIdentifier: 
   animalName: Dodo
-  prefab: {fileID: 6397777405160439761, guid: 0b9a57bcce777410c97202dc62498985, type: 3}
+  prefab: {fileID: 963902539609349758, guid: 0b9a57bcce777410c97202dc62498985, type: 3}
   startingPopulation: 200

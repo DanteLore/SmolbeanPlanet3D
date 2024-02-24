@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using System.Linq;
-using System;
 using Newtonsoft.Json;  
 
 public class SaveFileData
@@ -14,6 +13,7 @@ public class SaveFileData
     public List<NatureObjectSaveData> rockData;
     public List<BuildingObjectSaveData> buildingData;
     public List<DropItemSaveData> dropItemData;
+    public List<AnimalSaveData> animalData;
     public CameraSaveData cameraData;
     public TimeOfDaySaveData timeData;
 }
@@ -32,6 +32,7 @@ public class SaveGameManager : MonoBehaviour
     private DropController dropController;
     private CameraController cameraController;
     private DayNightCycleController dayNightController;
+    private AnimalController animalController;
 
     void Awake()
     {
@@ -43,13 +44,14 @@ public class SaveGameManager : MonoBehaviour
 
     void Start()
     {
-        gridManager = GameObject.FindAnyObjectByType<GridManager>();
-        treeGenerator = GameObject.FindAnyObjectByType<TreeGenerator>();
-        rockGenerator = GameObject.FindAnyObjectByType<RockGenerator>();
-        buildingController = GameObject.FindAnyObjectByType<BuildingController>();
-        dropController = GameObject.FindAnyObjectByType<DropController>();
-        cameraController = GameObject.FindAnyObjectByType<CameraController>();
-        dayNightController = GameObject.FindAnyObjectByType<DayNightCycleController>();
+        gridManager = FindAnyObjectByType<GridManager>();
+        treeGenerator = FindAnyObjectByType<TreeGenerator>();
+        rockGenerator = FindAnyObjectByType<RockGenerator>();
+        buildingController = FindAnyObjectByType<BuildingController>();
+        dropController = FindAnyObjectByType<DropController>();
+        cameraController = FindAnyObjectByType<CameraController>();
+        dayNightController = FindAnyObjectByType<DayNightCycleController>();
+        animalController = FindAnyObjectByType<AnimalController>();
     }
 
     public void SaveGame(string name)
@@ -70,7 +72,8 @@ public class SaveGameManager : MonoBehaviour
             buildingData = buildingController.GetSaveData(),
             dropItemData = dropController.GetSaveData(),
             cameraData = cameraController.GetSaveData(),
-            timeData = dayNightController.GetSaveData()
+            timeData = dayNightController.GetSaveData(),
+            animalData = animalController.GetSaveData()
         };
 
         using (StreamWriter file = File.CreateText(filename))
@@ -136,6 +139,8 @@ public class SaveGameManager : MonoBehaviour
             cameraController.LoadState(saveData.cameraData);
         if(saveData.timeData != null)
             dayNightController.LoadState(saveData.timeData);
+        if (saveData.animalData != null)
+            animalController.LoadAnimals(saveData.animalData);
 
         string pngFilename = GetPngFilename(filename);
         if(File.Exists(pngFilename) && groundTexture != null)

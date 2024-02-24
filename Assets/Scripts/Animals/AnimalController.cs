@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -53,7 +54,8 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         var prefab = animalSpecs[saveData.speciesIndex].prefab;
         var pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
         var rot = Quaternion.Euler(0f, saveData.rotationY, 0f);
-        var animal = Instantiate(prefab, pos, rot, transform);
+        var animal = Instantiate(prefab, pos, rot, transform).GetComponent<SmolbeanAnimal>();
+        animal.Species = animalSpecs[saveData.speciesIndex];
     }
 
     private AnimalSaveData GenerateAnimalData(GridManager gridManager, Rect squareBounds, AnimalSpec species)
@@ -75,5 +77,26 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
             rotationY = rotationY,
             speciesIndex = speciesIndex
         };
+    }
+
+    public List<AnimalSaveData> GetSaveData()
+    {
+        return GetComponentsInChildren<SmolbeanAnimal>()
+            .Select(b => new AnimalSaveData
+            {
+                positionX = b.transform.position.x,
+                positionY = b.transform.position.y,
+                positionZ = b.transform.position.z,
+                rotationY = b.transform.rotation.eulerAngles.y,
+                speciesIndex = Array.IndexOf(animalSpecs, b.Species)
+            })
+            .ToList();
+    }
+
+    internal void LoadAnimals(List<AnimalSaveData> animalData)
+    {
+        Clear();
+
+        animalData.ForEach(InstantiateAnimal);
     }
 }

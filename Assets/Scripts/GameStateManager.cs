@@ -16,7 +16,6 @@ public class GameStateManager : MonoBehaviour
         set
         {
             selectedGameSpeed = value;
-            Debug.Log("Time scale set to: " + selectedGameSpeed);
             GameSpeedChanged?.Invoke(this, selectedGameSpeed);
         }
     }
