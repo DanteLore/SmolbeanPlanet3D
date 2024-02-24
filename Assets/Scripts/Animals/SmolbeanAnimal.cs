@@ -1,18 +1,23 @@
 using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
+using System;
 
 public abstract class SmolbeanAnimal : MonoBehaviour
 {
+    protected void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
+
     public string natureLayer = "Nature";
     public string creatureLayer = "Creatures";
     public float destinationThreshold = 1.0f;
-    
-    public Vector3 SpawnPoint { get; private set; }
+
+    public float health;
+    public float foodLevel;
 
     protected Animator animator;
     protected NavMeshAgent navAgent;
     protected SoundPlayer soundPlayer;
+    protected StateMachine stateMachine;
 
     public AnimalSpec Species { get; set; }
 
@@ -25,7 +30,49 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         navAgent = GetComponent<NavMeshAgent>();
         navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         body = transform.Find("Body").gameObject;
-    }    
+
+        stateMachine = new StateMachine(shouldLog: false);
+        InitialiseStats();
+    }
+
+    protected virtual void Update()
+    {
+        UpdateStats();
+
+        stateMachine.Tick();
+    }
+
+    protected virtual void InitialiseStats()
+    {
+        health = Species.initialHealth;
+        foodLevel = Species.initialFoodLevel;
+    }
+
+    protected virtual void UpdateStats()
+    {
+        foodLevel = Mathf.Max(0f, foodLevel - Species.foodDigestedPerSecond * Time.deltaTime);
+
+        if (foodLevel <= Species.starvationThreshold)
+        {
+            float healthDelta = Species.starvationRatePerSecond * Time.deltaTime;
+            healthDelta *= 1f - Mathf.InverseLerp(0f, Species.starvationThreshold, foodLevel);
+            health = Mathf.Max(0f, health - healthDelta); 
+        }
+        else 
+        {   
+            float healthDelta = Species.healthRecoveryPerSecond * Time.deltaTime;
+            healthDelta *= Mathf.InverseLerp(Species.starvationThreshold, Species.maxFoodLevel, foodLevel);
+            health = Mathf.Min(Species.maxHealth, health + healthDelta);
+        }
+
+        if (health <= 0)
+            Die(); 
+    }
+
+    private void Die()
+    {
+        DestroyImmediate(gameObject);
+    }
 
     public void Hide()
     {
