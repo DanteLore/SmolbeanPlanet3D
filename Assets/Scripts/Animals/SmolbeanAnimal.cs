@@ -18,6 +18,11 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     protected NavMeshAgent navAgent;
     protected SoundPlayer soundPlayer;
 
+    internal float GetAvailableFood()
+    {
+        throw new NotImplementedException();
+    }
+
     protected StateMachine stateMachine;
     public AnimalSpec species;
     public Vector3 target;

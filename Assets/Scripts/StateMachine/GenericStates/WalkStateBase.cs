@@ -43,13 +43,16 @@ public abstract class WalkStateBase : IState
 
     public void Tick()
     {
-        if(Vector3.SqrMagnitude(lastPosition - navAgent.transform.position) >= 0.5f)
+        var pos = navAgent.transform.position;
+        var time = Time.time;
+
+        if (Vector3.SqrMagnitude(lastPosition - pos) > 0.0f)
         {
-            lastMoved = Time.time;
-            lastPosition = navAgent.transform.position;
+            lastMoved = time;
+            lastPosition = pos;
         }
 
-        if(Time.time - lastMoved > 1f)
+        if(time - lastMoved > 1f)
         {
             // Kick the nav agent after small amount of inactivity
             navAgent.isStopped = true;

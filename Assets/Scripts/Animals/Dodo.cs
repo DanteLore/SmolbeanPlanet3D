@@ -12,6 +12,7 @@ public class Dodo : SmolbeanAnimal
 
         AT(idle, eat, Hungry());
         AT(eat, wander, Full());
+        AT(eat, wander, NoFoodHere());
         AT(wander, idle, Arrived());
         AT(idle, wander, IdleFor(5));
 
@@ -21,6 +22,7 @@ public class Dodo : SmolbeanAnimal
         Func<bool> Hungry() => () => foodLevel < 70f;
         Func<bool> Full() => () => foodLevel > 80f;
         Func<bool> Arrived() => () => CloseEnoughTo(target);
+        Func<bool> NoFoodHere() => () => GroundWearManager.Instance.GetAvailableGrass(transform.position) <= 0.1f;
     }
 
     protected override void Update()

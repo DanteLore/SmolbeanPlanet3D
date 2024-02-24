@@ -17,11 +17,12 @@ public class WanderState : WalkStateBase
 
         var pos = animal.transform.position;
 
-        float x = pos.x + Random.Range(-5f, 5f);
-        float z = pos.z + Random.Range(-5f, 5f);
+        float x = pos.x + Random.Range(-4f, 4f);
+        float z = pos.z + Random.Range(-4f, 4f);
 
-        if (Physics.Raycast(new Ray(new Vector3(x, 1000, z), Vector3.down), out var hit, 2000, LayerMask.GetMask("Ground")))
-            animal.target = hit.point;
+        if (Physics.Raycast(new Ray(new Vector3(x, 1000, z), Vector3.down), out var rayHit, 2000, LayerMask.GetMask("Ground"))
+            && NavMesh.SamplePosition(rayHit.point, out var navHit, 1.0f, NavMesh.AllAreas))
+            animal.target = navHit.position;
         else
             animal.target = pos;
     }
