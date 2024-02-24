@@ -71,7 +71,7 @@ public class GridManager : MonoBehaviour
         //InvokeRepeating("UpdateNavMesh", 0.0f, 300.0f);
         UpdateNavMesh();
 
-        Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
+        //Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
     }
 
     private void UpdateNavMesh()
