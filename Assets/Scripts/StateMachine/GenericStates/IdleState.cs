@@ -20,13 +20,13 @@ public class IdleState : IState
 
     public void OnEnter()
     {
-        animator.SetBool("IsIdle", true);
+        animator?.SetBool("IsIdle", true);
         startedIdleTime = Time.time;
     }
 
     public void OnExit()
     {
-        animator.SetBool("IsIdle", false);
+        animator?.SetBool("IsIdle", false);
     }
 
     public void Tick()

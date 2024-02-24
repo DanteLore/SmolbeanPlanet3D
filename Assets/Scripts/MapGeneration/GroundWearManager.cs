@@ -9,7 +9,8 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
     public Texture2D wearTexture;
     public Material grassMaterial;
-    public int wearStrength = 2;
+    public float textureUpdateDelay = 0.25f;
+    public float wearStrength = 1 / 255;
     public float updateThreshold = 0.5f;
     public int squaresToGrowBackEachFrame = 1024;
     public float grassGrowthWeight = 0.5f;
@@ -18,8 +19,10 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     public float mapWidth = 400f;
     public float mapHeight = 400f;
     public float mapOffsetX = -200f;
+
     public float mapOffsetY = -200f;
 
+    private Color[] data;
     private int textureWidth;
     private int textureHeight;
 
@@ -38,7 +41,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
         Clear();
 
-        InvokeRepeating("UpdateTexture", 1.0f, 0.5f);
+        InvokeRepeating(nameof(UpdateTexture), 1.0f, textureUpdateDelay);
     }
 
     void Update()
@@ -48,21 +51,54 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
     private void GrowGrass()
     {
-        float amount = (wearStrength * Time.deltaTime) * grassGrowthWeight;
+        float amount = wearStrength * Time.deltaTime * grassGrowthWeight;
         for(int i = 0; i < squaresToGrowBackEachFrame; i++)
         {
-            int x = UnityEngine.Random.Range(0, textureWidth);
-            int y = UnityEngine.Random.Range(0, textureHeight);
+            int x = Random.Range(0, textureWidth);
+            int y = Random.Range(0, textureHeight);
 
-            var px = wearTexture.GetPixel(x, y);
-            float r = Mathf.Clamp01(px.r - amount);
-            wearTexture.SetPixel(x, y, new Color(r, px.g, px.b));
+            var px = data[y * textureWidth + x];
+            float r = px.r - amount;
+            r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01?
+            data[y * textureWidth + x] = new Color(r, px.g, px.b);
         }
+    }
+
+    public float GetAvailableGrass(Vector3 worldPosition)
+    {
+        Vector2Int center = WorldToTexture(worldPosition);
+        int x = center.x;
+        int y = center.y;
+        int radius = wearRadius - 1;
+        float rSquared = radius * radius;
+        float grassAvailable = 0f;
+        int squares = 0;
+
+        for (int u = x - radius; u < x + radius + 1; u++)
+        {  
+            for (int v = y - radius; v < y + radius + 1; v++)
+            {
+                float dSquared = (x - u) * (x - u) + (y - v) * (y - v);
+                if (dSquared < rSquared)
+                {
+                    squares++;
+                    Color c = data[y * textureWidth + x];
+                    grassAvailable += c.g * (1 - c.r); // Green is the grass density, red is the wear level
+                }
+            }
+        }
+
+        return grassAvailable / squares;
     }
 
     public void WalkedOn(Vector3 position)
     {
         WearCircle(WorldToTexture(position), wearRadius);
+    }
+
+    public void RegisterHarvest(Vector3 position, float weight = 1f)
+    {
+        WearCircle(WorldToTexture(position), wearRadius, weight);
     }
 
     public void BuildingOn(Bounds bounds, BuildingWearPattern wearPattern, Vector2 wearScale)
@@ -73,29 +109,35 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
             WearCircle(bounds, wearScale);
     }
 
-    private void WearCircle(Bounds bounds, Vector2 wearScale)
+    private void WearCircle(Bounds bounds, Vector2 wearScale, float weight = 1.0f)
     {
         var min = WorldToTexture(bounds.min);
         var center = WorldToTexture(bounds.center);
-        int radius = Mathf.RoundToInt(Vector2Int.Distance(min, center) * Mathf.Min(wearScale.x, wearScale.y));
+        int radius = Mathf.RoundToInt((center.x - min.x) * wearScale.x);
 
-        WearCircle(center, radius);
+        WearCircle(center, radius, weight);
     }
 
-    private void WearCircle(Vector2Int center, int radius)
+    private void WearCircle(Vector2Int center, int radius, float weight = 1.0f)
     {
-        for (int y = Mathf.Max(center.y - radius, 0); y < Mathf.Min(center.y + radius, textureHeight); y++)
-        {
-            for (int x = Mathf.Max(center.x - radius, 0); x < Mathf.Min(center.x + radius, textureWidth); x++)
-            {
-                float dist = Vector2.Distance(new Vector2(x, y), center);
+        int x = center.x;
+        int y = center.y;
+        float rSquared = radius * radius;
 
-                if (dist <= radius)
+        for (int u = x - radius; u < x + radius + 1; u++)
+        {
+            for (int v = y - radius; v < y + radius + 1; v++)
+            {
+                float dSquared = (x - u) * (x - u) + (y - v) * (y - v);
+                if (dSquared < rSquared)
                 {
-                    float c = wearStrength * ((radius - dist) / 256f);
-                    var px = wearTexture.GetPixel(x, y);
-                    px.r = Mathf.Clamp01(px.r + c); // Wear is on the RED channel
-                    wearTexture.SetPixel(x, y, px);
+                    float blur = 1 - (dSquared / rSquared);
+                    float c = wearStrength * weight * blur;
+                    Color px = data[v * textureWidth + u];
+                    float r = px.r + c; // Wear is on the RED channel
+                    r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01?
+                    data[v * textureWidth + u] = px;
+                    data[v * textureWidth + u].r = r;
                 }
             }
         }
@@ -104,11 +146,10 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     private void WearRectangle(Bounds bounds, Vector2 wearScale)
     {
         var min = WorldToTexture(bounds.min);
-        var max = WorldToTexture(bounds.max);
         var center = WorldToTexture(bounds.center);
 
-        float radiusX = (max.x - min.x) / 2;
-        float radiusY = (max.y - min.y) / 2;
+        float radiusX = center.x - min.x;
+        float radiusY = center.y - min.y;
 
         int startX = Mathf.RoundToInt(center.x - radiusX * wearScale.x);
         int endX = Mathf.RoundToInt(center.x + radiusX * wearScale.x);
@@ -120,9 +161,10 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
             for (int x = startX; x < endX; x++)
             {
                 float c = wearStrength * Time.deltaTime;
-                var px = wearTexture.GetPixel(x, y);
-                px.r = Mathf.Clamp01(px.r + c); // Wear is on the RED channel
-                wearTexture.SetPixel(x, y, px);
+                Color px = data[y * textureWidth + x];
+                float r = px.r + c; // Wear is on the RED channel
+                r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01?
+                data[y * textureWidth + x] = new Color(r, px.g, px.b, px.a);
             }
         }
     }
@@ -137,28 +179,31 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
     private void UpdateTexture()
     {
+        wearTexture.SetPixels(data);
         wearTexture.Apply();
     }
 
     public void Clear()
     {
-        CancelInvoke("UpdateTexture");
+        CancelInvoke(nameof(UpdateTexture));
+
+        data = wearTexture.GetPixels();
 
         for (int y = 0; y < textureHeight; y++)
         {
             for (int x = 0; x < textureWidth; x++)
             {
-                Color c = wearTexture.GetPixel(x, y);
-                c.r = 0.0f; // Wear is on the RED channel
-                wearTexture.SetPixel(x, y, c);
+                Color c1 = data[y * textureWidth + x];
+                Color c2 = new (0, c1.g, 0, 0); // Copy only the green channel
+                data[y * textureWidth + x] = c2;
             }
         }
 
-        wearTexture.Apply();
+        UpdateTexture();
     }
 
     public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        InvokeRepeating("UpdateTexture", 1.0f, 0.5f);
+        InvokeRepeating(nameof(UpdateTexture), 1.0f, textureUpdateDelay);
     }
 }

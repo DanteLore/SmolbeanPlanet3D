@@ -14,4 +14,5 @@ public class AnimalSpec : ScriptableObject
     public float starvationThreshold;
     public float starvationRatePerSecond;
     public float healthRecoveryPerSecond;
+    public float foodEatenPerSecond;
 }

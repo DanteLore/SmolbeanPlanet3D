@@ -17,9 +17,10 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     protected Animator animator;
     protected NavMeshAgent navAgent;
     protected SoundPlayer soundPlayer;
+
     protected StateMachine stateMachine;
 
-    public AnimalSpec Species { get; set; }
+    public AnimalSpec species;
 
     private GameObject body;
 
@@ -39,39 +40,49 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     {
         UpdateStats();
 
+        if (health <= 0f)
+            return;
+
         stateMachine.Tick();
     }
 
     protected virtual void InitialiseStats()
     {
-        health = Species.initialHealth;
-        foodLevel = Species.initialFoodLevel;
+        health = species.initialHealth;
+        foodLevel = species.initialFoodLevel;
     }
 
     protected virtual void UpdateStats()
     {
-        foodLevel = Mathf.Max(0f, foodLevel - Species.foodDigestedPerSecond * Time.deltaTime);
+        foodLevel = Mathf.Max(0f, foodLevel - species.foodDigestedPerSecond * Time.deltaTime);
 
-        if (foodLevel <= Species.starvationThreshold)
+        if (foodLevel <= species.starvationThreshold)
         {
-            float healthDelta = Species.starvationRatePerSecond * Time.deltaTime;
-            healthDelta *= 1f - Mathf.InverseLerp(0f, Species.starvationThreshold, foodLevel);
+            float healthDelta = species.starvationRatePerSecond * Time.deltaTime;
+            healthDelta *= 1f - Mathf.InverseLerp(0f, species.starvationThreshold, foodLevel);
             health = Mathf.Max(0f, health - healthDelta); 
         }
         else 
         {   
-            float healthDelta = Species.healthRecoveryPerSecond * Time.deltaTime;
-            healthDelta *= Mathf.InverseLerp(Species.starvationThreshold, Species.maxFoodLevel, foodLevel);
-            health = Mathf.Min(Species.maxHealth, health + healthDelta);
+            float healthDelta = species.healthRecoveryPerSecond * Time.deltaTime;
+            healthDelta *= Mathf.InverseLerp(species.starvationThreshold, species.maxFoodLevel, foodLevel);
+            health = Mathf.Min(species.maxHealth, health + healthDelta);
         }
 
         if (health <= 0)
             Die(); 
     }
 
-    private void Die()
+    protected virtual void Die()
     {
         DestroyImmediate(gameObject);
+    }
+
+    public virtual float Eat(float amount)
+    {
+        float delta = Mathf.Min(amount, species.maxFoodLevel - foodLevel);
+        foodLevel += delta;
+        return delta;
     }
 
     public void Hide()

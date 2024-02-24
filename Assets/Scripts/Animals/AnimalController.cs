@@ -39,7 +39,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
                     continue;
 
                 Rect squareBounds = gridManager.GetSquareBounds(x, z);
-                bool boxFull = Physics.CheckBox(squareBounds.center, new Vector3(squareBounds.width / 2f, 100f, squareBounds.height / 2f), Quaternion.identity, LayerMask.GetMask(natureLayer));
+                //bool boxFull = Physics.CheckBox(squareBounds.center, new Vector3(squareBounds.width / 2f, 100f, squareBounds.height / 2f), Quaternion.identity, LayerMask.GetMask(natureLayer));
 
                 var animalData = GenerateAnimalData(gridManager, squareBounds, species);
                 InstantiateAnimal(animalData);
@@ -55,7 +55,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         var pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
         var rot = Quaternion.Euler(0f, saveData.rotationY, 0f);
         var animal = Instantiate(prefab, pos, rot, transform).GetComponent<SmolbeanAnimal>();
-        animal.Species = animalSpecs[saveData.speciesIndex];
+        animal.species = animalSpecs[saveData.speciesIndex];
     }
 
     private AnimalSaveData GenerateAnimalData(GridManager gridManager, Rect squareBounds, AnimalSpec species)
@@ -88,7 +88,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
                 positionY = b.transform.position.y,
                 positionZ = b.transform.position.z,
                 rotationY = b.transform.rotation.eulerAngles.y,
-                speciesIndex = Array.IndexOf(animalSpecs, b.Species)
+                speciesIndex = Array.IndexOf(animalSpecs, b.species)
             })
             .ToList();
     }

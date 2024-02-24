@@ -24,5 +24,13 @@ public class EatGrassState : IState
 
     public void Tick()
     {
+        var pos = animal.transform.position;
+        float available = GroundWearManager.Instance.GetAvailableGrass(pos);
+        if (available > 0.1f) // Hard coded threshold... hmmmm
+        {
+            float desired = animal.species.foodEatenPerSecond * Time.deltaTime;
+            animal.Eat(desired);
+            GroundWearManager.Instance.RegisterHarvest(pos, 0.5f);
+        }
     }
 }

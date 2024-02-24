@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animalName: Dodo
   prefab: {fileID: 963902539609349758, guid: 0b9a57bcce777410c97202dc62498985, type: 3}
-  startingPopulation: 200
+  startingPopulation: 2000
   maxFoodLevel: 100
   initialFoodLevel: 100
   foodDigestedPerSecond: 1
@@ -23,3 +23,4 @@ MonoBehaviour:
   starvationThreshold: 20
   starvationRatePerSecond: 4
   healthRecoveryPerSecond: 2
+  foodEatenPerSecond: 5
