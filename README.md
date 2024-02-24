@@ -11,6 +11,20 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Animal Time!
+
+Spent a very enjoyable Saturday sat at my desk with my newly fixed Mac, adding Dodos to Smolbean Island.
+
+Dodos wander around eating grass, causing wear to the ground and looking silly as they don't yet have animation set up.  They have hunger and health hooked up
+and will die if they don't eat for very long.
+
+![Screenshot](./Docs/Images/screenshot57.png)
+
+Since I want to have a couple of hundred animals roaming the island in the end, I have also had to do a bunch of optimisation.  The upshot of this is that I now
+have hit 1440p 60FPS on my M1 Mac for the first time.  Check out the following screenshot full size...
+
+![Screenshot](./Docs/Images/screenshot56.png)
+
 ## Fun with fonts
 
 Alchemical symbols are included in the unicode spec, and contained in this free font from Google: [Noto Sans Symbols](https://fonts.google.com/noto/specimen/Noto+Sans+Symbols/glyphs).  I also added [Roboto](https://fonts.google.com/specimen/Roboto) so I could use some greek letters.
