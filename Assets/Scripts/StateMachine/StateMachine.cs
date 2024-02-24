@@ -79,11 +79,12 @@ public class StateMachine
 
     private Transition GetTransition()
     {
-        foreach(var t in anyTransitions)
+        // Quicker to do .ToArray() then unumerate, than to enumerate the list!
+        foreach (var t in anyTransitions.ToArray()) 
             if(t.Condition())
                 return t;
 
-        foreach(var t in currentTransitions)
+        foreach(var t in currentTransitions.ToArray())
             if(t.Condition())
                 return t;
         
