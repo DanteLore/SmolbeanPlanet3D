@@ -31,7 +31,7 @@ public class LoadGameMenuController : SmolbeanMenu
         fileListView.bindItem = (e, i) => (e as Label).text = files[i];
         fileListView.selectionType = SelectionType.Single;
         fileListView.selectionChanged += FileSelectedFromList;
-        fileListView.itemsChosen += _ => { }; // Both methods need to be hooked up, or neither works :facepalm:
+        fileListView.itemsChosen += FileChosenFromList; // Both methods need to be hooked up, or neither works :facepalm:
     }
 
     private void LoadButtonClicked()
@@ -48,5 +48,13 @@ public class LoadGameMenuController : SmolbeanMenu
     private void FileSelectedFromList(IEnumerable<object> items)
     {
          loadGameButton.SetEnabled(fileListView.selectedItem != null);
+    }
+
+    private void FileChosenFromList(IEnumerable<object> items)
+    {
+        if(fileListView.selectedItem != null)
+        {
+            LoadButtonClicked();
+        }
     }
 }

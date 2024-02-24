@@ -34,7 +34,7 @@ public class SaveGameMenuController : SmolbeanMenu
         fileListView.selectionType = SelectionType.Single;
         fileListView.focusable = true;
         fileListView.selectionChanged += FileSelectedFromList;
-        fileListView.itemsChosen += _ => { }; // Both methods need to be hooked up, or neither works :facepalm:
+        fileListView.itemsChosen += FileChosenFromList;  // Both methods need to be hooked up, or neither works :facepalm:
     }
 
     private void FilenameValueChanged(ChangeEvent<string> evt)
@@ -58,11 +58,18 @@ public class SaveGameMenuController : SmolbeanMenu
 
     private void FileSelectedFromList(IEnumerable<object> items)
     {
-        Debug.Log("FileSelectedFromList " + fileListView.selectedItem);
-
         if (fileListView.selectedItem != null)
         {
             filenameTextField.value = fileListView.selectedItem.ToString();
+        }
+    }
+
+    private void FileChosenFromList(IEnumerable<object> items)
+    {
+        if (fileListView.selectedItem != null)
+        {
+            filenameTextField.value = fileListView.selectedItem.ToString();
+            SaveButtonClicked();
         }
     }
 }
