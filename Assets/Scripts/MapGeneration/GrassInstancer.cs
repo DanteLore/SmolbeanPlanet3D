@@ -42,12 +42,13 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     void Update()
     {
         var planes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
+        var cameraPos = mainCamera.transform.position;
 
         foreach(var batch in batches)
         {
-            Vector3 p = batch.bounds.ClosestPoint(mainCamera.transform.position);
+            Vector3 p = batch.bounds.ClosestPoint(cameraPos);
 
-            if(Vector3.SqrMagnitude(p - mainCamera.transform.position) < renderThresholdSqr && GeometryUtility.TestPlanesAABB(planes, batch.bounds))
+            if(Vector3.SqrMagnitude(p - cameraPos) < renderThresholdSqr && GeometryUtility.TestPlanesAABB(planes, batch.bounds))
             {
                 for(int i = 0; i < mesh.subMeshCount; i++)
                 {
