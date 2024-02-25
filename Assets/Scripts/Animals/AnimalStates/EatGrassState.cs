@@ -3,7 +3,6 @@ using UnityEngine;
 public class EatGrassState : IState
 {
     private SmolbeanAnimal animal;
-
     private float sleepStartTime;
 
     public float TimeAsleep { get { return Time.time - sleepStartTime; } }
@@ -15,7 +14,7 @@ public class EatGrassState : IState
 
     public void OnEnter()
     {
-        sleepStartTime = Time.time;
+        sleepStartTime = Time.time; 
     }
 
     public void OnExit()
@@ -25,8 +24,8 @@ public class EatGrassState : IState
     public void Tick()
     {
         var pos = animal.transform.position;
-        float desired = animal.species.foodEatenPerSecond * Time.deltaTime;
-        animal.Eat(desired);
-        GroundWearManager.Instance.RegisterHarvest(pos, 0.5f);
+        var available = GroundWearManager.Instance.GetAvailableGrass(pos);
+        animal.Eat(animal.species.foodEatenPerSecond * available * Time.deltaTime);
+        GroundWearManager.Instance.RegisterHarvest(pos, animal.species.grassWearPerSecondWhenEating * Time.deltaTime);
     }
 }

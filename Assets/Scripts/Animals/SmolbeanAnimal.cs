@@ -6,6 +6,7 @@ using System;
 public abstract class SmolbeanAnimal : MonoBehaviour
 {
     protected void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
+    protected void AT(IState to, Func<bool> condition) => stateMachine.AddAnyTransition(to, condition);
 
     public string natureLayer = "Nature";
     public string creatureLayer = "Creatures";
@@ -37,7 +38,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         body = transform.Find("Body").gameObject;
 
-        stateMachine = new StateMachine(shouldLog: false);
+        stateMachine = new StateMachine(shouldLog: true);
         InitialiseStats();
     }
 
