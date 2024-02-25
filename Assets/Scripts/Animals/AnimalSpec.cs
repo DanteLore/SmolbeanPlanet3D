@@ -18,4 +18,5 @@ public class AnimalSpec : ScriptableObject
     public float fullThreshold;
     public float hungryThreshold;
     public float grassWearPerSecondWhenEating;
+    public float sightRange;
 }

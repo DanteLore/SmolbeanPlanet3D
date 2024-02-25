@@ -38,7 +38,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         body = transform.Find("Body").gameObject;
 
-        stateMachine = new StateMachine(shouldLog: true);
+        stateMachine = new StateMachine(shouldLog: false);
         InitialiseStats();
     }
 
@@ -114,4 +114,20 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         var found = Physics.OverlapSphere(transform.position, destinationThreshold, LayerMask.GetMask(natureLayer, creatureLayer));
         return found.Any(c => c.gameObject == target);
     }
+
+    public virtual bool IsEnoughFoodHere()
+    {
+        return false;
+    }
+
+    public virtual bool IsFull()
+    {
+        return foodLevel > species.fullThreshold;
+    }
+
+    public virtual bool IsHungry()
+    {
+        return foodLevel < species.hungryThreshold;
+    }
+
 }

@@ -15,7 +15,7 @@ public class ChooseWoodlandLocation : IState
     {
         var pos = animal.transform.position;
 
-        var treeLocations = Physics.OverlapSphere(pos, 100f, LayerMask.GetMask("Nature"))
+        var treeLocations = Physics.OverlapSphere(pos, animal.species.sightRange, LayerMask.GetMask("Nature"))
             .Select(c => c.gameObject.GetComponent<SmolbeanTree>())
             .Where(_ => _ != null)
             .Select(tree => tree.transform.position)

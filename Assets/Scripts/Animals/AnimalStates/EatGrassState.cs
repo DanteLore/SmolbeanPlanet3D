@@ -2,10 +2,7 @@ using UnityEngine;
 
 public class EatGrassState : IState
 {
-    private SmolbeanAnimal animal;
-    private float sleepStartTime;
-
-    public float TimeAsleep { get { return Time.time - sleepStartTime; } }
+    private readonly SmolbeanAnimal animal;
 
     public EatGrassState(SmolbeanAnimal animal)
     {
@@ -14,7 +11,6 @@ public class EatGrassState : IState
 
     public void OnEnter()
     {
-        sleepStartTime = Time.time; 
     }
 
     public void OnExit()

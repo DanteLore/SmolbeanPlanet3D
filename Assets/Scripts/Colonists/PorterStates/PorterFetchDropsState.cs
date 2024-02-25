@@ -58,7 +58,6 @@ public class PorterFetchDropsState : IState
 
     public void OnExit()
     {
-        
     }
 
     public void Tick()
