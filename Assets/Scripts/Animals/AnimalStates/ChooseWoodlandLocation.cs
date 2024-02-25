@@ -23,17 +23,30 @@ public class ChooseWoodlandLocation : IState
 
         float x = 0f, z = 0f;
 
-        foreach(var v in treeLocations)
+
+
+        if (treeLocations.Length > 0)
         {
-            x += v.x;
-            z += v.z;
+            foreach (var v in treeLocations)
+            {
+                x += v.x;
+                z += v.z;
+            }
+
+            x /= treeLocations.Length;
+            z /= treeLocations.Length;
+
+            x += Random.Range(-8, 8);
+            z += Random.Range(-8, 8);
         }
+        else
+        {
+            x = pos.x;
+            z = pos.z;
 
-        x /= treeLocations.Length;
-        z /= treeLocations.Length;
-
-        x += Random.Range(-8, 8);
-        z += Random.Range(-8, 8);
+            x += Random.Range(-16, 16);
+            z += Random.Range(-16, 16);
+        }
 
         if (
                 Physics.Raycast(new Ray(new Vector3(x, 1000, z), Vector3.down), out var rayHit, 2000, LayerMask.GetMask("Ground"))

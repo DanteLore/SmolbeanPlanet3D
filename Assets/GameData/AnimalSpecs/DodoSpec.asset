@@ -21,10 +21,10 @@ MonoBehaviour:
   maxHealth: 100
   initialHealth: 100
   starvationThreshold: 20
-  starvationRatePerSecond: 4
+  starvationRatePerSecond: 1
   healthRecoveryPerSecond: 2
   foodEatenPerSecond: 10
   fullThreshold: 80
   hungryThreshold: 30
-  grassWearPerSecondWhenEating: 10
+  grassWearPerSecondWhenEating: 2
   sightRange: 32
