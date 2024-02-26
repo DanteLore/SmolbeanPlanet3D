@@ -23,8 +23,6 @@ public class ChooseWoodlandLocation : IState
 
         float x = 0f, z = 0f;
 
-
-
         if (treeLocations.Length > 0)
         {
             foreach (var v in treeLocations)

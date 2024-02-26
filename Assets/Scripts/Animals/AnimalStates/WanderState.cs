@@ -9,6 +9,9 @@ public class WanderState : WalkStateBase
         : base(navAgent, animator, soundPlayer)
     {
         this.animal = animal;
+
+        // Disable the navagent reset, bec ause it's expensive to use in animals
+        navAgentResetEnabled = false;
     }
     
     protected override Vector3 GetDestination()

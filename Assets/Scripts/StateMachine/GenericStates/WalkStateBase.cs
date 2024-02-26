@@ -10,7 +10,8 @@ public abstract class WalkStateBase : IState
     private Vector3 lastPosition;
     private float lastMoved;
     private static readonly float gameSpeedNavJumpSize = 0.5f;
-    
+    protected bool navAgentResetEnabled = true;
+
     public float StuckTime { get { return Time.time - lastMoved; } }
 
     public WalkStateBase(NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer)
@@ -52,7 +53,8 @@ public abstract class WalkStateBase : IState
             lastPosition = pos;
         }
 
-        if(time - lastMoved > 1f)
+        // Commenting this out messes up colonists, but not (seemingly) animals!
+        if(navAgentResetEnabled && time - lastMoved > 1f)
         {
             // Kick the nav agent after small amount of inactivity
             navAgent.isStopped = true;

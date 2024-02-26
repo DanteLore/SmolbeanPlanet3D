@@ -49,7 +49,27 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         GrowGrass();
     }
 
+    private int grassGrowthBatchStart = 0;
     private void GrowGrass()
+    {
+        // Amount to grow back each frame, scaled by frame time and by number of frames to update a batch
+        float amount = Time.deltaTime * grassGrowthWeight * (data.Length / squaresToGrowBackEachFrame);
+
+        int start = grassGrowthBatchStart;
+        int end = Mathf.Min(grassGrowthBatchStart + squaresToGrowBackEachFrame, data.Length);
+
+        for (int i = start; i < end; i++)
+        {
+            var px = data[i];
+            float r = px.r - amount;
+            r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01?
+            data[i].r = r;
+        }
+
+        grassGrowthBatchStart = end >= data.Length ? 0 : end;
+    }
+
+    private void GrowGrassRandom()
     {
         float amount = wearStrength * Time.deltaTime * grassGrowthWeight;
         for(int i = 0; i < squaresToGrowBackEachFrame; i++)

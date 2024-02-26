@@ -103,7 +103,9 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public bool CloseEnoughTo(Vector3 dest)
     {
-        Vector3 v1 = new(transform.position.x, 0.0f, transform.position.z);
+        var pos = transform.position;
+
+        Vector3 v1 = new(pos.x, 0.0f, pos.z);
         Vector3 v2 = new(dest.x, 0.0f, dest.z);
 
         return Vector3.SqrMagnitude(v1 - v2) < destinationThreshold;

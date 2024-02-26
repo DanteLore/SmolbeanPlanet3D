@@ -18,7 +18,7 @@ public class ChooseEatingPlaceState : IState
 
         List<Vector3> candidates = new();
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i <= 6; i++)
         {
             float radius = animal.species.sightRange / 2f;
             float x = pos.x + Random.Range(-radius, radius);
