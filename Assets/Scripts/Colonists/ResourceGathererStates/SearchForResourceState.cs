@@ -20,6 +20,7 @@ public class SearchForResourceState : IState
     {
         gatherer.Target = GetTargets(gatherer.transform.position)
                                 .Take(10)
+                                .Where(IsOnNavMesh)
                                 .ToList()
                                 .OrderBy(_ => Guid.NewGuid())
                                 .FirstOrDefault();
@@ -41,7 +42,6 @@ public class SearchForResourceState : IState
         return candidates
             .Select(c => c.gameObject)
             .Where(go => go.GetComponent(gatherer.TargetType) != null)
-            .Where(IsOnNavMesh)
             .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - pos))
             .ToList();
     }
