@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animalName: Dodo
   prefab: {fileID: 963902539609349758, guid: 0b9a57bcce777410c97202dc62498985, type: 3}
+  dropSpec: {fileID: 11400000, guid: abfa08d2a5229475fb5e9e814c1cf06f, type: 2}
+  deathParticleSystem: {fileID: 1572338817668193572, guid: e936c0a6f501449c58d506868894fdcd, type: 3}
   startingPopulation: 200
   initialHealth: 100
   maxHealth: 100
   healthRecoveryPerSecond: 2
-  oldAgeSeconds: 600
-  lifespanSeconds: 720
+  oldAgeSeconds: 1
+  lifespanSeconds: 2
   oldAgeHealthImpactPerSecond: 2
   sightRange: 32
   speed: 4

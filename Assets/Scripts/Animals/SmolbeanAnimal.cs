@@ -3,6 +3,7 @@ using UnityEngine.AI;
 using System.Linq;
 using System;
 using Random = UnityEngine.Random;
+using System.Collections;
 
 public abstract class SmolbeanAnimal : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public AnimalSpec species;
     public Vector3 target;
     private GameObject body;
+    protected bool isDead = false;
 
     protected virtual void Start()
     {
@@ -41,12 +43,15 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     protected virtual void Update()
     {
-        UpdateStats();
+        if (!isDead)
+        {
+            UpdateStats();
 
-        if (health <= 0f)
-            return;
+            if (health <= 0f)
+                return;
 
-        stateMachine.Tick();
+            stateMachine.Tick();
+        }
     }
 
     protected virtual void InitialiseStats()
@@ -89,7 +94,23 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     protected virtual void Die()
     {
-        DestroyImmediate(gameObject);
+        isDead = true;
+        StartCoroutine(DoDeathActivities());
+    }
+
+    private IEnumerator DoDeathActivities()
+    {
+        yield return new WaitForEndOfFrame();
+        Instantiate(species.deathParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
+        //soundPlayer.Play("Break");
+
+        DropController.Instance.Drop(species.dropSpec, transform.position);
+        yield return new WaitForEndOfFrame();
+
+        body.SetActive(false);
+        yield return new WaitForEndOfFrame();
+
+        Destroy(gameObject);
     }
 
     public virtual float Eat(float amount)

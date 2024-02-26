@@ -6,6 +6,8 @@ public class AnimalSpec : ScriptableObject
     [Header("Basic")]
     public string animalName;
     public GameObject prefab;
+    public DropSpec dropSpec;
+    public GameObject deathParticleSystem;
 
     [Header("Species Settings")]
     public int startingPopulation;

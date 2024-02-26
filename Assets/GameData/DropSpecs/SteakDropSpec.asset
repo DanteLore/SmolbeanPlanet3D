@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82318625a37943d3a4fec9d0e7e748b, type: 3}
+  m_Name: SteakDropSpec
+  m_EditorClassIdentifier: 
+  dropName: Steak
+  dropRate: 1
+  stackSize: 1
+  thumbnail: {fileID: 2800000, guid: 48937662f380d4c2f981c9cb1c0f81a4, type: 3}
+  singlePrefab: {fileID: 9089081350327664049, guid: 969f4b62f67d44d6e8e30b090108f5fa, type: 3}
+  somePrefab: {fileID: 9089081350327664049, guid: 969f4b62f67d44d6e8e30b090108f5fa, type: 3}
+  lotsPrefab: {fileID: 9089081350327664049, guid: 969f4b62f67d44d6e8e30b090108f5fa, type: 3}
