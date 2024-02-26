@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
 using System;
+using Random = UnityEngine.Random;
 
 public abstract class SmolbeanAnimal : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public string creatureLayer = "Creatures";
     public float destinationThreshold = 1.0f;
 
+    public float age;
     public float health;
     public float foodLevel;
 
@@ -19,15 +21,10 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     protected NavMeshAgent navAgent;
     protected SoundPlayer soundPlayer;
 
-    internal float GetAvailableFood()
-    {
-        throw new NotImplementedException();
-    }
-
     protected StateMachine stateMachine;
+    public int speciesIndex;
     public AnimalSpec species;
     public Vector3 target;
-
     private GameObject body;
 
     protected virtual void Start()
@@ -55,22 +52,33 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     protected virtual void InitialiseStats()
     {
         health = species.initialHealth;
-        foodLevel = species.initialFoodLevel;
+        foodLevel = Random.Range(species.initialFoodLevelMin, species.initialFoodLevelMax);
     }
 
     protected virtual void UpdateStats()
     {
+        age += Time.deltaTime;
+        navAgent.speed = species.speed;
+
+        float ageFactor = Mathf.InverseLerp(species.oldAgeSeconds, species.lifespanSeconds, age);
+
+        // Decreasing health due to old age
+        health -= species.oldAgeHealthImpactPerSecond * ageFactor * Time.deltaTime;
+
+        // Digest some food
         foodLevel = Mathf.Max(0f, foodLevel - species.foodDigestedPerSecond * Time.deltaTime);
 
         if (foodLevel <= species.starvationThreshold)
         {
+            // Health decrease sue to starvation
             float healthDelta = species.starvationRatePerSecond * Time.deltaTime;
             healthDelta *= 1f - Mathf.InverseLerp(0f, species.starvationThreshold, foodLevel);
             health = Mathf.Max(0f, health - healthDelta); 
         }
-        else 
-        {   
-            float healthDelta = species.healthRecoveryPerSecond * Time.deltaTime;
+        else
+        {
+            // Health recover with a full stomach
+            float healthDelta = species.healthRecoveryPerSecond * ageFactor * Time.deltaTime;
             healthDelta *= Mathf.InverseLerp(species.starvationThreshold, species.maxFoodLevel, foodLevel);
             health = Mathf.Min(species.maxHealth, health + healthDelta);
         }
@@ -131,5 +139,4 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     {
         return foodLevel < species.hungryThreshold;
     }
-
 }

@@ -15,7 +15,7 @@ public class FlockState : IState
         stateMachine = new StateMachine(shouldLog: false);
 
         var idle = new IdleState(animator);
-        var findWoodland = new ChooseWoodlandLocation(animal);
+        var findWoodland = new ChooseFlockLocation(animal);
         var wander = new WanderState(animal, navAgent, animator, soundPlayer);
 
         AT(wander, HasSomewhereToGo());

@@ -83,6 +83,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         var pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
         var rot = Quaternion.Euler(0f, saveData.rotationY, 0f);
         var animal = Instantiate(prefab, pos, rot, transform).GetComponent<SmolbeanAnimal>();
+        animal.speciesIndex = saveData.speciesIndex;
         animal.species = animalSpecs[saveData.speciesIndex];
     }
 
