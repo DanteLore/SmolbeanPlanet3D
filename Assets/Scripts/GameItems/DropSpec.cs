@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "DropSpec", menuName = "Smolbean/Drop Spec", order = 1)]

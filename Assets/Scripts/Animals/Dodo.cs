@@ -1,7 +1,11 @@
 using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Dodo : SmolbeanAnimal
 {
+    private float lastEggLaidTime = 0f;
+
     protected override void Start()
     {
         base.Start();
@@ -29,5 +33,22 @@ public class Dodo : SmolbeanAnimal
     protected override void Update()
     {
         base.Update();
+
+        if(age >= species.maturityAgeSeconds &&
+            health >= species.minimumHealthToGiveBirth &&
+            Time.time - lastEggLaidTime >= species.gestationPeriodSeconds &&
+            Random.Range(0f, 1f) <= species.birthProbability * Time.deltaTime &&
+            AnimalController.Instance.AnimalCount(species) < species.populationCap)
+        {
+            LayAnEgg();
+        }
+    }
+
+    private void LayAnEgg()
+    {
+        lastEggLaidTime = Time.time;
+        Instantiate(species.eggLaidParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
+        var egg = DropController.Instance.Drop(species.eggDropSpec, transform.position);
+        egg.GetComponent<SmolbeanEgg>().species = species;
     }
 }

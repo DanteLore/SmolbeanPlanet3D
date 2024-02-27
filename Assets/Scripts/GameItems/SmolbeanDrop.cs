@@ -7,7 +7,7 @@ public class SmolbeanDrop : MonoBehaviour
 
     public int quantity;
 
-    private float createTime;
+    protected float createTime;
     private float lastCheckTime;
 
     void Awake()
@@ -21,18 +21,21 @@ public class SmolbeanDrop : MonoBehaviour
         // Check our own validity every second
         if (Time.time - lastCheckTime > 1f)
         {
-            // If we fell off the nav mesh, we must die
-            float age = Time.time - createTime;
-
-            if (age > dropSpec.lifeSpanSeconds)
-                Destroy(gameObject);
-
-            if (age > 5 &&
-                !NavMesh.SamplePosition(transform.position, out var _, 0.5f, NavMesh.AllAreas))
-                Destroy(gameObject);
-
+            PerSecondUpdate(Time.time - createTime);
             lastCheckTime = Time.time;
         }
+    }
+
+    protected virtual void PerSecondUpdate(float age)
+    {
+        // If we're too old, we must die
+        if (age > dropSpec.lifeSpanSeconds)
+            Destroy(gameObject);
+
+        // If we fell off the nav mesh, we must die
+        if (age > 5 &&
+            !NavMesh.SamplePosition(transform.position, out var _, 0.5f, NavMesh.AllAreas))
+            Destroy(gameObject);
     }
 
     public bool IsFull()

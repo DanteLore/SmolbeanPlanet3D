@@ -7,12 +7,22 @@ using UnityEngine.AI;
 
 public class AnimalController : MonoBehaviour, IObjectGenerator
 {
+    public static AnimalController Instance { get; private set; }
+
     public AnimalSpec[] animalSpecs;
     public int Priority { get { return 12; } }
     public float edgeBuffer = 0.1f;
     public string natureLayer = "Nature";
 
     private GridManager gridManager;
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+            Destroy(gameObject);
+        else
+            Instance = this;
+    }
 
     void Start()
     {
@@ -70,11 +80,16 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
                     continue;
 
                 // Finally, create the animal
-                var animalData = GenerateAnimalData(pos, species);
-                InstantiateAnimal(animalData);
+                CreateAnimal(species, pos);
                 animalsToAdd--;
             }
         }
+    }
+
+    public void CreateAnimal(AnimalSpec species, Vector3 pos)
+    {
+        var animalData = GenerateAnimalData(pos, species);
+        InstantiateAnimal(animalData);
     }
 
     private void InstantiateAnimal(AnimalSaveData saveData)
@@ -117,10 +132,16 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
             .ToList();
     }
 
-    internal void LoadAnimals(List<AnimalSaveData> animalData)
+    public void LoadAnimals(List<AnimalSaveData> animalData)
     {
         Clear();
 
         animalData.ForEach(InstantiateAnimal);
+    }
+
+    public int AnimalCount(AnimalSpec species)
+    {
+        // This gon' be slow
+        return GetComponentsInChildren<SmolbeanAnimal>().Count(animal => animal.species == species);
     }
 }
