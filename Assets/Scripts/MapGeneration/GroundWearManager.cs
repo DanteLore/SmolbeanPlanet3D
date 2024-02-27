@@ -209,16 +209,14 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
         data = wearTexture.GetPixels();
 
-        for (int y = 0; y < textureHeight; y++)
+        for (int i = 0; i < data.Length; i++)
         {
-            for (int x = 0; x < textureWidth; x++)
-            {
-                Color c1 = data[y * textureWidth + x];
-                Color c2 = new (0, c1.g, 0, 0); // Copy only the green channel
-                data[y * textureWidth + x] = c2;
-            }
+            // CLear all but the green channel
+            data[i].r = 0; 
+            data[i].b = 0;
+            data[i].a = 0;
         }
-
+        
         UpdateTexture();
     }
 
