@@ -19,3 +19,4 @@ MonoBehaviour:
   singlePrefab: {fileID: 6349528156777659111, guid: e7562bd68f0d44d85beb5aec01dc981a, type: 3}
   somePrefab: {fileID: 8732702458763513014, guid: bba0e19e755e443149a6506efb556ca1, type: 3}
   lotsPrefab: {fileID: 5937759800181111344, guid: 79fcdedd1c6c8451f83121a2225b6722, type: 3}
+  lifeSpanSeconds: 240

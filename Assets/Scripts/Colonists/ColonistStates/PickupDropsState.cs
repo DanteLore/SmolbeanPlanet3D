@@ -2,7 +2,7 @@ public class PickupDropsState : IState
 {
     private IGatherDrops gatherer;
     private DropController dropController;
-    private ItemStack stack;
+    private SmolbeanDrop stack;
 
     public PickupDropsState(IGatherDrops gatherer, DropController dropController)
     {
@@ -12,7 +12,7 @@ public class PickupDropsState : IState
 
     public void OnEnter()
     {       
-        stack = gatherer.TargetDrop.GetComponent<ItemStack>();
+        stack = gatherer.TargetDrop.GetComponent<SmolbeanDrop>();
     }
 
     public void OnExit()

@@ -70,10 +70,10 @@ public abstract class SmolbeanBuilding : MonoBehaviour
         GroundWearManager.Instance.BuildingOn(building.GetComponent<Renderer>().bounds, wearPattern, wearScale);
     }
 
-    public List<ItemStack> DropPointContents(float radius = 2.0f)
+    public List<SmolbeanDrop> DropPointContents(float radius = 2.0f)
     {
         return Physics.OverlapSphere(GetDropPoint(), radius, LayerMask.GetMask(dropLayer))
-            .Select(c => c.gameObject.GetComponent<ItemStack>())
+            .Select(c => c.gameObject.GetComponent<SmolbeanDrop>())
             .ToList();
     }
 }

@@ -1,5 +1,5 @@
 public class CollectionRequest
 {
-    public ItemStack item;
+    public SmolbeanDrop item;
     public IDeliverDrops porter;
 }

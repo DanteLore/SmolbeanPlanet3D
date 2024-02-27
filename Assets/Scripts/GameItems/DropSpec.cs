@@ -13,6 +13,7 @@ public class DropSpec : ScriptableObject
     public GameObject singlePrefab;
     public GameObject somePrefab;
     public GameObject lotsPrefab;
+    public int lifeSpanSeconds;
 
     public GameObject GetPrefabFor(int qtty)
     {

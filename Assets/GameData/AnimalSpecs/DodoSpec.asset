@@ -20,8 +20,8 @@ MonoBehaviour:
   initialHealth: 100
   maxHealth: 100
   healthRecoveryPerSecond: 2
-  oldAgeSeconds: 120
-  lifespanSeconds: 240
+  oldAgeSeconds: 240
+  lifespanSeconds: 300
   oldAgeHealthImpactPerSecond: 2
   sightRange: 32
   speed: 4

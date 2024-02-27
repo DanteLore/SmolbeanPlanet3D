@@ -36,13 +36,13 @@ public class PorterSearchForDropToCollectState : IState
                                             .OrderBy(_ => Guid.NewGuid())
                                             .FirstOrDefault();
         if(porter.TargetDrop)
-            DeliveryManager.Instance.ClaimCollection(porter.TargetDrop.GetComponent<ItemStack>(), porter);
+            DeliveryManager.Instance.ClaimCollection(porter.TargetDrop.GetComponent<SmolbeanDrop>(), porter);
     }
 
     private IEnumerable<GameObject> GetDropTargets(Vector3 pos)
     {
         return Physics.OverlapSphere(pos, 500f, LayerMask.GetMask(dropLayer))
-            .Select(c => c.gameObject.GetComponent<ItemStack>())
+            .Select(c => c.gameObject.GetComponent<SmolbeanDrop>())
             .Where(i => i != null)
             .Where(i => !DeliveryManager.Instance.IsCollectionClaimed(i))
             .Select(i => i.gameObject)

@@ -31,7 +31,7 @@ public class SearchForDropsState : IState
     private GameObject GetDropTarget()
     {
         return Physics.OverlapSphere(gatherer.transform.position, 5f, LayerMask.GetMask(dropLayer))
-            .Select(c => c.gameObject.GetComponent<ItemStack>())
+            .Select(c => c.gameObject.GetComponent<SmolbeanDrop>())
             .Where(i => i != null && i.dropSpec == gatherer.dropSpec)
             .Select(i => i.gameObject)
             .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - gatherer.transform.position))

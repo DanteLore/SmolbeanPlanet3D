@@ -112,7 +112,7 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
     private bool DropPointFull()
     {
         int count = Physics.OverlapSphere(DropPoint, 1f, LayerMask.GetMask(dropLayer))
-                    .Select(c => c.gameObject.GetComponent<ItemStack>())
+                    .Select(c => c.gameObject.GetComponent<SmolbeanDrop>())
                     .Where(i => i != null && i.dropSpec == dropSpec)
                     .Sum(i => i.quantity);
 

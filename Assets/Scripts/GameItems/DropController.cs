@@ -12,9 +12,7 @@ public class DropController : MonoBehaviour, IObjectGenerator
     public DropSpec[] dropSpecs;
     public string dropLayer = "Drops";
     public float dropMergeRadius = 2f;
-    public float inaccessibleDistance = 0.5f;
     private Dictionary<string, DropSpec> dropSpecLookup;
-    private float inaccessibleThreshold;
 
     void Awake()
     {
@@ -26,43 +24,7 @@ public class DropController : MonoBehaviour, IObjectGenerator
 
     void Start()
     {
-        inaccessibleThreshold = inaccessibleDistance * inaccessibleDistance;
         dropSpecLookup = dropSpecs.ToDictionary(x => x.dropName, x => x);
-        
-        StartCoroutine(CleanUp());
-    }
-
-    private IEnumerator CleanUp()
-    {
-        while(true)
-        {
-            RemoveInaccessibleDrops();
-
-            yield return new WaitForSeconds(2f);
-        }
-    }
-
-    private void RemoveInaccessibleDrops()
-    {
-        List<GameObject> inaccessible = new List<GameObject>();
-
-        for(int i = 0; i < transform.childCount; i++)
-        {
-            var child = transform.GetChild(i).gameObject;
-            if (Time.time - child.GetComponent<ItemStack>().CreateTime > 5f &&
-                !NavMesh.SamplePosition(child.transform.position, out var _, 0.5f, NavMesh.AllAreas))
-            {
-                inaccessible.Add(child);
-            }
-        }
-
-        if(inaccessible.Count > 0)
-        {
-            //Debug.Log("Destroying inaccessible drops x " + inaccessible.Count);
-
-            foreach(var child in inaccessible)
-                Destroy(child);
-        }
     }
 
     public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
@@ -73,7 +35,7 @@ public class DropController : MonoBehaviour, IObjectGenerator
     public GameObject Drop(DropSpec spec, Vector3 position, int quantity = 0)
     {
         var others = Physics.OverlapSphere(position, dropMergeRadius, LayerMask.GetMask(dropLayer))
-            .Select(d => d.GetComponent<ItemStack>())
+            .Select(d => d.GetComponent<SmolbeanDrop>())
             .Where(d => d != null && d.dropSpec == spec)
             .OrderBy(d => d.quantity);
 
@@ -89,7 +51,7 @@ public class DropController : MonoBehaviour, IObjectGenerator
         }
 
         var gameObject = Instantiate(spec.GetPrefabFor(qtty), position, Quaternion.identity, transform);
-        var itemStack = gameObject.GetComponent<ItemStack>();
+        var itemStack = gameObject.GetComponent<SmolbeanDrop>();
         itemStack.dropSpec = spec;
         itemStack.quantity = qtty;
 
@@ -101,7 +63,7 @@ public class DropController : MonoBehaviour, IObjectGenerator
         return new InventoryItem {dropSpec = spec, quantity = quantity};
     }
 
-    public InventoryItem Pickup(ItemStack stack)
+    public InventoryItem Pickup(SmolbeanDrop stack)
     {
         // Add any logic here to handle an inability to pick up a whole stack, stack splitting etc etc
 
@@ -114,7 +76,7 @@ public class DropController : MonoBehaviour, IObjectGenerator
 
     public List<DropItemSaveData> GetSaveData()
     {
-        return GetComponentsInChildren<ItemStack>().Select(GetSaveData).ToList();
+        return GetComponentsInChildren<SmolbeanDrop>().Select(GetSaveData).ToList();
     }
 
     public void LoadDrops(List<DropItemSaveData> dropItemData)
@@ -143,7 +105,7 @@ public class DropController : MonoBehaviour, IObjectGenerator
             DestroyImmediate(transform.GetChild(0).gameObject);
     }
 
-    private DropItemSaveData GetSaveData(ItemStack stack)
+    private DropItemSaveData GetSaveData(SmolbeanDrop stack)
     {
         return new DropItemSaveData
         {

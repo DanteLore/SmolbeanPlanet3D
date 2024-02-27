@@ -85,12 +85,12 @@ public class DeliveryManager : MonoBehaviour
         }
     }
 
-    public bool IsCollectionClaimed(ItemStack itemStack)
+    public bool IsCollectionClaimed(SmolbeanDrop itemStack)
     {
         return collections.Any(c => c.item == itemStack);
     }
 
-    public void ClaimCollection(ItemStack itemStack, IDeliverDrops porter)
+    public void ClaimCollection(SmolbeanDrop itemStack, IDeliverDrops porter)
     {
         collections.Add(new CollectionRequest { item = itemStack, porter = porter });
     }
