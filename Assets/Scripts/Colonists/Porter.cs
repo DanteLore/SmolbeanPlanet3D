@@ -42,7 +42,7 @@ public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
         void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
 
         Func<bool> DropFound() => () => TargetDrop != null;
-        Func<bool> NoDropFound() => () => TargetDrop == null;
+        Func<bool> NoDropFound() => () => TargetDrop == null && !searchForCollectionJob.InProgress;
         Func<bool> HasBeenIdleForAWhile() => () => idle.TimeIdle >= idleTime;
         Func<bool> FetchDropSucceeded() => () => fetchDrop.Finished && CloseEnoughTo(SpawnPoint);
         Func<bool> FetchDropFailed() => () => fetchDrop.Finished && !CloseEnoughTo(SpawnPoint);

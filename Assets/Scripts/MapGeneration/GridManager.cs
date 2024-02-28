@@ -55,7 +55,7 @@ public class GridManager : MonoBehaviour
         GameMap = gameMap;
 
         UnityEngine.Random.InitState(1);
-        
+
         ClearMap();
 
         var meshData = terrainData.meshData.ToList();
@@ -68,10 +68,9 @@ public class GridManager : MonoBehaviour
         foreach(var gen in FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None).OfType<IObjectGenerator>().OrderBy(g => g.Priority))
             gen.Generate(GameMap, GameMapWidth, GameMapHeight);
 
-        //InvokeRepeating("UpdateNavMesh", 0.0f, 300.0f);
         UpdateNavMesh();
 
-        //Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
+        Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
     }
 
     private void UpdateNavMesh()
@@ -123,8 +122,6 @@ public class GridManager : MonoBehaviour
 
     private void ClearMap()
     {
-        CancelInvoke("UpdateNavMesh");
-
         foreach(var gen in GetComponentsInChildren<IObjectGenerator>().OrderByDescending(g => g.Priority))
             gen.Clear();
 

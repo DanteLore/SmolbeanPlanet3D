@@ -5,8 +5,12 @@ using System;
 
 public class PorterSearchForDropToCollectState : IState
 {
+    private const float maxRadius = 496f;
+
+    public bool InProgress { get { return radius <= maxRadius; } }
     private Porter porter;
     private string dropLayer;
+    private float radius;
 
     public PorterSearchForDropToCollectState(Porter porter, string dropLayer)
     {
@@ -16,6 +20,7 @@ public class PorterSearchForDropToCollectState : IState
 
     public void OnEnter()
     {
+        radius = 32f;
     }
 
     public void OnExit()
@@ -35,18 +40,19 @@ public class PorterSearchForDropToCollectState : IState
                                             .ToList()
                                             .OrderBy(_ => Guid.NewGuid())
                                             .FirstOrDefault();
-        if(porter.TargetDrop)
+        if (porter.TargetDrop)
             DeliveryManager.Instance.ClaimCollection(porter.TargetDrop.GetComponent<SmolbeanDrop>(), porter);
+        else
+            radius += 8f;
     }
 
     private IEnumerable<GameObject> GetDropTargets(Vector3 pos)
     {
-        return Physics.OverlapSphere(pos, 500f, LayerMask.GetMask(dropLayer))
+        return Physics.OverlapSphere(pos, radius, LayerMask.GetMask(dropLayer))
             .Select(c => c.gameObject.GetComponent<SmolbeanDrop>())
             .Where(i => i != null)
             .Where(i => !DeliveryManager.Instance.IsCollectionClaimed(i))
             .Select(i => i.gameObject)
-            .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - porter.transform.position))
-            .ToList();
+            .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - porter.transform.position));
     }
 }
