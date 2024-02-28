@@ -60,9 +60,9 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         var sleeping = new SleepState(this);
         var waitForTargetToDie = new WaitForTargetToDieState(animator);
 
-        AT(walkToResource,  walkHome,   () => walkToResource.StuckTime > 5f);
-        AT(walkToDrop,      walkHome,   () => walkToDrop.StuckTime > 5f);
-        AT(walkToDropPoint, walkHome,   () => walkToDropPoint.StuckTime > 5f);
+        AT(walkToResource,  walkHome, () => walkToResource.StuckTime > 5f);
+        AT(walkToDrop,      walkHome, () => walkToDrop.StuckTime > 5f);
+        AT(walkToDropPoint, walkHome, () => walkToDropPoint.StuckTime > 5f);
 
         AT(idle, searchForResources, ReadyToGo());
 
@@ -98,7 +98,7 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         Func<bool> InventoryNotEmpty() => () => !Inventory.IsEmpty();
         Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
         Func<bool> IsAtDropPoint() => () => CloseEnoughTo(DropPoint);
-        Func<bool> ReadyToGo() => () => idle.TimeIdle >= idleTime && Home.DropPointContents().Where(s => s.IsFull()).Count() < maxStacks;
+        Func<bool> ReadyToGo() => () => idle.TimeIdle >= idleTime && !DropPointFull();
         Func<bool> HasBeenSleepingForAWhile() => () => sleeping.TimeAsleep >= sleepTime;
     }
 
@@ -111,11 +111,6 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
 
     private bool DropPointFull()
     {
-        int count = Physics.OverlapSphere(DropPoint, 1f, LayerMask.GetMask(dropLayer))
-                    .Select(c => c.gameObject.GetComponent<SmolbeanDrop>())
-                    .Where(i => i != null && i.dropSpec == dropSpec)
-                    .Sum(i => i.quantity);
-
-        return count >= dropSpec.stackSize;
+        return Home.DropPointContents().Where(i => i != null && i.dropSpec == dropSpec).Where(s => s.IsFull()).Count() >= maxStacks;
     }
 }
