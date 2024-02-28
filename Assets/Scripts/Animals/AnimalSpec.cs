@@ -24,17 +24,19 @@ public class AnimalSpec : ScriptableObject
     public float lifespanSeconds;
     public float oldAgeHealthImpactPerSecond;
     public float maturityAgeSeconds;
+    [Range(0f, 1f)] public float juvenileScale;
 
     [Header("Reproduction")]
     public float gestationPeriodSeconds;
-    [Range(0f, 1f)]
-    public float birthProbability;
+    [Range(0f, 1f)] public float birthProbability;
     public float minimumHealthToGiveBirth;
+    public float pregnancyHealthImpact;
     public float chickGestationSeconds;
 
     [Header("Senses and Abilities")]
     public float sightRange;
     public float speed;
+    public float oldAgeSpeedDecrease;
 
     [Header("Food and Eating")]
     public float maxFoodLevel;

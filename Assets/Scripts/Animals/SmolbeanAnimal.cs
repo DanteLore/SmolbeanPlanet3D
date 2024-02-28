@@ -63,9 +63,19 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     protected virtual void UpdateStats()
     {
         age += Time.deltaTime;
-        navAgent.speed = species.speed;
 
         float ageFactor = Mathf.InverseLerp(species.oldAgeSeconds, species.lifespanSeconds, age);
+
+        // Juveniles are small
+        if(age <= species.maturityAgeSeconds)
+        {
+            var x = Mathf.InverseLerp(0f, species.maturityAgeSeconds, age);
+            var s = Mathf.Lerp(species.juvenileScale, 1f, x);
+            transform.localScale = new Vector3(s, s, s);
+        }
+
+        // Speed decrease due to old age
+        navAgent.speed = species.speed - species.oldAgeSpeedDecrease * ageFactor;
 
         // Decreasing health due to old age
         health -= species.oldAgeHealthImpactPerSecond * ageFactor * Time.deltaTime;

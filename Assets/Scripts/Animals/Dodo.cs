@@ -47,6 +47,7 @@ public class Dodo : SmolbeanAnimal
     private void LayAnEgg()
     {
         lastEggLaidTime = Time.time;
+        health -= species.pregnancyHealthImpact;
         Instantiate(species.eggLaidParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
         var egg = DropController.Instance.Drop(species.eggDropSpec, transform.position);
         egg.GetComponent<SmolbeanEgg>().species = species;

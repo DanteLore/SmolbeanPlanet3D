@@ -27,12 +27,15 @@ MonoBehaviour:
   lifespanSeconds: 300
   oldAgeHealthImpactPerSecond: 2
   maturityAgeSeconds: 30
+  juvenileScale: 0.4
   gestationPeriodSeconds: 30
   birthProbability: 0.053
   minimumHealthToGiveBirth: 80
+  pregnancyHealthImpact: 50
   chickGestationSeconds: 30
   sightRange: 32
   speed: 4
+  oldAgeSpeedDecrease: 2
   maxFoodLevel: 100
   initialFoodLevelMin: 20
   initialFoodLevelMax: 100
