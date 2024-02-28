@@ -11,6 +11,17 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Animal lifecycles
+
+Animals now reproduce (there are no sexes, dodos just lay eggs), populations grow and dodos die of starvation or old age.  Dodos also like to flock together and congregate
+under trees - so habitat distruction by colonists is a thing that happens now.  They eat grass to stay alive, so there's an element of selective pressure going on too.
+
+Dodos also drop a nice juicy steak when they die - which might give a clue as to the next Colonist profession I want to add.  As might
+[this tutorial on arrow trajectories](https://youtu.be/ZrZYEL4wvko?si=XyXVm7-Ot6vVJeY5).
+
+![Screenshot](./Docs/Images/screenshot59.png)
+![Screenshot](./Docs/Images/screenshot60.png)
+
 ## Animal Time!
 
 Spent a very enjoyable Saturday sat at my desk with my newly fixed Mac, adding Dodos to Smolbean Island.
