@@ -76,4 +76,10 @@ public class Dodo : SmolbeanAnimal
             };
         }
     }
+
+    protected override void Die()
+    {
+        soundPlayer.PlayOneShot("Dodo3");
+        base.Die();
+    }
 }

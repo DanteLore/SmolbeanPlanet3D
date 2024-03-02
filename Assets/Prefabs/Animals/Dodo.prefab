@@ -117,17 +117,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clips:
   - name: Dodo1
-    clip: {fileID: 8300000, guid: 3a29d0f88959b4169840bed9886409ce, type: 3}
+    clip: {fileID: 8300000, guid: 761c37699cd434221befd7b1e24b01ca, type: 3}
     loop: 0
     volume: 1
     ignoreGamePause: 0
   - name: Dodo2
-    clip: {fileID: 8300000, guid: 56147ae5a21ae40c387b165278929b84, type: 3}
+    clip: {fileID: 8300000, guid: d82a17ac97ca44bd0ba6ead64e858fda, type: 3}
     loop: 0
     volume: 1
     ignoreGamePause: 0
   - name: Dodo3
-    clip: {fileID: 8300000, guid: 809ae5de1a9c646a189da3311fb24275, type: 3}
+    clip: {fileID: 8300000, guid: f6c45371974014d929ffb5e021b91dc3, type: 3}
     loop: 0
     volume: 1
     ignoreGamePause: 0

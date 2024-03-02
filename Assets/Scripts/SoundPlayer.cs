@@ -101,7 +101,6 @@ public class SoundPlayer : MonoBehaviour
     {
         if(clipLookup.TryGetValue(clipName, out var clip))
         {
-            Debug.Log(clipName);
             AudioSource.PlayClipAtPoint(clip.clip, position, clip.volume);
         }
     }
