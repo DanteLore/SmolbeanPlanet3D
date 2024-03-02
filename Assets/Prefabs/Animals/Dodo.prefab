@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3189731342314875097}
   - component: {fileID: 6372413718643281895}
   - component: {fileID: 3483808832908120606}
+  - component: {fileID: 6902860458360500714}
   m_Layer: 0
   m_Name: Dodo
   m_TagString: Untagged
@@ -50,8 +51,7 @@ MonoBehaviour:
   natureLayer: Nature
   creatureLayer: Creatures
   destinationThreshold: 1
-  health: 0
-  foodLevel: 0
+  speciesIndex: 0
   species: {fileID: 0}
   target: {x: 0, y: 0, z: 0}
 --- !u!195 &6372413718643281895
@@ -103,6 +103,35 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6902860458360500714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963902539609349758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68fa791a1deb24dd6b411d5047a385b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - name: Dodo1
+    clip: {fileID: 8300000, guid: 3a29d0f88959b4169840bed9886409ce, type: 3}
+    loop: 0
+    volume: 1
+    ignoreGamePause: 0
+  - name: Dodo2
+    clip: {fileID: 8300000, guid: 56147ae5a21ae40c387b165278929b84, type: 3}
+    loop: 0
+    volume: 1
+    ignoreGamePause: 0
+  - name: Dodo3
+    clip: {fileID: 8300000, guid: 809ae5de1a9c646a189da3311fb24275, type: 3}
+    loop: 0
+    volume: 1
+    ignoreGamePause: 0
+  mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
 --- !u!1 &5544634839636332108
 GameObject:
   m_ObjectHideFlags: 0

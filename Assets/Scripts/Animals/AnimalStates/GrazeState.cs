@@ -6,6 +6,7 @@ public class GrazeState : IState
 {
     private readonly StateMachine stateMachine;
     private readonly IState startState;
+    private readonly SoundPlayer soundPlayer;
 
     protected void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
     protected void AT(IState to, Func<bool> condition) => stateMachine.AddAnyTransition(to, condition);
@@ -32,11 +33,13 @@ public class GrazeState : IState
         Func<bool> HasSomewhereToGo() => () => !animal.CloseEnoughTo(animal.target);
         Func<bool> Arrived() => () => animal.CloseEnoughTo(animal.target);
         Func<bool> NotEnoughFoodHere() => () => !animal.IsEnoughFoodHere();
+        this.soundPlayer = soundPlayer;
     }
 
     public void OnEnter()
     {
         stateMachine.SetState(startState);
+        soundPlayer.PlayOneShot("Dodo2");
     }
 
     public void OnExit()

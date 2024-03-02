@@ -11,7 +11,7 @@ public class Dodo : SmolbeanAnimal
         target = transform.position; // We start where we want to be
         float sleepLightLevel = Random.Range(0.3f, 0.5f); // The light level we like to sleep at
 
-    var sleep = new SleepState(this);
+        var sleep = new SleepState(this, animator, soundPlayer);
         var graze = new GrazeState(this, animator, navAgent, soundPlayer);
         var flock = new FlockState(this, animator, navAgent, soundPlayer);
 
