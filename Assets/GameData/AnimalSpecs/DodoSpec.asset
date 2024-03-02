@@ -16,23 +16,22 @@ MonoBehaviour:
   prefab: {fileID: 963902539609349758, guid: 0b9a57bcce777410c97202dc62498985, type: 3}
   dropSpec: {fileID: 11400000, guid: abfa08d2a5229475fb5e9e814c1cf06f, type: 2}
   deathParticleSystem: {fileID: 1572338817668193572, guid: e936c0a6f501449c58d506868894fdcd, type: 3}
-  eggDropSpec: {fileID: 11400000, guid: 140e3843c50454231bb72463dd3851eb, type: 2}
-  eggLaidParticleSystem: {fileID: 1572338817668193572, guid: b9033dd033f804d9f8ca7cd2a7cad063, type: 3}
+  sleepParticleSystem: {fileID: 1572338817668193572, guid: 631718f0bff854df1b58a025e98baf49, type: 3}
   startingPopulation: 150
   populationCap: 200
   initialHealth: 100
   maxHealth: 100
   healthRecoveryPerSecond: 2
-  oldAgeSeconds: 240
-  lifespanSeconds: 300
+  sleepingHealthDecreaseMultiplier: 0.1
+  oldAgeSeconds: 900
+  lifespanSeconds: 1200
   oldAgeHealthImpactPerSecond: 4
-  maturityAgeSeconds: 30
+  maturityAgeSeconds: 300
   juvenileScale: 0.4
   gestationPeriodSeconds: 30
   birthProbability: 0.053
   minimumHealthToGiveBirth: 80
   pregnancyHealthImpact: 80
-  chickGestationSeconds: 30
   sightRange: 32
   speed: 4
   oldAgeSpeedDecrease: 2
@@ -40,9 +39,13 @@ MonoBehaviour:
   initialFoodLevelMin: 20
   initialFoodLevelMax: 100
   foodDigestedPerSecond: 1
+  sleepingDigestionMultiplier: 0.2
   starvationThreshold: 20
   starvationRatePerSecond: 2
   foodEatenPerSecond: 6
   fullThreshold: 80
   hungryThreshold: 30
   grassWearPerSecondWhenEating: 2
+  eggDropSpec: {fileID: 11400000, guid: 140e3843c50454231bb72463dd3851eb, type: 2}
+  eggLaidParticleSystem: {fileID: 1572338817668193572, guid: b9033dd033f804d9f8ca7cd2a7cad063, type: 3}
+  chickGestationSeconds: 30

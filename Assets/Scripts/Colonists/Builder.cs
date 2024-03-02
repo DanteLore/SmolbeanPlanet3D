@@ -16,7 +16,7 @@ public class Builder : SmolbeanColonist
         stateMachine = new StateMachine(shouldLog:false);
 
         var idle = new IdleState(animator);
-        var sleep = new SleepState(this);
+        var sleep = new ColonistSleepState(this);
         var chooseBuildingSite = new SearchForBuildingSiteState(this, buildingLayer);
         var walkToSite = new BuilderWalkToBuildingState(this, navAgent, animator, soundPlayer);
         var buildBuilding = new BuildBuildingState(this, soundPlayer);

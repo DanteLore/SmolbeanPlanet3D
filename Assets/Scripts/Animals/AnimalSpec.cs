@@ -8,6 +8,7 @@ public class AnimalSpec : ScriptableObject
     public GameObject prefab;
     public DropSpec dropSpec;
     public GameObject deathParticleSystem;
+    public GameObject sleepParticleSystem;
 
     [Header("Species Settings")]
     public int startingPopulation;
@@ -17,6 +18,7 @@ public class AnimalSpec : ScriptableObject
     public float initialHealth;
     public float maxHealth;
     public float healthRecoveryPerSecond;
+    public float sleepingHealthDecreaseMultiplier;
     public float oldAgeSeconds;
     public float lifespanSeconds;
     public float oldAgeHealthImpactPerSecond;
@@ -39,6 +41,7 @@ public class AnimalSpec : ScriptableObject
     public float initialFoodLevelMin;
     public float initialFoodLevelMax;
     public float foodDigestedPerSecond;
+    public float sleepingDigestionMultiplier;
     public float starvationThreshold;
     public float starvationRatePerSecond;
     public float foodEatenPerSecond;

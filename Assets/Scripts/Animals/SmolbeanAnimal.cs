@@ -11,6 +11,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public string natureLayer = "Nature";
     public string creatureLayer = "Creatures";
+
     public float destinationThreshold = 1.0f;
 
     protected AnimalStats stats;
@@ -29,6 +30,8 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public Vector3 target;
     private GameObject body;
     protected bool isDead = false;
+    protected bool isSleeping = false;
+    private GameObject sleepPs;
 
     protected virtual void Start()
     {
@@ -74,17 +77,25 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         navAgent.speed = species.speed - species.oldAgeSpeedDecrease * ageFactor;
 
         // Decreasing health due to old age
-        stats.health -= species.oldAgeHealthImpactPerSecond * ageFactor * Time.deltaTime;
+        float oldAgeHealthDetriment = species.oldAgeHealthImpactPerSecond * ageFactor * Time.deltaTime;
+        if (isSleeping) // Less if sleeping!
+            oldAgeHealthDetriment *= species.sleepingHealthDecreaseMultiplier;
+        stats.health -= oldAgeHealthDetriment;
 
         // Digest some food
-        stats.foodLevel = Mathf.Max(0f, stats.foodLevel - species.foodDigestedPerSecond * Time.deltaTime);
+        float foodDelta = species.foodDigestedPerSecond * Time.deltaTime;
+        if (isSleeping) // Less if sleeping!
+            foodDelta *= species.sleepingHealthDecreaseMultiplier;
+        stats.foodLevel = Mathf.Max(0f, stats.foodLevel - foodDelta);
 
         if (stats.foodLevel <= species.starvationThreshold)
         {
             // Health decrease due to starvation
             float healthDelta = species.starvationRatePerSecond * Time.deltaTime;
             healthDelta *= 1f - Mathf.InverseLerp(0f, species.starvationThreshold, stats.foodLevel);
-            stats.health = Mathf.Max(0f, stats.health - healthDelta); 
+            if (isSleeping) // Less if sleeping!
+                healthDelta *= species.sleepingHealthDecreaseMultiplier;
+            stats.health -= healthDelta; 
         }
         else
         {
@@ -163,6 +174,25 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     {
         var found = Physics.OverlapSphere(transform.position, destinationThreshold, LayerMask.GetMask(natureLayer, creatureLayer));
         return found.Any(c => c.gameObject == target);
+    }
+
+    public void StartSleep()
+    {
+        isSleeping = true;
+        float y = body.GetComponent<MeshRenderer>().bounds.max.y * 1.1f;
+        var animalPosition = transform.position;
+        var p = new Vector3(animalPosition.x, y, animalPosition.z);
+        sleepPs = Instantiate(species.sleepParticleSystem, p, Quaternion.Euler(0f, 0f, 0f), transform);
+    }
+
+    public void EndSleep()
+    {
+        isSleeping = false;
+        if (sleepPs != null)
+        {
+            Destroy(sleepPs);
+            sleepPs = null;
+        }
     }
 
     public virtual bool IsEnoughFoodHere()

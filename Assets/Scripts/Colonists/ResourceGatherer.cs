@@ -57,7 +57,7 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         var dropInventory = new DropInventoryAtDropPointState(this, DropController.Instance);
 
         var idle = new IdleState(animator);
-        var sleeping = new SleepState(this);
+        var sleeping = new ColonistSleepState(this);
         var waitForTargetToDie = new WaitForTargetToDieState(animator);
 
         AT(walkToResource,  walkHome, () => walkToResource.StuckTime > 5f);

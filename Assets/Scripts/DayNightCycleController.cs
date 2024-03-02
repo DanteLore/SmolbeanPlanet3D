@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,16 +16,25 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     public Light sunLight;
     public Material[] sunSensitiveMaterials;
     public float hourLengthSeconds = 12f;
+    public float lightLevel;
 
     [Range(0f, 24f)]
     public float gameStartTime = 7f;
 
+    internal bool IsNight()
+    {
+        throw new NotImplementedException();
+    }
+
     [Range(0f, 24f)]
     public float timeOfDay;
-
     public int day = 1;
-
     public int Priority { get { return 1; } }
+
+    public bool TimeIsBetween(float start, float end)
+    {
+        return start <= timeOfDay && timeOfDay <= end;
+    }
 
     public string DisplayTime
     {
@@ -117,7 +127,9 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
         sunLight.color = directionalLightColor;
         sunLight.transform.localRotation = Quaternion.Euler(angle, 0f, 0f);
 
-        foreach(var mat in sunSensitiveMaterials)
+        lightLevel = (directionalLightColor.grayscale + ambientLight.grayscale) / 2;
+
+        foreach (var mat in sunSensitiveMaterials)
         {
             mat.SetVector("_sunDirection", sunLight.transform.forward);
             mat.SetVector("_sunColor", sunColor.Evaluate(tod));
