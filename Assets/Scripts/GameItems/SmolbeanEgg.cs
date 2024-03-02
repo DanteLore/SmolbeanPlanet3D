@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class SmolbeanEgg : SmolbeanDrop
 {
-    public AnimalSpec species;
+    public BirdSpec species;
 
     protected override void PerSecondUpdate(float age)
     {
@@ -39,6 +39,6 @@ public class SmolbeanEgg : SmolbeanDrop
         if (saveData is not EggDropSaveData eggSpec)
             throw new Exception("Failed to load extra egg data");
 
-        species = AnimalController.Instance.animalSpecs[eggSpec.speciesIndex];
+        species = AnimalController.Instance.animalSpecs[eggSpec.speciesIndex] as BirdSpec;
     }
 }

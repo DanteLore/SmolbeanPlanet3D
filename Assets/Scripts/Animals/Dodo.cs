@@ -45,11 +45,12 @@ public class Dodo : SmolbeanAnimal
 
     private void LayAnEgg()
     {
+        var birdSpecies = (BirdSpec)species;
         ((DodoStats)stats).lastEggLaidTime = Time.time;
-        stats.health -= species.pregnancyHealthImpact;
-        Instantiate(species.eggLaidParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
-        var egg = DropController.Instance.Drop(species.eggDropSpec, transform.position);
-        egg.GetComponent<SmolbeanEgg>().species = species;
+        stats.health -= birdSpecies.pregnancyHealthImpact;
+        Instantiate(birdSpecies.eggLaidParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
+        var egg = DropController.Instance.Drop(birdSpecies.eggDropSpec, transform.position);
+        egg.GetComponent<SmolbeanEgg>().species = birdSpecies;
     }
 
     public override void InitialiseStats(AnimalStats newStats = null)

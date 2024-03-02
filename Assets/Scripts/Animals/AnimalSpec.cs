@@ -9,9 +9,6 @@ public class AnimalSpec : ScriptableObject
     public DropSpec dropSpec;
     public GameObject deathParticleSystem;
 
-    public DropSpec eggDropSpec; // needs refactoring down to a new bird spec class
-    public GameObject eggLaidParticleSystem;
-
     [Header("Species Settings")]
     public int startingPopulation;
     public int populationCap;
@@ -31,7 +28,6 @@ public class AnimalSpec : ScriptableObject
     [Range(0f, 1f)] public float birthProbability;
     public float minimumHealthToGiveBirth;
     public float pregnancyHealthImpact;
-    public float chickGestationSeconds;
 
     [Header("Senses and Abilities")]
     public float sightRange;

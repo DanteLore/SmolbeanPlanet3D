@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b77def043b494a5ba6d33e05af9411d, type: 3}
+  m_Script: {fileID: 11500000, guid: 9de01146c0ddf4a45a95147c5c799ab3, type: 3}
   m_Name: DodoSpec
   m_EditorClassIdentifier: 
   animalName: Dodo
@@ -31,7 +31,7 @@ MonoBehaviour:
   gestationPeriodSeconds: 30
   birthProbability: 0.053
   minimumHealthToGiveBirth: 80
-  pregnancyHealthImpact: 50
+  pregnancyHealthImpact: 80
   chickGestationSeconds: 30
   sightRange: 32
   speed: 4
