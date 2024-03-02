@@ -23,7 +23,7 @@ public class GridManagerEditor : Editor
             EditorUtility.SetDirty(gridManager.mapData);
             AssetDatabase.SaveAssetIfDirty(gridManager.mapData);
 
-            gridManager.Recreate(newMap, generator.mapWidth, generator.mapHeight);
+            gridManager.Recreate(newMap, generator.mapWidth, generator.mapHeight, true);
             EditorUtility.SetDirty(target);
         }
     }

@@ -25,7 +25,7 @@ MonoBehaviour:
   healthRecoveryPerSecond: 2
   oldAgeSeconds: 240
   lifespanSeconds: 300
-  oldAgeHealthImpactPerSecond: 2
+  oldAgeHealthImpactPerSecond: 4
   maturityAgeSeconds: 30
   juvenileScale: 0.4
   gestationPeriodSeconds: 30

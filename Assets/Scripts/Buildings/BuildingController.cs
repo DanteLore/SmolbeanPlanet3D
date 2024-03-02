@@ -7,6 +7,8 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
 {
     public BuildingSpec[] buildings;
     public int Priority { get { return 100; } }
+    public bool NewGameOnly { get { return true; } }
+    public bool RunModeOnly { get { return true; } }
     public static BuildingController Instance;
     private GridManager gridManager;
 
@@ -53,7 +55,7 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
                 positionZ = b.transform.position.z,
                 rotationY = b.transform.rotation.eulerAngles.y,
                 prefabIndex = b.PrefabIndex,
-                inventory = b.Inventory.GetSaveData(),
+                inventory = b.Inventory.GetSaveData().ToArray(),
                 complete = !(b is BuildingSite)
             })
             .ToList();

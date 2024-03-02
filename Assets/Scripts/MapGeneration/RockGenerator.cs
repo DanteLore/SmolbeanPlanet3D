@@ -13,6 +13,8 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
     }
 
     public int Priority { get { return 20; } }
+    public bool NewGameOnly { get { return false; } }
+    public bool RunModeOnly { get { return false; } }
 
     public RockData[] rockData;
     public float rocksPerGridSquareFactor = 0.1f;

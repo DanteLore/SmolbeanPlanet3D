@@ -6,6 +6,9 @@ public class DropController : MonoBehaviour, IObjectGenerator
 {
     public static DropController Instance { get; private set; }
     public int Priority { get { return 100; } }
+    public bool NewGameOnly { get { return true; } }
+    public bool RunModeOnly { get { return true; } }
+
     public DropSpec[] dropSpecs;
     public string dropLayer = "Drops";
     public float dropMergeRadius = 2f;
@@ -73,7 +76,7 @@ public class DropController : MonoBehaviour, IObjectGenerator
 
     public List<DropItemSaveData> GetSaveData()
     {
-        return GetComponentsInChildren<SmolbeanDrop>().Select(GetSaveData).ToList();
+        return GetComponentsInChildren<SmolbeanDrop>().Select(d => d.GetSaveData()).ToList();
     }
 
     public void LoadDrops(List<DropItemSaveData> dropItemData)
@@ -91,7 +94,8 @@ public class DropController : MonoBehaviour, IObjectGenerator
             else
             {
                 var pos = new Vector3(dropItem.positionX, dropItem.positionY, dropItem.positionZ);
-                Drop(dropSpec, pos, dropItem.quantity);
+                var drop = Drop(dropSpec, pos, dropItem.quantity).GetComponent<SmolbeanDrop>();
+                drop.LoadExtraData(dropItem);
             }
         }
     }
@@ -100,18 +104,6 @@ public class DropController : MonoBehaviour, IObjectGenerator
     {
         while (transform.childCount > 0)
             DestroyImmediate(transform.GetChild(0).gameObject);
-    }
-
-    private DropItemSaveData GetSaveData(SmolbeanDrop stack)
-    {
-        return new DropItemSaveData
-        {
-            positionX = stack.gameObject.transform.position.x,
-            positionY = stack.gameObject.transform.position.y,
-            positionZ = stack.gameObject.transform.position.z,
-            dropSpecName = stack.dropSpec.dropName,
-            quantity = stack.quantity
-        };
     }
 
     public DropSpec DropSpecByName(string name)

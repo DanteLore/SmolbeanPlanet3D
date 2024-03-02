@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System;
 
 public class GameInitManager : MonoBehaviour, IObjectGenerator
 {
@@ -13,6 +11,8 @@ public class GameInitManager : MonoBehaviour, IObjectGenerator
     public string natureLayer = "Nature";
 
     public int Priority { get { return 200; } }
+    public bool NewGameOnly { get { return false; } }
+    public bool RunModeOnly { get { return true; } }
 
     public void Clear()
     {
@@ -21,10 +21,6 @@ public class GameInitManager : MonoBehaviour, IObjectGenerator
 
     public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        // Don't do this at design time
-        if (!Application.isPlaying)
-            return;
-
         GameStateManager.Instance.StartGame();
 
         var pos = PlaceShipwreck(gameMap, gameMapWidth, gameMapHeight);
@@ -58,7 +54,7 @@ public class GameInitManager : MonoBehaviour, IObjectGenerator
         {
             for(int x = 1; x < gameMapWidth - 1; x++)
             {
-                if(SquareLooksGood(gameMap, x, y, gameMapWidth, gameMapHeight))
+                if(SquareLooksGood(gameMap, x, y, gameMapWidth))
                 {
                     return new Vector2Int(x, y);
                 }
@@ -69,7 +65,7 @@ public class GameInitManager : MonoBehaviour, IObjectGenerator
         return new Vector2Int(gameMapWidth / 2, gameMapHeight / 2);
     }
 
-    private static bool SquareLooksGood(List<int> gameMap, int centerX, int centerY, int gameMapWidth, int gameMapHeight)
+    private static bool SquareLooksGood(List<int> gameMap, int centerX, int centerY, int gameMapWidth)
     {
         var levels = new int[3] {0, 0, 0};
         for(int y = centerY - 1; y <= centerY + 1; y++)

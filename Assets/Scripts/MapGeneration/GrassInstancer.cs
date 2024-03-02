@@ -6,11 +6,13 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 {
     private class Batch
     {
-        public List<Matrix4x4> batchData = new List<Matrix4x4>();
+        public List<Matrix4x4> batchData = new ();
         public Bounds bounds;
     }
 
     public int Priority { get { return 100; } }
+    public bool NewGameOnly { get { return false; } }
+    public bool RunModeOnly { get { return true; } }
 
     private const int BATCH_SIZE = 1024;
     public int instanceAttemptsPerSquareMeter = 1000;

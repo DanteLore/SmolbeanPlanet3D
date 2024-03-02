@@ -78,7 +78,10 @@ public class SaveGameManager : MonoBehaviour
 
         using (StreamWriter file = File.CreateText(filename))
         {
-            JsonSerializer serializer = new JsonSerializer();
+            JsonSerializer serializer = new ()
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            };
             serializer.Serialize(file, saveData);
         }
 
@@ -121,11 +124,14 @@ public class SaveGameManager : MonoBehaviour
         SaveFileData saveData = null;
         using (StreamReader file = File.OpenText(filename))
         {
-            JsonSerializer serializer = new JsonSerializer();
+            JsonSerializer serializer = new()
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            };
             saveData = (SaveFileData)serializer.Deserialize(file, typeof(SaveFileData));
         }
 
-        gridManager.Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight);
+        gridManager.Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight, false);
         
         if(saveData.treeData != null)
             treeGenerator.LoadTrees(saveData.treeData);

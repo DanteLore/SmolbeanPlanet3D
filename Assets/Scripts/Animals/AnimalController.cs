@@ -11,10 +11,10 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
 
     public AnimalSpec[] animalSpecs;
     public int Priority { get { return 12; } }
+    public bool NewGameOnly { get { return true; } }
+    public bool RunModeOnly { get { return true; } }
     public float edgeBuffer = 0.1f;
     public string natureLayer = "Nature";
-
-    private GridManager gridManager;
 
     void Awake()
     {
@@ -22,11 +22,6 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
             Destroy(gameObject);
         else
             Instance = this;
-    }
-
-    void Start()
-    {
-        gridManager = FindAnyObjectByType<GridManager>();
     }
 
     public void Clear()
@@ -37,7 +32,9 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
 
     public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        foreach(var species in animalSpecs)
+        var gridManager = FindAnyObjectByType<GridManager>();
+
+        foreach (var species in animalSpecs)
         {
             int animalsToAdd = species.startingPopulation;
 
@@ -58,8 +55,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
                 float worldZ = Random.Range(squareBounds.yMin + buffer, squareBounds.yMax - buffer);
 
                 // Get the Y coord at this spot
-                RaycastHit rayHit;
-                bool hit = Physics.Raycast(new Ray(new Vector3(worldX, 1000, worldZ), Vector3.down), out rayHit, 2000, LayerMask.GetMask("Ground"));
+                bool hit = Physics.Raycast(new Ray(new Vector3(worldX, 1000, worldZ), Vector3.down), out RaycastHit rayHit, 2000, LayerMask.GetMask("Ground"));
 
                 // Check we hit the ground
                 if (!hit)
@@ -100,6 +96,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         var animal = Instantiate(prefab, pos, rot, transform).GetComponent<SmolbeanAnimal>();
         animal.speciesIndex = saveData.speciesIndex;
         animal.species = animalSpecs[saveData.speciesIndex];
+        animal.InitialiseStats(saveData.stats);
     }
 
     private AnimalSaveData GenerateAnimalData(Vector3 pos, AnimalSpec species)
@@ -121,14 +118,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
     public List<AnimalSaveData> GetSaveData()
     {
         return GetComponentsInChildren<SmolbeanAnimal>()
-            .Select(b => new AnimalSaveData
-            {
-                positionX = b.transform.position.x,
-                positionY = b.transform.position.y,
-                positionZ = b.transform.position.z,
-                rotationY = b.transform.rotation.eulerAngles.y,
-                speciesIndex = Array.IndexOf(animalSpecs, b.species)
-            })
+            .Select(animal => animal.GetSaveData())
             .ToList();
     }
 

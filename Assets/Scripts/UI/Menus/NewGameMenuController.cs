@@ -101,7 +101,7 @@ public class NewGameMenuController : SmolbeanMenu
 
     private void StartGameClicked()
     {
-        gridManager.Recreate(map, mapGenerator.mapWidth, mapGenerator.mapHeight);
+        gridManager.Recreate(map, mapGenerator.mapWidth, mapGenerator.mapHeight, true);
         MenuController.Instance.CloseAll();
     }
 

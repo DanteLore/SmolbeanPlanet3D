@@ -45,7 +45,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void Recreate(List<int> gameMap, int width, int height)
+    public void Recreate(List<int> gameMap, int width, int height, bool newGame)
     {        
         DateTime startTime = DateTime.Now;
 
@@ -65,7 +65,12 @@ public class GridManager : MonoBehaviour
 
         DrawMap();
 
-        foreach(var gen in FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None).OfType<IObjectGenerator>().OrderBy(g => g.Priority))
+        var generators =
+            FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .OfType<IObjectGenerator>()
+            .Where(og => !og.RunModeOnly || Application.isPlaying)
+            .Where(og => !og.NewGameOnly || newGame);
+        foreach (var gen in generators.OrderBy(g => g.Priority))
             gen.Generate(GameMap, GameMapWidth, GameMapHeight);
 
         UpdateNavMesh();

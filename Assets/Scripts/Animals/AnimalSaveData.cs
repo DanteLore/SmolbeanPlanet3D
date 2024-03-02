@@ -8,4 +8,5 @@ public class AnimalSaveData
     public float positionZ;
     public float rotationY;
     public int speciesIndex;
+    public AnimalStats stats;
 }

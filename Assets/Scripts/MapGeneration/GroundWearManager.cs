@@ -7,6 +7,9 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
     public int Priority { get { return 0; }}
 
+    public bool NewGameOnly { get { return false; } }
+    public bool RunModeOnly { get { return true; } }
+
     public Texture2D wearTexture;
     public Material grassMaterial;
     public float textureUpdateDelay = 0.25f;

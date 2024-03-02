@@ -5,6 +5,8 @@ using UnityEngine;
 public class DayNightCycleController : MonoBehaviour, IObjectGenerator
 {
     public static DayNightCycleController Instance { get; private set; }
+    public bool NewGameOnly { get { return false; } }
+    public bool RunModeOnly { get { return true; } }
     public Gradient ambientLightColor;
     [GradientUsage(hdr:true)] public Gradient sunColor;
     public Gradient directionalLight;

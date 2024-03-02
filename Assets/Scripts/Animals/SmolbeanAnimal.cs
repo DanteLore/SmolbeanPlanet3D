@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Linq;
 using System;
-using Random = UnityEngine.Random;
 using System.Collections;
 
 public abstract class SmolbeanAnimal : MonoBehaviour
@@ -14,9 +13,11 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public string creatureLayer = "Creatures";
     public float destinationThreshold = 1.0f;
 
-    public float age;
-    public float health;
-    public float foodLevel;
+    protected AnimalStats stats;
+    public AnimalStats Stats
+    {
+        get { return stats; }
+    }
 
     protected Animator animator;
     protected NavMeshAgent navAgent;
@@ -38,7 +39,6 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         body = transform.Find("Body").gameObject;
 
         stateMachine = new StateMachine(shouldLog: false);
-        InitialiseStats();
     }
 
     protected virtual void Update()
@@ -47,29 +47,25 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         {
             UpdateStats();
 
-            if (health <= 0f)
+            if (stats.health <= 0f)
                 return;
 
             stateMachine.Tick();
         }
     }
 
-    protected virtual void InitialiseStats()
-    {
-        health = species.initialHealth;
-        foodLevel = Random.Range(species.initialFoodLevelMin, species.initialFoodLevelMax);
-    }
+    public abstract void InitialiseStats(AnimalStats newStats = null);
 
     protected virtual void UpdateStats()
     {
-        age += Time.deltaTime;
+        stats.age += Time.deltaTime;
 
-        float ageFactor = Mathf.InverseLerp(species.oldAgeSeconds, species.lifespanSeconds, age);
+        float ageFactor = Mathf.InverseLerp(species.oldAgeSeconds, species.lifespanSeconds, stats.age);
 
         // Juveniles are small
-        if(age <= species.maturityAgeSeconds)
+        if(stats.age <= species.maturityAgeSeconds)
         {
-            var x = Mathf.InverseLerp(0f, species.maturityAgeSeconds, age);
+            var x = Mathf.InverseLerp(0f, species.maturityAgeSeconds, stats.age);
             var s = Mathf.Lerp(species.juvenileScale, 1f, x);
             transform.localScale = new Vector3(s, s, s);
         }
@@ -78,27 +74,27 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         navAgent.speed = species.speed - species.oldAgeSpeedDecrease * ageFactor;
 
         // Decreasing health due to old age
-        health -= species.oldAgeHealthImpactPerSecond * ageFactor * Time.deltaTime;
+        stats.health -= species.oldAgeHealthImpactPerSecond * ageFactor * Time.deltaTime;
 
         // Digest some food
-        foodLevel = Mathf.Max(0f, foodLevel - species.foodDigestedPerSecond * Time.deltaTime);
+        stats.foodLevel = Mathf.Max(0f, stats.foodLevel - species.foodDigestedPerSecond * Time.deltaTime);
 
-        if (foodLevel <= species.starvationThreshold)
+        if (stats.foodLevel <= species.starvationThreshold)
         {
-            // Health decrease sue to starvation
+            // Health decrease due to starvation
             float healthDelta = species.starvationRatePerSecond * Time.deltaTime;
-            healthDelta *= 1f - Mathf.InverseLerp(0f, species.starvationThreshold, foodLevel);
-            health = Mathf.Max(0f, health - healthDelta); 
+            healthDelta *= 1f - Mathf.InverseLerp(0f, species.starvationThreshold, stats.foodLevel);
+            stats.health = Mathf.Max(0f, stats.health - healthDelta); 
         }
         else
         {
             // Health recover with a full stomach
             float healthDelta = species.healthRecoveryPerSecond * ageFactor * Time.deltaTime;
-            healthDelta *= Mathf.InverseLerp(species.starvationThreshold, species.maxFoodLevel, foodLevel);
-            health = Mathf.Min(species.maxHealth, health + healthDelta);
+            healthDelta *= Mathf.InverseLerp(species.starvationThreshold, species.maxFoodLevel, stats.foodLevel);
+            stats.health = Mathf.Min(species.maxHealth, stats.health + healthDelta);
         }
 
-        if (health <= 0)
+        if (stats.health <= 0)
             Die(); 
     }
 
@@ -113,7 +109,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         yield return new WaitForEndOfFrame();
         Instantiate(species.deathParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
         //soundPlayer.Play("Break");
-
+        
         DropController.Instance.Drop(species.dropSpec, transform.position);
         yield return new WaitForEndOfFrame();
 
@@ -125,9 +121,22 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public virtual float Eat(float amount)
     {
-        float delta = Mathf.Min(amount, species.maxFoodLevel - foodLevel);
-        foodLevel += delta;
+        float delta = Mathf.Min(amount, species.maxFoodLevel - stats.foodLevel);
+        stats.foodLevel += delta;
         return delta;
+    }
+
+    public AnimalSaveData GetSaveData()
+    {
+        return new AnimalSaveData
+        {
+            positionX = transform.position.x,
+            positionY = transform.position.y,
+            positionZ = transform.position.z,
+            rotationY = transform.rotation.eulerAngles.y,
+            speciesIndex = speciesIndex,
+            stats = stats
+        };
     }
 
     public void Hide()
@@ -163,11 +172,11 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public virtual bool IsFull()
     {
-        return foodLevel > species.fullThreshold;
+        return stats.foodLevel > species.fullThreshold;
     }
 
     public virtual bool IsHungry()
     {
-        return foodLevel < species.hungryThreshold;
+        return stats.foodLevel < species.hungryThreshold;
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -41,5 +43,22 @@ public class SmolbeanDrop : MonoBehaviour
     public bool IsFull()
     {
         return quantity >= dropSpec.stackSize;
+    }
+
+    public virtual DropItemSaveData GetSaveData()
+    {
+        return new DropItemSaveData
+        {
+            positionX = transform.position.x,
+            positionY = transform.position.y,
+            positionZ = transform.position.z,
+            dropSpecName = dropSpec.dropName,
+            quantity = quantity
+        };
+    }
+
+    public virtual void LoadExtraData(DropItemSaveData saveData)
+    {
+        // Nothing to do here
     }
 }

@@ -12,6 +12,8 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         public float probability;
     }
     public int Priority { get { return 10; } }
+    public bool NewGameOnly { get { return false; } }
+    public bool RunModeOnly { get { return false; } }
 
     public TreeData[] treeData;
     public int maxTreesPerSquare = 4;

@@ -4,8 +4,6 @@ using Random = UnityEngine.Random;
 
 public class Dodo : SmolbeanAnimal
 {
-    private float lastEggLaidTime = 0f;
-
     protected override void Start()
     {
         base.Start();
@@ -34,9 +32,10 @@ public class Dodo : SmolbeanAnimal
     {
         base.Update();
 
-        if(age >= species.maturityAgeSeconds &&
-            health >= species.minimumHealthToGiveBirth &&
-            Time.time - lastEggLaidTime >= species.gestationPeriodSeconds &&
+        if(!isDead &&
+            stats.age >= species.maturityAgeSeconds &&
+            stats.health >= species.minimumHealthToGiveBirth &&
+            Time.time - ((DodoStats)stats).lastEggLaidTime >= species.gestationPeriodSeconds &&
             Random.Range(0f, 1f) <= species.birthProbability * Time.deltaTime &&
             AnimalController.Instance.AnimalCount(species) < species.populationCap)
         {
@@ -46,10 +45,28 @@ public class Dodo : SmolbeanAnimal
 
     private void LayAnEgg()
     {
-        lastEggLaidTime = Time.time;
-        health -= species.pregnancyHealthImpact;
+        ((DodoStats)stats).lastEggLaidTime = Time.time;
+        stats.health -= species.pregnancyHealthImpact;
         Instantiate(species.eggLaidParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
         var egg = DropController.Instance.Drop(species.eggDropSpec, transform.position);
         egg.GetComponent<SmolbeanEgg>().species = species;
+    }
+
+    public override void InitialiseStats(AnimalStats newStats = null)
+    {
+        if (newStats != null)
+        {
+            stats = newStats;
+        }
+        else
+        {
+            stats = new DodoStats()
+            {
+                age = 0f,
+                health = species.initialHealth,
+                foodLevel = Random.Range(species.initialFoodLevelMin, species.initialFoodLevelMax),
+                lastEggLaidTime = 0f
+            };
+        }
     }
 }
