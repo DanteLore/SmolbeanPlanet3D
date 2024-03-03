@@ -73,8 +73,6 @@ public class AmbientManager : MonoBehaviour
 
             float coastVolume = Hyperbolic(1 - Mathf.Abs(seaVolume - landVolume));
 
-            Debug.Log(coastVolume);
-
             float windVolume = 1 - coastVolume * coastWindVolumeDip;
 
             soundPlayer.SetVolume("Waves", coastVolume);
