@@ -1,18 +1,21 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AmbientManager : MonoBehaviour
 {
     public float movementResolutionMeters = 4f;
+    public float minimumUpdateTimeSeconds = 1f;
     public int mapSquareRadius = 4;
+    public float coastHyperbolicWeight = 4f;
+    [Range(0, 1)]
+    public float coastWindVolumeDip = 0.5f;
     public string groundLayer = "Ground";
     public string seaLayer = "Sea";
 
     private GridManager gridManager;
     private SoundPlayer soundPlayer;
-    private Vector3 lastPosition;
+    private Vector3 lastUpdatePosition;
+    private float lastUpdateTime;
 
     void Start()
     {
@@ -22,17 +25,20 @@ public class AmbientManager : MonoBehaviour
         soundPlayer.Play("Wind");
         soundPlayer.Play("Waves");
 
-        lastPosition = transform.position;
-        UpdateVolumes(lastPosition);
+        lastUpdatePosition = transform.position;
+        lastUpdateTime = Time.time;
+        UpdateVolumes(lastUpdatePosition);
     }
 
     void Update()
     {
         Vector3 pos = transform.position;
 
-        if(Vector3.SqrMagnitude(lastPosition - pos) > movementResolutionMeters * movementResolutionMeters)
+        if(Vector3.SqrMagnitude(lastUpdatePosition - pos) > movementResolutionMeters * movementResolutionMeters
+            || Time.time - lastUpdateTime >= minimumUpdateTimeSeconds)
         {
-            lastPosition = pos;
+            lastUpdateTime = Time.time;
+            lastUpdatePosition = pos;
             UpdateVolumes(pos);
         }
     }
@@ -65,8 +71,20 @@ public class AmbientManager : MonoBehaviour
             float seaVolume = (1.0f * seaCount) / (seaCount + landCount);
             float landVolume = (1.0f * landCount) / (seaCount + landCount);
 
-            soundPlayer.SetVolume("Waves", seaVolume);
-            soundPlayer.SetVolume("Wind", landVolume);
+            float coastVolume = Hyperbolic(1 - Mathf.Abs(seaVolume - landVolume));
+
+            Debug.Log(coastVolume);
+
+            float windVolume = 1 - coastVolume * coastWindVolumeDip;
+
+            soundPlayer.SetVolume("Waves", coastVolume);
+            soundPlayer.SetVolume("Wind", windVolume);
         }
+    }
+
+    private float Hyperbolic(float x)
+    {
+        float n = coastHyperbolicWeight;
+        return (n + 1) * x / ((n * x) + 1);
     }
 }

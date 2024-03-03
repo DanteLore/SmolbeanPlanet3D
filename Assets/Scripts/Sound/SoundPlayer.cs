@@ -87,11 +87,11 @@ public class SoundPlayer : MonoBehaviour
         return player;
     }
 
-    internal void SetVolume(string clipName, float volume)
+    public void SetVolume(string clipName, float volume)
     {
-        if (players.TryGetValue(clipName, out var player))
+        if (players.TryGetValue(clipName, out var player) && clipLookup.TryGetValue(clipName, out var clip))
         {
-            player.volume = volume;
+            player.volume = Mathf.Lerp(0f, clip.volume, volume);
         }
     }
 
