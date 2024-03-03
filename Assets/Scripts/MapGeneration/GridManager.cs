@@ -4,6 +4,7 @@ using System;
 using Unity.AI.Navigation;
 using System.Collections.Generic;
 using UnityEngine.AI;
+using System.Collections;
 
 public class GridManager : MonoBehaviour
 {
@@ -45,7 +46,7 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void Recreate(List<int> gameMap, int width, int height, bool newGame)
+    public IEnumerator Recreate(List<int> gameMap, int width, int height, bool newGame)
     {        
         DateTime startTime = DateTime.Now;
 
@@ -56,14 +57,26 @@ public class GridManager : MonoBehaviour
 
         UnityEngine.Random.InitState(1);
 
+        yield return null;
+
         ClearMap();
+
+        yield return null;
+        Debug.Log($"Map cleared at {(DateTime.Now - startTime).TotalSeconds}s");
 
         var meshData = terrainData.meshData.ToList();
         var neighbourData = terrainData.neighbourData.ToDictionary(nd => nd.id, nd => nd);
-        
+
+        yield return null;
         map = new MapGenerator(GameMapWidth, GameMapHeight, meshData, neighbourData).GenerateMap(GameMap);
 
+        yield return null;
+        Debug.Log($"Map generated at {(DateTime.Now - startTime).TotalSeconds}s");
+
         DrawMap();
+
+        yield return null;
+        Debug.Log($"Map drawn at {(DateTime.Now - startTime).TotalSeconds}s");
 
         var generators =
             FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
@@ -71,11 +84,19 @@ public class GridManager : MonoBehaviour
             .Where(og => !og.RunModeOnly || Application.isPlaying)
             .Where(og => !og.NewGameOnly || newGame);
         foreach (var gen in generators.OrderBy(g => g.Priority))
+        {
+            DateTime genStart = DateTime.Now;
             gen.Generate(GameMap, GameMapWidth, GameMapHeight);
+            Debug.Log($"Generator: {gen.GetType().Name} {(DateTime.Now - genStart).TotalSeconds}s");
+        }
+
+        yield return null;
+        Debug.Log($"Generators complete at {(DateTime.Now - startTime).TotalSeconds}s");
 
         UpdateNavMesh();
 
         Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
+        yield return null;
     }
 
     private void UpdateNavMesh()

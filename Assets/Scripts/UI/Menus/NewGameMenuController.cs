@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
@@ -104,9 +105,17 @@ public class NewGameMenuController : SmolbeanMenu
 
     private void StartGameClicked()
     {
+        StartCoroutine(StartGame());
+    }
+
+    IEnumerator StartGame()
+    {
+        // Show a please wait message here
         soundPlayer.Play("Click");
-        gridManager.Recreate(map, mapGenerator.mapWidth, mapGenerator.mapHeight, true);
+        yield return null;
+        yield return StartCoroutine(gridManager.Recreate(map, mapGenerator.mapWidth, mapGenerator.mapHeight, true));
         MenuController.Instance.CloseAll();
+        yield return null;
     }
 
     private void RandomButtonClicked()

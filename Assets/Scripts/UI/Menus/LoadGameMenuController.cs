@@ -38,8 +38,15 @@ public class LoadGameMenuController : SmolbeanMenu
 
     private void LoadButtonClicked()
     {
+        StartCoroutine(LoadGame());
+    }
+
+    private IEnumerator LoadGame()
+    {
+        // Show a "please wait" screen here in future!
         soundPlayer.Play("Click");
-        SaveGameManager.Instance.LoadGame((string)fileListView.selectedItem);
+        yield return null;
+        yield return SaveGameManager.Instance.LoadGame((string)fileListView.selectedItem);
         MenuController.Instance.CloseAll();
     }
 

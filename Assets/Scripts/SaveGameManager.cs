@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using System.Linq;
-using Newtonsoft.Json;  
+using Newtonsoft.Json;
+using System.Collections;
 
 public class SaveFileData
 {
@@ -116,7 +117,7 @@ public class SaveGameManager : MonoBehaviour
         return files;
     }
 
-    public void LoadGame(string name)
+    public IEnumerator LoadGame(string name)
     {
         string filename = GetFilename(name);
         Debug.Log($"Loading game from {filename}");
@@ -131,29 +132,37 @@ public class SaveGameManager : MonoBehaviour
             saveData = (SaveFileData)serializer.Deserialize(file, typeof(SaveFileData));
         }
 
-        gridManager.Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight, false);
+        yield return null;
+
+        yield return gridManager.Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight, false);
         
         if(saveData.treeData != null)
             treeGenerator.LoadTrees(saveData.treeData);
-        if(saveData.rockData != null)
+        yield return null;
+        if (saveData.rockData != null)
             rockGenerator.LoadRocks(saveData.rockData);
-        if(saveData.buildingData != null)
+        yield return null;
+        if (saveData.buildingData != null)
             buildingController.LoadBuildings(saveData.buildingData);
-        if(saveData.dropItemData != null)
+        yield return null;
+        if (saveData.dropItemData != null)
             dropController.LoadDrops(saveData.dropItemData);
-        if(saveData.cameraData != null)
+        yield return null;
+        if (saveData.cameraData != null)
             cameraController.LoadState(saveData.cameraData);
-        if(saveData.timeData != null)
+        yield return null;
+        if (saveData.timeData != null)
             dayNightController.LoadState(saveData.timeData);
+        yield return null;
         if (saveData.animalData != null)
             animalController.LoadAnimals(saveData.animalData);
+        yield return null;
 
         string pngFilename = GetPngFilename(filename);
         if(File.Exists(pngFilename) && groundTexture != null)
         {
             groundTexture.LoadImage(File.ReadAllBytes(pngFilename));
         }
-
-        MenuController.Instance.CloseAll();
+        yield return null;
     }
 }

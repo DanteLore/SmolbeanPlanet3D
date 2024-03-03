@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Profiling;
 
 public class GrassInstancer : MonoBehaviour, IObjectGenerator
 {
@@ -39,6 +40,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     private float yNoiseOffset;
     private Bounds mapBounds;
     public Camera mainCamera;
+    private GridManager gridManager;
     private float renderThresholdSqr;
 
     void Update()
@@ -62,6 +64,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
     void Start()
     {
+        gridManager = FindFirstObjectByType<GridManager>();
         renderThresholdSqr = renderThreshold * renderThreshold;
         GenerateGrass();
     }
@@ -78,16 +81,16 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
     private void GenerateGrass()
     {
-        System.DateTime start = System.DateTime.Now;
-        Random.InitState(randomSeed);
-        xNoiseOffset = UnityEngine.Random.Range(0f, 1000f);
-        yNoiseOffset = UnityEngine.Random.Range(0f, 1000f);
+        //System.DateTime start = System.DateTime.Now;
+        //Random.InitState(randomSeed);
+        xNoiseOffset = Random.Range(0f, 1000f);
+        yNoiseOffset = Random.Range(0f, 1000f);
 
         rayLayerMask = LayerMask.GetMask(occlusionLayers.Append(groundLayer).ToArray());
         groundLayerMask = LayerMask.GetMask(groundLayer);
         groundLayerNum = LayerMask.NameToLayer(groundLayer);
 
-        mapBounds = FindAnyObjectByType<GridManager>().GetIslandBounds();
+        mapBounds = gridManager.GetIslandBounds();
         float area = mapBounds.size.x * mapBounds.size.y;
         int instanceCount = Mathf.CeilToInt(instanceAttemptsPerSquareMeter * area);
         //Debug.Log($"Map area {area}sqm => {instanceCount} instance attempts total");
@@ -176,20 +179,20 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         float posZ = Random.Range(bounds.min.z, bounds.max.z);
         pos = Vector3.zero;
 
-        Ray ray = new Ray(new Vector3(posX, 1000f, posZ), Vector3.down);
-        if (!Physics.Raycast(ray, out RaycastHit hit, 2000f, rayLayerMask))
+        float noise = Mathf.PerlinNoise((posX + xNoiseOffset) / (mapBounds.size.x * noiseScale), (posZ + yNoiseOffset) / (mapBounds.size.z * noiseScale));
+        if (Random.Range(0.1f, 1.0f) > noise)
             return false;
 
-        var posY = hit.point.y;
-        if (hit.transform.gameObject.layer != groundLayerNum || posY < minHeight)
+        Ray ray = new Ray(new Vector3(posX, 1000f, posZ), Vector3.down);
+        if (!Physics.Raycast(ray, out RaycastHit hit, 2000f, rayLayerMask))
             return false;
 
         float angle = Vector3.Angle(Vector3.up, hit.normal);
         if (angle > maxSlopeAngle)
             return false;
 
-        float noise = Mathf.PerlinNoise((posX + xNoiseOffset) / (mapBounds.size.x * noiseScale), (posZ + yNoiseOffset) / (mapBounds.size.z * noiseScale));
-        if(Random.Range(0.1f, 1.0f) > noise)
+        var posY = hit.point.y;
+        if (posY < minHeight || hit.transform.gameObject.layer != groundLayerNum)
             return false;
 
         pos = new Vector3(posX, posY, posZ);

@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,23 +10,29 @@ public class GridManagerEditor : Editor
     {
         base.OnInspectorGUI();
 
+        if(GUILayout.Button("Wave Function Collapse"))
+        {
+            EditorCoroutineUtility.StartCoroutine(DrawMap(), this);
+            
+            EditorUtility.SetDirty(target);
+        }
+    }
+
+    private IEnumerator DrawMap()
+    {
         var gridManager = (GridManager)target;
         gridManager.BootstrapMapData();
 
-        if(GUILayout.Button("Wave Function Collapse"))
-        {
-            var generator = GameObject.FindAnyObjectByType<GameMapGenerator>();
+        var generator = FindAnyObjectByType<GameMapGenerator>();
 
-            var newMap = generator.GenerateMap(generator.seed);
-            gridManager.mapData.GameMap = newMap.ToArray();
-            gridManager.mapData.GameMapWidth = generator.mapWidth;
-            gridManager.mapData.GameMapHeight = generator.mapHeight;
-            gridManager.mapData.MaxLevelNumber = generator.maxLevelNumber;
-            EditorUtility.SetDirty(gridManager.mapData);
-            AssetDatabase.SaveAssetIfDirty(gridManager.mapData);
+        var newMap = generator.GenerateMap(generator.seed);
+        gridManager.mapData.GameMap = newMap.ToArray();
+        gridManager.mapData.GameMapWidth = generator.mapWidth;
+        gridManager.mapData.GameMapHeight = generator.mapHeight;
+        gridManager.mapData.MaxLevelNumber = generator.maxLevelNumber;
+        EditorUtility.SetDirty(gridManager.mapData);
+        AssetDatabase.SaveAssetIfDirty(gridManager.mapData);
 
-            gridManager.Recreate(newMap, generator.mapWidth, generator.mapHeight, true);
-            EditorUtility.SetDirty(target);
-        }
+        yield return gridManager.Recreate(newMap, generator.mapWidth, generator.mapHeight, true);
     }
 }
