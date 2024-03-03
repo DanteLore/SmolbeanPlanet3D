@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 public class NewGameMenuController : SmolbeanMenu
 {
     UIDocument document;
+    private SoundPlayer soundPlayer;
     GameMapGenerator mapGenerator;
     GridManager gridManager;
     VisualElement previewPane;
@@ -17,6 +18,7 @@ public class NewGameMenuController : SmolbeanMenu
     void OnEnable()
     {
         document = GetComponent<UIDocument>();
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
         mapGenerator = FindFirstObjectByType<GameMapGenerator>();
         gridManager = FindFirstObjectByType<GridManager>();
         
@@ -96,17 +98,20 @@ public class NewGameMenuController : SmolbeanMenu
 
     private void CancelButtonClicked()
     {
+        soundPlayer.Play("Click");
         MenuController.Instance.ShowMenu();
     }
 
     private void StartGameClicked()
     {
+        soundPlayer.Play("Click");
         gridManager.Recreate(map, mapGenerator.mapWidth, mapGenerator.mapHeight, true);
         MenuController.Instance.CloseAll();
     }
 
     private void RandomButtonClicked()
     {
+        soundPlayer.Play("Click");
         int seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
         seedTextField.value = seed.ToString();
     }

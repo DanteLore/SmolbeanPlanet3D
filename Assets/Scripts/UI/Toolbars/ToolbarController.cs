@@ -1,23 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ToolbarController : MonoBehaviour
 {
     public string defaultToolbarName = "MainToolbar";
+    private SoundPlayer soundPlayer;
 
     public static ToolbarController Instance { get; private set; }
+
+    private bool isVisible;
 
     void Awake()
     {
         if(Instance != null && Instance != this)
-            Destroy(gameObject);
+            DestroyImmediate(gameObject);
         else
             Instance = this;
     }
 
     void Start()
     {
+        isVisible = false; // force this to true when the game starts to stop a sound playing :)
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
         CloseAll();
     }
     
@@ -28,7 +31,17 @@ public class ToolbarController : MonoBehaviour
 
         foreach(Transform child in transform)
         {
-            child.gameObject.SetActive(child.gameObject.name == menuName);
+            if (child.gameObject.name == menuName)
+            {
+                if (isVisible == true) // Only play a sound if we're switching toolbars
+                    soundPlayer.Play("Whoosh2");
+                child.gameObject.SetActive(true);
+                isVisible = true;
+            }
+            else
+            {
+                child.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -38,5 +51,7 @@ public class ToolbarController : MonoBehaviour
         {
             child.gameObject.SetActive(false);
         }
+
+        isVisible = false;
     }
 }

@@ -8,6 +8,7 @@ using System;
 public class LoadGameMenuController : SmolbeanMenu
 {
     UIDocument document;
+    private SoundPlayer soundPlayer;
     private ListView fileListView;
     private string[] files;
     private Button loadGameButton;
@@ -15,6 +16,7 @@ public class LoadGameMenuController : SmolbeanMenu
     void OnEnable()
     {
         document = GetComponent<UIDocument>();
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
 
         files = SaveGameManager.Instance.ListSaveFiles().ToArray();
         
@@ -36,12 +38,14 @@ public class LoadGameMenuController : SmolbeanMenu
 
     private void LoadButtonClicked()
     {
+        soundPlayer.Play("Click");
         SaveGameManager.Instance.LoadGame((string)fileListView.selectedItem);
         MenuController.Instance.CloseAll();
     }
 
     private void CancelButtonClicked()
     {
+        soundPlayer.Play("Click");
         MenuController.Instance.ShowMenu();
     }
 
@@ -54,6 +58,7 @@ public class LoadGameMenuController : SmolbeanMenu
     {
         if(fileListView.selectedItem != null)
         {
+            soundPlayer.Play("Click");
             LoadButtonClicked();
         }
     }

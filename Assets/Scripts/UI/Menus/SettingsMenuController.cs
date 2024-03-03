@@ -7,11 +7,13 @@ public class SettingsMenuController : SmolbeanMenu
 {
     public AudioMixer mixer;
     private UIDocument document;
+    private SoundPlayer soundPlayer;
 
     void OnEnable()
     {
         document = GetComponent<UIDocument>();
-        
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
+
         var doneButton = document.rootVisualElement.Q<Button>("doneButton");
         doneButton.clicked += DoneButtonClicked;
 
@@ -74,6 +76,7 @@ public class SettingsMenuController : SmolbeanMenu
 
     private void DoneButtonClicked()
     {
+        soundPlayer.Play("Click");
         MenuController.Instance.ShowMenu();
     }
 }

@@ -1,9 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
-using System.Collections.Generic;
-using System;
-using UnityEngine.Rendering;
 
 public class MapMenuController : SmolbeanMenu
 {
@@ -18,6 +15,7 @@ public class MapMenuController : SmolbeanMenu
     public GameObject rocks;
 
     private UIDocument document;
+    private SoundPlayer soundPlayer;
     private VisualElement mapBox;
     private Texture2D mapTexture;
     private float width;
@@ -28,10 +26,15 @@ public class MapMenuController : SmolbeanMenu
     void OnEnable()
     {
         document = GetComponent<UIDocument>();
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
         mapBox = document.rootVisualElement.Q<VisualElement>("mapBox");
         
         var closeButton = document.rootVisualElement.Q<Button>("closeButton");
-        closeButton.clicked += () => { MenuController.Instance.CloseAll(); };
+        closeButton.clicked += () =>
+        {
+            soundPlayer.Play("Click");
+            MenuController.Instance.CloseAll();
+        };
 
         mapTexture = new Texture2D(groundTexture.width, groundTexture.height) { filterMode = FilterMode.Point };
 

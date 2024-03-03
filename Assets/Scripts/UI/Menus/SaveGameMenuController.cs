@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class SaveGameMenuController : SmolbeanMenu
 {
     UIDocument document;
+    private SoundPlayer soundPlayer;
     private TextField filenameTextField;
     private ListView fileListView;
     private string[] files;
@@ -14,6 +15,7 @@ public class SaveGameMenuController : SmolbeanMenu
     void OnEnable()
     {
         document = GetComponent<UIDocument>();
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
 
         files = SaveGameManager.Instance.ListSaveFiles().ToArray();
         
@@ -47,11 +49,13 @@ public class SaveGameMenuController : SmolbeanMenu
 
     private void CancelButtonClicked()
     {
+        soundPlayer.Play("Click");
         MenuController.Instance.ShowMenu();
     }
 
     private void SaveButtonClicked()
     {
+        soundPlayer.Play("Click");
         SaveGameManager.Instance.SaveGame(filenameTextField.value);
         MenuController.Instance.ShowMenu();
     }
@@ -68,6 +72,7 @@ public class SaveGameMenuController : SmolbeanMenu
     {
         if (fileListView.selectedItem != null)
         {
+            soundPlayer.Play("Click");
             filenameTextField.value = fileListView.selectedItem.ToString();
             SaveButtonClicked();
         }

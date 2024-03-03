@@ -5,6 +5,12 @@ using System.Linq;
 public class BuildToolbarController : MonoBehaviour
 {
     private UIDocument document;
+    private SoundPlayer soundPlayer;
+
+    private void Start()
+    {
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
+    }
 
     void OnEnable()
     {
@@ -58,6 +64,7 @@ public class BuildToolbarController : MonoBehaviour
 
     private void BuildButtonClicked(EventBase eventBase)
     {
+        soundPlayer.Play("Click");
         var spec = (BuildingSpec)((Button)eventBase.target).userData;
         BuildManager.Instance.BeginBuild(spec);
     }

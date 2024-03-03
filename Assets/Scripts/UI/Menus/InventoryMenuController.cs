@@ -7,6 +7,7 @@ public class InventoryMenu : SmolbeanMenu
 {
 
     private UIDocument document;
+    private SoundPlayer soundPlayer;
     private string[] files;
 
     VisualElement buildingListContainer;
@@ -14,7 +15,8 @@ public class InventoryMenu : SmolbeanMenu
     void OnEnable()
     {
         document = GetComponent<UIDocument>();
-        
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
+
         var closeButton = document.rootVisualElement.Q<Button>("closeButton");
         closeButton.clicked += CloseButtonClicked;
         
@@ -72,6 +74,7 @@ public class InventoryMenu : SmolbeanMenu
 
     private void CloseButtonClicked()
     {
+        soundPlayer.Play("Click");
         MenuController.Instance.CloseAll();
     }
 }

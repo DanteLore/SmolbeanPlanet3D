@@ -6,11 +6,13 @@ public class DeliveryRequestsMenu : SmolbeanMenu
     private UIDocument document;
 
     VisualElement listContainer;
+    SoundPlayer soundPlayer;
 
     void OnEnable()
     {
         document = GetComponent<UIDocument>();
-        
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
+
         var closeButton = document.rootVisualElement.Q<Button>("closeButton");
         closeButton.clicked += CloseButtonClicked;
         
@@ -74,5 +76,6 @@ public class DeliveryRequestsMenu : SmolbeanMenu
     private void CloseButtonClicked()
     {
         MenuController.Instance.CloseAll();
+        soundPlayer.Play("Click");
     }
 }

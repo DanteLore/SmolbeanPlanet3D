@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -13,6 +12,7 @@ public class MenuController : MonoBehaviour
     private string activeMenu = "";
 
     private Dictionary<KeyCode, string> hotkeyLookup;
+    private SoundPlayer soundPlayer;
 
     void Awake()
     {
@@ -29,6 +29,8 @@ public class MenuController : MonoBehaviour
 
     void Start()
     {
+        isVisible = true; // force this to true when the game starts to stop a sound playing :)
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
         ShowMenu();
     }
 
@@ -61,7 +63,6 @@ public class MenuController : MonoBehaviour
         }
     }
 
-
     public void ShowMenu(string menuName = "MainMenu")
     {
         ToolbarController.Instance.CloseAll();
@@ -72,6 +73,9 @@ public class MenuController : MonoBehaviour
             {
                 if(child.shouldPauseGame)
                     GameStateManager.Instance.Pause();
+
+                if (isVisible == false)
+                    soundPlayer.Play("Whoosh");
 
                 child.gameObject.SetActive(true);
             }
