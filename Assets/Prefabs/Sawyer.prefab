@@ -25,13 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4271924121148788523}
+  serializedVersion: 2
   m_LocalRotation: {x: -0.5972954, y: -0.6189046, z: -0.28462753, w: -0.4232995}
   m_LocalPosition: {x: -0, y: 0.008, z: -0.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7197489695742156253}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 171.179, y: 299.035, z: -97.234985}
 --- !u!33 &5076806808707676502
 MeshFilter:
@@ -58,6 +58,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -110,6 +112,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5678464011766705138}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -117,7 +120,6 @@ Transform:
   m_Children:
   - {fileID: 103696802120103732}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &5678464011766705148
 NavMeshAgent:
@@ -185,10 +187,12 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: fe536c24d81564d2faf2711639d9b668, type: 3}
     loop: 1
     volume: 1
+    ignoreGamePause: 0
   - name: Working
     clip: {fileID: 8300000, guid: 42c27295ce51b48c7830fe9c16cc5c35, type: 3}
     loop: 1
-    volume: 0.5
+    volume: 0.3
+    ignoreGamePause: 0
   mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
 --- !u!114 &1372385318150365270
 MonoBehaviour:
@@ -206,6 +210,7 @@ MonoBehaviour:
   dropLayer: Drops
   destinationThreshold: 2
   idleTime: 1
+  maxStacks: 5
 --- !u!1001 &502959277502828767
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -511,7 +516,7 @@ PrefabInstance:
       value: 1.6185424
       objectReference: {fileID: 0}
     - target: {fileID: 7465265125427785221, guid: fdb2b9d1eddea4b16adc1463aa9e1c8c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 69b817f126e7e4c23a5ace3237c8e81f, type: 2}
     m_RemovedComponents: []
@@ -563,7 +568,7 @@ CapsuleCollider:
   m_Center: {x: 0, y: 0.74, z: 0}
 --- !u!95 &6230100243018290099
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -577,6 +582,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
