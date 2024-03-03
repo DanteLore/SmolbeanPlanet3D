@@ -54,7 +54,7 @@ public abstract class WalkStateBase : IState
         }
 
         // Commenting this out messes up colonists, but not (seemingly) animals!
-        if(navAgentResetEnabled && time - lastMoved > 1f)
+        if(navAgentResetEnabled && time - lastMoved > 5f * GameStateManager.Instance.SelectedGameSpeed)
         {
             // Kick the nav agent after small amount of inactivity
             navAgent.isStopped = true;
