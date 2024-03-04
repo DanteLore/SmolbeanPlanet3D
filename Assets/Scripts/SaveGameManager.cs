@@ -25,7 +25,7 @@ public class SaveGameManager : MonoBehaviour
 
     public static readonly string EXTENSION = ".sbp";
     public Texture2D groundTexture;
-
+    private MapGeneratorManager mapGenerator;
     private GridManager gridManager;
     private TreeGenerator treeGenerator;
     private RockGenerator rockGenerator;
@@ -45,6 +45,7 @@ public class SaveGameManager : MonoBehaviour
 
     void Start()
     {
+        mapGenerator = FindAnyObjectByType<MapGeneratorManager>();
         gridManager = FindAnyObjectByType<GridManager>();
         treeGenerator = FindAnyObjectByType<TreeGenerator>();
         rockGenerator = FindAnyObjectByType<RockGenerator>();
@@ -109,7 +110,7 @@ public class SaveGameManager : MonoBehaviour
 
     public IEnumerable<string> ListSaveFiles()
     {
-        DirectoryInfo info = new DirectoryInfo(Application.persistentDataPath);
+        DirectoryInfo info = new(Application.persistentDataPath);
         var files = info.GetFiles()
             .Where(f => f.Extension == EXTENSION)
             .OrderByDescending(f => f.CreationTime)
@@ -134,7 +135,7 @@ public class SaveGameManager : MonoBehaviour
 
         yield return null;
 
-        yield return gridManager.Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight, false);
+        yield return mapGenerator.Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight, false);
         
         if(saveData.treeData != null)
             treeGenerator.LoadTrees(saveData.treeData);

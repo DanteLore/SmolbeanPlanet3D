@@ -1,14 +1,14 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(GameMapGenerator))]
+[CustomEditor(typeof(GameMapCreator))]
 public class GameMapGeneratorEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
-        var mapGenerator = (GameMapGenerator)target;
+        var mapGenerator = (GameMapCreator)target;
 
         if(GUILayout.Button("Random Seed"))
         {

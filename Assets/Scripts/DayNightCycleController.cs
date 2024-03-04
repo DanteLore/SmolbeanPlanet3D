@@ -30,7 +30,7 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     [Range(0f, 24f)]
     public float timeOfDay;
     public int day = 1;
-    public int Priority { get { return 1; } }
+    public int Priority { get { return 4; } }
 
     public bool TimeIsBetween(float start, float end)
     {

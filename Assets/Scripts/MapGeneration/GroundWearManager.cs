@@ -6,7 +6,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 {
     public static GroundWearManager Instance { get; private set; }
 
-    public int Priority { get { return 0; }}
+    public int Priority { get { return 2; }}
 
     public bool NewGameOnly { get { return false; } }
     public bool RunModeOnly { get { return true; } }

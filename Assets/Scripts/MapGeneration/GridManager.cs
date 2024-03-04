@@ -1,14 +1,12 @@
 using UnityEngine;
 using System.Linq;
-using System;
 using Unity.AI.Navigation;
 using System.Collections.Generic;
 using UnityEngine.AI;
 using System.Collections;
 
-public class GridManager : MonoBehaviour
+public class GridManager : MonoBehaviour, IObjectGenerator
 {
-    public MapData mapData;
     public TerrainData terrainData;
     public Material meshMaterial;
     public float fuzzyEdgeFactor = 0.01f;
@@ -19,94 +17,50 @@ public class GridManager : MonoBehaviour
 
     public bool addMeshDebugGizmos = false;
 
+    public List<int> GameMap { get; private set; }
+    public int GameMapWidth { get; private set; }
+    public int GameMapHeight { get; private set; }
+    public int MaxLevelNumber { get; private set; }
+    public int DrawMapWidth { get; private set; }
+    public int DrawMapHeight { get; private set; }
+
     private MeshData[] map;
 
     private GameObject Ground { get { return transform.Find("Ground").gameObject; }}
     private GameObject Seabed { get { return transform.Find("Seabed").gameObject; }}
-    public List<int> GameMap {get; private set;}
-    public int GameMapWidth { get; private set; }
-    public int GameMapHeight { get; private set; }
-    public int MaxLevelNumber { get; private set; }
-    public int DrawMapWidth { get { return GameMapWidth + 1; }}
-    public int DrawMapHeight { get { return GameMapHeight + 1; }}
 
-    void Awake()
+    public int Priority { get { return 0; } }
+
+    public bool NewGameOnly { get { return false; } }
+
+    public bool RunModeOnly { get { return false; } }
+
+    public void Clear()
     {
-        BootstrapMapData();
-    }
-
-    public void BootstrapMapData()
-    {
-        if(mapData != null)
-        {
-            GameMapWidth = mapData.GameMapWidth;
-            GameMapHeight = mapData.GameMapWidth;
-            MaxLevelNumber = mapData.MaxLevelNumber;
-            GameMap = mapData.GameMap.ToList();
-        }
-    }
-
-    public IEnumerator Recreate(List<int> gameMap, int width, int height, bool newGame)
-    {        
-        DateTime startTime = DateTime.Now;
-
-        GameMapWidth = width;
-        GameMapHeight = height;
-        MaxLevelNumber = gameMap.Max();
-        GameMap = gameMap;
-
-        UnityEngine.Random.InitState(1);
-
-        yield return null;
-
         ClearMap();
+    }
 
-        yield return null;
-        Debug.Log($"Map cleared at {(DateTime.Now - startTime).TotalSeconds}s");
+    public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    {
+        GameMap = gameMap;
+        GameMapWidth = gameMapWidth;
+        GameMapHeight = gameMapHeight;
+        DrawMapWidth = gameMapWidth + 1;
+        DrawMapHeight = gameMapHeight + 1;
 
         var meshData = terrainData.meshData.ToList();
         var neighbourData = terrainData.neighbourData.ToDictionary(nd => nd.id, nd => nd);
 
         yield return null;
 
-        var generator = new MapGenerator(GameMapWidth, GameMapHeight, meshData, neighbourData);
-        yield return generator.GenerateMap(GameMap);
-        map = generator.tiles;
-
-        yield return null;
-        Debug.Log($"Map generated at {(DateTime.Now - startTime).TotalSeconds}s");
+        var wfc = new WaveFunctionCollapse(gameMapWidth, gameMapHeight, meshData, neighbourData);
+        yield return wfc.GenerateMap(gameMap);
+        map = wfc.tiles;
 
         yield return DrawMap();
 
-        yield return null;
-        Debug.Log($"Map drawn at {(DateTime.Now - startTime).TotalSeconds}s");
-
-        var generators =
-            FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
-            .OfType<IObjectGenerator>()
-            .Where(og => !og.RunModeOnly || Application.isPlaying)
-            .Where(og => !og.NewGameOnly || newGame);
-        foreach (var gen in generators.OrderBy(g => g.Priority))
-        {
-            yield return RunGeneratorTimed(gen);
-        }
-
-        yield return null;
-        Debug.Log($"Generators complete at {(DateTime.Now - startTime).TotalSeconds}s");
-
         UpdateNavMesh();
 
-        Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
-        yield return null;
-    }
-
-    private IEnumerator RunGeneratorTimed(IObjectGenerator gen)
-    {
-        DateTime startTime = DateTime.Now;
-        yield return null;
-        Debug.Log($"Generator starting: {gen.GetType().Name}");
-        yield return gen.Generate(GameMap, GameMapWidth, GameMapHeight);
-        Debug.Log($"Generator complete: {gen.GetType().Name} {(DateTime.Now - startTime).TotalSeconds}s");
         yield return null;
     }
 
@@ -118,7 +72,7 @@ public class GridManager : MonoBehaviour
 
     private IEnumerator DrawMap()
     {
-        Vector3 offset = new Vector3(DrawMapWidth * tileSize / 2.0f, 0f, DrawMapHeight * tileSize / 2.0f);
+        Vector3 offset = new(DrawMapWidth * tileSize / 2.0f, 0f, DrawMapHeight * tileSize / 2.0f);
 
         for (int x = 0; x < DrawMapWidth; x++)
         {
@@ -160,9 +114,6 @@ public class GridManager : MonoBehaviour
 
     private void ClearMap()
     {
-        foreach(var gen in GetComponentsInChildren<IObjectGenerator>().OrderByDescending(g => g.Priority))
-            gen.Clear();
-
         while (Ground.transform.childCount > 0)
             DestroyImmediate(Ground.transform.GetChild(0).gameObject);
 
@@ -199,12 +150,14 @@ public class GridManager : MonoBehaviour
         renderer.sharedMaterial = meshMaterial;
         var meshFilter = parent.AddComponent<MeshFilter>();
 
-        Mesh mesh = new Mesh();
-        mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+        Mesh mesh = new ()
+        {
+            indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
+        };
         mesh.CombineMeshes(combine);
         meshFilter.sharedMesh = mesh;
 
-        var collider = parent.AddComponent<MeshCollider>();
+        parent.AddComponent<MeshCollider>();
 
         if(addMeshDebugGizmos)
             parent.AddComponent<DebugMesh>();
@@ -230,7 +183,7 @@ public class GridManager : MonoBehaviour
 
     public float GetGridHeightAt(float worldX, float worldZ)
     { 
-        Ray ray = new Ray(new Vector3(worldX, 1000f, worldZ), Vector3.down);
+        Ray ray = new(new Vector3(worldX, 1000f, worldZ), Vector3.down);
         if(Physics.Raycast(ray, out RaycastHit hit, 2000f, LayerMask.GetMask(groundLayer, seaLayer))) 
         {
             return hit.point.y;

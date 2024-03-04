@@ -1,18 +1,17 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class NewGameMenuController : SmolbeanMenu
 {
-    UIDocument document;
+    private UIDocument document;
     private SoundPlayer soundPlayer;
-    GameMapGenerator mapGenerator;
-    GridManager gridManager;
-    VisualElement previewPane;
+    private GameMapCreator mapCreator;
+    private GridManager gridManager;
+    private MapGeneratorManager mapGeneratorManager;
+    private VisualElement previewPane;
     private TextField seedTextField;
     private List<int> map;
 
@@ -20,8 +19,9 @@ public class NewGameMenuController : SmolbeanMenu
     {
         document = GetComponent<UIDocument>();
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
-        mapGenerator = FindFirstObjectByType<GameMapGenerator>();
+        mapCreator = FindFirstObjectByType<GameMapCreator>();
         gridManager = FindFirstObjectByType<GridManager>();
+        mapGeneratorManager = FindFirstObjectByType<MapGeneratorManager>();
         
         var startGameButton = document.rootVisualElement.Q<Button>("startGameButton");
         startGameButton.clicked += StartGameClicked;
@@ -30,64 +30,64 @@ public class NewGameMenuController : SmolbeanMenu
         randomButton.clicked += RandomButtonClicked;
 
         var slider = document.rootVisualElement.Q<Slider>("noiseScale1Slider");
-        slider.RegisterValueChangedCallback(v => { mapGenerator.noiseScale1 = v.newValue; SettingChanged(); });
-        var range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.noiseScale1)).GetCustomAttribute<RangeAttribute>();
+        slider.RegisterValueChangedCallback(v => { mapCreator.noiseScale1 = v.newValue; SettingChanged(); });
+        var range = typeof(GameMapCreator).GetField(nameof(GameMapCreator.noiseScale1)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
-        slider.value = mapGenerator.noiseScale1;
+        slider.value = mapCreator.noiseScale1;
 
         slider = document.rootVisualElement.Q<Slider>("noiseScale2Slider");
-        slider.RegisterValueChangedCallback(v => { mapGenerator.noiseScale2 = v.newValue; SettingChanged(); });
-        range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.noiseScale2)).GetCustomAttribute<RangeAttribute>();
+        slider.RegisterValueChangedCallback(v => { mapCreator.noiseScale2 = v.newValue; SettingChanged(); });
+        range = typeof(GameMapCreator).GetField(nameof(GameMapCreator.noiseScale2)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
-        slider.value = mapGenerator.noiseScale2;
+        slider.value = mapCreator.noiseScale2;
 
         slider = document.rootVisualElement.Q<Slider>("noiseScale3Slider");
-        slider.RegisterValueChangedCallback(v => { mapGenerator.noiseScale3 = v.newValue; SettingChanged(); });
-        range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.noiseScale3)).GetCustomAttribute<RangeAttribute>();
+        slider.RegisterValueChangedCallback(v => { mapCreator.noiseScale3 = v.newValue; SettingChanged(); });
+        range = typeof(GameMapCreator).GetField(nameof(GameMapCreator.noiseScale3)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
-        slider.value = mapGenerator.noiseScale3;
+        slider.value = mapCreator.noiseScale3;
 
         slider = document.rootVisualElement.Q<Slider>("noiseStrength1Slider");
-        slider.RegisterValueChangedCallback(v => { mapGenerator.noiseStength1 = v.newValue; SettingChanged(); });
-        range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.noiseStength1)).GetCustomAttribute<RangeAttribute>();
+        slider.RegisterValueChangedCallback(v => { mapCreator.noiseStength1 = v.newValue; SettingChanged(); });
+        range = typeof(GameMapCreator).GetField(nameof(GameMapCreator.noiseStength1)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
-        slider.value = mapGenerator.noiseStength1;
+        slider.value = mapCreator.noiseStength1;
 
         slider = document.rootVisualElement.Q<Slider>("noiseStrength2Slider");
-        slider.RegisterValueChangedCallback(v => { mapGenerator.noiseStength2 = v.newValue; SettingChanged(); });
-        range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.noiseStength2)).GetCustomAttribute<RangeAttribute>();
+        slider.RegisterValueChangedCallback(v => { mapCreator.noiseStength2 = v.newValue; SettingChanged(); });
+        range = typeof(GameMapCreator).GetField(nameof(GameMapCreator.noiseStength2)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
-        slider.value = mapGenerator.noiseStength2;
+        slider.value = mapCreator.noiseStength2;
 
         slider = document.rootVisualElement.Q<Slider>("noiseStrength3Slider");
-        slider.RegisterValueChangedCallback(v => { mapGenerator.noiseStength3 = v.newValue; SettingChanged(); });
-        range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.noiseStength3)).GetCustomAttribute<RangeAttribute>();
+        slider.RegisterValueChangedCallback(v => { mapCreator.noiseStength3 = v.newValue; SettingChanged(); });
+        range = typeof(GameMapCreator).GetField(nameof(GameMapCreator.noiseStength3)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
-        slider.value = mapGenerator.noiseStength3;
+        slider.value = mapCreator.noiseStength3;
 
         slider = document.rootVisualElement.Q<Slider>("heightAdjustSlider");
-        slider.RegisterValueChangedCallback(v => { mapGenerator.heightBias = v.newValue; SettingChanged(); });
-        range = typeof(GameMapGenerator).GetField(nameof(GameMapGenerator.heightBias)).GetCustomAttribute<RangeAttribute>();
+        slider.RegisterValueChangedCallback(v => { mapCreator.heightBias = v.newValue; SettingChanged(); });
+        range = typeof(GameMapCreator).GetField(nameof(GameMapCreator.heightBias)).GetCustomAttribute<RangeAttribute>();
         slider.lowValue = range.min;
         slider.highValue = range.max;
-        slider.value = mapGenerator.heightBias;
+        slider.value = mapCreator.heightBias;
 
         var cancelButton = document.rootVisualElement.Q<Button>("cancelButton");
         cancelButton.clicked += CancelButtonClicked;
 
         seedTextField = document.rootVisualElement.Q<TextField>("seedTextField");
         seedTextField.RegisterValueChangedCallback(v => { SettingChanged(); });
-        seedTextField.value = mapGenerator.seed.ToString();
+        seedTextField.value = mapCreator.seed.ToString();
 
         previewPane = document.rootVisualElement.Q<VisualElement>("newMapPreview");
         
-        map = gridManager.GameMap;
+        map = mapGeneratorManager.GameMap;
         DrawMap();
     }
 
@@ -114,7 +114,7 @@ public class NewGameMenuController : SmolbeanMenu
         yield return null;
         document.rootVisualElement.style.display = DisplayStyle.None;
         // Show a please wait message here
-        yield return StartCoroutine(gridManager.Recreate(map, mapGenerator.mapWidth, mapGenerator.mapHeight, true));
+        yield return StartCoroutine(mapGeneratorManager.Recreate(map, mapCreator.mapWidth, mapCreator.mapHeight, true));
         // Hide the please wait message here
         MenuController.Instance.CloseAll();
     }
@@ -130,22 +130,22 @@ public class NewGameMenuController : SmolbeanMenu
     {
         if (int.TryParse(seedTextField.value, out int seed))
         {
-            map = mapGenerator.GenerateMap(seed);
+            map = mapCreator.GenerateMap(seed);
         }
     }
 
     private void DrawMap()
     {
-        Texture2D texture = new Texture2D(mapGenerator.mapWidth, mapGenerator.mapHeight);
+        Texture2D texture = new Texture2D(mapCreator.mapWidth, mapCreator.mapHeight);
         texture.filterMode = FilterMode.Point;
 
         // Walk y backwards, because textures start in the top left
-        for (int y = mapGenerator.mapHeight - 1; y >= 0; y--)
+        for (int y = mapCreator.mapHeight - 1; y >= 0; y--)
         {
-            for (int x = 0; x < mapGenerator.mapWidth; x++)
+            for (int x = 0; x < mapCreator.mapWidth; x++)
             {
-                int i = map[y * mapGenerator.mapWidth + x];
-                float g = (mapGenerator.maxLevelNumber + 1.0f - i) / (mapGenerator.maxLevelNumber + 1.0f);
+                int i = map[y * mapCreator.mapWidth + x];
+                float g = (mapCreator.maxLevelNumber + 1.0f - i) / (mapCreator.maxLevelNumber + 1.0f);
                 Color color = (i == 0) ? Color.blue : new Color(0f, Mathf.Lerp(0.1f, 1.0f, g), 0f);
                 texture.SetPixel(x, y, color);
             }
