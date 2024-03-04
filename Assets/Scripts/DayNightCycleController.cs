@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -84,10 +85,11 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
         day = 1;
     }
 
-    public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
         timeOfDay = gameStartTime;
         day = 1;
+        yield return null;
     }
 
     public TimeOfDaySaveData GetSaveData()

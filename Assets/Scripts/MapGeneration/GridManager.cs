@@ -73,7 +73,7 @@ public class GridManager : MonoBehaviour
         yield return null;
         Debug.Log($"Map generated at {(DateTime.Now - startTime).TotalSeconds}s");
 
-        DrawMap();
+        DrawMap(); // NOTE: This method is very slow when coroutined...
 
         yield return null;
         Debug.Log($"Map drawn at {(DateTime.Now - startTime).TotalSeconds}s");
@@ -85,9 +85,7 @@ public class GridManager : MonoBehaviour
             .Where(og => !og.NewGameOnly || newGame);
         foreach (var gen in generators.OrderBy(g => g.Priority))
         {
-            DateTime genStart = DateTime.Now;
-            gen.Generate(GameMap, GameMapWidth, GameMapHeight);
-            Debug.Log($"Generator: {gen.GetType().Name} {(DateTime.Now - genStart).TotalSeconds}s");
+            yield return RunGeneratorTimed(gen);
         }
 
         yield return null;
@@ -96,6 +94,16 @@ public class GridManager : MonoBehaviour
         UpdateNavMesh();
 
         Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
+        yield return null;
+    }
+
+    private IEnumerator RunGeneratorTimed(IObjectGenerator gen)
+    {
+        DateTime startTime = DateTime.Now;
+        yield return null;
+        Debug.Log($"Generator starting: {gen.GetType().Name}");
+        yield return gen.Generate(GameMap, GameMapWidth, GameMapHeight);
+        Debug.Log($"Generator complete: {gen.GetType().Name} {(DateTime.Now - startTime).TotalSeconds}s");
         yield return null;
     }
 

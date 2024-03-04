@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Collections;
 
 public class TreeGenerator : MonoBehaviour, IObjectGenerator
 {
@@ -42,11 +43,9 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
             InstantiateTree(treeData);
     }
 
-    public void Generate(List<int> gameMap, int mapWidth, int mapHeight)
+    public IEnumerator Generate(List<int> gameMap, int mapWidth, int mapHeight)
     {
         gridManager = FindAnyObjectByType<GridManager>();
-
-        var treeData = new List<NatureObjectSaveData>();
 
         Clear();
 
@@ -66,15 +65,16 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
                         if(sample > noiseThreshold)
                         {
                             var data = GenerateTreeData(z, x);
-                            if(TreeNotInTheSea(data))
-                                treeData.Add(data);
+                            if (TreeNotInTheSea(data))
+                            {
+                                InstantiateTree(data);
+                            }
                         }
                     }
                 }
             }
         }
-
-        treeData.ForEach(InstantiateTree);
+        yield return null;
     }
 
     private bool TreeNotInTheSea(NatureObjectSaveData data)

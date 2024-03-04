@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Collections;
 
 public class RockGenerator : MonoBehaviour, IObjectGenerator
 {
@@ -28,10 +29,10 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
 
     public MapData mapData;
 
-    public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
         Clear();
-        var gridManager = GameObject.FindAnyObjectByType<GridManager>();
+        var gridManager = FindAnyObjectByType<GridManager>();
 
         int numberOfRocksToGenerate = Mathf.FloorToInt(gameMapWidth * gameMapHeight * rocksPerGridSquareFactor);
         
@@ -59,6 +60,7 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
                 }
             }
         }
+        yield return null;
     }
 
     private NatureObjectSaveData GenerateRockData(GridManager gridManager, Rect squareBounds)

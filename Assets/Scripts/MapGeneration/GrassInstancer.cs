@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.Profiling;
+using System.Collections;
 
 public class GrassInstancer : MonoBehaviour, IObjectGenerator
 {
@@ -33,7 +34,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     public float renderThreshold = 100f;
 
     private List<Batch> batches;
-    private int rayLayerMask;
+    private int occlusionLayerMask;
     private int groundLayerMask;
     private int groundLayerNum;
     private float xNoiseOffset;
@@ -66,7 +67,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     {
         gridManager = FindFirstObjectByType<GridManager>();
         renderThresholdSqr = renderThreshold * renderThreshold;
-        GenerateGrass();
+        StartCoroutine(GenerateGrass());
     }
 
     public void Clear()
@@ -74,21 +75,23 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         batches = new List<Batch>();
     }
 
-    public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        GenerateGrass();
+        yield return GenerateGrass();
     }
 
-    private void GenerateGrass()
+    private IEnumerator GenerateGrass()
     {
+        batches = new List<Batch>();
+
         //System.DateTime start = System.DateTime.Now;
         //Random.InitState(randomSeed);
         xNoiseOffset = Random.Range(0f, 1000f);
         yNoiseOffset = Random.Range(0f, 1000f);
 
-        rayLayerMask = LayerMask.GetMask(occlusionLayers.Append(groundLayer).ToArray());
-        groundLayerMask = LayerMask.GetMask(groundLayer);
+        occlusionLayerMask = LayerMask.GetMask(occlusionLayers.ToArray());
         groundLayerNum = LayerMask.NameToLayer(groundLayer);
+        groundLayerMask = LayerMask.GetMask(groundLayer);
 
         mapBounds = gridManager.GetIslandBounds();
         float area = mapBounds.size.x * mapBounds.size.y;
@@ -97,13 +100,18 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         
         List<Vector3> grassBlades = new List<Vector3>();
 
-        for(int i = 0; i < instanceCount; i++)
+        var min = mapBounds.min; // Cache for speed!
+        var max = mapBounds.max;
+        var size = mapBounds.size;
+
+        for (int i = 0; i < instanceCount; i++)
         {
-            if(TryCreateGrassBlade(mapBounds, out Vector3 pos))
+            if (TryCreateGrassBlade(min, max, size, out Vector3 pos))
             {
                 grassBlades.Add(pos);
             }
         }
+        yield return null;
 
         //Debug.Log($"Actually created {grassBlades.Count} grass blades");
 
@@ -119,6 +127,8 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         //Debug.Log("Batches created by quad tree: " + batches.Count());
         //Debug.Log(string.Join(",", batches.Select(b => b.batchData.Count)));
         //Debug.Log($"Setup grass instance data in {(System.DateTime.Now - start).Seconds}s");
+
+        yield return null;
     }
 
     private List<Batch> CreateBatchesBinarySplit(Bounds bounds, List<Vector3> grassBlades, bool splitHorizontal = true)
@@ -173,26 +183,29 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         return matrix;
     }
 
-    private bool TryCreateGrassBlade(Bounds bounds, out Vector3 pos)
+    private bool TryCreateGrassBlade(Vector3 min, Vector3 max, Vector3 size, out Vector3 pos)
     {
-        float posX = Random.Range(bounds.min.x, bounds.max.x);
-        float posZ = Random.Range(bounds.min.z, bounds.max.z);
+        float posX = Random.Range(min.x, max.x);
+        float posZ = Random.Range(min.z, max.z);
         pos = Vector3.zero;
 
-        float noise = Mathf.PerlinNoise((posX + xNoiseOffset) / (mapBounds.size.x * noiseScale), (posZ + yNoiseOffset) / (mapBounds.size.z * noiseScale));
+        float noise = Mathf.PerlinNoise((posX + xNoiseOffset) / (size.x * noiseScale), (posZ + yNoiseOffset) / (size.z * noiseScale));
         if (Random.Range(0.1f, 1.0f) > noise)
             return false;
 
         Ray ray = new Ray(new Vector3(posX, 1000f, posZ), Vector3.down);
-        if (!Physics.Raycast(ray, out RaycastHit hit, 2000f, rayLayerMask))
+        if (!Physics.Raycast(ray, out RaycastHit groundHit, 2000f, groundLayerMask))
             return false;
 
-        float angle = Vector3.Angle(Vector3.up, hit.normal);
+        float angle = Vector3.Angle(Vector3.up, groundHit.normal);
         if (angle > maxSlopeAngle)
             return false;
 
-        var posY = hit.point.y;
-        if (posY < minHeight || hit.transform.gameObject.layer != groundLayerNum)
+        var posY = groundHit.point.y;
+        if (posY < minHeight)
+            return false;
+
+        if (Physics.Raycast(ray, out RaycastHit _, 2000f, occlusionLayerMask))
             return false;
 
         pos = new Vector3(posX, posY, posZ);

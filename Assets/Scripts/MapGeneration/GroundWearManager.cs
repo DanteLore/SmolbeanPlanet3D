@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -223,8 +224,9 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         UpdateTexture();
     }
 
-    public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
         InvokeRepeating(nameof(UpdateTexture), 1.0f, textureUpdateDelay);
+        yield return null;
     }
 }

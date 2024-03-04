@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 using UnityEngine.AI;
+using System.Collections;
 
 public class AnimalController : MonoBehaviour, IObjectGenerator
 {
     public static AnimalController Instance { get; private set; }
 
     public AnimalSpec[] animalSpecs;
-    public int Priority { get { return 12; } }
+    public int Priority { get { return 150; } }
     public bool NewGameOnly { get { return true; } }
     public bool RunModeOnly { get { return true; } }
     public float edgeBuffer = 0.1f;
@@ -30,7 +31,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
             DestroyImmediate(transform.GetChild(0).gameObject);
     }
 
-    public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
         var gridManager = FindAnyObjectByType<GridManager>();
 
@@ -78,6 +79,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
                 // Finally, create the animal
                 CreateAnimal(species, pos);
                 animalsToAdd--;
+                yield return null;
             }
         }
     }

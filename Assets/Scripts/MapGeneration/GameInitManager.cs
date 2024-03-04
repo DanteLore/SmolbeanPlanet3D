@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Collections;
 
 public class GameInitManager : MonoBehaviour, IObjectGenerator
 {
@@ -19,7 +20,7 @@ public class GameInitManager : MonoBehaviour, IObjectGenerator
         // Nothing to do here, as the shipwreck will be controlled by the building manager once it's created
     }
 
-    public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
         GameStateManager.Instance.StartGame();
 
@@ -28,6 +29,8 @@ public class GameInitManager : MonoBehaviour, IObjectGenerator
         ClearNatureObjectsAround(pos);
         
         cameraController.MoveTo(pos);
+
+        yield return null;
     }
 
     private Vector3 PlaceShipwreck(List<int> gameMap, int gameMapWidth, int gameMapHeight)

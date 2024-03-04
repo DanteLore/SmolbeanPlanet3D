@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 
 public interface IObjectGenerator
@@ -7,5 +8,5 @@ public interface IObjectGenerator
     public bool RunModeOnly { get; }
     public void Clear();
 
-    public void Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight);
+    public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight);
 }
