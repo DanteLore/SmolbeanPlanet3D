@@ -97,7 +97,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         List<Vector3> grassBlades = new();
         yield return GenerateGrassBlades(grassBlades);
 
-        Debug.Log($"Created {grassBlades.Count} grass blades");
+        //Debug.Log($"Created {grassBlades.Count} grass blades");
 
         yield return null;
 
@@ -110,8 +110,8 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
         batches = CreateBatchesBinarySplit(mapBounds, grassBlades);
 
-        Debug.Log("Batches created by quad tree: " + batches.Count());
-        Debug.Log(string.Join(",", batches.Select(b => b.batchData.Count)));
+        //Debug.Log("Batches created by quad tree: " + batches.Count());
+        //Debug.Log(string.Join(",", batches.Select(b => b.batchData.Count)));
         //Debug.Log($"Setup grass instance data in {(System.DateTime.Now - start).Seconds}s");
 
         yield return null;
