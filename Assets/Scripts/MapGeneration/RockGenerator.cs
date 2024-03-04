@@ -26,6 +26,7 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
     public float tiltMaxDegrees = 6.0f;
     public string natureLayer = "Nature";
     public bool rocksInWaterEnabled = false;
+    public int rocksToGeneratePerFrame = 100;
 
     public MapData mapData;
 
@@ -57,6 +58,8 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
                     InstantiateRock(rockData);
 
                     numberOfRocksToGenerate--;
+                    if (numberOfRocksToGenerate % rocksToGeneratePerFrame == 0)
+                        yield return null;
                 }
             }
         }

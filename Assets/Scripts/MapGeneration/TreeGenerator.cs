@@ -73,8 +73,9 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
                     }
                 }
             }
+
+            yield return null;
         }
-        yield return null;
     }
 
     private bool TreeNotInTheSea(NatureObjectSaveData data)

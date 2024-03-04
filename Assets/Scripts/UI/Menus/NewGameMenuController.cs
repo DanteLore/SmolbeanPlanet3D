@@ -110,12 +110,13 @@ public class NewGameMenuController : SmolbeanMenu
 
     IEnumerator StartGame()
     {
-        // Show a please wait message here
         soundPlayer.Play("Click");
         yield return null;
+        document.rootVisualElement.style.display = DisplayStyle.None;
+        // Show a please wait message here
         yield return StartCoroutine(gridManager.Recreate(map, mapGenerator.mapWidth, mapGenerator.mapHeight, true));
+        // Hide the please wait message here
         MenuController.Instance.CloseAll();
-        yield return null;
     }
 
     private void RandomButtonClicked()

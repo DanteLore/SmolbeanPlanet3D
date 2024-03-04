@@ -73,7 +73,7 @@ public class GridManager : MonoBehaviour
         yield return null;
         Debug.Log($"Map generated at {(DateTime.Now - startTime).TotalSeconds}s");
 
-        DrawMap(); // NOTE: This method is very slow when coroutined...
+        yield return DrawMap();
 
         yield return null;
         Debug.Log($"Map drawn at {(DateTime.Now - startTime).TotalSeconds}s");
@@ -113,7 +113,7 @@ public class GridManager : MonoBehaviour
         surface.BuildNavMesh();
     }
 
-    private void DrawMap()
+    private IEnumerator DrawMap()
     {
         Vector3 offset = new Vector3(DrawMapWidth * tileSize / 2.0f, 0f, DrawMapHeight * tileSize / 2.0f);
 
@@ -144,6 +144,7 @@ public class GridManager : MonoBehaviour
                 // Seabed is created to a separate mesh, as only the ground should be navigable
                 tileObj.transform.parent = meshData.name.StartsWith("Seabed") ? Seabed.transform : Ground.transform;
             }
+            yield return null;
         }
 
         // Seabed can be merged to a single mesh

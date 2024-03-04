@@ -16,6 +16,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
     public bool RunModeOnly { get { return true; } }
     public float edgeBuffer = 0.1f;
     public string natureLayer = "Nature";
+    public int animalsToAddPerFrame = 10;
 
     void Awake()
     {
@@ -79,7 +80,9 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
                 // Finally, create the animal
                 CreateAnimal(species, pos);
                 animalsToAdd--;
-                yield return null;
+
+                if(animalsToAdd % animalsToAddPerFrame == 0)
+                    yield return null; 
             }
         }
     }
