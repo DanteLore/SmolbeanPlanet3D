@@ -82,10 +82,11 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
     private IEnumerator GenerateGrass()
     {
+        mapBounds = gridManager.GetIslandBounds();
         batches = new List<Batch>();
 
         //System.DateTime start = System.DateTime.Now;
-        //Random.InitState(randomSeed);
+        Random.InitState(randomSeed);
         xNoiseOffset = Random.Range(0f, 1000f);
         yNoiseOffset = Random.Range(0f, 1000f);
 
@@ -93,27 +94,12 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         groundLayerNum = LayerMask.NameToLayer(groundLayer);
         groundLayerMask = LayerMask.GetMask(groundLayer);
 
-        mapBounds = gridManager.GetIslandBounds();
-        float area = mapBounds.size.x * mapBounds.size.y;
-        int instanceCount = Mathf.CeilToInt(instanceAttemptsPerSquareMeter * area);
-        //Debug.Log($"Map area {area}sqm => {instanceCount} instance attempts total");
-        
-        List<Vector3> grassBlades = new List<Vector3>();
+        List<Vector3> grassBlades = new();
+        yield return GenerateGrassBlades(grassBlades);
 
-        var min = mapBounds.min; // Cache for speed!
-        var max = mapBounds.max;
-        var size = mapBounds.size;
+        Debug.Log($"Created {grassBlades.Count} grass blades");
 
-        for (int i = 0; i < instanceCount; i++)
-        {
-            if (TryCreateGrassBlade(min, max, size, out Vector3 pos))
-            {
-                grassBlades.Add(pos);
-            }
-        }
         yield return null;
-
-        //Debug.Log($"Actually created {grassBlades.Count} grass blades");
 
         // Batch collapse performance
         // No batch collapse:       ~5.3ms      (Fixed batch grid based on BATCH_SIZE and number of blades per m2)
@@ -124,11 +110,33 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
         batches = CreateBatchesBinarySplit(mapBounds, grassBlades);
 
-        //Debug.Log("Batches created by quad tree: " + batches.Count());
-        //Debug.Log(string.Join(",", batches.Select(b => b.batchData.Count)));
+        Debug.Log("Batches created by quad tree: " + batches.Count());
+        Debug.Log(string.Join(",", batches.Select(b => b.batchData.Count)));
         //Debug.Log($"Setup grass instance data in {(System.DateTime.Now - start).Seconds}s");
 
         yield return null;
+    }
+
+    private IEnumerator GenerateGrassBlades(List<Vector3> grassBlades)
+    {
+        Vector3 size = mapBounds.size;
+        float tileArea = gridManager.tileSize * gridManager.tileSize;
+
+        foreach (var meshRenderer in gridManager.GetAllGroundMeshes())
+        {
+            Bounds bounds = meshRenderer.bounds;
+
+            int instanceCount = Mathf.CeilToInt(tileArea * instanceAttemptsPerSquareMeter);
+
+            for (int i = 0; i < instanceCount; i++)
+            {
+                if (TryCreateGrassBlade(bounds.min, bounds.max, size, out Vector3 pos))
+                {
+                    grassBlades.Add(pos);
+                }
+            }
+        }
+        return null;
     }
 
     private List<Batch> CreateBatchesBinarySplit(Bounds bounds, List<Vector3> grassBlades, bool splitHorizontal = true)
@@ -193,8 +201,8 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         if (Random.Range(0.1f, 1.0f) > noise)
             return false;
 
-        Ray ray = new Ray(new Vector3(posX, 1000f, posZ), Vector3.down);
-        if (!Physics.Raycast(ray, out RaycastHit groundHit, 2000f, groundLayerMask))
+        Ray ray = new (new Vector3(posX, 1000f, posZ), Vector3.down);
+        if (!Physics.Raycast(ray, out RaycastHit groundHit, float.PositiveInfinity, groundLayerMask))
             return false;
 
         float angle = Vector3.Angle(Vector3.up, groundHit.normal);
@@ -205,7 +213,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         if (posY < minHeight)
             return false;
 
-        if (Physics.Raycast(ray, out RaycastHit _, 2000f, occlusionLayerMask))
+        if (Physics.Raycast(ray, out RaycastHit _, float.PositiveInfinity, occlusionLayerMask))
             return false;
 
         pos = new Vector3(posX, posY, posZ);

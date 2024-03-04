@@ -248,4 +248,9 @@ public class GridManager : MonoBehaviour
 
         return new Vector2Int(Mathf.FloorToInt(x), Mathf.FloorToInt(y));
     }
+
+    public IEnumerable<MeshRenderer> GetAllGroundMeshes()
+    {
+        return Ground.GetComponentsInChildren<MeshRenderer>();
+    }
 }
