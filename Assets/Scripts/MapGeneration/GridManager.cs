@@ -68,7 +68,10 @@ public class GridManager : MonoBehaviour
         var neighbourData = terrainData.neighbourData.ToDictionary(nd => nd.id, nd => nd);
 
         yield return null;
-        map = new MapGenerator(GameMapWidth, GameMapHeight, meshData, neighbourData).GenerateMap(GameMap);
+
+        var generator = new MapGenerator(GameMapWidth, GameMapHeight, meshData, neighbourData);
+        yield return generator.GenerateMap(GameMap);
+        map = generator.tiles;
 
         yield return null;
         Debug.Log($"Map generated at {(DateTime.Now - startTime).TotalSeconds}s");

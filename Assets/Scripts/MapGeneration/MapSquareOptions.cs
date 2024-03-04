@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class MapSquareOptions
 {
-    private List<int> options;
+    private int[] options;
     public int X { get; private set; }
     public int Y { get; private set; }
 
-    public bool IsCollapsed { get { return options.Count == 1; }}
+    public bool IsCollapsed { get { return options.Length == 1; }}
 
     public int TileId { get { return options.First(); }}
 
-    public int NumberOfPossibilities { get { return options.Count; }}
+    public int NumberOfPossibilities { get { return options.Length; }}
 
     public IReadOnlyList<int> Options { get { return options; }}
 
-    public MapSquareOptions(int x, int y, List<int> options)
+    public MapSquareOptions(int x, int y, int[] options)
     {
         this.options = options;
         this.X = x;
@@ -26,15 +26,15 @@ public class MapSquareOptions
 
     public void Choose(int option)
     {
-        options = new List<int> { option };
+        options = new int[] { option };
     }
 
     public bool Restrict(IEnumerable<int> allowed)
     {
-        int cnt = options.Count;
-        var newOptions = options.Intersect(allowed).ToList();
+        int cnt = options.Length;
+        var newOptions = options.Intersect(allowed).ToArray();
 
-        if(options.Count == 0)
+        if(options.Length == 0)
         {
             Debug.Log($"Options[{options.Count()}] {string.Join(", ", options)}");
             Debug.Log($"Allowed[{allowed.Count()}] {string.Join(", ", allowed)}");
@@ -42,6 +42,6 @@ public class MapSquareOptions
         }
 
         options = newOptions;
-        return cnt != options.Count;
+        return cnt != options.Length;
     }
 }

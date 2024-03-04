@@ -1,20 +1,20 @@
 using System.Linq;
 using System.Collections.Generic;
-using System;
-using UnityEngine;
+using System.Collections;
 
 public class MapGenerator 
 {
-    private int drawMapWidth;
-    private int drawMapHeight;
-    private int gameMapWidth;
-    private int gameMapHeight;
-    private Dictionary<String, MeshData> meshData;
-    private Dictionary<int, NeighbourData> neighbourData;
-    private List<int> allTileOptions;
-    private List<int> seabedOptions;
-    private Vector2 mapCentre;
+    private readonly int drawMapWidth;
+    private readonly int drawMapHeight;
+    private readonly int gameMapWidth;
+    private readonly int gameMapHeight;
+    private readonly Dictionary<string, MeshData> meshData;
+    private readonly Dictionary<int, NeighbourData> neighbourData;
+    private readonly int[] allTileOptions;
+    private readonly int[] seabedOptions;
     MapSquareOptions[] drawMap;
+
+    public MeshData[] tiles;
 
     public MapGenerator(int gameMapWidth, int gameMapHeight, List<MeshData> meshData, Dictionary<int, NeighbourData> neighbourData)
     {
@@ -25,19 +25,18 @@ public class MapGenerator
         this.meshData = meshData.ToDictionary(md => md.name, md => md);
         this.neighbourData = neighbourData;
 
-        allTileOptions = neighbourData.Keys.ToList();
-        seabedOptions = this.meshData.Values.Where(x => x.name.StartsWith("Seabed")).Select(x => x.id).ToList();
-        mapCentre = new Vector2(drawMapWidth / 2.0f, drawMapHeight / 2.0f);
+        allTileOptions = neighbourData.Keys.ToArray();
+        seabedOptions = this.meshData.Values.Where(x => x.name.StartsWith("Seabed")).Select(x => x.id).ToArray();
     }
 
-    public MeshData[] GenerateMap(List<int> gameMap)
+    public IEnumerator GenerateMap(List<int> gameMap)
     {
         drawMap = InitialiseMap();
+        yield return null;
 
-        //AddOcean(gameMap);
+        yield return ApplyGameMapRestrictions(gameMap);
 
-        ApplyGameMapRestrictions(gameMap);
-
+        int i = 0;
         while (drawMap.Any(ms => !ms.IsCollapsed))
         {
             // Select square that isn't collapsed yet with lowest possibilities
@@ -47,17 +46,18 @@ public class MapGenerator
 
             // Collapse - recurse until stable
             CollapseAt(target);
+
+            if(i++ % 1000 == 0)
+                yield return null;
         }
 
-        var tiles = drawMap.Select(m => meshData[neighbourData[m.TileId].name]).ToArray();
-
-        return tiles;
+        tiles = drawMap.Select(m => meshData[neighbourData[m.TileId].name]).ToArray();
     }
 
-    private void ApplyGameMapRestrictions(List<int> gameMap)
+    private IEnumerator ApplyGameMapRestrictions(List<int> gameMap)
     {
         var recurseInto = new List<MapSquareOptions>();
-
+        
         for(int y = 0; y < gameMapHeight; y++)
         {
             for(int x = 0; x < gameMapWidth; x++)
@@ -84,9 +84,12 @@ public class MapGenerator
                     recurseInto.Add(frontRight);
             }
         }
+        yield return null;
 
-        foreach(var square in recurseInto)
+        foreach (var square in recurseInto)
             CollapseAt(square);
+
+        yield return null;
     }
 
     private MapSquareOptions[] InitialiseMap()
@@ -113,7 +116,7 @@ public class MapGenerator
 
     private void CollapseAt(MapSquareOptions target)
     {
-        List<MapSquareOptions> recurseInto = new List<MapSquareOptions>();
+        List<MapSquareOptions> recurseInto = new();
         
         // Left
         if(target.X > 0)
