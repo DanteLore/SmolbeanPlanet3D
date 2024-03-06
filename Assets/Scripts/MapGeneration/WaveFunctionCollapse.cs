@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Collections.Generic;
-using System.Collections;
+using System;
 
 public class WaveFunctionCollapse 
 {
@@ -12,12 +12,14 @@ public class WaveFunctionCollapse
     private readonly Dictionary<int, NeighbourData> neighbourData;
     private readonly int[] allTileOptions;
     private readonly int[] seabedOptions;
-    MapSquareOptions[] drawMap;
-
+    private MapSquareOptions[] drawMap;
+    private Random rand;
     public MeshData[] tiles;
 
     public WaveFunctionCollapse(int gameMapWidth, int gameMapHeight, List<MeshData> meshData, Dictionary<int, NeighbourData> neighbourData)
     {
+        rand = new Random(0);
+
         this.gameMapWidth = gameMapWidth;
         this.gameMapHeight = gameMapHeight;
         this.drawMapWidth = gameMapWidth + 1;
@@ -29,14 +31,12 @@ public class WaveFunctionCollapse
         seabedOptions = this.meshData.Values.Where(x => x.name.StartsWith("Seabed")).Select(x => x.id).ToArray();
     }
 
-    public IEnumerator GenerateMap(List<int> gameMap)
+    public void GenerateMap(List<int> gameMap)
     {
         drawMap = InitialiseMap();
-        yield return null;
 
-        yield return ApplyGameMapRestrictions(gameMap);
+        ApplyGameMapRestrictions(gameMap);
 
-        int i = 0;
         while (drawMap.Any(ms => !ms.IsCollapsed))
         {
             // Select square that isn't collapsed yet with lowest possibilities
@@ -46,15 +46,12 @@ public class WaveFunctionCollapse
 
             // Collapse - recurse until stable
             CollapseAt(target);
-
-            if(i++ % 1000 == 0)
-                yield return null;
         }
 
         tiles = drawMap.Select(m => meshData[neighbourData[m.TileId].name]).ToArray();
     }
 
-    private IEnumerator ApplyGameMapRestrictions(List<int> gameMap)
+    private void ApplyGameMapRestrictions(List<int> gameMap)
     {
         var recurseInto = new List<MapSquareOptions>();
         
@@ -84,12 +81,9 @@ public class WaveFunctionCollapse
                     recurseInto.Add(frontRight);
             }
         }
-        yield return null;
 
         foreach (var square in recurseInto)
             CollapseAt(square);
-
-        yield return null;
     }
 
     private MapSquareOptions[] InitialiseMap()
@@ -111,7 +105,7 @@ public class WaveFunctionCollapse
 
     private int SelectRandomTile(MapSquareOptions target)
     {
-        return target.Options[UnityEngine.Random.Range(0, target.Options.Count)];
+        return target.Options[rand.Next(target.Options.Count)];
     }
 
     private void CollapseAt(MapSquareOptions target)

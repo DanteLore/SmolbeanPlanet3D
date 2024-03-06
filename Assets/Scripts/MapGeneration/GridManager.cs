@@ -4,6 +4,7 @@ using Unity.AI.Navigation;
 using System.Collections.Generic;
 using UnityEngine.AI;
 using System.Collections;
+using System.Threading;
 
 public class GridManager : MonoBehaviour, IObjectGenerator
 {
@@ -54,7 +55,9 @@ public class GridManager : MonoBehaviour, IObjectGenerator
         yield return null;
 
         var wfc = new WaveFunctionCollapse(gameMapWidth, gameMapHeight, meshData, neighbourData);
-        yield return wfc.GenerateMap(gameMap);
+        wfc.GenerateMap(gameMap);
+        yield return null;
+
         map = wfc.tiles;
 
         yield return DrawMap();

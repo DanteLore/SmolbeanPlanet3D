@@ -1,12 +1,17 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CameraController : MonoBehaviour
+public class CameraController : MonoBehaviour, IObjectGenerator
 {
     private CameraControlActions cameraActions;
     private InputAction movement;
     private Transform cameraTransform;
+
+    public Vector3 cameraStartPosition;
+    public Quaternion cameraStartRotation;
 
     [Header("Horizontal Movement")]
     public float maxSpeed = 100f;
@@ -30,6 +35,12 @@ public class CameraController : MonoBehaviour
     private bool movingToPoint;
     private float zoomHeight;
     private float zoomVectorMaxLength;
+
+    public int Priority { get { return -50; } }
+
+    public bool NewGameOnly { get { return false; } }
+
+    public bool RunModeOnly { get { return true; } }
 
     void Awake()
     {
@@ -77,6 +88,17 @@ public class CameraController : MonoBehaviour
             UpdateBasePosition();
             UpdateCameraPosition();
         }
+    }
+
+    public void Clear()
+    {
+    }
+
+    public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    {
+        transform.position = cameraStartPosition;
+        transform.rotation = cameraStartRotation;
+        yield return null;
     }
 
     private void GetKeyboardMovement()
