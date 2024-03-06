@@ -234,4 +234,9 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         InvokeRepeating(nameof(UpdateTexture), 1.0f, textureUpdateDelay);
         yield return null;
     }
+
+    public void SaveTo(SaveFileData saveData)
+    {
+        // Back soon!
+    }
 }

@@ -43,6 +43,13 @@ public class GridManager : MonoBehaviour, IObjectGenerator
         yield return Generate(data.gameMap, data.gameMapWidth, data.gameMapHeight);
     }
 
+    public void SaveTo(SaveFileData saveData)
+    {
+        saveData.gameMap = GameMap;
+        saveData.gameMapWidth = GameMapWidth;
+        saveData.gameMapHeight = GameMapHeight;
+    }
+
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
         GameMap = gameMap;

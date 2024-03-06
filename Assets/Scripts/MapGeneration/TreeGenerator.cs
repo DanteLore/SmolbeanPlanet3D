@@ -29,9 +29,9 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
 
     private GridManager gridManager;
 
-    public List<NatureObjectSaveData> GetSaveData()
+    public void SaveTo(SaveFileData saveData)
     {
-        return GetComponentsInChildren<SmolbeanTree>().Select(t => t.saveData).ToList();
+        saveData.treeData = GetComponentsInChildren<SmolbeanTree>().Select(t => t.saveData).ToList();
     }
 
     public IEnumerator Load(SaveFileData data)
@@ -43,10 +43,6 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         }
 
         return null;
-    }
-
-    private void LoadTrees(List<NatureObjectSaveData> loadedData)
-    {
     }
 
     public IEnumerator Generate(List<int> gameMap, int mapWidth, int mapHeight)
@@ -86,7 +82,7 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
 
     private bool TreeNotInTheSea(NatureObjectSaveData data)
     {
-        Ray ray = new Ray(new Vector3(data.positionX, 1000f, data.positionZ), Vector3.down);
+        Ray ray = new(new Vector3(data.positionX, 1000f, data.positionZ), Vector3.down);
         if (Physics.Raycast(ray, out RaycastHit hit, 2000f, LayerMask.GetMask(groundLayer)))
         {
             return hit.point.y > minimumTreeAltitude;

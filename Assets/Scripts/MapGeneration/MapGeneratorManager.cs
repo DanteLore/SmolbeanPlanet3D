@@ -68,6 +68,16 @@ public class MapGeneratorManager : MonoBehaviour
         Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
     }
 
+    public SaveFileData Save()
+    {
+        SaveFileData saveData = new();
+
+        foreach (var gen in GetAllGenerators())
+            gen.SaveTo(saveData);
+
+        return saveData;
+    }
+
     private static IEnumerable<IObjectGenerator> GetActiveGenerators()
     {
         return GetAllGenerators()

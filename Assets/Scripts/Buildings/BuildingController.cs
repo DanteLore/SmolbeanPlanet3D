@@ -45,9 +45,9 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
             DestroyImmediate(transform.GetChild(0).gameObject);
     }
 
-    public List<BuildingObjectSaveData> GetSaveData()
+    public void SaveTo(SaveFileData saveData)
     {
-        return GetComponentsInChildren<SmolbeanBuilding>()
+        saveData.buildingData = GetComponentsInChildren<SmolbeanBuilding>()
             .Select(b => new BuildingObjectSaveData
             {
                 positionX = b.transform.position.x,

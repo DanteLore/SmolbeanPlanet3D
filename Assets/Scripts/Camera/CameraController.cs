@@ -93,8 +93,7 @@ public class CameraController : MonoBehaviour, IObjectGenerator
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        transform.position = cameraStartPosition;
-        transform.rotation = cameraStartRotation;
+        transform.SetPositionAndRotation(cameraStartPosition, cameraStartRotation);
         yield return null;
     }
 
@@ -152,7 +151,7 @@ public class CameraController : MonoBehaviour, IObjectGenerator
             targetPosition = Vector3.zero;
         }
 
-        transform.position += targetDirection * speed * Time.fixedDeltaTime;
+        transform.position += speed * Time.fixedDeltaTime * targetDirection;
     }
     
     private void RotateCamera(InputAction.CallbackContext inputValue)
@@ -178,14 +177,14 @@ public class CameraController : MonoBehaviour, IObjectGenerator
 
         if(Mathf.Abs(zoomDelta) > 0.1f)
         {
-            zoomHeight = zoomHeight + zoomDelta * stepSize;
+            zoomHeight += zoomDelta * stepSize;
             zoomHeight = Mathf.Clamp(zoomHeight, minZoomFactor, 1f);
         }
     }
 
     private void UpdateCameraPosition()
     {
-        var zoomTarget = (cameraTransform.localPosition).normalized * zoomHeight * zoomVectorMaxLength;
+        var zoomTarget = zoomHeight * zoomVectorMaxLength * cameraTransform.localPosition.normalized;
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.fixedDeltaTime * zoomSpeed);
     }
 
@@ -196,9 +195,9 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         movingToPoint = true;
     }
 
-    public CameraSaveData GetSaveData()
+    public void SaveTo(SaveFileData saveData)
     {
-        return new CameraSaveData
+        saveData.cameraData = new CameraSaveData
         {
             positionX = transform.position.x,
             positionY = transform.position.y,
@@ -228,8 +227,7 @@ public class CameraController : MonoBehaviour, IObjectGenerator
     {
         cameraActions.Disable();
 
-        transform.position = new Vector3(cameraData.positionX, cameraData.positionY, cameraData.positionZ);
-        transform.rotation = Quaternion.Euler(cameraData.rotationX, cameraData.rotationY, cameraData.rotationZ);
+        transform.SetPositionAndRotation(new Vector3(cameraData.positionX, cameraData.positionY, cameraData.positionZ), Quaternion.Euler(cameraData.rotationX, cameraData.rotationY, cameraData.rotationZ));
 
         targetPosition = Vector3.zero;
         targetDirection = Vector3.zero;

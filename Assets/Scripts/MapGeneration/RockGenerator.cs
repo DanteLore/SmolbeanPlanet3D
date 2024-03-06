@@ -113,15 +113,15 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
             DestroyImmediate(transform.GetChild(0).gameObject);
     }
 
-    public List<NatureObjectSaveData> GetSaveData()
-    {
-        return GetComponentsInChildren<SmolbeanRock>().Select(t => t.saveData).ToList();
-    }
-
     public IEnumerator Load(SaveFileData data)
     {
         data.rockData?.ForEach(InstantiateRock);
 
         return null;
+    }
+
+    public void SaveTo(SaveFileData saveData)
+    {
+        saveData.rockData = GetComponentsInChildren<SmolbeanRock>().Select(t => t.saveData).ToList();
     }
 }

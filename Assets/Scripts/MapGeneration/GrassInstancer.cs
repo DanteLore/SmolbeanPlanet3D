@@ -257,4 +257,9 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
             }
         }
     }
+
+    public void SaveTo(SaveFileData saveData)
+    {
+        // Nothing to save here - easier to regenerate grass - and nobody's counting :D
+    }
 }

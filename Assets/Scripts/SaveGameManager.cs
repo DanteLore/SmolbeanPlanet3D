@@ -32,6 +32,7 @@ public class SaveGameManager : MonoBehaviour
     void Start()
     {
         mapGenerator = FindAnyObjectByType<MapGeneratorManager>();
+
         gridManager = FindAnyObjectByType<GridManager>();
         treeGenerator = FindAnyObjectByType<TreeGenerator>();
         rockGenerator = FindAnyObjectByType<RockGenerator>();
@@ -50,19 +51,7 @@ public class SaveGameManager : MonoBehaviour
         if(File.Exists(filename))
             File.Delete(filename);
 
-        var saveData = new SaveFileData
-        {
-            gameMapWidth = gridManager.GameMapWidth,
-            gameMapHeight = gridManager.GameMapHeight,
-            gameMap = gridManager.GameMap,
-            treeData = treeGenerator.GetSaveData(),
-            rockData = rockGenerator.GetSaveData(),
-            buildingData = buildingController.GetSaveData(),
-            dropItemData = dropController.GetSaveData(),
-            cameraData = cameraController.GetSaveData(),
-            timeData = dayNightController.GetSaveData(),
-            animalData = animalController.GetSaveData()
-        };
+        SaveFileData saveData = mapGenerator.Save();
 
         using (StreamWriter file = File.CreateText(filename))
         {

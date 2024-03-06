@@ -119,9 +119,9 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         };
     }
 
-    public List<AnimalSaveData> GetSaveData()
+    public void SaveTo(SaveFileData saveData)
     {
-        return GetComponentsInChildren<SmolbeanAnimal>()
+        saveData.animalData = GetComponentsInChildren<SmolbeanAnimal>()
             .Select(animal => animal.GetSaveData())
             .ToList();
     }

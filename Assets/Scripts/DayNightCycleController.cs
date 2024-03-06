@@ -91,9 +91,9 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
         yield return null;
     }
 
-    public TimeOfDaySaveData GetSaveData()
+    public void SaveTo(SaveFileData saveData)
     {
-        return new TimeOfDaySaveData { timeOfDay = timeOfDay, day = day };
+        saveData.timeData = new TimeOfDaySaveData { timeOfDay = timeOfDay, day = day };
     }
 
     public IEnumerator Load(SaveFileData data)

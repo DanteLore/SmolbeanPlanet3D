@@ -19,6 +19,11 @@ public class GameInitManager : MonoBehaviour, IObjectGenerator
         // Nothing to do here, as the shipwreck will be controlled by the building manager once it's created
     }
 
+    public void SaveTo(SaveFileData saveData)
+    {
+        // Nothing to do here.  Shipwreck is saved as a building once the game has started
+    }
+
     public IEnumerator Load(SaveFileData data)
     {
         // Nothing to do here.  Shipwreck is saved as a building once the game has started
