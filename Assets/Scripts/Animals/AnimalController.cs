@@ -12,7 +12,6 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
 
     public AnimalSpec[] animalSpecs;
     public int Priority { get { return 150; } }
-    public bool NewGameOnly { get { return true; } }
     public bool RunModeOnly { get { return true; } }
     public float edgeBuffer = 0.1f;
     public string natureLayer = "Nature";
@@ -127,11 +126,12 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
             .ToList();
     }
 
-    public void LoadAnimals(List<AnimalSaveData> animalData)
+    public IEnumerator Load(SaveFileData data)
     {
-        Clear();
-
-        animalData.ForEach(InstantiateAnimal);
+        if (data.animalData != null)
+            data.animalData.ForEach(InstantiateAnimal);
+        
+        return null;
     }
 
     public int AnimalCount(AnimalSpec species)

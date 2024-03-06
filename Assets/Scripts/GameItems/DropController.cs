@@ -7,7 +7,6 @@ public class DropController : MonoBehaviour, IObjectGenerator
 {
     public static DropController Instance { get; private set; }
     public int Priority { get { return 100; } }
-    public bool NewGameOnly { get { return true; } }
     public bool RunModeOnly { get { return true; } }
 
     public DropSpec[] dropSpecs;
@@ -81,10 +80,18 @@ public class DropController : MonoBehaviour, IObjectGenerator
         return GetComponentsInChildren<SmolbeanDrop>().Select(d => d.GetSaveData()).ToList();
     }
 
+    public IEnumerator Load(SaveFileData data)
+    {
+        if (data.dropItemData != null)
+        {
+            LoadDrops(data.dropItemData);
+        }
+
+        return null;
+    }
+
     public void LoadDrops(List<DropItemSaveData> dropItemData)
     {
-        Clear();
-
         foreach(var dropItem in dropItemData)
         {
             DropSpec dropSpec = dropSpecLookup[dropItem.dropSpecName];

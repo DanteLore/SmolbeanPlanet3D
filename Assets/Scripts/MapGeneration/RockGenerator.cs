@@ -14,7 +14,6 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
     }
 
     public int Priority { get { return 20; } }
-    public bool NewGameOnly { get { return false; } }
     public bool RunModeOnly { get { return false; } }
 
     public RockData[] rockData;
@@ -119,11 +118,10 @@ public class RockGenerator : MonoBehaviour, IObjectGenerator
         return GetComponentsInChildren<SmolbeanRock>().Select(t => t.saveData).ToList();
     }
 
-    public void LoadRocks(List<NatureObjectSaveData> loadedData)
+    public IEnumerator Load(SaveFileData data)
     {
-        Clear();
+        data.rockData?.ForEach(InstantiateRock);
 
-        foreach(var rockData in loadedData)
-            InstantiateRock(rockData);
+        return null;
     }
 }

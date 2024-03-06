@@ -31,14 +31,16 @@ public class GridManager : MonoBehaviour, IObjectGenerator
     private GameObject Seabed { get { return transform.Find("Seabed").gameObject; }}
 
     public int Priority { get { return 0; } }
-
-    public bool NewGameOnly { get { return false; } }
-
     public bool RunModeOnly { get { return false; } }
 
     public void Clear()
     {
         ClearMap();
+    }
+
+    public IEnumerator Load(SaveFileData data)
+    {
+        yield return Generate(data.gameMap, data.gameMapWidth, data.gameMapHeight);
     }
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)

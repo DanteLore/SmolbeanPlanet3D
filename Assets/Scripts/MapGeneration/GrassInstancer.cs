@@ -13,7 +13,6 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     }
 
     public int Priority { get { return 100; } }
-    public bool NewGameOnly { get { return false; } }
     public bool RunModeOnly { get { return true; } }
 
     private const int BATCH_SIZE = 1024;
@@ -76,6 +75,11 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     }
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    {
+        yield return GenerateGrass();
+    }
+
+    public IEnumerator Load(SaveFileData data)
     {
         yield return GenerateGrass();
     }

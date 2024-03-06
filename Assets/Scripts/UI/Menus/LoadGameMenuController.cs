@@ -46,6 +46,8 @@ public class LoadGameMenuController : SmolbeanMenu
         // Show a "please wait" screen here in future!
         soundPlayer.Play("Click");
         yield return null;
+        document.rootVisualElement.style.display = DisplayStyle.None;
+        yield return null;
         yield return SaveGameManager.Instance.LoadGame((string)fileListView.selectedItem);
         MenuController.Instance.CloseAll();
     }

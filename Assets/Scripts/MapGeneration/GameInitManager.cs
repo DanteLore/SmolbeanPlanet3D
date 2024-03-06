@@ -12,12 +12,17 @@ public class GameInitManager : MonoBehaviour, IObjectGenerator
     public string natureLayer = "Nature";
 
     public int Priority { get { return 200; } }
-    public bool NewGameOnly { get { return false; } }
     public bool RunModeOnly { get { return true; } }
 
     public void Clear()
     {
         // Nothing to do here, as the shipwreck will be controlled by the building manager once it's created
+    }
+
+    public IEnumerator Load(SaveFileData data)
+    {
+        // Nothing to do here.  Shipwreck is saved as a building once the game has started
+        return null;
     }
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)

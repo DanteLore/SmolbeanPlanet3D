@@ -8,11 +8,9 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
 {
     public BuildingSpec[] buildings;
     public int Priority { get { return 100; } }
-    public bool NewGameOnly { get { return true; } }
     public bool RunModeOnly { get { return true; } }
     public static BuildingController Instance;
     private GridManager gridManager;
-
 
     public IEnumerable<SmolbeanBuilding> Buildings
     {
@@ -63,12 +61,15 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
             .ToList();
     }
 
-    public void LoadBuildings(List<BuildingObjectSaveData> loadedData)
+    public IEnumerator Load(SaveFileData data)
     {
-        Clear();
+        if (data.buildingData != null)
+        {
+            foreach (var buildingData in data.buildingData)
+                InstantiateBuilding(buildingData);
+        }
 
-        foreach (var buildingData in loadedData)
-            InstantiateBuilding(buildingData);
+        return null;
     }
 
     public SmolbeanBuilding PlaceBuilding(Vector3 pos, BuildingSpec spec)

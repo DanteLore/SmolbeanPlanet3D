@@ -37,9 +37,6 @@ public class CameraController : MonoBehaviour, IObjectGenerator
     private float zoomVectorMaxLength;
 
     public int Priority { get { return -50; } }
-
-    public bool NewGameOnly { get { return false; } }
-
     public bool RunModeOnly { get { return true; } }
 
     void Awake()
@@ -217,6 +214,14 @@ public class CameraController : MonoBehaviour, IObjectGenerator
             cameraRotationZ = cameraTransform.localRotation.eulerAngles.z,
             zoomHeight = zoomHeight
         };
+    }
+
+    public IEnumerator Load(SaveFileData data)
+    {
+        if (data.cameraData != null)
+            LoadState(data.cameraData);
+
+        return null;
     }
 
     public void LoadState(CameraSaveData cameraData)

@@ -28,7 +28,7 @@ public class MapGeneratorManager : MonoBehaviour
         }
     }
 
-    public IEnumerator Recreate(List<int> gameMap, int width, int height, bool newGame)
+    public IEnumerator Recreate(List<int> gameMap, int width, int height)
     {
         DateTime startTime = DateTime.Now;
         UnityEngine.Random.InitState(1);
@@ -38,24 +38,52 @@ public class MapGeneratorManager : MonoBehaviour
         MaxLevelNumber = gameMap.Max();
         GameMap = gameMap;
 
-        foreach (var gen in GetComponentsInChildren<IObjectGenerator>().OrderByDescending(g => g.Priority))
-            gen.Clear();
-
-        yield return null;
+        Clear();
         Debug.Log($"Map cleared at {(DateTime.Now - startTime).TotalSeconds}s");
+        yield return null;
 
-        var generators =
-            FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
-            .OfType<IObjectGenerator>()
-            .Where(og => !og.RunModeOnly || Application.isPlaying)
-            .Where(og => !og.NewGameOnly || newGame);
-
-        foreach (var gen in generators.OrderBy(g => g.Priority))
-        {
+        foreach (var gen in GetActiveGenerators().OrderBy(g => g.Priority))
             yield return RunGeneratorTimed(gen);
-        }
 
         Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
+    }
+
+    public IEnumerator Load(SaveFileData saveData)
+    {
+        DateTime startTime = DateTime.Now;
+        UnityEngine.Random.InitState(1);
+
+        GameMapWidth = saveData.gameMapWidth;
+        GameMapHeight = saveData.gameMapHeight;
+        GameMap = saveData.gameMap;
+        MaxLevelNumber = GameMap.Max();
+
+        Clear();
+        Debug.Log($"Map cleared at {(DateTime.Now - startTime).TotalSeconds}s");
+        yield return null;
+
+        foreach (var gen in GetActiveGenerators().OrderBy(g => g.Priority))
+            yield return LoadGeneratorTimed(gen, saveData);
+
+        Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
+    }
+
+    private static IEnumerable<IObjectGenerator> GetActiveGenerators()
+    {
+        return GetAllGenerators()
+            .Where(og => !og.RunModeOnly || Application.isPlaying);
+    }
+
+    private static IEnumerable<IObjectGenerator> GetAllGenerators()
+    {
+        return FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                    .OfType<IObjectGenerator>();
+    }
+
+    public void Clear()
+    {
+        foreach (var gen in GetAllGenerators().OrderByDescending(x => x.Priority))
+            gen.Clear();
     }
 
     private IEnumerator RunGeneratorTimed(IObjectGenerator gen)
@@ -65,6 +93,16 @@ public class MapGeneratorManager : MonoBehaviour
         //Debug.Log($"Generator starting: {gen.GetType().Name}");
         yield return gen.Generate(GameMap, GameMapWidth, GameMapHeight);
         Debug.Log($"P{gen.Priority} Generator complete: {gen.GetType().Name} {(DateTime.Now - startTime).TotalSeconds}s");
+        yield return null;
+    }
+
+    private IEnumerator LoadGeneratorTimed(IObjectGenerator gen, SaveFileData saveData)
+    {
+        DateTime startTime = DateTime.Now;
+        yield return null;
+        //Debug.Log($"Generator starting: {gen.GetType().Name}");
+        yield return gen.Load(saveData);
+        Debug.Log($"P{gen.Priority} Load complete: {gen.GetType().Name} {(DateTime.Now - startTime).TotalSeconds}s");
         yield return null;
     }
 }

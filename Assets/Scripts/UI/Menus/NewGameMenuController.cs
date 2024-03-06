@@ -9,7 +9,6 @@ public class NewGameMenuController : SmolbeanMenu
     private UIDocument document;
     private SoundPlayer soundPlayer;
     private GameMapCreator mapCreator;
-    private GridManager gridManager;
     private MapGeneratorManager mapGeneratorManager;
     private VisualElement previewPane;
     private TextField seedTextField;
@@ -20,7 +19,6 @@ public class NewGameMenuController : SmolbeanMenu
         document = GetComponent<UIDocument>();
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
         mapCreator = FindFirstObjectByType<GameMapCreator>();
-        gridManager = FindFirstObjectByType<GridManager>();
         mapGeneratorManager = FindFirstObjectByType<MapGeneratorManager>();
         
         var startGameButton = document.rootVisualElement.Q<Button>("startGameButton");
@@ -114,7 +112,7 @@ public class NewGameMenuController : SmolbeanMenu
         yield return null;
         document.rootVisualElement.style.display = DisplayStyle.None;
         // Show a please wait message here
-        yield return StartCoroutine(mapGeneratorManager.Recreate(map, mapCreator.mapWidth, mapCreator.mapHeight, true));
+        yield return StartCoroutine(mapGeneratorManager.Recreate(map, mapCreator.mapWidth, mapCreator.mapHeight));
         // Hide the please wait message here
         MenuController.Instance.CloseAll();
     }
@@ -136,7 +134,7 @@ public class NewGameMenuController : SmolbeanMenu
 
     private void DrawMap()
     {
-        Texture2D texture = new Texture2D(mapCreator.mapWidth, mapCreator.mapHeight);
+        Texture2D texture = new(mapCreator.mapWidth, mapCreator.mapHeight);
         texture.filterMode = FilterMode.Point;
 
         // Walk y backwards, because textures start in the top left

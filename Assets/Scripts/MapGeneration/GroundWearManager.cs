@@ -8,7 +8,6 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
     public int Priority { get { return 2; }}
 
-    public bool NewGameOnly { get { return false; } }
     public bool RunModeOnly { get { return true; } }
 
     public Texture2D wearTexture;
@@ -222,6 +221,12 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         }
         
         UpdateTexture();
+    }
+
+    public IEnumerator Load(SaveFileData data)
+    {
+        InvokeRepeating(nameof(UpdateTexture), 1.0f, textureUpdateDelay);
+        yield return null;
     }
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)

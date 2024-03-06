@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Collections.Generic;
-using System;
+using UnityEngine;
 
 public class WaveFunctionCollapse 
 {
@@ -13,13 +13,10 @@ public class WaveFunctionCollapse
     private readonly int[] allTileOptions;
     private readonly int[] seabedOptions;
     private MapSquareOptions[] drawMap;
-    private Random rand;
     public MeshData[] tiles;
 
     public WaveFunctionCollapse(int gameMapWidth, int gameMapHeight, List<MeshData> meshData, Dictionary<int, NeighbourData> neighbourData)
     {
-        rand = new Random(0);
-
         this.gameMapWidth = gameMapWidth;
         this.gameMapHeight = gameMapHeight;
         this.drawMapWidth = gameMapWidth + 1;
@@ -105,7 +102,7 @@ public class WaveFunctionCollapse
 
     private int SelectRandomTile(MapSquareOptions target)
     {
-        return target.Options[rand.Next(target.Options.Count)];
+        return target.Options[Random.Range(0, target.Options.Count)];
     }
 
     private void CollapseAt(MapSquareOptions target)

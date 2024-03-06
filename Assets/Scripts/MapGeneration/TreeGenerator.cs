@@ -13,7 +13,6 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         public float probability;
     }
     public int Priority { get { return 10; } }
-    public bool NewGameOnly { get { return false; } }
     public bool RunModeOnly { get { return false; } }
 
     public TreeData[] treeData;
@@ -35,12 +34,19 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
         return GetComponentsInChildren<SmolbeanTree>().Select(t => t.saveData).ToList();
     }
 
-    public void LoadTrees(List<NatureObjectSaveData> loadedData)
+    public IEnumerator Load(SaveFileData data)
     {
-        Clear();
+        if(data.treeData != null)
+        {
+            foreach (var treeData in data.treeData)
+                InstantiateTree(treeData);
+        }
 
-        foreach(var treeData in loadedData)
-            InstantiateTree(treeData);
+        return null;
+    }
+
+    private void LoadTrees(List<NatureObjectSaveData> loadedData)
+    {
     }
 
     public IEnumerator Generate(List<int> gameMap, int mapWidth, int mapHeight)

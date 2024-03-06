@@ -11,7 +11,6 @@ public class FadeManager : MonoBehaviour//, IObjectGenerator
     public int fadeSteps = 100;
 
     public int Priority { get { return -100; } }
-    public bool NewGameOnly { get { return false; } }
     public bool RunModeOnly { get { return true; } }
 
     public void Clear()

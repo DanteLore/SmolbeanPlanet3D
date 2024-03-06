@@ -33,6 +33,6 @@ public class MapGeneratorManagerEditor : Editor
         EditorUtility.SetDirty(mapGenerator.mapData);
         AssetDatabase.SaveAssetIfDirty(mapGenerator.mapData);
 
-        yield return mapGenerator.Recreate(newMap, generator.mapWidth, generator.mapHeight, true);
+        yield return mapGenerator.Recreate(newMap, generator.mapWidth, generator.mapHeight);
     }
 }

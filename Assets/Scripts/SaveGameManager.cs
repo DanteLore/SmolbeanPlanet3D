@@ -5,20 +5,6 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.Collections;
 
-public class SaveFileData
-{
-    public int gameMapWidth;
-    public int gameMapHeight;
-    public List<int> gameMap;
-    public List<NatureObjectSaveData> treeData;
-    public List<NatureObjectSaveData> rockData;
-    public List<BuildingObjectSaveData> buildingData;
-    public List<DropItemSaveData> dropItemData;
-    public List<AnimalSaveData> animalData;
-    public CameraSaveData cameraData;
-    public TimeOfDaySaveData timeData;
-}
-
 public class SaveGameManager : MonoBehaviour
 {
     public static SaveGameManager Instance { get; private set; }
@@ -135,29 +121,7 @@ public class SaveGameManager : MonoBehaviour
 
         yield return null;
 
-        yield return mapGenerator.Recreate(saveData.gameMap, saveData.gameMapWidth, saveData.gameMapHeight, false);
-        
-        if(saveData.treeData != null)
-            treeGenerator.LoadTrees(saveData.treeData);
-        yield return null;
-        if (saveData.rockData != null)
-            rockGenerator.LoadRocks(saveData.rockData);
-        yield return null;
-        if (saveData.buildingData != null)
-            buildingController.LoadBuildings(saveData.buildingData);
-        yield return null;
-        if (saveData.dropItemData != null)
-            dropController.LoadDrops(saveData.dropItemData);
-        yield return null;
-        if (saveData.cameraData != null)
-            cameraController.LoadState(saveData.cameraData);
-        yield return null;
-        if (saveData.timeData != null)
-            dayNightController.LoadState(saveData.timeData);
-        yield return null;
-        if (saveData.animalData != null)
-            animalController.LoadAnimals(saveData.animalData);
-        yield return null;
+        yield return mapGenerator.Load(saveData);
 
         string pngFilename = GetPngFilename(filename);
         if(File.Exists(pngFilename) && groundTexture != null)

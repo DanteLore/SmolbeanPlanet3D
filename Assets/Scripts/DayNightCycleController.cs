@@ -7,7 +7,6 @@ using UnityEngine;
 public class DayNightCycleController : MonoBehaviour, IObjectGenerator
 {
     public static DayNightCycleController Instance { get; private set; }
-    public bool NewGameOnly { get { return false; } }
     public bool RunModeOnly { get { return true; } }
     public Gradient ambientLightColor;
     [GradientUsage(hdr:true)] public Gradient sunColor;
@@ -97,10 +96,19 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
         return new TimeOfDaySaveData { timeOfDay = timeOfDay, day = day };
     }
 
+    public IEnumerator Load(SaveFileData data)
+    {
+        if (data.timeData != null)
+        {
+            timeOfDay = data.timeData.timeOfDay;
+            day = data.timeData.day;
+        }
+
+        return null;
+    }
+
     public void LoadState(TimeOfDaySaveData loadedData)
     {
-        timeOfDay = loadedData.timeOfDay;
-        day = loadedData.day;
     }
 
     void Update()
