@@ -50,6 +50,7 @@ public class GameStateManager : MonoBehaviour
     public void StartGame()
     {
         IsStarted = true;
+        SelectedGameSpeed = 1f;
         GameStarted?.Invoke(this, IsStarted);
     }
 
