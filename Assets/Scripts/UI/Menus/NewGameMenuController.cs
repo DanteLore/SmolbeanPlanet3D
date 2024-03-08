@@ -106,21 +106,21 @@ public class NewGameMenuController : SmolbeanMenu
         StartCoroutine(StartGame());
     }
 
-    IEnumerator StartGame()
+    private IEnumerator StartGame()
     {
         soundPlayer.Play("Click");
         yield return null;
         document.rootVisualElement.style.display = DisplayStyle.None;
-        // Show a please wait message here
-        yield return StartCoroutine(mapGeneratorManager.Recreate(map, mapCreator.mapWidth, mapCreator.mapHeight));
-        // Hide the please wait message here
+        yield return mapGeneratorManager.Recreate(map, mapCreator.mapWidth, mapCreator.mapHeight);
+        yield return null;
+        GameStateManager.Instance.StartGame();
         MenuController.Instance.CloseAll();
     }
 
     private void RandomButtonClicked()
     {
         soundPlayer.Play("Click");
-        int seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+        int seed = Random.Range(int.MinValue, int.MaxValue);
         seedTextField.value = seed.ToString();
     }
 

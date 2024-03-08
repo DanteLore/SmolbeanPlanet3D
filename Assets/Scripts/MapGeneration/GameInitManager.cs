@@ -32,13 +32,14 @@ public class GameInitManager : MonoBehaviour, IObjectGenerator
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        GameStateManager.Instance.StartGame();
-
         var pos = PlaceShipwreck(gameMap, gameMapWidth, gameMapHeight);
-
         ClearNatureObjectsAround(pos);
-        
+        yield return null;
+
         cameraController.MoveTo(pos);
+        yield return null;
+
+        GameStateManager.Instance.StartGame();
 
         yield return null;
     }
