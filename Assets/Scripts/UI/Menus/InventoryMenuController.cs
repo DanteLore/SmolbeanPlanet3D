@@ -22,12 +22,12 @@ public class InventoryMenu : SmolbeanMenu
         
         buildingListContainer = document.rootVisualElement.Q<VisualElement>("buildingListContainer");
 
-        InvokeRepeating("RefreshBuildingsList", 0.1f, 2.0f);
+        InvokeRepeating(nameof(RefreshBuildingsList), 0.1f, 2.0f);
     }
 
     void OnDisable()
     {
-        CancelInvoke("RefreshBuildingsList");
+        CancelInvoke(nameof(RefreshBuildingsList));
     }
 
     private void RefreshBuildingsList()

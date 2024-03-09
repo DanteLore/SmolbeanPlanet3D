@@ -24,14 +24,14 @@ public class ToolbarController : MonoBehaviour
         CloseAll();
     }
     
-    public void ShowToolbar(string menuName = null)
+    public void ShowToolbar(string name = null)
     {
-        if(menuName == null)
-            menuName = defaultToolbarName;
+        if(name == null)
+            name = defaultToolbarName;
 
         foreach(Transform child in transform)
         {
-            if (child.gameObject.name == menuName)
+            if (child.gameObject.name == name)
             {
                 if (isVisible == true) // Only play a sound if we're switching toolbars
                     soundPlayer.Play("Whoosh2");

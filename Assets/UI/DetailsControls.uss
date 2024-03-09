@@ -1,0 +1,52 @@
+.ingredientContainer,
+.inventoryContainer {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px;
+    margin-left: 24px;
+    margin-bottom: 20px;
+}
+
+.ingredientContainer Button,
+.inventoryContainer Button {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    max-width: 30px;
+    max-height: 30px;
+    -unity-text-align: lower-right;
+    -unity-font-style: bold;
+    font-size: 14px;
+}
+
+.ingredientContainer Label {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    max-width: 30px;
+    max-height: 30px;
+    font-size: 26px;
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoEmoji-Regular.ttf?fileID=12800000&guid=3ec600630513644ab93a6e55cbe0392d&type=3#NotoEmoji-Regular");
+    -unity-text-align: middle-center;
+}
+
+.inventoryContainer Label {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    max-width: 30px;
+    max-height: 30px;
+    font-size: 26px;
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoSansLinearA-Regular.ttf?fileID=12800000&guid=6ae3fa7357f50498b9187d566ca7995d&type=3#NotoSansLinearA-Regular");
+    -unity-text-align: middle-center;
+}
+
+.ingredientContainer Button:hover,
+.inventoryContainer Button:hover {
+    border-width: 1px;
+    border-color: rgb(255, 255, 255);
+    border-radius: 5px;
+}

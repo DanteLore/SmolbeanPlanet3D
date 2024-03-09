@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
+using System;
 
 public class MenuController : MonoBehaviour
 {
@@ -92,13 +93,17 @@ public class MenuController : MonoBehaviour
     public void CloseAll()
     {
         foreach(Transform child in transform)
-        {
             child.gameObject.SetActive(false);
-        }
 
         activeMenu = "";
         isVisible = false;
         GameStateManager.Instance.Resume();
         ToolbarController.Instance.ShowToolbar();
+    }
+
+    public void Close(string name)
+    {
+        if (activeMenu == name)
+            CloseAll();
     }
 }

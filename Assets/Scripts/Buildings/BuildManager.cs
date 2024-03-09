@@ -16,6 +16,7 @@ public class BuildManager : MonoBehaviour
     public float allowedHeightDifferential = 0.2f;
 
     private GridManager gridManager;
+
     private GameObject mapCursor;
     private Vector2Int currentSquare;
     private Vector3 center;
@@ -23,7 +24,7 @@ public class BuildManager : MonoBehaviour
     public bool IsBuilding { get; private set; }
     public bool IsEditing { get; private set; }
 
-    private Transform editTargetTransform;
+    public Transform EditTargetTransform { get; private set; }
     private int selectedBuildingIndex;
     private GameObject buildingEditWidget;
     private SoundPlayer soundPlayer;
@@ -66,20 +67,28 @@ public class BuildManager : MonoBehaviour
     private void BeginEdit(Transform target)
     {
         IsEditing = true;
-        editTargetTransform = target;
+        EditTargetTransform = target;
         buildingEditWidget = Instantiate(buildingEditWidgetPrefab, target.position, target.rotation, target);
         var edit = buildingEditWidget.GetComponent<BuildingEdit>();
         edit.BuildingDelete += DeleteTargetBuilding;
         edit.AllowDelete = target.gameObject.GetComponent<SmolbeanBuilding>().BuildingSpec.deleteAllowed;
+        MenuController.Instance.ShowMenu("BuildingDetailsMenu");
     }
 
     private void EndEdit()
     {
         IsEditing = false;
-        editTargetTransform = null;
+        EditTargetTransform = null;
         
         if(buildingEditWidget != null)
             Destroy(buildingEditWidget);
+
+        MenuController.Instance.Close("BuildingDetailsMenu");
+    }
+
+    public void ClearSelection()
+    {
+        EndEdit();
     }
 
     // TODO:  The following three "Update" methods should be illegal.  This is a shameful implementation of a state machine
@@ -138,7 +147,7 @@ public class BuildManager : MonoBehaviour
             // User clicked off the building
             EndEdit();
         }
-        else if(IsEditing && hitInfo.transform != editTargetTransform)
+        else if(IsEditing && hitInfo.transform != EditTargetTransform)
         {
             EndEdit();
             BeginEdit(hitInfo.transform);
@@ -195,8 +204,8 @@ public class BuildManager : MonoBehaviour
 
     private void DeleteTargetBuilding()
     {
-        Instantiate(buildingDeletedParticleSystem, editTargetTransform.position, editTargetTransform.rotation);
-        Destroy(editTargetTransform.gameObject); 
+        Instantiate(buildingDeletedParticleSystem, EditTargetTransform.position, EditTargetTransform.rotation);
+        Destroy(EditTargetTransform.gameObject); 
         soundPlayer.Play("Demolish");
         EndEdit();
     }
