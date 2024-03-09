@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 public class MapMenuController : SmolbeanMenu
 {
@@ -49,47 +50,45 @@ public class MapMenuController : SmolbeanMenu
         mapBox.style.backgroundImage = mapTexture;
 
         Debug.Log("Drawing map");
-
-        StartCoroutine(DrawMap(mapTexture));
+       DrawMap(mapTexture);
     }
 
-    private IEnumerator DrawMap(Texture2D mapTexture)
+    private void DrawMap(Texture2D mapTexture)
     {
+        int gameMapWidth = gridManager.GameMapWidth;
+        int gameMapHeight = gridManager.GameMapHeight;
+
         int width = groundTexture.width;
         int height = groundTexture.height;
+        Color[] data = groundTexture.GetPixels();
 
         // Map
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                float wear = groundTexture.GetPixel(x, y).r;
-
-                Color baseColor = GetMapColorAt(x * 1f / width, y * 1f / height);
+                float wear = data[y * width + x].r;
+                Color baseColor = GetMapColorAt(x * 1f / width, y * 1f / height, gameMapWidth, gameMapHeight);
                 Color c = Color.Lerp(baseColor, wornGroundColor, wear);
 
-                mapTexture.SetPixel(x, y, c);
-            }
-
-            if (y % 50 == 0)
-            {
-                mapTexture.Apply();
-                yield return null;
+                data[y * width + x] = c;
             }
         }
 
         // Objects
         foreach (var entry in mapEntries)
         {
-            DrawNatureObjects(mapTexture, entry.parentObject.transform, entry.color, entry.radius);
-
-            mapTexture.Apply();
-            yield return null;
+            DrawNatureObjects(data, width, entry.parentObject.transform, entry.color, entry.radius);
         }
+
+        mapTexture.SetPixels(data);
+        mapTexture.Apply();
     }
 
-    private void DrawNatureObjects(Texture2D mapTexture, Transform parent, Color color, int radius)
+    private void DrawNatureObjects(Color[] data, int width, Transform parent, Color color, int radius)
     {
+        float rSquared = radius * radius;
+
         foreach (Transform child in parent)
         {
             var pos = child.position;
@@ -99,26 +98,34 @@ public class MapMenuController : SmolbeanMenu
 
             int centerX = Mathf.RoundToInt(mapTexture.width * mapX);
             int centerY = Mathf.RoundToInt(mapTexture.height * mapY);
+            Vector2Int center = new Vector2Int(centerX, centerY);
 
             for (int y = centerY - radius; y < centerY + radius; y++)
             {
                 for (int x = centerX - radius; x < centerX + radius; x++)
                 {
-                    mapTexture.SetPixel(x, y, color);
+                    float dist = (new Vector2(x, y) - center).sqrMagnitude;
+                    if (dist <= rSquared)
+                    {
+                        data[y * width + x] = color;
+                    }
                 }
             }
         }
     }
 
-    private Color GetMapColorAt(float dX, float dY)
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private Color GetMapColorAt(float dX, float dY, int width, int height)
     {
-        int x = Mathf.RoundToInt(Mathf.Clamp01(dX) * (gridManager.GameMapWidth - 1));
-        int y = Mathf.RoundToInt(Mathf.Clamp01(dY) * (gridManager.GameMapHeight - 1));
+        int x = Mathf.RoundToInt(dX * (width - 1));
+        int y = Mathf.RoundToInt(dY * (height - 1));
 
-        int val = gridManager.GameMap[y * gridManager.GameMapWidth + x];
+        int val = gridManager.GameMap[y * width + x];
 
         if (val == 0)
+        {
             return seaColor;
+        }
         else
         {
             float a = Mathf.InverseLerp(0f, gridManager.MaxLevelNumber - 1, val - 1);
