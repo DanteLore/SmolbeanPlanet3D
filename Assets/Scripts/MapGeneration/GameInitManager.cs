@@ -36,11 +36,7 @@ public class GameInitManager : MonoBehaviour, IObjectGenerator
         ClearNatureObjectsAround(pos);
         yield return null;
 
-        cameraController.MoveTo(pos);
-        yield return null;
-
-        GameStateManager.Instance.StartGame();
-
+        cameraController.gameStartPositon = pos;
         yield return null;
     }
 

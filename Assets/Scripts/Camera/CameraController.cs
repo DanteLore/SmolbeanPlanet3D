@@ -10,8 +10,10 @@ public class CameraController : MonoBehaviour, IObjectGenerator
     private InputAction movement;
     private Transform cameraTransform;
 
+    [Header("Default Position")]
     public Vector3 cameraStartPosition;
     public Quaternion cameraStartRotation;
+    public float cameraStartTilt = 20;
 
     [Header("Horizontal Movement")]
     public float maxSpeed = 100f;
@@ -30,25 +32,29 @@ public class CameraController : MonoBehaviour, IObjectGenerator
     public float minTilt = 10.0f;
     public float maxTilt = 80.0f;
 
+    public float flySpeedMetresPerSec = 20f;
+    public float zoomVectorMaxLength = 80f;
+
+    private float zoomHeight;
+
     private Vector3 targetPosition;
     private Vector3 targetDirection;
     private bool movingToPoint;
-    private float zoomHeight;
-    private float zoomVectorMaxLength;
 
-    public int Priority { get { return -50; } }
+    internal Vector3 gameStartPositon;
+
+    public int Priority { get { return 500; } }
     public bool RunModeOnly { get { return true; } }
 
     void Awake()
     {
         cameraActions = new CameraControlActions();
-        cameraTransform  = GetComponentInChildren<Camera>().transform;
+        cameraTransform = GetComponentInChildren<Camera>().transform;
     }
 
     void OnEnable()
     {
         zoomHeight = 0.5f;
-        zoomVectorMaxLength = cameraTransform.localPosition.magnitude * 2;
         cameraTransform.LookAt(transform);
 
         movement = cameraActions.Camera.Movement;
@@ -89,12 +95,15 @@ public class CameraController : MonoBehaviour, IObjectGenerator
 
     public void Clear()
     {
+        transform.SetPositionAndRotation(cameraStartPosition, cameraStartRotation);
+        cameraTransform.rotation = Quaternion.Euler(cameraStartTilt, 0f, 0f);
+        zoomHeight = 1f;
+        cameraTransform.localPosition = zoomHeight * zoomVectorMaxLength * cameraTransform.localPosition.normalized;
     }
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        transform.SetPositionAndRotation(cameraStartPosition, cameraStartRotation);
-        yield return null;
+        yield return FlyTo(gameStartPositon, transform.rotation, cameraTransform.rotation, 0.2f);
     }
 
     private void GetKeyboardMovement()
@@ -188,13 +197,6 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.fixedDeltaTime * zoomSpeed);
     }
 
-    public void MoveTo(Vector3 target)
-    {
-        targetPosition = target;
-        targetDirection = (target - transform.position).normalized;
-        movingToPoint = true;
-    }
-
     public void SaveTo(SaveFileData saveData)
     {
         saveData.cameraData = new CameraSaveData
@@ -218,25 +220,53 @@ public class CameraController : MonoBehaviour, IObjectGenerator
     public IEnumerator Load(SaveFileData data)
     {
         if (data.cameraData != null)
-            LoadState(data.cameraData);
+        {
+            Vector3 pos = new (data.cameraData.positionX, data.cameraData.positionY, data.cameraData.positionZ);
+            Quaternion rot = Quaternion.Euler(data.cameraData.rotationX, data.cameraData.rotationY, data.cameraData.rotationZ);
+            Quaternion cameraRot = Quaternion.Euler(data.cameraData.cameraRotationX, data.cameraData.cameraRotationY, data.cameraData.cameraRotationZ);
+            float zoom = data.cameraData.zoomHeight;
 
-        return null;
+            yield return FlyTo(pos, rot, cameraRot, zoom);
+        }
+
+        yield return null;
     }
 
-    public void LoadState(CameraSaveData cameraData)
+    private IEnumerator FlyTo(Vector3 targetPosition, Quaternion targetRotation, Quaternion targetCameraRotation, float targetZoomHeight)
     {
         cameraActions.Disable();
+        movingToPoint = true;
 
-        transform.SetPositionAndRotation(new Vector3(cameraData.positionX, cameraData.positionY, cameraData.positionZ), Quaternion.Euler(cameraData.rotationX, cameraData.rotationY, cameraData.rotationZ));
+        var startPosition = transform.position;
+        var startRotation = transform.rotation;
+        var startCameraRotation = cameraTransform.rotation;
+        var startZoomHeight = zoomHeight;
 
-        targetPosition = Vector3.zero;
-        targetDirection = Vector3.zero;
+        float distance = (startPosition - targetPosition).magnitude;
+        float duration = 1000 * distance / flySpeedMetresPerSec; // Assume speed
+        DateTime startTime = DateTime.Now;
+
+        yield return null;
+
+        while(transform.position != targetPosition)
+        {
+            float t = (float)((DateTime.Now - startTime).TotalMilliseconds / duration);
+
+            Vector3 pos = Vector3.Lerp(startPosition, targetPosition, t);
+            Quaternion rot = Quaternion.Lerp(startRotation, targetRotation, t);
+            transform.SetPositionAndRotation(pos, rot);
+            zoomHeight = Mathf.Lerp(startZoomHeight, targetZoomHeight, t);
+            cameraTransform.localPosition = zoomHeight * zoomVectorMaxLength * cameraTransform.localPosition.normalized;
+            cameraTransform.localRotation = Quaternion.Lerp(startCameraRotation, targetCameraRotation, t);
+
+            yield return null;
+        }
+
+        this.targetPosition = targetPosition;
+
+        yield return null;
+
         movingToPoint = false;
-        
-        cameraTransform.localPosition = new Vector3(cameraData.cameraPositionX, cameraData.cameraPositionY, cameraData.cameraPositionZ);
-        cameraTransform.localRotation = Quaternion.Euler(cameraData.cameraRotationX, cameraData.cameraRotationY, cameraData.cameraRotationZ);
-        zoomHeight = cameraData.zoomHeight;
-
         cameraActions.Enable();
     }
 }
