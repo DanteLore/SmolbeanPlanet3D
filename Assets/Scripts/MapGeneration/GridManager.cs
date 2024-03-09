@@ -66,6 +66,7 @@ public class GridManager : MonoBehaviour, IObjectGenerator
         var wfc = new WaveFunctionCollapse(gameMapWidth, gameMapHeight, meshData, neighbourData);
         wfc.GenerateMap(gameMap);
         yield return null;
+        MaxLevelNumber = gameMap.Max();
 
         map = wfc.tiles;
 
