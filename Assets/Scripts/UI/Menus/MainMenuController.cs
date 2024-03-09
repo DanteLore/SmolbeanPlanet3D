@@ -18,11 +18,13 @@ public class MainMenuController : SmolbeanMenu
         var resumeButton = document.rootVisualElement.Q<Button>("resumeButton");
         resumeButton.clicked += ResumeButtonClicked;
         resumeButton.visible = GameStateManager.Instance.IsStarted;
-        GameStateManager.Instance.GameStarted += (o, started) => resumeButton.visible = started;
+        GameStateManager.Instance.GameStatusChanged += (o, started) => resumeButton.visible = started;
         
         var saveGameButton = document.rootVisualElement.Q<Button>("saveGameButton");
         saveGameButton.clicked += SaveGameButtonClicked;
-        
+        saveGameButton.visible = GameStateManager.Instance.IsStarted;
+        GameStateManager.Instance.GameStatusChanged += (o, started) => saveGameButton.visible = started;
+
         var loadGameButton = document.rootVisualElement.Q<Button>("loadGameButton");
         loadGameButton.clicked += LoadGameButtonClicked;
         

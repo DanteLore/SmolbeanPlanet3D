@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Linq;
 using System.Collections;
 
-public class GameInitManager : MonoBehaviour, IObjectGenerator
+public class ShipwreckManager : MonoBehaviour, IObjectGenerator
 {
     public CameraController cameraController;
     public BuildingSpec shipwreckSpec;

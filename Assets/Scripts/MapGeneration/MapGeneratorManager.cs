@@ -38,7 +38,10 @@ public class MapGeneratorManager : MonoBehaviour
         MaxLevelNumber = gameMap.Max();
         GameMap = gameMap;
 
+        GameStateManager.Instance.EndGame();
+
         Clear();
+
         Debug.Log($"Map cleared at {(DateTime.Now - startTime).TotalSeconds}s");
         yield return null;
 
@@ -57,6 +60,8 @@ public class MapGeneratorManager : MonoBehaviour
         GameMapHeight = saveData.gameMapHeight;
         GameMap = saveData.gameMap;
         MaxLevelNumber = GameMap.Max();
+
+        GameStateManager.Instance.EndGame();
 
         Clear();
         Debug.Log($"Map cleared at {(DateTime.Now - startTime).TotalSeconds}s");

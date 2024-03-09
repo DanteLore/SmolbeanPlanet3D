@@ -8,7 +8,7 @@ public class GameStateManager : MonoBehaviour
     public bool IsStarted { get; private set;}
     public event EventHandler<float> GameSpeedChanged;
     public event EventHandler<bool> GamePauseStateChanged;
-    public event EventHandler<bool> GameStarted;
+    public event EventHandler<bool> GameStatusChanged;
     private float selectedGameSpeed = 1.0f;
     public float SelectedGameSpeed 
     {
@@ -47,11 +47,17 @@ public class GameStateManager : MonoBehaviour
         GamePauseStateChanged?.Invoke(this, IsPaused);
     }
 
+    public void EndGame()
+    {
+        IsStarted = false;
+        GameStatusChanged?.Invoke(this, IsStarted);
+    }
+
     public void StartGame()
     {
         IsStarted = true;
         SelectedGameSpeed = 1f;
-        GameStarted?.Invoke(this, IsStarted);
+        GameStatusChanged?.Invoke(this, IsStarted);
     }
 
     public void Update()
