@@ -1,5 +1,7 @@
 .ingredientContainer,
-.inventoryContainer {
+.inventoryContainer,
+.recipeContainer
+{
     flex-direction: row;
     flex-wrap: wrap;
     padding: 5px;
@@ -8,7 +10,9 @@
 }
 
 .ingredientContainer Button,
-.inventoryContainer Button {
+.inventoryContainer Button,
+.recipeContainer Button
+{
     width: 30px;
     height: 30px;
     min-width: 30px;
@@ -20,32 +24,54 @@
     font-size: 14px;
 }
 
-.ingredientContainer Label {
-    width: 30px;
-    height: 30px;
-    min-width: 30px;
-    min-height: 30px;
-    max-width: 30px;
-    max-height: 30px;
-    font-size: 26px;
-    -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoEmoji-Regular.ttf?fileID=12800000&guid=3ec600630513644ab93a6e55cbe0392d&type=3#NotoEmoji-Regular");
+.bigLabel
+{
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    font-size: 32px;
+    margin: 6px;
     -unity-text-align: middle-center;
 }
 
-.inventoryContainer Label {
+.recipeContainerLabel
+{
     width: 30px;
     height: 30px;
     min-width: 30px;
     min-height: 30px;
     max-width: 30px;
     max-height: 30px;
-    font-size: 26px;
-    -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoSansLinearA-Regular.ttf?fileID=12800000&guid=6ae3fa7357f50498b9187d566ca7995d&type=3#NotoSansLinearA-Regular");
+    font-size: 32px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
     -unity-text-align: middle-center;
+}
+
+.notoEmoji
+{
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoEmoji-Regular.ttf?fileID=12800000&guid=3ec600630513644ab93a6e55cbe0392d&type=3#NotoEmoji-Regular");
+}
+
+.notoLinearA
+{
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoSansLinearA-Regular.ttf?fileID=12800000&guid=6ae3fa7357f50498b9187d566ca7995d&type=3#NotoSansLinearA-Regular");
+}
+
+.notoSansSymbols
+{
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoSansSymbols-Regular.ttf?fileID=12800000&guid=96e32fe508410474b8b72399fd1900db&type=3#NotoSansSymbols-Regular");
 }
 
 .ingredientContainer Button:hover,
-.inventoryContainer Button:hover {
+.inventoryContainer Button:hover,
+.recipeContainer Button:hover
+{
     border-width: 1px;
     border-color: rgb(255, 255, 255);
     border-radius: 5px;

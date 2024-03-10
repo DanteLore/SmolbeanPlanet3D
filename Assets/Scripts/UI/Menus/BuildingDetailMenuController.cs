@@ -69,40 +69,84 @@ public class BuildingDetailsMenuController : SmolbeanMenu
 
         if(!building.Inventory.IsEmpty())
         {
-            var inventoryContainer = new VisualElement();
-            inventoryContainer.AddToClassList("inventoryContainer");
-            mainScrollView.Add(inventoryContainer);
+            BuildInventory(building, mainScrollView);
+        }
 
-            Label inventoryLabel = new();
-            inventoryContainer.Add(inventoryLabel);
-            inventoryLabel.text = "𐚱";
+        if (building is FactoryBuilding factory)
+        {
+            BuildRecipe(mainScrollView, factory);
+        }
+    }
 
-            foreach (var item in building.Inventory.Totals)
-            {
-                Button button = new();
-                button.userData = item.dropSpec;
-                button.text = item.quantity.ToString();
-                button.style.backgroundColor = new Color(0, 0, 0, 0);
-                button.style.backgroundImage = item.dropSpec.thumbnail;
-                inventoryContainer.Add(button);
-            }
+    private static void BuildRecipe(ScrollView mainScrollView, FactoryBuilding factory)
+    {
+        Label recipeLabel = new();
+        recipeLabel.AddToClassList("notoSansSymbols");
+        recipeLabel.AddToClassList("bigLabel");
+        mainScrollView.Add(recipeLabel);
+        recipeLabel.text = "⎌";
+
+        var recipeContainer = new VisualElement();
+        recipeContainer.AddToClassList("recipeContainer");
+        mainScrollView.Add(recipeContainer);
+
+        foreach (var ingredient in factory.recipe.ingredients)
+        {
+            Button button = new();
+            button.text = ingredient.quantity.ToString();
+            button.style.backgroundColor = new Color(0, 0, 0, 0);
+            button.style.backgroundImage = ingredient.item.thumbnail;
+            recipeContainer.Add(button);
+        }
+
+        Label equalsLabel = new();
+        equalsLabel.AddToClassList("recipeContainerLabel");
+        recipeContainer.Add(equalsLabel);
+        equalsLabel.text = "→";
+
+        Button productButton = new();
+        productButton.text = factory.recipe.quantity.ToString();
+        productButton.style.backgroundImage = factory.recipe.createdItem.thumbnail;
+        recipeContainer.Add(productButton);
+    }
+
+    private static void BuildInventory(SmolbeanBuilding building, ScrollView mainScrollView)
+    {
+        Label inventoryLabel = new();
+        inventoryLabel.AddToClassList("notoLinearA");
+        inventoryLabel.AddToClassList("bigLabel");
+        mainScrollView.Add(inventoryLabel);
+        inventoryLabel.text = "𐚱";
+
+        var inventoryContainer = new VisualElement();
+        inventoryContainer.AddToClassList("inventoryContainer");
+        mainScrollView.Add(inventoryContainer);
+
+        foreach (var item in building.Inventory.Totals)
+        {
+            Button button = new();
+            button.text = item.quantity.ToString();
+            button.style.backgroundColor = new Color(0, 0, 0, 0);
+            button.style.backgroundImage = item.dropSpec.thumbnail;
+            inventoryContainer.Add(button);
         }
     }
 
     private static void BuildIngredients(SmolbeanBuilding building, ScrollView mainScrollView)
     {
+        Label ingredientsLabel = new();
+        ingredientsLabel.AddToClassList("notoEmoji");
+        ingredientsLabel.AddToClassList("bigLabel");
+        mainScrollView.Add(ingredientsLabel);
+        ingredientsLabel.text = "⚒";
+
         var ingredientContainer = new VisualElement();
         ingredientContainer.AddToClassList("ingredientContainer");
         mainScrollView.Add(ingredientContainer);
 
-        Label ingredientsLabel = new();
-        ingredientContainer.Add(ingredientsLabel);
-        ingredientsLabel.text = "⚒";
-
         foreach (var ingredient in building.BuildingSpec.ingredients)
         {
             Button button = new();
-            button.userData = ingredient.item;
             button.text = ingredient.quantity.ToString();
             button.style.backgroundColor = new Color(0, 0, 0, 0);
             button.style.backgroundImage = ingredient.item.thumbnail;
