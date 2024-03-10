@@ -11,6 +11,14 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## A weekend of UI work
+
+Added a few new UIs, as well as some beefy optimisation of the way the game is generated, loaded and saved.
+
+Visual highlight is the new Dodo Menu, which allows you to see some Dodo stats.
+
+![Screenshot](./Docs/Images/screenshot61.png)
+
 ## Animal lifecycles
 
 Animals now reproduce (there are no sexes, dodos just lay eggs), populations grow and dodos die of starvation or old age.  Dodos also like to flock together and congregate

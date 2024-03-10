@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6372413718643281895}
   - component: {fileID: 3483808832908120606}
   - component: {fileID: 6902860458360500714}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Dodo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -144,7 +144,7 @@ GameObject:
   - component: {fileID: 1328806946437220300}
   - component: {fileID: 8439103554327783183}
   - component: {fileID: 9107109127262929752}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}

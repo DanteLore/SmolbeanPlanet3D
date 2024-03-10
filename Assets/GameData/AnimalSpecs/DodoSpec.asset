@@ -17,6 +17,7 @@ MonoBehaviour:
   dropSpec: {fileID: 11400000, guid: abfa08d2a5229475fb5e9e814c1cf06f, type: 2}
   deathParticleSystem: {fileID: 1572338817668193572, guid: e936c0a6f501449c58d506868894fdcd, type: 3}
   sleepParticleSystem: {fileID: 1572338817668193572, guid: 631718f0bff854df1b58a025e98baf49, type: 3}
+  thumbnail: {fileID: 2800000, guid: 693fe1d4f22554065864af1642a067b0, type: 3}
   startingPopulation: 150
   populationCap: 200
   initialHealth: 100

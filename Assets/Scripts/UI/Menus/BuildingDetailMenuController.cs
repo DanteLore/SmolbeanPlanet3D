@@ -1,35 +1,25 @@
-using System;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class BuildingDetailsMenuController : SmolbeanMenu
+public class BuildingDetailsMenuController : BaseDetailsMenuController
 {
-    private UIDocument document;
     private BuildManager buildManager;
-    private GridManager gridManager;
-    private SoundPlayer soundPlayer;
-    private Transform target;
 
-    void OnEnable()
+    protected override void OnEnable()
     {
-        document = GetComponent<UIDocument>();
         buildManager = FindFirstObjectByType<BuildManager>();
-        gridManager = FindFirstObjectByType<GridManager>();
-        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
 
-        var closeButton = document.rootVisualElement.Q<Button>("closeButton");
-        closeButton.clicked += CloseButtonClicked;
-
-        InvokeRepeating(nameof(Refresh), 0.1f, 0.1f);
+        base.OnEnable();
     }
 
-    void OnDisable()
+    protected override void CloseButtonClicked()
     {
-        CancelInvoke(nameof(Refresh));
+        soundPlayer.Play("Click");
+        buildManager.ClearSelection();
+        MenuController.Instance.CloseAll();
     }
 
-    private void Refresh()
+    protected override void Refresh()
     {
         if (ReferenceEquals(buildManager.EditTargetTransform, target))
             return;
@@ -39,17 +29,10 @@ public class BuildingDetailsMenuController : SmolbeanMenu
         Clear();
 
         if (target != null)
-            SetTarget();
+            DrawMenu();
     }
 
-    private void CloseButtonClicked()
-    {
-        soundPlayer.Play("Click");
-        buildManager.ClearSelection();
-        MenuController.Instance.CloseAll();
-    }
-
-    private void SetTarget()
+    private void DrawMenu()
     {
         var building = target.GetComponent<SmolbeanBuilding>();
 
@@ -152,10 +135,5 @@ public class BuildingDetailsMenuController : SmolbeanMenu
             button.style.backgroundImage = ingredient.item.thumbnail;
             ingredientContainer.Add(button);
         }
-    }
-
-    private void Clear()
-    {
-        document.rootVisualElement.Q<ScrollView>("mainScrollView").Clear();
     }
 }

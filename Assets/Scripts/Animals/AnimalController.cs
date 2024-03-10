@@ -5,15 +5,27 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using UnityEngine.AI;
 using System.Collections;
+using UnityEngine.InputSystem;
 
 public class AnimalController : MonoBehaviour, IObjectGenerator
 {
     public static AnimalController Instance { get; private set; }
 
+    public string animalLayer = "Creatures";
     public AnimalSpec[] animalSpecs;
     public int Priority { get { return 150; } }
     public bool RunModeOnly { get { return true; } }
+
+    public Transform TargetTransform { get; internal set; }
+
     public float edgeBuffer = 0.1f;
+
+    internal void ClearSelection()
+    {
+        TargetTransform = null;
+        MenuController.Instance.Close("AnimalDetailsMenu");
+    }
+
     public string natureLayer = "Nature";
     public int animalsToAddPerFrame = 10;
 
@@ -24,6 +36,24 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         else
             Instance = this;
     }
+
+    void Update()
+    {
+        if (!Mouse.current.leftButton.wasPressedThisFrame)
+            return;
+
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out var hit, float.MaxValue, LayerMask.GetMask(animalLayer)))
+        {
+            TargetTransform = hit.transform;
+            MenuController.Instance.ShowMenu("AnimalDetailsMenu");
+        }
+        else
+        {
+            TargetTransform = null;
+            MenuController.Instance.Close("AnimalDetailsMenu");
+        }
+    }    
 
     public void Clear()
     {

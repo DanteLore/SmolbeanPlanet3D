@@ -9,6 +9,7 @@ public class AnimalSpec : ScriptableObject
     public DropSpec dropSpec;
     public GameObject deathParticleSystem;
     public GameObject sleepParticleSystem;
+    public Texture2D thumbnail;
 
     [Header("Species Settings")]
     public int startingPopulation;
