@@ -9,6 +9,8 @@ public abstract class WalkStateBase : IState
     protected SoundPlayer soundPlayer;
     private Vector3 lastPosition;
     private float lastMoved;
+    private float distanceSteeringTarget;
+    private float originalAnimatorSpeed;
     private static readonly float gameSpeedNavJumpSize = 0.5f;
     protected bool navAgentResetEnabled = true;
 
@@ -24,28 +26,59 @@ public abstract class WalkStateBase : IState
     protected abstract Vector3 GetDestination();
 
     public virtual void OnEnter()
-    {        
+    {
         navAgent.SetDestination(GetDestination());
         navAgent.isStopped = false;
 
         lastPosition = navAgent.transform.position;
         lastMoved = Time.time;
 
-        animator?.SetBool("IsWalking", true);
-        soundPlayer?.Play("Footsteps");
+        if (animator != null)
+        {
+            originalAnimatorSpeed = animator.speed;
+            animator.SetBool("IsWalking", true);
+        }
+
+        if (soundPlayer != null)
+        {
+            soundPlayer?.Play("Footsteps");
+        }
     }
 
     public virtual void OnExit()
     {
+        if (animator != null)
+        {
+            animator.speed = originalAnimatorSpeed;
+            animator.SetBool("IsWalking", false);
+        }
+
         navAgent.isStopped = true;
-        animator?.SetBool("IsWalking", false);
-        soundPlayer?.Stop("Footsteps");
+
+        if (soundPlayer != null)
+        {
+            soundPlayer?.Stop("Footsteps");
+        }
     }
 
     public void Tick()
     {
+        if (navAgent.pathPending)
+        {
+            if (animator != null)
+                animator.SetBool("IsWalking", false);
+
+            return;
+        }
+
+        if (animator != null)
+            animator.SetBool("IsWalking", true);
+
         var pos = navAgent.transform.position;
         var time = Time.time;
+
+        if(animator != null && navAgent != null)
+            animator.speed = Mathf.InverseLerp(0f, navAgent.speed, navAgent.velocity.magnitude);
 
         if (Vector3.SqrMagnitude(lastPosition - pos) > 0.0f)
         {
@@ -66,7 +99,6 @@ public abstract class WalkStateBase : IState
             CheckSteeringTargetPosition();
     }
 
-    private float distanceSteeringTarget;
     private void CheckSteeringTargetPosition()
     {
         float d = Vector3.Distance(navAgent.transform.position, navAgent.steeringTarget);
