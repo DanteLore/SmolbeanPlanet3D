@@ -169,14 +169,14 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         };
     }
 
-    public void SaveTo(SaveFileData saveData)
+    public void SaveTo(SaveFileData saveData, string filename)
     {
         saveData.animalData = GetComponentsInChildren<SmolbeanAnimal>()
             .Select(animal => animal.GetSaveData())
             .ToList();
     }
 
-    public IEnumerator Load(SaveFileData data)
+    public IEnumerator Load(SaveFileData data, string filename)
     {
         if (data.animalData != null)
             data.animalData.ForEach(InstantiateAnimal);

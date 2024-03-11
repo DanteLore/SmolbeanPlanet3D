@@ -75,12 +75,12 @@ public class DropController : MonoBehaviour, IObjectGenerator
         return item;
     }
 
-    public void SaveTo(SaveFileData saveData)
+    public void SaveTo(SaveFileData saveData, string filename)
     {
         saveData.dropItemData = GetComponentsInChildren<SmolbeanDrop>().Select(d => d.GetSaveData()).ToList();
     }
 
-    public IEnumerator Load(SaveFileData data)
+    public IEnumerator Load(SaveFileData data, string filename)
     {
         if (data.dropItemData != null)
         {

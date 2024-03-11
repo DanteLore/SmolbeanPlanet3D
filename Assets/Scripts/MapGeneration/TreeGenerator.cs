@@ -29,12 +29,12 @@ public class TreeGenerator : MonoBehaviour, IObjectGenerator
 
     private GridManager gridManager;
 
-    public void SaveTo(SaveFileData saveData)
+    public void SaveTo(SaveFileData saveData, string filename)
     {
         saveData.treeData = GetComponentsInChildren<SmolbeanTree>().Select(t => t.saveData).ToList();
     }
 
-    public IEnumerator Load(SaveFileData data)
+    public IEnumerator Load(SaveFileData data, string filename)
     {
         if(data.treeData != null)
         {

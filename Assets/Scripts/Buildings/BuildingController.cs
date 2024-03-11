@@ -45,7 +45,7 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
             DestroyImmediate(transform.GetChild(0).gameObject);
     }
 
-    public void SaveTo(SaveFileData saveData)
+    public void SaveTo(SaveFileData saveData, string filename)
     {
         saveData.buildingData = GetComponentsInChildren<SmolbeanBuilding>()
             .Select(b => new BuildingObjectSaveData
@@ -61,7 +61,7 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
             .ToList();
     }
 
-    public IEnumerator Load(SaveFileData data)
+    public IEnumerator Load(SaveFileData data, string filename)
     {
         if (data.buildingData != null)
         {

@@ -79,7 +79,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         yield return GenerateGrass();
     }
 
-    public IEnumerator Load(SaveFileData data)
+    public IEnumerator Load(SaveFileData data, string filename)
     {
         yield return GenerateGrass();
     }
@@ -258,7 +258,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         }
     }
 
-    public void SaveTo(SaveFileData saveData)
+    public void SaveTo(SaveFileData saveData, string filename)
     {
         // Nothing to save here - easier to regenerate grass - and nobody's counting :D
     }

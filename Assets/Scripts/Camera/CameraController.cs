@@ -197,7 +197,7 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, zoomTarget, Time.fixedDeltaTime * zoomSpeed);
     }
 
-    public void SaveTo(SaveFileData saveData)
+    public void SaveTo(SaveFileData saveData, string filename)
     {
         saveData.cameraData = new CameraSaveData
         {
@@ -217,7 +217,7 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         };
     }
 
-    public IEnumerator Load(SaveFileData data)
+    public IEnumerator Load(SaveFileData data, string filename)
     {
         if (data.cameraData != null)
         {

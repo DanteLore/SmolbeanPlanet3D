@@ -12,14 +12,6 @@ public class SaveGameManager : MonoBehaviour
     public static readonly string EXTENSION = ".sbp";
     public Texture2D groundTexture;
     private MapGeneratorManager mapGenerator;
-    private GridManager gridManager;
-    private TreeGenerator treeGenerator;
-    private RockGenerator rockGenerator;
-    private BuildingController buildingController;
-    private DropController dropController;
-    private CameraController cameraController;
-    private DayNightCycleController dayNightController;
-    private AnimalController animalController;
 
     void Awake()
     {
@@ -32,15 +24,6 @@ public class SaveGameManager : MonoBehaviour
     void Start()
     {
         mapGenerator = FindAnyObjectByType<MapGeneratorManager>();
-
-        gridManager = FindAnyObjectByType<GridManager>();
-        treeGenerator = FindAnyObjectByType<TreeGenerator>();
-        rockGenerator = FindAnyObjectByType<RockGenerator>();
-        buildingController = FindAnyObjectByType<BuildingController>();
-        dropController = FindAnyObjectByType<DropController>();
-        cameraController = FindAnyObjectByType<CameraController>();
-        dayNightController = FindAnyObjectByType<DayNightCycleController>();
-        animalController = FindAnyObjectByType<AnimalController>();
     }
 
     public void SaveGame(string name)
@@ -48,29 +31,19 @@ public class SaveGameManager : MonoBehaviour
         string filename = GetFilename(name);
         Debug.Log($"Saving game to {filename}");
 
-        if(File.Exists(filename))
+        if (File.Exists(filename))
             File.Delete(filename);
 
-        SaveFileData saveData = mapGenerator.Save();
+        SaveFileData saveData = mapGenerator.Save(filename);
 
         using (StreamWriter file = File.CreateText(filename))
         {
-            JsonSerializer serializer = new ()
+            JsonSerializer serializer = new()
             {
                 TypeNameHandling = TypeNameHandling.Auto
             };
             serializer.Serialize(file, saveData);
         }
-
-        if(groundTexture != null)
-        {
-            File.WriteAllBytes(GetPngFilename(filename), groundTexture.EncodeToPNG());
-        }
-    }
-
-    private static string GetPngFilename(string filename)
-    {
-        return filename.Replace(EXTENSION, ".png");
     }
 
     private static string GetFilename(string name)
@@ -108,15 +81,6 @@ public class SaveGameManager : MonoBehaviour
             saveData = (SaveFileData)serializer.Deserialize(file, typeof(SaveFileData));
         }
 
-        yield return null;
-
-        yield return mapGenerator.Load(saveData);
-
-        string pngFilename = GetPngFilename(filename);
-        if(File.Exists(pngFilename) && groundTexture != null)
-        {
-            groundTexture.LoadImage(File.ReadAllBytes(pngFilename));
-        }
-        yield return null;
+        yield return mapGenerator.Load(saveData, filename);
     }
 }

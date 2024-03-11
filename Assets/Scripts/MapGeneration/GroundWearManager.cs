@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GroundWearManager : MonoBehaviour, IObjectGenerator
@@ -223,8 +224,19 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         UpdateTexture();
     }
 
-    public IEnumerator Load(SaveFileData data)
+    public IEnumerator Load(SaveFileData saveData, string filename)
     {
+        if (!string.IsNullOrEmpty(filename))
+        {
+            string pngFilename = GetPngFilename(filename);
+            if (File.Exists(pngFilename) && wearTexture != null)
+            {
+                wearTexture.LoadImage(File.ReadAllBytes(pngFilename));
+            }
+        }
+
+        data = wearTexture.GetPixels();
+
         InvokeRepeating(nameof(UpdateTexture), 1.0f, textureUpdateDelay);
         yield return null;
     }
@@ -235,8 +247,17 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         yield return null;
     }
 
-    public void SaveTo(SaveFileData saveData)
+    public void SaveTo(SaveFileData saveData, string filename)
     {
-        // Back soon!
+        if (wearTexture != null)
+        {
+            string pngFile = GetPngFilename(filename);
+            File.WriteAllBytes(pngFile, wearTexture.EncodeToPNG());
+        }
+    }
+
+    private static string GetPngFilename(string filename)
+    {
+        return filename.Replace(SaveGameManager.EXTENSION, ".png");
     }
 }

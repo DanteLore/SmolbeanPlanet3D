@@ -38,12 +38,12 @@ public class GridManager : MonoBehaviour, IObjectGenerator
         ClearMap();
     }
 
-    public IEnumerator Load(SaveFileData data)
+    public IEnumerator Load(SaveFileData data, string filename)
     {
         yield return Generate(data.gameMap, data.gameMapWidth, data.gameMapHeight);
     }
 
-    public void SaveTo(SaveFileData saveData)
+    public void SaveTo(SaveFileData saveData, string filename)
     {
         saveData.gameMap = GameMap;
         saveData.gameMapWidth = GameMapWidth;

@@ -51,7 +51,7 @@ public class MapGeneratorManager : MonoBehaviour
         Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
     }
 
-    public IEnumerator Load(SaveFileData saveData)
+    public IEnumerator Load(SaveFileData saveData, string filename)
     {
         DateTime startTime = DateTime.Now;
         UnityEngine.Random.InitState(1);
@@ -68,17 +68,17 @@ public class MapGeneratorManager : MonoBehaviour
         yield return null;
 
         foreach (var gen in GetActiveGenerators().OrderBy(g => g.Priority))
-            yield return LoadGeneratorTimed(gen, saveData);
+            yield return LoadGeneratorTimed(gen, saveData, filename);
 
         Debug.Log($"Map generated in {(DateTime.Now - startTime).TotalSeconds}s");
     }
 
-    public SaveFileData Save()
+    public SaveFileData Save(string filename)
     {
         SaveFileData saveData = new();
 
         foreach (var gen in GetAllGenerators())
-            gen.SaveTo(saveData);
+            gen.SaveTo(saveData, filename);
 
         return saveData;
     }
@@ -111,12 +111,12 @@ public class MapGeneratorManager : MonoBehaviour
         yield return null;
     }
 
-    private IEnumerator LoadGeneratorTimed(IObjectGenerator gen, SaveFileData saveData)
+    private IEnumerator LoadGeneratorTimed(IObjectGenerator gen, SaveFileData saveData, string filename)
     {
         DateTime startTime = DateTime.Now;
         yield return null;
         //Debug.Log($"Generator starting: {gen.GetType().Name}");
-        yield return gen.Load(saveData);
+        yield return gen.Load(saveData, filename);
         Debug.Log($"P{gen.Priority} Load complete: {gen.GetType().Name} {(DateTime.Now - startTime).TotalSeconds}s");
         yield return null;
     }
