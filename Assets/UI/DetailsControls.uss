@@ -76,3 +76,26 @@
     border-color: rgb(255, 255, 255);
     border-radius: 5px;
 }
+
+.fieldRow
+{
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    justify-content: flex-start;
+}
+
+.fieldLabel
+{
+    width: 45%;
+    -unity-text-align: middle-right;
+    white-space: nowrap;
+}
+
+.valueLabel
+{
+    width: 45%;
+    -unity-font-style: bold;
+    -unity-text-align: middle-left;
+    white-space: nowrap;
+}

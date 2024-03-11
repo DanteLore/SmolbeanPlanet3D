@@ -12,6 +12,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
     public static AnimalController Instance { get; private set; }
 
     public string animalLayer = "Creatures";
+    public string uiLayer = "UI";
     public AnimalSpec[] animalSpecs;
     public int Priority { get { return 150; } }
     public bool RunModeOnly { get { return true; } }
@@ -42,8 +43,12 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         if (!Mouse.current.leftButton.wasPressedThisFrame)
             return;
 
+        // Over the UI
+        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            return;
+
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out var hit, float.MaxValue, LayerMask.GetMask(animalLayer)))
+        if (Physics.Raycast(ray, out var hit, float.MaxValue, LayerMask.GetMask(animalLayer, uiLayer)))
         {
             TargetTransform = hit.transform;
             MenuController.Instance.ShowMenu("AnimalDetailsMenu");

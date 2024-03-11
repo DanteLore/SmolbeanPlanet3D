@@ -55,8 +55,17 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 
         foreach (var (field, label) in fieldLookup)
         {
-            label.text = field.Name + ": " + field.GetValue(animal.Stats);
+            label.text = GetDisplayValue(animal, field);
         }
+
+        UpdateLocation(animal);
+    }
+
+    private void UpdateLocation(SmolbeanAnimal animal)
+    {
+        var pos = gridManager.GetGameSquareFromWorldCoords(animal.transform.position);
+        var positionLabel = document.rootVisualElement.Q<Label>("positionLabel");
+        positionLabel.text = $"{pos.x}λ \u00d7 {pos.y}φ";
     }
 
     private void DrawMenu()
@@ -66,16 +75,41 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
         var animalImage = document.rootVisualElement.Q<VisualElement>("animalImage");
         animalImage.style.backgroundImage = animal.species.thumbnail;
 
+        var nameLabel = document.rootVisualElement.Q<Label>("nameLabel");
+        nameLabel.text = animal.Stats.name;
+
+        UpdateLocation(animal);
+
         var mainScrollView = document.rootVisualElement.Q<ScrollView>("mainScrollView");
         FieldInfo[] fields = animal.Stats.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
         foreach (var field in fields)
         {
-            Label fieldLabel = new();
-            mainScrollView.Add(fieldLabel);
-            fieldLabel.text = field.Name + ": " + field.GetValue(animal.Stats);
+            VisualElement rowContainer = new();
+            rowContainer.AddToClassList("fieldRow");
+            mainScrollView.Add(rowContainer);
 
-            fieldLookup.Add(field, fieldLabel);
+            Label fieldLabel = new();
+            fieldLabel.AddToClassList("fieldLabel");
+            fieldLabel.text = field.Name + ":";
+            rowContainer.Add(fieldLabel);
+
+            Label valueLabel = new();
+            valueLabel.AddToClassList("valueLabel");
+            valueLabel.text = GetDisplayValue(animal, field);
+            rowContainer.Add(valueLabel);
+
+            fieldLookup.Add(field, valueLabel);
         }
+    }
+
+    private static string GetDisplayValue(SmolbeanAnimal animal, FieldInfo field)
+    {
+        var value = field.GetValue(animal.Stats);
+
+        if (field.FieldType == typeof(float))
+            return String.Format("{0:0.0}", value);
+
+        return value.ToString();
     }
 }

@@ -69,6 +69,7 @@ public class Dodo : SmolbeanAnimal
         {
             stats = new DodoStats()
             {
+                name = DodoNameGenerator.Generate(),
                 age = 0f,
                 health = species.initialHealth,
                 foodLevel = Random.Range(species.initialFoodLevelMin, species.initialFoodLevelMax),
