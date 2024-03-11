@@ -2,10 +2,10 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 using UnityEngine.AI;
 using System.Collections;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 public class AnimalController : MonoBehaviour, IObjectGenerator
 {
@@ -16,14 +16,17 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
     public AnimalSpec[] animalSpecs;
     public int Priority { get { return 150; } }
     public bool RunModeOnly { get { return true; } }
-
+    public GameObject selectionCursorPrefab;
     public Transform TargetTransform { get; internal set; }
-
     public float edgeBuffer = 0.1f;
 
-    internal void ClearSelection()
+    private GameObject cursor;
+
+    public void ClearSelection()
     {
         TargetTransform = null;
+        Destroy(cursor);
+        cursor = null;
         MenuController.Instance.Close("AnimalDetailsMenu");
     }
 
@@ -40,21 +43,33 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
 
     void Update()
     {
-        if (!Mouse.current.leftButton.wasPressedThisFrame)
-            return;
-
-        // Over the UI
-        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+        // No click, or click over UI
+        if (!Mouse.current.leftButton.wasPressedThisFrame ||
+            UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             return;
 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out var hit, float.MaxValue, LayerMask.GetMask(animalLayer, uiLayer)))
         {
+            if (cursor != null)
+            {
+                Destroy(cursor);
+                cursor = null;
+            }
+
             TargetTransform = hit.transform;
+
+            cursor = Instantiate(selectionCursorPrefab, TargetTransform);
             MenuController.Instance.ShowMenu("AnimalDetailsMenu");
         }
         else
         {
+            if (cursor != null)
+            {
+                Destroy(cursor);
+                cursor = null;
+            }
+
             TargetTransform = null;
             MenuController.Instance.Close("AnimalDetailsMenu");
         }

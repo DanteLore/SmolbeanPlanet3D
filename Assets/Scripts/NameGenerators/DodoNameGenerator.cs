@@ -8,7 +8,17 @@ public static class DodoNameGenerator
         "Cluckles",
         "Hootie",
         "Dave",
-        "Doreen"
+        "Doreen",
+        "Pierre",
+        "LeRoy",
+        "Beebee",
+        "Jacqueline",
+        "Dorothy",
+        "Derek",
+        "Daryll",
+        "Daisy",
+        "Jacques",
+        "Dante"
     };
 
     private static readonly string[] nicknames =
@@ -16,13 +26,28 @@ public static class DodoNameGenerator
         "Big Beak",
         "Captain",
         "Feathers",
-        "Claws"
+        "Claws",
+        "Doc",
+        "Honk Honk",
+        "le Gourmand",
+        "Joufflue",
+        "Chubbs",
+        "Dangerous",
+        "Stinky"
     };
 
     private static readonly string[] surnames = {
         "McDodo",
         "Honkington",
-        "L'Œuf"
+        "L'Œuf",
+        "Pigeonne",
+        "Klaxonner",
+        "Lutchmee",
+        "Appadoo",
+        "Gopaul",
+        "Beeharry",
+        "Nunkoo",
+        "Pierre"
     };
 
     public static string Generate()

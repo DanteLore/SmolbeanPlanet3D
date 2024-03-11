@@ -19,7 +19,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
         MenuController.Instance.CloseAll();
     }
 
-    protected override void Refresh()
+    protected override void Update()
     {
         if (ReferenceEquals(buildManager.EditTargetTransform, target))
             return;

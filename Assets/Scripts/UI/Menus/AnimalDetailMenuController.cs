@@ -31,21 +31,22 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
         MenuController.Instance.CloseAll();
     }
 
-    protected override void Refresh()
+    protected override void Update()
     {
-        if (ReferenceEquals(animalController.TargetTransform, target))
+        if(animalController.TargetTransform == null)
         {
-            if (target != null)
-                UpdateValues();
+            target = null;
+            Clear();
+        }
+        else if (ReferenceEquals(animalController.TargetTransform, target))
+        {
+            UpdateValues();
         }
         else
         {
             target = animalController.TargetTransform;
-
             Clear();
-
-            if (target != null)
-                DrawMenu();
+            DrawMenu();
         }
     }
 
@@ -83,7 +84,7 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
         var mainScrollView = document.rootVisualElement.Q<ScrollView>("mainScrollView");
         FieldInfo[] fields = animal.Stats.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
-        foreach (var field in fields)
+        foreach (var field in fields.Where(f => f.Name != "name"))
         {
             VisualElement rowContainer = new();
             rowContainer.AddToClassList("fieldRow");

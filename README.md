@@ -17,7 +17,7 @@ Added a few new UIs, as well as some beefy optimisation of the way the game is g
 
 Visual highlight is the new Dodo Menu, which allows you to see some Dodo stats.
 
-![Screenshot](./Docs/Images/screenshot61.png)
+![Screenshot](./Docs/Images/screenshot62.png)
 
 ## Animal lifecycles
 

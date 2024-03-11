@@ -16,17 +16,16 @@ public abstract class BaseDetailsMenuController : SmolbeanMenu
 
         var closeButton = document.rootVisualElement.Q<Button>("closeButton");
         closeButton.clicked += CloseButtonClicked;
-
     }
 
-    void Update()
+    void OnDisable()
     {
-        Refresh();
+        target = null;
     }
+
+    protected abstract void Update();
 
     protected abstract void CloseButtonClicked();
-
-    protected abstract void Refresh();
 
     protected virtual void Clear()
     {
