@@ -21,8 +21,8 @@ public class BasicColonist : SmolbeanColonist
         {
             stats = new ColonistStats()
             {
-                name = DodoNameGenerator.Generate(), // TODO:  People are not dodos!
-                age = 0f, // TODO: Randomise starting age!
+                name = ColonistNameGenerator.Generate(), 
+                age = Random.Range(species.maturityAgeSeconds, species.oldAgeSeconds),
                 health = species.initialHealth,
                 foodLevel = Random.Range(species.initialFoodLevelMin, species.initialFoodLevelMax)
             };
