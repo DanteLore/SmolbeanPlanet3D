@@ -28,7 +28,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public int speciesIndex;
     public AnimalSpec species;
     public Vector3 target;
-    private GameObject body;
+    protected GameObject body;
     protected bool isDead = false;
     protected bool isSleeping = false;
     private GameObject sleepPs;

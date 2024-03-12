@@ -1,10 +1,7 @@
-using System.Collections;
 using UnityEngine;
 
 public class Sawmill : FactoryBuilding
 {
-    public float spawnDelaySeconds = 5f;
-    public GameObject sawyerPrefab;
     public ParticleSystem sawingParticleSystem;
 
     protected override void Start()
@@ -13,14 +10,7 @@ public class Sawmill : FactoryBuilding
         
         sawingParticleSystem.Stop();
 
-        StartCoroutine(CreateSawyer(spawnDelaySeconds));
-    }
-
-    private IEnumerator CreateSawyer(float delayTime)
-    {
-        yield return new WaitForSeconds(delayTime);
-
-        Instantiate(sawyerPrefab, spawnPoint.transform.position, Quaternion.identity, transform);
+        // Register jobs here soon!
     }
 
     public override void StartProcessing()

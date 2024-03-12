@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.AI;
-using System.Linq;
 
 public abstract class SmolbeanColonist : SmolbeanAnimal
 {
@@ -10,7 +9,6 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
     public Vector3 SpawnPoint { get; private set; }
 
     private Vector3 lastReportedPosition;
-    private GameObject body;
 
     private SmolbeanBuilding home;
     public SmolbeanBuilding Home
@@ -30,7 +28,6 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
         base.Start();
 
         navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
-        body = transform.Find("Body").gameObject;
         Inventory = new Inventory();
     }    
 

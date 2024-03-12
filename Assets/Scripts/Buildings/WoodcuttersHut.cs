@@ -1,25 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WoodcuttersHut : SmolbeanBuilding
 {
     public GameObject woodcutterPrefab;
     public float spawnDelaySeconds = 5f;
-    private GameObject woodcutter;
 
     protected override void Start()
     {
         base.Start();
-        
-        StartCoroutine(CreateWoodcutter(spawnDelaySeconds));
-    }
 
-    private IEnumerator CreateWoodcutter(float delayTime)
-    {
-        yield return new WaitForSeconds(delayTime);
-
-        woodcutter = Instantiate(woodcutterPrefab, spawnPoint.transform.position, Quaternion.identity, transform);
+        // Register jobs here soon!
     }
 }
