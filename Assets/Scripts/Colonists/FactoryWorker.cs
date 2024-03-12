@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class FactoryWorker : SmolbeanColonist, IReturnDrops
+public class FactoryWorker : BasicColonist, IReturnDrops
 {
     public float idleTime = 1f;
     public int maxStacks = 5;
@@ -16,8 +16,6 @@ public class FactoryWorker : SmolbeanColonist, IReturnDrops
             return Home.GetDropPoint();
         }
     }
-    
-    private StateMachine stateMachine;
 
     protected override void Start()
     {
@@ -25,7 +23,7 @@ public class FactoryWorker : SmolbeanColonist, IReturnDrops
 
         stateMachine = new StateMachine(shouldLog:false);
 
-        var factory = (FactoryBuilding)this.Home;
+        var factory = (FactoryBuilding)Home;
 
         var idle = new IdleState(animator);
         var walkHome = new WalkHomeState(this, navAgent, animator, soundPlayer);

@@ -1,9 +1,7 @@
 using System;
 
-public class Builder : SmolbeanColonist
+public class Builder : BasicColonist
 {
-    private StateMachine stateMachine;
-
     public string buildingLayer = "Buildings";
     public float sleepTime = 5f;
 

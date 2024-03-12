@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class Miner : SmolbeanColonist, IReturnDrops
+public class Miner : BasicColonist, IReturnDrops
 {
     public float idleTime = 1f;
     public float mineCooldown = 1f;
@@ -18,8 +18,6 @@ public class Miner : SmolbeanColonist, IReturnDrops
             return Home.GetDropPoint();
         }
     }
-    
-    private StateMachine stateMachine;
 
     protected override void Start()
     {

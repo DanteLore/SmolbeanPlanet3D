@@ -99,7 +99,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
                 if (gameMap[z * gameMapWidth + x] == 0)
                     continue;
 
-                // Pick a random spot on the tile, not to close to the edge
+                // Pick a random spot on the tile, not too close to the edge
                 Rect squareBounds = gridManager.GetSquareBounds(x, z);
                 float buffer = gridManager.tileSize * edgeBuffer;
                 float worldX = Random.Range(squareBounds.xMin + buffer, squareBounds.xMax - buffer);

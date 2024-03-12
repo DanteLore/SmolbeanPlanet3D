@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
+public class Porter : BasicColonist, IGatherDrops, IDeliverDrops
 {    
     public float idleTime = 1f;
     public float sleepTime = 2f;
@@ -9,8 +9,6 @@ public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
     public GameObject TargetDrop { get; set; }
 
     public DeliveryRequest DeliveryRequest { get; set; }
-
-    private StateMachine stateMachine;
 
     protected override void Start()
     {

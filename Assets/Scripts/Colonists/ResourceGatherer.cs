@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturnDrops
+public abstract class ResourceGatherer : BasicColonist, IGatherDrops, IReturnDrops
 {
     public float damage = 20f;
     public float hitCooldown = 1f;
@@ -10,7 +10,6 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
     public float sleepTime = 2f;
     public int maxStacks = 3;
     public DropSpec dropSpec;
-    private StateMachine stateMachine;
 
     public GameObject Target { get; set; }
     public GameObject TargetDrop { get; set; }

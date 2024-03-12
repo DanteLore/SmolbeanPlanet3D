@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b85114f4f3f2b4c1bb5eea80d8c4aa0d, type: 3}
+  m_Name: ColonistSpec
+  m_EditorClassIdentifier: 
+  animalName: 
+  prefab: {fileID: 5678464011766705138, guid: c9e113ff2882f4146b4b977ec7a7d43b, type: 3}
+  dropSpec: {fileID: 0}
+  deathParticleSystem: {fileID: 1708857678183282219, guid: c0a8a93d928bb43529ca1831cdbf6913, type: 3}
+  sleepParticleSystem: {fileID: 1572338817668193572, guid: 631718f0bff854df1b58a025e98baf49, type: 3}
+  thumbnail: {fileID: 2800000, guid: f324c832b2ea64f7899febbbbc81a308, type: 3}
+  startingPopulation: 5
+  populationCap: 100
+  initialHealth: 100
+  maxHealth: 100
+  healthRecoveryPerSecond: 2
+  sleepingHealthDecreaseMultiplier: 0.01
+  oldAgeSeconds: 6600
+  lifespanSeconds: 10000
+  oldAgeHealthImpactPerSecond: 0.1
+  maturityAgeSeconds: 300
+  juvenileScale: 0.5
+  gestationPeriodSeconds: 0
+  birthProbability: 0
+  minimumHealthToGiveBirth: 0
+  pregnancyHealthImpact: 0
+  sightRange: 500
+  speed: 10
+  oldAgeSpeedDecrease: 0.2
+  maxFoodLevel: 0
+  initialFoodLevelMin: 0
+  initialFoodLevelMax: 0
+  foodDigestedPerSecond: 0
+  sleepingDigestionMultiplier: 0
+  starvationThreshold: 0
+  starvationRatePerSecond: 0
+  foodEatenPerSecond: 0
+  fullThreshold: 0
+  hungryThreshold: 0
+  grassWearPerSecondWhenEating: 0
