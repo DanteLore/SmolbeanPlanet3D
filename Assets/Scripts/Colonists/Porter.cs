@@ -14,8 +14,6 @@ public class Porter : BasicColonist, IGatherDrops, IDeliverDrops
     {
         base.Start();
 
-        stateMachine = new StateMachine(shouldLog:false);
-
         var idle = new IdleState(animator);
 
         var searchForDeliveryJob = new PorterClaimDeliveryRequest(this, DeliveryManager.Instance);
@@ -35,9 +33,7 @@ public class Porter : BasicColonist, IGatherDrops, IDeliverDrops
 
         AT(idle, searchForDeliveryJob, HasBeenIdleForAWhile());
 
-        stateMachine.SetState(idle);
-
-        void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
+        StateMachine.SetState(idle);
 
         Func<bool> DropFound() => () => TargetDrop != null;
         Func<bool> NoDropFound() => () => TargetDrop == null && !searchForCollectionJob.InProgress;
@@ -47,12 +43,5 @@ public class Porter : BasicColonist, IGatherDrops, IDeliverDrops
         Func<bool> NoDeliveryToDo() => () => DeliveryRequest == null;
         Func<bool> DeliveryAssigned() => () => DeliveryRequest != null;
         Func<bool> DeliveryComplete() => () => doDelivery.Finished;
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        stateMachine.Tick();
     }
 }

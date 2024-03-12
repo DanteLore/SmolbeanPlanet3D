@@ -5,14 +5,26 @@ using System.Collections;
 
 public class ShipwreckManager : MonoBehaviour, IObjectGenerator
 {
+    public static ShipwreckManager Instance { get; private set; }
+
     public CameraController cameraController;
     public BuildingSpec shipwreckSpec;
     public Ingredient[] startingInventory;
     public float shipwreckClearingRadius = 6f;
     public string natureLayer = "Nature";
 
+    public SmolbeanBuilding Shipwreck { get; private set; }
     public int Priority { get { return 200; } }
     public bool RunModeOnly { get { return true; } }
+
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+            Destroy(gameObject);
+        else
+            Instance = this;
+    }
 
     public void Clear()
     {
@@ -43,9 +55,9 @@ public class ShipwreckManager : MonoBehaviour, IObjectGenerator
     private Vector3 PlaceShipwreck(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
         // Does a shipwreck already exist?
-        var shipwreck = BuildingController.Instance.Buildings.FirstOrDefault(b => b is Shipwreck);
-        if (shipwreck != null)
-            return shipwreck.transform.position;
+        Shipwreck = BuildingController.Instance.Buildings.FirstOrDefault(b => b is Shipwreck);
+        if (Shipwreck != null)
+            return Shipwreck.transform.position;
 
         Vector2Int mapPos = FindShipwreckLocation(gameMap, gameMapWidth, gameMapHeight);
 
@@ -53,9 +65,9 @@ public class ShipwreckManager : MonoBehaviour, IObjectGenerator
         var inventory = startingInventory.Select(i => new InventoryItemSaveData { dropSpecName = i.item.dropName, quantity = i.quantity });
 
         // Place the shipwreck
-        shipwreck = BuildingController.Instance.PlaceBuildingOnSquare(shipwreckSpec, mapPos.x, mapPos.y, inventory);
+        Shipwreck = BuildingController.Instance.PlaceBuildingOnSquare(shipwreckSpec, mapPos.x, mapPos.y, inventory);
 
-        return shipwreck.transform.position;
+        return Shipwreck.transform.position;
     }
 
     private static Vector2Int FindShipwreckLocation(List<int> gameMap, int gameMapWidth, int gameMapHeight)

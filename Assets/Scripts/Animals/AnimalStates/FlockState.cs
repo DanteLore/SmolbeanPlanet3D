@@ -2,22 +2,15 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class FlockState : IState
+public class FlockState : CompoundState
 {
-    private readonly StateMachine stateMachine;
-    private readonly IState startState;
     private readonly SoundPlayer soundPlayer;
-
-    protected void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
-    protected void AT(IState to, Func<bool> condition) => stateMachine.AddAnyTransition(to, condition);
 
     public FlockState(SmolbeanAnimal animal, Animator animator, NavMeshAgent navAgent, SoundPlayer soundPlayer)
     {
-        stateMachine = new StateMachine(shouldLog: false);
-
         var idle = new IdleState(animator);
         var findWoodland = new ChooseFlockLocation(animal);
-        var wander = new WanderState(animal, navAgent, animator, soundPlayer);
+        var wander = new WalkToTargetState(animal, navAgent, animator, soundPlayer);
 
         AT(wander, HasSomewhereToGo());
         AT(wander, idle, Arrived());
@@ -36,18 +29,9 @@ public class FlockState : IState
         this.soundPlayer = soundPlayer;
     }
 
-    public void OnEnter()
+    public override void OnEnter()
     {
-        stateMachine.SetState(startState);
+        base.OnEnter();
         soundPlayer.PlayOneShot("Dodo1");        
-    }
-
-    public void OnExit()
-    {
-    }
-
-    public void Tick()
-    {
-        stateMachine?.Tick();
     }
 }

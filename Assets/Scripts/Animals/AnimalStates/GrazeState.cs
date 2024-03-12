@@ -2,22 +2,15 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class GrazeState : IState
+public class GrazeState : CompoundState
 {
-    private readonly StateMachine stateMachine;
-    private readonly IState startState;
     private readonly SoundPlayer soundPlayer;
-
-    protected void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
-    protected void AT(IState to, Func<bool> condition) => stateMachine.AddAnyTransition(to, condition);
 
     public GrazeState(SmolbeanAnimal animal, Animator animator, NavMeshAgent navAgent, SoundPlayer soundPlayer)
     {
-        stateMachine = new StateMachine(shouldLog: false);
-
         var eat = new EatGrassState(animal);
         var lookForPlaceToEat = new ChooseEatingPlaceState(animal);
-        var wander = new WanderState(animal, navAgent, animator, soundPlayer);
+        var wander = new WalkToTargetState(animal, navAgent, animator, soundPlayer);
 
         AT(wander, HasSomewhereToGo());
         AT(wander, eat, Arrived());
@@ -27,7 +20,6 @@ public class GrazeState : IState
         // In case the search states find a very close point
         AT(lookForPlaceToEat, eat, Arrived());
 
-        startState = eat;
         stateMachine.SetState(eat);
 
         Func<bool> HasSomewhereToGo() => () => !animal.CloseEnoughTo(animal.target);
@@ -36,18 +28,9 @@ public class GrazeState : IState
         this.soundPlayer = soundPlayer;
     }
 
-    public void OnEnter()
+    public override void OnEnter()
     {
-        stateMachine.SetState(startState);
+        base.OnEnter();
         soundPlayer.PlayOneShot("Dodo2");
-    }
-
-    public void OnExit()
-    {
-    }
-
-    public void Tick()
-    {
-        stateMachine?.Tick();
     }
 }

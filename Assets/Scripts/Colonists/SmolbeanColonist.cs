@@ -15,7 +15,7 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
     {
         get
         {
-            // Once colonists break free of their home buildings, this will go away!
+            // TODO: Once colonists break free of their home buildings, this will go away!
             if(home == null)
                 home = GetComponentInParent<SmolbeanBuilding>();
             
@@ -33,6 +33,8 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
 
     protected override void Update()
     {
+        base.Update();
+
         UpdateGroundWear();
     }
 

@@ -21,7 +21,7 @@ public class Dodo : SmolbeanAnimal
         AT(graze, flock, Full());
         AT(sleep, flock, WakeupTime(5f));
         
-        stateMachine.SetState(flock);
+        StateMachine.SetState(flock);
 
         Func<bool> Hungry() => IsHungry;
         Func<bool> Full() => IsFull;

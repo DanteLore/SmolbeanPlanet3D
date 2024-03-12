@@ -23,11 +23,9 @@ public class Miner : BasicColonist, IReturnDrops
     {
         base.Start();
 
-        stateMachine = new StateMachine(shouldLog:false);
-
         var idle = new IdleState(animator);
         var getReady = new MinerBlinkInTheSunlightState(this);
-        var operateMine = new OperateMineState(this, animator, soundPlayer);
+        var operateMine = new OperateMineState(this, soundPlayer);
         var walkToDropPoint = new WalkToDropPointState(this, navAgent, animator, soundPlayer);
         var dropInventory = new DropInventoryAtDropPointState(this, DropController.Instance);
         var walkHome = new WalkHomeState(this, navAgent, animator, soundPlayer);
@@ -42,9 +40,7 @@ public class Miner : BasicColonist, IReturnDrops
         AT(dropInventory, walkHome, InventoryIsEmpty());
         AT(walkHome, idle, IsAtSpawnPoint());
 
-        stateMachine.SetState(getReady);
-
-        void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
+        StateMachine.SetState(getReady);
 
         Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
         Func<bool> IsAtDropPoint() => () => CloseEnoughTo(DropPoint);
@@ -53,12 +49,4 @@ public class Miner : BasicColonist, IReturnDrops
         Func<bool> MiningFinished() => () => operateMine.Finished;
         Func<bool> ReadyToGo() => () => idle.TimeIdle >= idleTime && Home.DropPointContents().Where(s => s.IsFull()).Count() < maxStacks;
     }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        stateMachine.Tick();
-    }
 }
-;

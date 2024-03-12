@@ -40,8 +40,6 @@ public abstract class ResourceGatherer : BasicColonist, IGatherDrops, IReturnDro
         base.Start();
 
         DropPoint = Home.GetDropPoint();
-
-        stateMachine = new StateMachine();
         
         var searchForResources = new SearchForResourceState(this, natureLayer);
         var searchForDrops = new SearchForDropsState(this, dropLayer);
@@ -83,9 +81,8 @@ public abstract class ResourceGatherer : BasicColonist, IGatherDrops, IReturnDro
         AT(walkHome,        sleeping,           IsAtSpawnPoint());
         AT(sleeping,        idle,               HasBeenSleepingForAWhile());
 
-        stateMachine.SetState(searchForResources);
+        StateMachine.SetState(searchForResources);
 
-        void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
         Func<bool> HasTarget() => () => Target != null;
         Func<bool> IsCloseEnoughToTarget() => () => CloseEnoughTo(Target);
         Func<bool> IsCloseEnoughToDrop() => () => CloseEnoughTo(TargetDrop);
@@ -99,13 +96,6 @@ public abstract class ResourceGatherer : BasicColonist, IGatherDrops, IReturnDro
         Func<bool> IsAtDropPoint() => () => CloseEnoughTo(DropPoint);
         Func<bool> ReadyToGo() => () => idle.TimeIdle >= idleTime && !DropPointFull();
         Func<bool> HasBeenSleepingForAWhile() => () => sleeping.TimeAsleep >= sleepTime;
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        stateMachine.Tick();
     }
 
     private bool DropPointFull()

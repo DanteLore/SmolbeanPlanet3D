@@ -89,6 +89,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -192,8 +194,7 @@ MonoBehaviour:
   building: {fileID: 2342996652910833306}
   itemDropRadius: 2
   itemDropHeight: 1
-  woodcutterPrefab: {fileID: 5678464011766705138, guid: 448bb25b7e83a4d2f8875362bd561e51, type: 3}
-  spawnDelaySeconds: 5
+  jobSpec: {fileID: 11400000, guid: 2a17e2408d94e448c9dcd55ae3b5a4af, type: 2}
 --- !u!208 &4150118438198778675
 NavMeshObstacle:
   m_ObjectHideFlags: 0

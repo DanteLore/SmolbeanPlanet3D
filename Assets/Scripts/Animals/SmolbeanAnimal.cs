@@ -6,8 +6,8 @@ using System.Collections;
 
 public abstract class SmolbeanAnimal : MonoBehaviour
 {
-    protected void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
-    protected void AT(IState to, Func<bool> condition) => stateMachine.AddAnyTransition(to, condition);
+    protected void AT(IState from, IState to, Func<bool> condition) => StateMachine.AddTransition(from, to, condition);
+    protected void AT(IState to, Func<bool> condition) => StateMachine.AddAnyTransition(to, condition);
 
     public string natureLayer = "Nature";
     public string creatureLayer = "Creatures";
@@ -24,7 +24,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     protected NavMeshAgent navAgent;
     protected SoundPlayer soundPlayer;
 
-    protected StateMachine stateMachine;
+    protected StateMachine StateMachine { get; private set; }
     public int speciesIndex;
     public AnimalSpec species;
     public Vector3 target;
@@ -41,7 +41,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         body = transform.Find("Body").gameObject;
 
-        stateMachine = new StateMachine(shouldLog: false);
+        StateMachine = new StateMachine(shouldLog: false);
     }
 
     protected virtual void Update()
@@ -53,7 +53,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
             if (stats.health <= 0f)
                 return;
 
-            stateMachine.Tick();
+            StateMachine.Tick();
         }
     }
 
@@ -179,7 +179,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public void StartSleep()
     {
         isSleeping = true;
-        float y = body.GetComponent<MeshRenderer>().bounds.max.y * 1.1f;
+        float y = GetComponentInChildren<Collider>().bounds.max.y * 1.1f;
         var animalPosition = transform.position;
         var p = new Vector3(animalPosition.x, y, animalPosition.z);
         sleepPs = Instantiate(species.sleepParticleSystem, p, Quaternion.Euler(0f, 0f, 0f), transform);

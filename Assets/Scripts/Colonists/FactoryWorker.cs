@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -21,8 +19,6 @@ public class FactoryWorker : BasicColonist, IReturnDrops
     {
         base.Start();
 
-        stateMachine = new StateMachine(shouldLog:false);
-
         var factory = (FactoryBuilding)Home;
 
         var idle = new IdleState(animator);
@@ -39,7 +35,7 @@ public class FactoryWorker : BasicColonist, IReturnDrops
         AT(dropInventory, walkHome, InventoryEmpty());
         AT(walkHome, idle, AtSpawnPoint());
 
-        stateMachine.SetState(idle);
+        StateMachine.SetState(idle);
 
         Func<bool> AtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
         Func<bool> AtDropPoint() => () => CloseEnoughTo(DropPoint);
@@ -47,14 +43,5 @@ public class FactoryWorker : BasicColonist, IReturnDrops
         Func<bool> InventoryEmpty() => Inventory.IsEmpty;
         Func<bool> FactoryReady() =>() => factory.IsReadyToStart;
         Func<bool> JobDone() => () => factory.IsFinished;
-
-        void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        stateMachine.Tick();
     }
 }

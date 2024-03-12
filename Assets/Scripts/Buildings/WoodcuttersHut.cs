@@ -1,14 +1,11 @@
-using UnityEngine;
-
 public class WoodcuttersHut : SmolbeanBuilding
 {
-    public GameObject woodcutterPrefab;
-    public float spawnDelaySeconds = 5f;
+    public JobSpec jobSpec;
 
     protected override void Start()
     {
         base.Start();
 
-        // Register jobs here soon!
+        JobController.Instance.RegisterJob(jobSpec, this);
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine;
 public class StateMachine
 {
     private IState currentState;
-    private bool shouldLog = false;
+    public bool shouldLog = false;
     private Dictionary<Type, List<Transition>> transitions = new Dictionary<Type, List<Transition>>();
     private List<Transition> currentTransitions = new List<Transition>();
     private List<Transition> anyTransitions = new List<Transition>();

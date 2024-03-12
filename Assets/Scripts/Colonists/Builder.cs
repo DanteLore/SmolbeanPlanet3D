@@ -11,8 +11,6 @@ public class Builder : BasicColonist
     {
         base.Start();
 
-        stateMachine = new StateMachine(shouldLog:false);
-
         var idle = new IdleState(animator);
         var sleep = new ColonistSleepState(this);
         var chooseBuildingSite = new SearchForBuildingSiteState(this, buildingLayer);
@@ -35,7 +33,7 @@ public class Builder : BasicColonist
 
         AT(buildBuilding, walkHome, TargetNotFound());
 
-        stateMachine.SetState(idle);
+        StateMachine.SetState(idle);
 
         Func<bool> IdleForAWhile() => () => idle.TimeIdle > 8f;
         Func<bool> SleepingForAWhile() => () => sleep.TimeAsleep > sleepTime;
@@ -45,14 +43,5 @@ public class Builder : BasicColonist
         Func<bool> CloseEnoughToHome() => () => CloseEnoughTo(SpawnPoint);
         Func<bool> BuildingComplete() => () => TargetBuilding.IsComplete;
         Func<bool> IsStuck() => () => walkToSite.StuckTime >= 2f;
-
-        void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
-    }
-
-    protected override void Update()
-    {
-        base.Update();
-
-        stateMachine.Tick();
     }
 }
