@@ -8,12 +8,12 @@ using System.Linq;
 
 public class AnimalDetailMenuController : BaseDetailsMenuController
 {
-    private AnimalController animalController;
-    private Dictionary<FieldInfo, Label> fieldLookup = new();
+    private AnimalDetailController animalDetailController;
+    private readonly Dictionary<FieldInfo, Label> fieldLookup = new();
 
     protected override void OnEnable()
     {
-        animalController = FindFirstObjectByType<AnimalController>();
+        animalDetailController = FindFirstObjectByType<AnimalDetailController>();
 
         base.OnEnable();
     }
@@ -27,24 +27,24 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
     protected override void CloseButtonClicked()
     {
         soundPlayer.Play("Click");
-        animalController.ClearSelection();
+        animalDetailController.ClearSelection();
         MenuController.Instance.CloseAll();
     }
 
     protected override void Update()
     {
-        if(animalController.TargetTransform == null)
+        if(animalDetailController.TargetTransform == null)
         {
             target = null;
             Clear();
         }
-        else if (ReferenceEquals(animalController.TargetTransform, target))
+        else if (ReferenceEquals(animalDetailController.TargetTransform, target))
         {
             UpdateValues();
         }
         else
         {
-            target = animalController.TargetTransform;
+            target = animalDetailController.TargetTransform;
             Clear();
             DrawMenu();
         }

@@ -27,8 +27,8 @@ MonoBehaviour:
   oldAgeSeconds: 6600
   lifespanSeconds: 10000
   oldAgeHealthImpactPerSecond: 0.1
-  maturityAgeSeconds: 300
-  juvenileScale: 0.5
+  maturityAgeSeconds: 0
+  juvenileScale: 1
   gestationPeriodSeconds: 0
   birthProbability: 0
   minimumHealthToGiveBirth: 0
