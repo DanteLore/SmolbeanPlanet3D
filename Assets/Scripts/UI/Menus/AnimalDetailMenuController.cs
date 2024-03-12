@@ -5,6 +5,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
+using System.Text;
 
 public class AnimalDetailMenuController : BaseDetailsMenuController
 {
@@ -84,7 +85,7 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
         var mainScrollView = document.rootVisualElement.Q<ScrollView>("mainScrollView");
         FieldInfo[] fields = animal.Stats.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
-        foreach (var field in fields.Where(f => f.Name != "name"))
+        foreach (var field in fields.Where(f => f.Name != "name").OrderBy(f => f.Name))
         {
             VisualElement rowContainer = new();
             rowContainer.AddToClassList("fieldRow");
@@ -92,7 +93,7 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 
             Label fieldLabel = new();
             fieldLabel.AddToClassList("fieldLabel");
-            fieldLabel.text = field.Name + ":";
+            fieldLabel.text = NicifyVariableName(field.Name) + ":";
             rowContainer.Add(fieldLabel);
 
             Label valueLabel = new();
@@ -102,6 +103,23 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 
             fieldLookup.Add(field, valueLabel);
         }
+    }
+
+    private string NicifyVariableName(string name)
+    {
+        StringBuilder result = new();
+
+        foreach(char c in name)
+        {
+            if (char.IsUpper(c))
+                result.Append(" " + c);
+            else
+                result.Append(c);
+        }
+
+        result[0] = char.ToUpper(result[0]);
+
+        return result.ToString();
     }
 
     private static string GetDisplayValue(SmolbeanAnimal animal, FieldInfo field)

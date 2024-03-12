@@ -11,6 +11,15 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Last big scary job
+
+For a long time there have been changes I have needed to make that have seemed scary. The last of these is to separate colonists from buildings. This means giving them their own lifecycles,
+allowing them to choose or be assigned work, and somehow combining the _many_ state machines that control them.
+
+Anyway... this week, over many late nights, I have started!
+
+![Screenshot](./Docs/Images/screenshot63.png)
+
 ## A weekend of UI work
 
 Added a few new UIs, as well as some beefy optimisation of the way the game is generated, loaded and saved.

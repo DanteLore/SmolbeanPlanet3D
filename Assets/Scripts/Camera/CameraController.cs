@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour, IObjectGenerator
 {
     private CameraControlActions cameraActions;
     private InputAction movement;
-    private Transform cameraTransform;
+    public Transform cameraTransform;
 
     [Header("Default Position")]
     public Vector3 cameraStartPosition;
