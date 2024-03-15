@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
+    <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
+    <Style src="project://database/Assets/UI/JobsMenu.uss?fileID=7433441132597879392&amp;guid=2fc8ed31c39a54711a72d5a99ac0ac4f&amp;type=3#JobsMenu" />
+    <ui:VisualElement name="VisualElement" class="menuContainer">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+            <ui:Label tabindex="-1" text="Jobs" display-tooltip-when-elided="true" name="Label" class="title" />
+            <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="height: 100%; display: flex;">
+                <ui:VisualElement name="listContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start; white-space: nowrap; flex-wrap: nowrap; flex-direction: column; justify-content: flex-start; align-self: stretch; flex-shrink: 0;" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+        <ui:VisualElement name="dialogButtonContainer" style="flex-direction: row-reverse; width: 100%;">
+            <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

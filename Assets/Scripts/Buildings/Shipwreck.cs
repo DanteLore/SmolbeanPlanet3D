@@ -1,9 +1,12 @@
 public class Shipwreck : Storehouse
 {
+    public JobSpec[] jobSpecs;
+
     protected override void Start()
     {
         base.Start();
 
-        // Register jobs here soon!
+        foreach(var jobSpec in jobSpecs)
+            JobController.Instance.RegisterJob(jobSpec, this);
     }
 }

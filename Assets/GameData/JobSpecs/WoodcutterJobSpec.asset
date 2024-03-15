@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: WoodcutterJobSpec
   m_EditorClassIdentifier: 
   jobName: Woodcutting
-  thumbnail: {fileID: 0}
+  thumbnail: {fileID: 2800000, guid: 9cb27bb01c2ae4e44bdb8ad5f895bfe9, type: 3}

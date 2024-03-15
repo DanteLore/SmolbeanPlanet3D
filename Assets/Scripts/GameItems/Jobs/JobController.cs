@@ -24,7 +24,7 @@ public class JobController : MonoBehaviour, IObjectGenerator
             Instance = this;
     }
 
-    public Job FindJob()
+    public Job ClaimNextJob(SmolbeanColonist colonist)
     {
         if (vacancies.Count == 0)
             return null;
@@ -33,6 +33,7 @@ public class JobController : MonoBehaviour, IObjectGenerator
         var job = vacancies[UnityEngine.Random.Range(0, vacancies.Count - 1)];
         vacancies.Remove(job);
         assignedJobs.Add(job);
+        job.Colonist = colonist;
 
         return job;
     }

@@ -18,6 +18,12 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
         base.OnEnable();
     }
 
+    protected void OnDisable()
+    {
+        if (target != null)
+            target.GetComponent<SmolbeanAnimal>().ThoughtsChanged -= ThoughtsChanged;
+    }
+
     protected override void Clear()
     {
         fieldLookup.Clear();

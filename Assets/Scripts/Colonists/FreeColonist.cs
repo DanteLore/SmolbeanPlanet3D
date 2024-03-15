@@ -19,8 +19,12 @@ public class FreeColonist : SmolbeanColonist
         AT(sleep, IsNight());
 
         AT(sleep, idle, WakeupTime());
-        AT(idle, beFree, NoJob());
+
         AT(idle, doJob, HasJob());
+        AT(idle, beFree, NoJob());
+
+        AT(findJob, doJob, HasJob());
+        AT(findJob, beFree, NoJob());
 
         AT(beFree, findJob, JobAvailable());
 

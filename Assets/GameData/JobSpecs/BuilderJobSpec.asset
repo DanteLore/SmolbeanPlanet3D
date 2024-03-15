@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BuilderJobSpec
   m_EditorClassIdentifier: 
   jobName: Building
-  thumbnail: {fileID: 0}
+  thumbnail: {fileID: 2800000, guid: 7a0072323599843268b0c6d0c9c1780a, type: 3}

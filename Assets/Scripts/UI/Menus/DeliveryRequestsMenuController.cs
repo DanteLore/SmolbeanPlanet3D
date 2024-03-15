@@ -18,7 +18,7 @@ public class DeliveryRequestsMenu : SmolbeanMenu
         
         listContainer = document.rootVisualElement.Q<VisualElement>("listContainer");
 
-        InvokeRepeating(nameof(RefreshList), 0.1f, 2.0f);
+        InvokeRepeating(nameof(RefreshList), 0.0f, 1.0f);
     }
 
     void OnDisable()
