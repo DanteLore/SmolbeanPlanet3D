@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,12 @@ public class JobController : MonoBehaviour, IObjectGenerator
 {
     public static JobController Instance { get; private set; }
 
-    private List<Job> jobs = new();
+    private List<Job> vacancies = new();
+    private List<Job> assignedJobs = new();
 
-    public IEnumerable<Job> Jobs { get { return jobs; } }
+    public IEnumerable<Job> Vacancies { get { return vacancies; } }
+    public IEnumerable<Job> AssignedJobs { get { return assignedJobs; } }
+
     public int Priority { get { return 150; } }
     public bool RunModeOnly { get { return true; } }
 
@@ -20,16 +24,29 @@ public class JobController : MonoBehaviour, IObjectGenerator
             Instance = this;
     }
 
+    public Job FindJob()
+    {
+        if (vacancies.Count == 0)
+            return null;
+
+        // TODO:  Random for now.  Need to assign, like delivery requests
+        var job = vacancies[UnityEngine.Random.Range(0, vacancies.Count - 1)];
+        vacancies.Remove(job);
+        assignedJobs.Add(job);
+
+        return job;
+    }
+
     public void RegisterJob(JobSpec jobSpec, SmolbeanBuilding woodcuttersHut)
     {
         Job job = new(woodcuttersHut, jobSpec);
 
-        jobs.Add(job);
+        vacancies.Add(job);
     }
 
     public void Clear()
     {
-        jobs.Clear();
+        vacancies.Clear();
     }
 
     public void SaveTo(SaveFileData saveData, string filename)

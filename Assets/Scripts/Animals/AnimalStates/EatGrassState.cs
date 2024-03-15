@@ -11,6 +11,7 @@ public class EatGrassState : IState
 
     public void OnEnter()
     {
+        animal.Think("Eating some grass...");
     }
 
     public void OnExit()

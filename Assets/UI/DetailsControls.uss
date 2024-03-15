@@ -99,3 +99,69 @@
     -unity-text-align: middle-left;
     white-space: nowrap;
 }
+
+.thoughtsContainer
+{
+    margin-top: 50px;
+}
+
+.thoughtsRow
+{
+    margin: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 3px;
+    padding-right: 1px;
+    background-color: rgba(255, 255, 255, .05);
+    color: rgb(0, 0, 0);
+    width: 90%;
+    min-width: 90%;
+    max-width: 90%;
+    border-radius: 5px;
+}
+
+.thoughtsRow Label
+{
+    white-space: wrap;
+    font-size: 10px;
+    -unity-text-align: middle-left;
+    color: rgb(0, 0, 0);
+}
+
+.thoughtsRowLatest
+{
+    margin: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 6px;
+    padding-right: 2px;
+    background-color: rgba(255, 255, 255, .2);
+    color: rgb(0, 0, 0);
+    width: 95%;
+    min-width: 95%;
+    max-width: 95%;
+    border-radius: 5px;
+}
+
+.thoughtsRowLatest Label
+{
+    white-space: wrap;
+    font-size: 14px;
+    -unity-text-align: middle-left;
+    color: rgb(0, 0, 0);
+}
+
+Label.todLabel
+{
+    height: 10px;
+    min-height: 10px;
+    max-height: 10px;
+    margin-top: 2px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 4px;
+    padding: 0px;
+    font-size: 10px;
+    -unity-text-align: middle-right;
+    color: rgb(0, 0, 0);
+}

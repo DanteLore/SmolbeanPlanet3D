@@ -14,6 +14,8 @@ public class ChooseEatingPlaceState : IState
 
     public void OnEnter()
     {
+        animal.Think("Looking for food");
+
         var pos = animal.transform.position;
 
         List<Vector3> candidates = new();

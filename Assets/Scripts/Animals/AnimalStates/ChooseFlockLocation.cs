@@ -17,6 +17,8 @@ public class ChooseFlockLocation
 
     public void OnEnter()
     {
+        animal.Think("Following the flock");
+
         var pos = animal.transform.position;
         var treeLocations = GetTreeLocations(pos);
         var animalLocations = GetAnimalLocations(pos);

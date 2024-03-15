@@ -6,13 +6,12 @@ public class FreeColonistState : CompoundState
     public FreeColonistState(SmolbeanColonist colonist, Animator animator, UnityEngine.AI.NavMeshAgent navAgent, SoundPlayer soundPlayer)
     {
         var idle = new IdleState(animator);
-        var sleep = new SleepState(colonist, animator, soundPlayer);
         var wander = new WalkToTargetState(colonist, navAgent, animator, soundPlayer);
         var findRestingPlace = new FindRestingPlaceState(colonist);
 
-        AT(idle, findRestingPlace, IdleFor(5f));
+        AT(idle, findRestingPlace, IdleFor(20f));
         AT(findRestingPlace, wander, HasSomewhereToGo());
-        AT(wander, sleep, Arrived());
+        AT(wander, idle, Arrived());
 
         stateMachine.SetState(idle);
 

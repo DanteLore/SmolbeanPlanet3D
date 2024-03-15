@@ -1,6 +1,6 @@
 using System;
 
-public class Builder : BasicColonist
+public class Builder : FreeColonist
 {
     public string buildingLayer = "Buildings";
     public float sleepTime = 5f;

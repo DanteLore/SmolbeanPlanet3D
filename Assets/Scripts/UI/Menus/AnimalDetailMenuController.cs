@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
 using System.Text;
@@ -11,6 +9,7 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 {
     private AnimalDetailController animalDetailController;
     private readonly Dictionary<FieldInfo, Label> fieldLookup = new();
+    private VisualElement thoughtsContainer;
 
     protected override void OnEnable()
     {
@@ -22,6 +21,7 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
     protected override void Clear()
     {
         fieldLookup.Clear();
+        thoughtsContainer = null;
         base.Clear();
     }
 
@@ -36,6 +36,9 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
     {
         if(animalDetailController.TargetTransform == null)
         {
+            if (target != null)
+                target.GetComponent<SmolbeanAnimal>().ThoughtsChanged -= ThoughtsChanged;
+
             target = null;
             Clear();
         }
@@ -46,21 +49,18 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
         else
         {
             target = animalDetailController.TargetTransform;
+
+            if (target != null)
+                target.GetComponent<SmolbeanAnimal>().ThoughtsChanged += ThoughtsChanged;
+
             Clear();
             DrawMenu();
         }
     }
 
-    private void UpdateValues()
+    private void ThoughtsChanged(object sender, EventArgs e)
     {
-        var animal = target.GetComponent<SmolbeanAnimal>();
-
-        foreach (var (field, label) in fieldLookup)
-        {
-            label.text = GetDisplayValue(animal, field);
-        }
-
-        UpdateLocation(animal);
+        UpdateThoughts(target.GetComponent<SmolbeanAnimal>());
     }
 
     private void UpdateLocation(SmolbeanAnimal animal)
@@ -82,14 +82,50 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 
         UpdateLocation(animal);
 
-        var mainScrollView = document.rootVisualElement.Q<ScrollView>("mainScrollView");
+        DisplayFields(animal);
+
+        thoughtsContainer = new();
+        thoughtsContainer.AddToClassList("thoughtsContainer");
+        document.rootVisualElement.Q<ScrollView>("mainScrollView").Add(thoughtsContainer);
+
+        UpdateThoughts(animal);
+    }
+
+    private void UpdateThoughts(SmolbeanAnimal animal)
+    {
+        thoughtsContainer.Clear();
+
+        int listLength = 4;
+        var thoughts = animal.Thoughts.Reverse().Take(listLength).ToArray();
+
+        for(int i = 0; i < thoughts.Length; i++)
+        {
+            VisualElement thoughtsRow = new();
+            thoughtsRow.AddToClassList(i == 0 ? "thoughtsRowLatest" : "thoughtsRow");
+            thoughtsContainer.Add(thoughtsRow);
+
+            string timeStr = DayNightCycleController.Instance.DisplayTime(thoughts[i].timeOfDay);
+            string dayStr = DayNightCycleController.Instance.DisplayDay(thoughts[i].day);
+            Label todLabel = new();
+            todLabel.text = $"{dayStr} {timeStr}";
+            todLabel.AddToClassList("todLabel");
+            thoughtsRow.Add(todLabel);
+
+            Label thoughtLabel = new();
+            thoughtLabel.text = thoughts[i].thought;
+            thoughtsRow.Add(thoughtLabel);
+        }
+    }
+
+    private void DisplayFields(SmolbeanAnimal animal)
+    {
         FieldInfo[] fields = animal.Stats.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
         foreach (var field in fields.Where(f => f.Name != "name").OrderBy(f => f.Name))
         {
             VisualElement rowContainer = new();
             rowContainer.AddToClassList("fieldRow");
-            mainScrollView.Add(rowContainer);
+            document.rootVisualElement.Q<ScrollView>("mainScrollView").Add(rowContainer);
 
             Label fieldLabel = new();
             fieldLabel.AddToClassList("fieldLabel");
@@ -103,6 +139,18 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 
             fieldLookup.Add(field, valueLabel);
         }
+    }
+
+    private void UpdateValues()
+    {
+        var animal = target.GetComponent<SmolbeanAnimal>();
+
+        foreach (var (field, label) in fieldLookup)
+        {
+            label.text = GetDisplayValue(animal, field);
+        }
+
+        UpdateLocation(animal);
     }
 
     private string NicifyVariableName(string name)
@@ -127,7 +175,12 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
         var value = field.GetValue(animal.Stats);
 
         if (field.FieldType == typeof(float))
-            return String.Format("{0:0.0}", value);
+        {
+            if (field.Name.ToLower() == "age")
+                return DayNightCycleController.Instance.DurationToString((float)value);
+            else
+                return string.Format("{0:0.0}", value);
+        }
 
         return value.ToString();
     }

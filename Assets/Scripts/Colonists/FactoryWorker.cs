@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-public class FactoryWorker : BasicColonist, IReturnDrops
+public class FactoryWorker : FreeColonist, IReturnDrops
 {
     public float idleTime = 1f;
     public int maxStacks = 5;

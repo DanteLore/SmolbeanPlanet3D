@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SleepState : IState
@@ -20,6 +18,7 @@ public class SleepState : IState
 
     public void OnEnter()
     {
+        animal.Think("ZZZZZzzzzz....");
         sleepStartTime = Time.time;
         animal.StartSleep();
     }
@@ -27,6 +26,7 @@ public class SleepState : IState
     public void OnExit()
     {
         animal.EndSleep();
+        animal.Think("Time to get up *yawn*");
     }
 
     public void Tick()

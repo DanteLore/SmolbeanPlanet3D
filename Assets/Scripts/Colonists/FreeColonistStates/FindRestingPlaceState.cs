@@ -5,8 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public class FindRestingPlaceState
-    : IState
+public class FindRestingPlaceState : IState
 {
     private readonly SmolbeanColonist colonist;
 
@@ -18,7 +17,23 @@ public class FindRestingPlaceState
     public void OnEnter()
     {
         // TODO: Come back to this when there is somewhere for colonists to rest!
-        colonist.target = ShipwreckManager.Instance.Shipwreck.spawnPoint.transform.position;
+
+        colonist.Think("Looking for somewhere to rest");
+
+        var pos = ShipwreckManager.Instance.Shipwreck.spawnPoint.transform.position;
+
+            float radius = 12f;
+            float x = pos.x + Random.Range(-radius, radius);
+            float z = pos.z + Random.Range(-radius, radius);
+
+        if (
+                Physics.Raycast(new Ray(new Vector3(x, 1000, z), Vector3.down), out var rayHit, 2000, LayerMask.GetMask("Ground"))
+                && NavMesh.SamplePosition(rayHit.point, out var navHit, 1.0f, NavMesh.AllAreas)
+                && navHit.position.y > 0.0f //don't go into the sea!
+            )
+            colonist.target = rayHit.point;
+        else
+            colonist.target = pos;
     }
 
     public void OnExit()

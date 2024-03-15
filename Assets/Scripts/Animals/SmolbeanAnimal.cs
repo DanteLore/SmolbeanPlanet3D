@@ -3,6 +3,7 @@ using UnityEngine.AI;
 using System.Linq;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class SmolbeanAnimal : MonoBehaviour
 {
@@ -32,6 +33,10 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     protected bool isDead = false;
     protected bool isSleeping = false;
     private GameObject sleepPs;
+    private readonly List<Thought> thoughts = new();
+    public IEnumerable<Thought> Thoughts { get { return thoughts; } }
+    public int memoryLength = 12;
+    public EventHandler ThoughtsChanged;
 
     protected virtual void Start()
     {
@@ -55,6 +60,23 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
             StateMachine.Tick();
         }
+    }
+
+    public void Think(string thought)
+    {
+        while (thoughts.Count > memoryLength)
+            thoughts.RemoveAt(0);
+
+        var t = new Thought
+        {
+            thought = thought,
+            day = DayNightCycleController.Instance.day,
+            timeOfDay = DayNightCycleController.Instance.timeOfDay
+        };
+
+        thoughts.Add(t);
+
+        ThoughtsChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public abstract void InitialiseStats(AnimalStats newStats = null);

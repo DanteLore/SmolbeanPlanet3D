@@ -21,11 +21,6 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     [Range(0f, 24f)]
     public float gameStartTime = 7f;
 
-    internal bool IsNight()
-    {
-        throw new NotImplementedException();
-    }
-
     [Range(0f, 24f)]
     public float timeOfDay;
     public int day = 1;
@@ -33,40 +28,52 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
 
     public bool TimeIsBetween(float start, float end)
     {
-        return start <= timeOfDay && timeOfDay <= end;
+        if (start < end)
+            return start <= timeOfDay && timeOfDay <= end;
+        else
+            return timeOfDay <= end || timeOfDay >= start;
     }
 
-    public string DisplayTime
+    public string DisplayTime(float t = -1f)
     {
-        get
-        {
-            int hour = Mathf.FloorToInt(timeOfDay);
-            float d = timeOfDay % 1f;
+        float tod = t == -1 ? timeOfDay : t;
 
-            if(d <= 0.25)
-                return $"🜚 {hour}";
-            if(d <= 0.50)
-                return $"🜚 {hour}.¼";
-            if(d <= 0.75)
-                return $"🜚 {hour}.½";
-            else
-                return $"🜚 {hour}.¾";
-        }
+        int hour = Mathf.FloorToInt(tod);
+        float d = tod % 1f;
+
+        if (d <= 0.25)
+            return $"🜚 {hour}";
+        if (d <= 0.50)
+            return $"🜚 {hour}.¼";
+        if (d <= 0.75)
+            return $"🜚 {hour}.½";
+        else
+            return $"🜚 {hour}.¾";
     }
 
-    public string DisplayDay
+    public string DisplayDay(int d = -1)
     {
-        get
-        {
-            return $"🜳 {day}";
-        }
+        int x = d == -1 ? day : d;
+        return $"🜳 {x}";
+    }
+
+    public string DurationToString(float d)
+    {
+        int days = Mathf.FloorToInt(d / (24 * hourLengthSeconds));
+        string dayStr = DisplayDay(days);
+
+        float hours = d % (24 * hourLengthSeconds);
+        hours /= hourLengthSeconds;
+        string hourStr = DisplayTime(hours);
+
+        return $"{dayStr} {hourStr}";
     }
 
     public string DisplayTimeAndDay
     {
         get
         {
-            return $"{DisplayDay}   {DisplayTime}";
+            return $"{DisplayDay()}   {DisplayTime()}";
         }
     }
 
