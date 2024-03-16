@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class SearchForJobState : IState
 {
-    private readonly FreeColonist colonist;
+    private readonly SmolbeanColonist colonist;
     private readonly JobController jobController;
 
-    public SearchForJobState(FreeColonist colonist, JobController jobController)
+    public SearchForJobState(SmolbeanColonist colonist, JobController jobController)
     {
         this.colonist = colonist;
         this.jobController = jobController;

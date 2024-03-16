@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class Miner : FreeColonist, IReturnDrops
+public class Miner : SmolbeanColonist, IReturnDrops
 {
     public float idleTime = 1f;
     public float mineCooldown = 1f;
@@ -17,6 +17,11 @@ public class Miner : FreeColonist, IReturnDrops
         {
             return Home.GetDropPoint();
         }
+    }
+
+    public override void InitialiseStats(AnimalStats newStats = null)
+    {
+        stats = newStats;
     }
 
     protected override void Start()
@@ -40,7 +45,7 @@ public class Miner : FreeColonist, IReturnDrops
         AT(dropInventory, walkHome, InventoryIsEmpty());
         AT(walkHome, idle, IsAtSpawnPoint());
 
-        StateMachine.SetState(getReady);
+        StateMachine.SetStartState(getReady);
 
         Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
         Func<bool> IsAtDropPoint() => () => CloseEnoughTo(DropPoint);

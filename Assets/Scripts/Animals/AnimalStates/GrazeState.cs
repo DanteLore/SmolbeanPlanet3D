@@ -20,7 +20,7 @@ public class GrazeState : CompoundState
         // In case the search states find a very close point
         AT(lookForPlaceToEat, eat, Arrived());
 
-        stateMachine.SetState(eat);
+        stateMachine.SetStartState(eat);
 
         Func<bool> HasSomewhereToGo() => () => !animal.CloseEnoughTo(animal.target);
         Func<bool> Arrived() => () => animal.CloseEnoughTo(animal.target);

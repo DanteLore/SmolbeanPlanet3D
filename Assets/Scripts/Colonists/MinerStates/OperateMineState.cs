@@ -18,7 +18,7 @@ public class OperateMineState : CompoundState
         AT(doJob, walkBack, InventoryIsNotEmpty());
         AT(walkBack, finished, WalkedBack());
 
-        startState = walkToJob;
+        stateMachine.SetStartState(walkToJob);
 
         Func<bool> WalkedToJob() => () => walkToJob.WalkingTime >= mine.TunnelTime;
         Func<bool> WalkedBack() => () => walkBack.WalkingTime >= mine.TunnelTime;
@@ -30,8 +30,6 @@ public class OperateMineState : CompoundState
         base.OnEnter();
         miner.Hide();
         mine.StartMining();
-
-        stateMachine.SetState(startState);
     }
 
     public override void OnExit()

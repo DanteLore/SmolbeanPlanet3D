@@ -1,11 +1,16 @@
 using System;
 
-public class Builder : FreeColonist
+public class Builder : SmolbeanColonist
 {
     public string buildingLayer = "Buildings";
     public float sleepTime = 5f;
 
     public BuildingSite TargetBuilding { get; set; }
+
+    public override void InitialiseStats(AnimalStats newStats = null)
+    {
+        stats = newStats;
+    }
 
     protected override void Start()
     {
@@ -33,7 +38,7 @@ public class Builder : FreeColonist
 
         AT(buildBuilding, walkHome, TargetNotFound());
 
-        StateMachine.SetState(idle);
+        StateMachine.SetStartState(idle);
 
         Func<bool> IdleForAWhile() => () => idle.TimeIdle > 8f;
         Func<bool> SleepingForAWhile() => () => sleep.TimeAsleep > sleepTime;

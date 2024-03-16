@@ -1,18 +1,24 @@
 using System;
 using UnityEngine;
 
-public class Porter : FreeColonist, IGatherDrops, IDeliverDrops
+public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
 {    
-    public float idleTime = 1f;
-    public float sleepTime = 2f;
+    public float idleTime = 10f;
 
     public GameObject TargetDrop { get; set; }
 
     public DeliveryRequest DeliveryRequest { get; set; }
 
+    public override void InitialiseStats(AnimalStats newStats = null)
+    {
+        stats = newStats;
+    }
+
     protected override void Start()
     {
         base.Start();
+
+        StateMachine.shouldLog = true;
 
         var idle = new IdleState(animator);
 
@@ -31,13 +37,13 @@ public class Porter : FreeColonist, IGatherDrops, IDeliverDrops
         AT(fetchDrop, idle, FetchDropSucceeded());
         AT(fetchDrop, searchForDeliveryJob, FetchDropFailed());
 
-        AT(idle, searchForDeliveryJob, HasBeenIdleForAWhile());
+        AT(idle, searchForDeliveryJob, HasBeenIdleFor(idleTime));
 
-        StateMachine.SetState(idle);
+        StateMachine.SetStartState(idle);
 
         Func<bool> DropFound() => () => TargetDrop != null;
         Func<bool> NoDropFound() => () => TargetDrop == null && !searchForCollectionJob.InProgress;
-        Func<bool> HasBeenIdleForAWhile() => () => idle.TimeIdle >= idleTime;
+        Func<bool> HasBeenIdleFor(float t) => () => idle.TimeIdle >= t;
         Func<bool> FetchDropSucceeded() => () => fetchDrop.Finished && CloseEnoughTo(SpawnPoint);
         Func<bool> FetchDropFailed() => () => fetchDrop.Finished && !CloseEnoughTo(SpawnPoint);
         Func<bool> NoDeliveryToDo() => () => DeliveryRequest == null;

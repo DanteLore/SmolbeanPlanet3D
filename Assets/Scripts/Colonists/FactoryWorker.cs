@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-public class FactoryWorker : FreeColonist, IReturnDrops
+public abstract class FactoryWorker : SmolbeanColonist, IReturnDrops
 {
     public float idleTime = 1f;
     public int maxStacks = 5;
@@ -35,7 +35,7 @@ public class FactoryWorker : FreeColonist, IReturnDrops
         AT(dropInventory, walkHome, InventoryEmpty());
         AT(walkHome, idle, AtSpawnPoint());
 
-        StateMachine.SetState(idle);
+        StateMachine.SetStartState(idle);
 
         Func<bool> AtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
         Func<bool> AtDropPoint() => () => CloseEnoughTo(DropPoint);
@@ -43,5 +43,10 @@ public class FactoryWorker : FreeColonist, IReturnDrops
         Func<bool> InventoryEmpty() => Inventory.IsEmpty;
         Func<bool> FactoryReady() =>() => factory.IsReadyToStart;
         Func<bool> JobDone() => () => factory.IsFinished;
+    }
+
+    public override void InitialiseStats(AnimalStats newStats = null)
+    {
+        stats = newStats;
     }
 }

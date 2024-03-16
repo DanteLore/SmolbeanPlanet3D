@@ -1,8 +1,8 @@
 public class GoToWorkState : IState
 {
-    private readonly FreeColonist colonist;
+    private readonly SmolbeanColonist colonist;
 
-    public GoToWorkState(FreeColonist colonist)
+    public GoToWorkState(SmolbeanColonist colonist)
     {
         this.colonist = colonist;
     }

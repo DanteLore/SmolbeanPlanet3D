@@ -4,8 +4,6 @@ using Random = UnityEngine.Random;
 
 public class FreeColonist : SmolbeanColonist
 {
-    public Job job;
-
     protected override void Start()
     {
         base.Start();
@@ -28,7 +26,7 @@ public class FreeColonist : SmolbeanColonist
 
         AT(beFree, findJob, JobAvailable());
 
-        StateMachine.SetState(beFree);
+        StateMachine.SetStartState(beFree);
 
         Func<bool> JobAvailable() => () => job == null && JobController.Instance.Vacancies.Any();
         Func<bool> IsNight() => () => DayNightCycleController.Instance.TimeIsBetween(21f, 5f);

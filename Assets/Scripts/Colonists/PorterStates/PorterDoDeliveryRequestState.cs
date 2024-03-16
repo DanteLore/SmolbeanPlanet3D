@@ -4,11 +4,16 @@ using System;
 
 public class PorterDoDeliveryRequestState : CompoundState
 {
+    private readonly Porter porter;
+
     public PorterDoDeliveryRequestState(Porter porter, Animator animator, NavMeshAgent navAgent, SoundPlayer soundPlayer, DeliveryManager deliveryManager)
+        : base()
     {
+        this.porter = porter;
+
         var walkToDestination = new PorterWalkToBuildingState(porter, navAgent, animator, soundPlayer);
-        var succeeded = new PorterFinishedDeliveryRequestState(this, porter, DeliveryManager.Instance);
-        var failed = new PorterFailedDeliveryRequestState(this, porter, DeliveryManager.Instance);
+        var succeeded = new PorterFinishedDeliveryRequestState(this, porter, deliveryManager);
+        var failed = new PorterFailedDeliveryRequestState(this, porter, deliveryManager);
         var goToStorehouse = new WalkHomeState(porter, navAgent, animator, soundPlayer);
         var pickupStuff = new PorterLoadDeliveryItemsState(porter);
         var unloadStuff = new PorterUnloadDeliveryItemsState(porter);
@@ -30,7 +35,7 @@ public class PorterDoDeliveryRequestState : CompoundState
         // Handle deletion of destination building
         AT(walkToDestination, goToStorehouse, BuildingDeleted());
 
-        startState = goToStorehouse;
+        stateMachine.SetStartState(goToStorehouse);
 
         Func<bool> IsAtDestinationBuilding() => () => porter.DeliveryRequest.Building != null && porter.CloseEnoughTo(porter.DeliveryRequest.Building.GetSpawnPoint());
         Func<bool> IsAtStorehouseAndReadyToPickup() => () => porter.CloseEnoughTo(porter.SpawnPoint) && porter.DeliveryRequest != null && porter.DeliveryRequest.IsComplete == false;
@@ -41,5 +46,11 @@ public class PorterDoDeliveryRequestState : CompoundState
         Func<bool> DeliveryRequestCancelled() => () => DeliveryIsFinished().Invoke() && HasStuffInInventory().Invoke();
         Func<bool> InventoryEmpty() => () => porter.Inventory.IsEmpty();
         Func<bool> BuildingDeleted() => () => porter.DeliveryRequest == null || porter.DeliveryRequest.Building == null;
+    }
+
+    public override void OnEnter()
+    {
+        porter.Think("Starting a delivery request");
+        base.OnEnter();
     }
 }

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jobName: Building
   thumbnail: {fileID: 2800000, guid: 7a0072323599843268b0c6d0c9c1780a, type: 3}
+  colonistPrefab: {fileID: 5678464011766705138, guid: 2f9ee2d0122c2493baa6e760b40aae85, type: 3}

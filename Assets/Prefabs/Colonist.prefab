@@ -135,8 +135,9 @@ MonoBehaviour:
   creatureLayer: Creatures
   destinationThreshold: 1
   speciesIndex: 1
-  species: {fileID: 0}
+  species: {fileID: 11400000, guid: 9cc68d1bc4c7b41bcb45f3d19e0f784c, type: 2}
   target: {x: 0, y: 0, z: 0}
+  memoryLength: 6
   dropLayer: Drops
 --- !u!1001 &502959277502828767
 PrefabInstance:

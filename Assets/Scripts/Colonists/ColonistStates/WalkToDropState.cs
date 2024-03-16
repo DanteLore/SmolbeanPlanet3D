@@ -3,7 +3,7 @@ using UnityEngine.AI;
 
 public class WalkToDropState : WalkStateBase
 {
-    private IGatherDrops gatherer;
+    private readonly IGatherDrops gatherer;
 
     public WalkToDropState(IGatherDrops gatherer, NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer) 
         : base(navAgent, animator, soundPlayer)

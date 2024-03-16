@@ -20,8 +20,7 @@ public class FlockState : CompoundState
         // In case the search states find a very close point
         AT(findWoodland, idle, Arrived());
 
-        startState = idle;
-        stateMachine.SetState(idle);
+        stateMachine.SetStartState(idle);
 
         Func<bool> IdleFor(float idleTime) => () => idle.TimeIdle >= idleTime;
         Func<bool> HasSomewhereToGo() => () => !animal.CloseEnoughTo(animal.target);

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Linq;
 using System;
 
-public abstract class ResourceGatherer : FreeColonist, IGatherDrops, IReturnDrops
+public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturnDrops
 {
     public float damage = 20f;
     public float hitCooldown = 1f;
@@ -81,7 +81,7 @@ public abstract class ResourceGatherer : FreeColonist, IGatherDrops, IReturnDrop
         AT(walkHome,        sleeping,           IsAtSpawnPoint());
         AT(sleeping,        idle,               HasBeenSleepingForAWhile());
 
-        StateMachine.SetState(searchForResources);
+        StateMachine.SetStartState(searchForResources);
 
         Func<bool> HasTarget() => () => Target != null;
         Func<bool> IsCloseEnoughToTarget() => () => CloseEnoughTo(Target);
@@ -101,5 +101,10 @@ public abstract class ResourceGatherer : FreeColonist, IGatherDrops, IReturnDrop
     private bool DropPointFull()
     {
         return Home.DropPointContents().Where(i => i != null && i.dropSpec == dropSpec).Where(s => s.IsFull()).Count() >= maxStacks;
+    }
+
+    public override void InitialiseStats(AnimalStats newStats = null)
+    {
+        stats = newStats;
     }
 }

@@ -10,7 +10,6 @@ public class Stonecutter : ResourceGatherer
         return typeof(SmolbeanRock);
     }
     
-
     protected override string GetGatheringTrigger()
     {
         return "StartMining";

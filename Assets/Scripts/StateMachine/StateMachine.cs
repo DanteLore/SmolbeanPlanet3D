@@ -9,8 +9,10 @@ public class StateMachine
     public bool shouldLog = false;
     private Dictionary<Type, List<Transition>> transitions = new Dictionary<Type, List<Transition>>();
     private List<Transition> currentTransitions = new List<Transition>();
+
     private List<Transition> anyTransitions = new List<Transition>();
     private static List<Transition> EmptyTransitions = new List<Transition>(0); // Need this?
+    private IState startState;
 
     private class Transition
     {
@@ -29,22 +31,28 @@ public class StateMachine
         this.shouldLog = shouldLog;
     }
 
-    private void Log(string message)
-    {
-        if(shouldLog)
-            Debug.Log(message);
-    }
-
     public void Tick()
     {
-        var transition = GetTransition();
-        if(transition != null)
-            SetState(transition.To);
+        if (currentState == null)
+        {
+            Restart();
+        }
+        else
+        {
+            var transition = GetTransition();
+            if (transition != null)
+                SetState(transition.To);
 
-        currentState?.Tick();
+            currentState?.Tick();
+        }
     }
 
-    public void SetState(IState state)
+    public void Restart()
+    {
+        SetState(startState);
+    }
+
+    private void SetState(IState state)
     {
         if(state == currentState)
             return;
@@ -59,6 +67,12 @@ public class StateMachine
             currentTransitions = EmptyTransitions;
 
         currentState?.OnEnter();
+    }
+
+    public void SetStartState(IState startState)
+    {
+        Debug.Assert(startState != null, "You can't set the start state to null!");
+        this.startState = startState;
     }
 
     public void AddTransition(IState from, IState to, Func<bool> predicate)
@@ -89,5 +103,11 @@ public class StateMachine
                 return t;
         
         return null;
+    }
+
+    private void Log(string message)
+    {
+        if (shouldLog)
+            Debug.Log(message);
     }
 }

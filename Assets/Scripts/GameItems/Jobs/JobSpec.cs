@@ -5,4 +5,5 @@ public class JobSpec : ScriptableObject
 {
     public string jobName;
     public Texture2D thumbnail;
+    public GameObject colonistPrefab;
 }

@@ -20,6 +20,7 @@ public class PorterSearchForDropToCollectState : IState
 
     public void OnEnter()
     {
+        porter.Think("Looking for drops to collect");
         radius = 32f;
     }
 

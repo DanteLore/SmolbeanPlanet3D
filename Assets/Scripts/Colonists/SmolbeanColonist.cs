@@ -6,21 +6,34 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
     public string dropLayer = "Drops";
     
     public Inventory Inventory { get; private set; }
-    public Vector3 SpawnPoint { get; private set; }
 
     private Vector3 lastReportedPosition;
 
-    private SmolbeanBuilding home;
+    public Job job;
+
     public SmolbeanBuilding Home
     {
         get
         {
             // TODO: Once colonists break free of their home buildings, this will go away!
-            if(home == null)
-                home = GetComponentInParent<SmolbeanBuilding>();
-            
-            return home;
+            return (job != null) ? job.Building : null;
         }
+    }
+
+    public Vector3 SpawnPoint
+    {
+        get
+        {
+            return (Home != null) ? Home.spawnPoint.transform.position : Vector3.zero;
+        }
+    }
+
+    public override void AdoptIdentity(SmolbeanAnimal parent)
+    {
+        base.AdoptIdentity(parent);
+
+        job = ((SmolbeanColonist)parent).job;
+        job.Colonist = (SmolbeanColonist)parent;
     }
 
     protected override void Start()

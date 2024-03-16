@@ -16,6 +16,7 @@ public class PorterFinishedDeliveryRequestState : IState
         deliveryManager.CompleteDelivery(porter, porter.DeliveryRequest);
         porter.DeliveryRequest = null;
         parent.SetFinished(true);
+        porter.Think("Finished delivery request");
     }
 
     public void OnExit()

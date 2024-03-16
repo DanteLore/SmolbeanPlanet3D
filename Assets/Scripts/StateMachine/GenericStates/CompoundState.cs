@@ -3,7 +3,6 @@ using System;
 public abstract class CompoundState : IState
 {
     protected readonly StateMachine stateMachine;
-    protected IState startState;
     public bool Finished { get; private set; }
 
     public CompoundState()

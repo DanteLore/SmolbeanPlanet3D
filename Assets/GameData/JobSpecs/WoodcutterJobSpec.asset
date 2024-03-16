@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jobName: Woodcutting
   thumbnail: {fileID: 2800000, guid: 9cb27bb01c2ae4e44bdb8ad5f895bfe9, type: 3}
+  colonistPrefab: {fileID: 5678464011766705138, guid: 448bb25b7e83a4d2f8875362bd561e51, type: 3}

@@ -18,7 +18,7 @@ MonoBehaviour:
   deathParticleSystem: {fileID: 1708857678183282219, guid: c0a8a93d928bb43529ca1831cdbf6913, type: 3}
   sleepParticleSystem: {fileID: 1572338817668193572, guid: 631718f0bff854df1b58a025e98baf49, type: 3}
   thumbnail: {fileID: 2800000, guid: f324c832b2ea64f7899febbbbc81a308, type: 3}
-  startingPopulation: 2
+  startingPopulation: 6
   populationCap: 100
   initialHealth: 100
   maxHealth: 100
