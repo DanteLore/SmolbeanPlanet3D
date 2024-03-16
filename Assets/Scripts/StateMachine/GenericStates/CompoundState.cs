@@ -13,6 +13,7 @@ public abstract class CompoundState : IState
     public virtual void OnEnter()
     {
         Finished = false;
+        stateMachine.Restart();
     }
 
     public virtual void OnExit()

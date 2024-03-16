@@ -53,13 +53,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6600294793794780286, guid: 6fc3ebad7dc73465aa3d9e4f14221a53, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 5a1e7c22fc7754877a3fe49a891bee83, type: 2}
     - target: {fileID: 7063485677674424287, guid: 6fc3ebad7dc73465aa3d9e4f14221a53, type: 3}
       propertyPath: dropSpec
       value: 
       objectReference: {fileID: 11400000, guid: 5ccc7888294ae4caaa64d9a8f47ea620, type: 2}
+    - target: {fileID: 7063485677674424287, guid: 6fc3ebad7dc73465aa3d9e4f14221a53, type: 3}
+      propertyPath: jobSpecs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063485677674424287, guid: 6fc3ebad7dc73465aa3d9e4f14221a53, type: 3}
+      propertyPath: 'jobSpecs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 359f622f858364ee1bb95f3f11b632a5, type: 2}
     - target: {fileID: 7864074422409821620, guid: 6fc3ebad7dc73465aa3d9e4f14221a53, type: 3}
       propertyPath: m_Name
       value: CoalMine

@@ -17,8 +17,6 @@ public class Mine : SmolbeanBuilding
         animator = GetComponent<Animator>();
 
         TunnelTime = startingTunnelTime;
-
-        // Register jobs here soon!
     }
 
     public InventoryItem TryHarvest()

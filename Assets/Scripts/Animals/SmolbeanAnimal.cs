@@ -203,7 +203,13 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public bool CloseEnoughTo(GameObject target)
     {
-        var found = Physics.OverlapSphere(transform.position, destinationThreshold, LayerMask.GetMask(natureLayer, creatureLayer));
+        if (target == null)
+            return false;
+
+        // This DOES need to be a sphere collision, rather than a standard distance check, because the object might be big and
+        // it's potition might be a point right in it's centre.
+
+        var found = Physics.OverlapSphere(transform.position, destinationThreshold, LayerMask.GetMask(LayerMask.LayerToName(target.layer)));
         return found.Any(c => c.gameObject == target);
     }
 

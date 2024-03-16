@@ -9,8 +9,6 @@ public class Sawmill : FactoryBuilding
         base.Start();
         
         sawingParticleSystem.Stop();
-
-        // Register jobs here soon!
     }
 
     public override void StartProcessing()

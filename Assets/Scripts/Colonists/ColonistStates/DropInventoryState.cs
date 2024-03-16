@@ -27,7 +27,10 @@ public class DropInventoryAtDropPointState : IState
     {
         var item = colonist.Inventory.DropLast();
 
-        if(item != null)
+        if (item != null)
+        {
+            ((SmolbeanColonist)colonist).Think($"Dropping {item.quantity} {item.dropSpec.dropName}");
             DropController.Instance.Drop(item.dropSpec, colonist.DropPoint, item.quantity);
+        }
     }
 }

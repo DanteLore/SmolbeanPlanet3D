@@ -18,6 +18,8 @@ public abstract class SmolbeanBuilding : MonoBehaviour
     public float itemDropRadius = 2f;
     public float itemDropHeight = 1f;
 
+    public JobSpec[] jobSpecs;
+
     public Inventory Inventory { get; private set; }
 
     public virtual bool IsComplete { get { return true; } }
@@ -40,6 +42,9 @@ public abstract class SmolbeanBuilding : MonoBehaviour
     protected virtual void Start()
     {
         InvokeRepeating(nameof(RegisterWear), 0.0f, 0.5f);
+
+        foreach (var jobSpec in jobSpecs)
+            JobController.Instance.RegisterJob(jobSpec, this);
     }
 
     protected virtual void Update()

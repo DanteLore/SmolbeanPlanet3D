@@ -9,7 +9,7 @@ public class PorterSearchForDropToCollectState : IState
 
     public bool InProgress { get { return radius <= maxRadius; } }
     private Porter porter;
-    private string dropLayer;
+    private readonly string dropLayer;
     private float radius;
 
     public PorterSearchForDropToCollectState(Porter porter, string dropLayer)
@@ -20,7 +20,6 @@ public class PorterSearchForDropToCollectState : IState
 
     public void OnEnter()
     {
-        porter.Think("Looking for drops to collect");
         radius = 32f;
     }
 

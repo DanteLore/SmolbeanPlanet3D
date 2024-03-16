@@ -24,16 +24,23 @@ public class SearchForDropsState : IState
 
     public void Tick()
     {
-        if(!gatherer.TargetDrop)
-            gatherer.TargetDrop = GetDropTarget();
+        if (!gatherer.TargetDrop)
+        {
+            var target = GetDropTarget();
+
+            if (target != null)
+            {
+                gatherer.TargetDrop = target.gameObject;
+                gatherer.Think($"Picking up {target.quantity} {target.dropSpec.dropName}");
+            }
+        }
     }
 
-    private GameObject GetDropTarget()
+    private SmolbeanDrop GetDropTarget()
     {
         return Physics.OverlapSphere(gatherer.transform.position, 5f, LayerMask.GetMask(dropLayer))
             .Select(c => c.gameObject.GetComponent<SmolbeanDrop>())
             .Where(i => i != null && i.dropSpec == gatherer.dropSpec)
-            .Select(i => i.gameObject)
             .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - gatherer.transform.position))
             .FirstOrDefault();
     }

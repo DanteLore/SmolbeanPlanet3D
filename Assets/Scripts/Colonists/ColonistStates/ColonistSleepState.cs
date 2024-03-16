@@ -15,6 +15,7 @@ public class ColonistSleepState : IState
 
     public void OnEnter()
     {
+        colonist.Think($"Old school sleep zzz");
         sleepStartTime = Time.time;
         colonist.Hide();
     }

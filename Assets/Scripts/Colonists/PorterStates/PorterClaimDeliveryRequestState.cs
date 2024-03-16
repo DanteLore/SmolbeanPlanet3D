@@ -12,7 +12,10 @@ public class PorterClaimDeliveryRequest : IState
     public void OnEnter()
     {
         porter.DeliveryRequest = deliveryManager.ClaimNextDeliveryRequest(porter, ((Storehouse)porter.Home).Inventory);
-        porter.Think("Claimed a delivery job");
+        if (porter.DeliveryRequest != null)
+            porter.Think($"Claimed a delivery job: {porter.DeliveryRequest.Quantity} {porter.DeliveryRequest.Item.dropName} to {porter.DeliveryRequest.Building.name}");
+        else
+            porter.Think("No deliveries to do");
     }
 
     public void OnExit()

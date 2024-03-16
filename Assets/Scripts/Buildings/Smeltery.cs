@@ -12,8 +12,6 @@ public class Smeltery : FactoryBuilding
         base.Start();
         fireObject.SetActive(false);
         smokeParticleSystem.Stop();
-
-        // Register jobs here soon!
     }
 
     public override void StartProcessing()

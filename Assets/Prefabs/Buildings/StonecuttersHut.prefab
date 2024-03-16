@@ -23,13 +23,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2543294295182630151}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.446, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3851827855203422478}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3821925883988594265
 GameObject:
@@ -56,13 +56,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3821925883988594265}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3851827855203422478}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &817976210350767667
 MeshFilter:
@@ -89,6 +89,8 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -140,6 +142,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7127336335192020291}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -149,7 +152,6 @@ Transform:
   - {fileID: 8818394560160737582}
   - {fileID: 8980079774725647906}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &8515707954259137378
 CapsuleCollider:
@@ -186,13 +188,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f27a230f4c7334c8e812204fa82e8b4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropLayer: Drops
+  spawnPoint: {fileID: 2543294295182630151}
+  dropPoint: {fileID: 7994519418638922986}
   wearPattern: 0
   wearScale: {x: 0.7, y: 0.7}
   building: {fileID: 3821925883988594265}
-  spawnPoint: {fileID: 2543294295182630151}
-  dropPoint: {fileID: 7994519418638922986}
-  stonecutterPrefab: {fileID: 7581404027262410325, guid: 37fd71f21f41849eab406cbaab22eee9, type: 3}
-  spawnDelaySeconds: 5
+  itemDropRadius: 2
+  itemDropHeight: 1
+  jobSpecs:
+  - {fileID: 11400000, guid: 78c75baf84a7a4cf58d0392077b32d58, type: 2}
 --- !u!208 &747968730789507724
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -232,11 +237,11 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7994519418638922986}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.85, y: 0.5, z: 2.85}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3851827855203422478}
-  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

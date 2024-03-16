@@ -194,7 +194,8 @@ MonoBehaviour:
   building: {fileID: 2342996652910833306}
   itemDropRadius: 2
   itemDropHeight: 1
-  jobSpec: {fileID: 11400000, guid: 2a17e2408d94e448c9dcd55ae3b5a4af, type: 2}
+  jobSpecs:
+  - {fileID: 11400000, guid: 2a17e2408d94e448c9dcd55ae3b5a4af, type: 2}
 --- !u!208 &4150118438198778675
 NavMeshObstacle:
   m_ObjectHideFlags: 0

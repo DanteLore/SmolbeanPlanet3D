@@ -81,7 +81,7 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         AT(walkHome,        sleeping,           IsAtSpawnPoint());
         AT(sleeping,        idle,               HasBeenSleepingForAWhile());
 
-        StateMachine.SetStartState(searchForResources);
+        StateMachine.SetStartState(idle);
 
         Func<bool> HasTarget() => () => Target != null;
         Func<bool> IsCloseEnoughToTarget() => () => CloseEnoughTo(Target);

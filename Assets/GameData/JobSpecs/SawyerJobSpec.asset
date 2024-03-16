@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3deb80622f8dc4004b8543031d9e52f6, type: 3}
+  m_Name: SawyerJobSpec
+  m_EditorClassIdentifier: 
+  jobName: Sawing
+  thumbnail: {fileID: 2800000, guid: 6e613e30b276b4f4bb1643c1d6d5b2f9, type: 3}
+  colonistPrefab: {fileID: 5678464011766705138, guid: f7e318657fb26425eba14eae1560439b, type: 3}

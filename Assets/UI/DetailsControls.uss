@@ -147,7 +147,7 @@
 .thoughtsRowLatest Label
 {
     white-space: normal;
-    font-size: 14px;
+    font-size: 12px;
     -unity-text-align: middle-left;
     color: rgb(0, 0, 0);
 }
