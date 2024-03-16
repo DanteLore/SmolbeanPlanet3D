@@ -14,6 +14,7 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
     protected override void OnEnable()
     {
         animalDetailController = FindFirstObjectByType<AnimalDetailController>();
+        target = null;
 
         base.OnEnable();
     }
@@ -28,29 +29,35 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
     {
         fieldLookup.Clear();
         thoughtsContainer = null;
+
         base.Clear();
     }
 
     protected override void CloseButtonClicked()
     {
+        if (target != null)
+            target.GetComponent<SmolbeanAnimal>().ThoughtsChanged -= ThoughtsChanged;
         soundPlayer.Play("Click");
+        target = null;
         animalDetailController.ClearSelection();
         MenuController.Instance.CloseAll();
     }
 
     protected override void Update()
     {
-        if(animalDetailController.TargetTransform == null)
+        if (ReferenceEquals(animalDetailController.TargetTransform, target) && target != null)
+        {
+            UpdateValues();
+            return;
+        }
+
+        if (animalDetailController.TargetTransform == null)
         {
             if (target != null)
                 target.GetComponent<SmolbeanAnimal>().ThoughtsChanged -= ThoughtsChanged;
 
             target = null;
             Clear();
-        }
-        else if (ReferenceEquals(animalDetailController.TargetTransform, target))
-        {
-            UpdateValues();
         }
         else
         {
