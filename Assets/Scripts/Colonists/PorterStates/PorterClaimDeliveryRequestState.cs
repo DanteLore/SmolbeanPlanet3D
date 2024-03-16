@@ -14,8 +14,6 @@ public class PorterClaimDeliveryRequest : IState
         porter.DeliveryRequest = deliveryManager.ClaimNextDeliveryRequest(porter, ((Storehouse)porter.Home).Inventory);
         if (porter.DeliveryRequest != null)
             porter.Think($"Claimed a delivery job: {porter.DeliveryRequest.Quantity} {porter.DeliveryRequest.Item.dropName} to {porter.DeliveryRequest.Building.name}");
-        else
-            porter.Think("No deliveries to do");
     }
 
     public void OnExit()

@@ -21,12 +21,15 @@ public abstract class FactoryWorker : SmolbeanColonist, IReturnDrops
 
         var factory = (FactoryBuilding)Home;
 
+        var giveUpJob = new SwitchColonistToFreeState(this);
         var idle = new IdleState(animator);
         var walkHome = new WalkHomeState(this, navAgent, animator, soundPlayer);
         var pickupIngredients = new FactoryWorkerPickupIngredientsState(factory);
         var doJob = new FactoryWorkerDoJobState(this, factory, soundPlayer, DropController.Instance);
         var walkToDropPoint = new WalkToDropPointState(this, navAgent, animator, soundPlayer);
         var dropInventory = new DropInventoryAtDropPointState(this, DropController.Instance);
+
+        AT(giveUpJob, JobTerminated());
 
         AT(idle, pickupIngredients, ReadyToMake());
         AT(pickupIngredients, doJob, FactoryReady());
@@ -37,6 +40,7 @@ public abstract class FactoryWorker : SmolbeanColonist, IReturnDrops
 
         StateMachine.SetStartState(idle);
 
+        Func<bool> JobTerminated() => () => job.IsTerminated;
         Func<bool> AtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
         Func<bool> AtDropPoint() => () => CloseEnoughTo(DropPoint);
         Func<bool> ReadyToMake() => () => factory.HasResources() && Home.DropPointContents().Where(s => s.IsFull()).Count() < maxStacks;

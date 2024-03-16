@@ -7,7 +7,6 @@ public class Woodcutter : ResourceGatherer
         return typeof(SmolbeanTree);
     }
     
-
     protected override string GetGatheringTrigger()
     {
         return "StartChopping";

@@ -1,6 +1,3 @@
-using UnityEngine;
-using System.Linq;
-using System.Collections.Generic;
 using System;
 
 public class Stonecutter : ResourceGatherer

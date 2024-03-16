@@ -28,12 +28,16 @@ public class Miner : SmolbeanColonist, IReturnDrops
     {
         base.Start();
 
+        var giveUpJob = new SwitchColonistToFreeState(this);
+
         var idle = new IdleState(animator);
         var getReady = new MinerBlinkInTheSunlightState(this);
         var operateMine = new OperateMineState(this, soundPlayer);
         var walkToDropPoint = new WalkToDropPointState(this, navAgent, animator, soundPlayer);
         var dropInventory = new DropInventoryAtDropPointState(this, DropController.Instance);
         var walkHome = new WalkHomeState(this, navAgent, animator, soundPlayer);
+
+        AT(giveUpJob, JobTerminated());
 
         AT(idle, operateMine, ReadyToGo());
         AT(operateMine, getReady, MiningFinished());
@@ -47,6 +51,7 @@ public class Miner : SmolbeanColonist, IReturnDrops
 
         StateMachine.SetStartState(getReady);
 
+        Func<bool> JobTerminated() => () => job.IsTerminated;
         Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
         Func<bool> IsAtDropPoint() => () => CloseEnoughTo(DropPoint);
         Func<bool> InventoryIsEmpty() => Inventory.IsEmpty;

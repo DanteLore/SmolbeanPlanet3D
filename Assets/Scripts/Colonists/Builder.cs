@@ -16,12 +16,16 @@ public class Builder : SmolbeanColonist
     {
         base.Start();
 
+        var giveUpJob = new SwitchColonistToFreeState(this);
+
         var idle = new IdleState(animator);
         var sleep = new ColonistSleepState(this);
         var chooseBuildingSite = new SearchForBuildingSiteState(this, buildingLayer);
         var walkToSite = new BuilderWalkToBuildingState(this, navAgent, animator, soundPlayer);
         var buildBuilding = new BuildBuildingState(this, soundPlayer);
         var walkHome = new WalkHomeState(this, navAgent, animator, soundPlayer);
+
+        AT(giveUpJob, JobTerminated());
 
         AT(idle, chooseBuildingSite, IdleForAWhile());
 
@@ -40,6 +44,7 @@ public class Builder : SmolbeanColonist
 
         StateMachine.SetStartState(idle);
 
+        Func<bool> JobTerminated() => () => job.IsTerminated;
         Func<bool> IdleForAWhile() => () => idle.TimeIdle > 8f;
         Func<bool> SleepingForAWhile() => () => sleep.TimeAsleep > sleepTime;
         Func<bool> CloseEnoughToSite() => () => TargetBuilding != null && CloseEnoughTo(TargetBuilding.GetSpawnPoint());
