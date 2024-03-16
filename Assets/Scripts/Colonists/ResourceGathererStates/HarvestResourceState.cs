@@ -28,8 +28,6 @@ public class HarvestResource : IState
         gatherer.transform.rotation = Quaternion.LookRotation(new Vector3(n.x, 0, n.z));
 
         soundPlayer.Play("Chopping");
-
-        gatherer.Think("Harvesting...");
     }
 
     public void OnExit()
@@ -41,8 +39,6 @@ public class HarvestResource : IState
         animator.ResetTrigger(gatherer.GatheringTrigger);
 
         navAgent.updateRotation = true;
-
-        gatherer.Think("Finished!");
     }
 
     public void Tick()

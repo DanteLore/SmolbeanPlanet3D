@@ -67,6 +67,7 @@ public abstract class SmolbeanBuilding : MonoBehaviour
         }
 
         DeliveryManager.Instance.BuildingDestroyed(this);
+        JobController.Instance.BuildingDestroyed(this);
     }
 
     private void RegisterWear()

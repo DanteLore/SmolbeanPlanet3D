@@ -8,7 +8,7 @@ public class DoJobState : CompoundState
         var idle = new IdleState(animator);
         var wander = new WalkToTargetState(colonist, navAgent, animator, soundPlayer);
         var goToWork = new GoToWorkState(colonist);
-        var switchColonist = new SwitchColonistState(colonist);
+        var switchColonist = new SwitchColonistToProfessionState(colonist);
 
         AT(idle, goToWork, IdleFor(1f));
         AT(goToWork, wander, HasSomewhereToGo());

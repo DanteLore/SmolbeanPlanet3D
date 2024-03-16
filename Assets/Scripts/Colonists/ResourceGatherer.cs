@@ -40,7 +40,9 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         base.Start();
 
         DropPoint = Home.GetDropPoint();
-        
+
+        var giveUpJob = new SwitchColonistToFreeState(this);
+
         var searchForResources = new SearchForResourceState(this, natureLayer);
         var searchForDrops = new SearchForDropsState(this, dropLayer);
 
@@ -56,6 +58,8 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         var idle = new IdleState(animator);
         var sleeping = new ColonistSleepState(this);
         var waitForTargetToDie = new WaitForTargetToDieState(animator);
+
+        AT(giveUpJob, JobTerminated());
 
         AT(walkToResource,  walkHome, () => walkToResource.StuckTime > 5f);
         AT(walkToDrop,      walkHome, () => walkToDrop.StuckTime > 5f);
@@ -83,6 +87,7 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
 
         StateMachine.SetStartState(idle);
 
+        Func<bool> JobTerminated() => () => job.IsTerminated;
         Func<bool> HasTarget() => () => Target != null;
         Func<bool> IsCloseEnoughToTarget() => () => CloseEnoughTo(Target);
         Func<bool> IsCloseEnoughToDrop() => () => CloseEnoughTo(TargetDrop);
