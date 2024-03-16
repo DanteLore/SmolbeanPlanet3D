@@ -3,13 +3,13 @@
     <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
     <Style src="project://database/Assets/UI/DeliveryRequestsMenu.uss?fileID=7433441132597879392&amp;guid=10e3c6aba5850471c94b00ccd8b09b1f&amp;type=3#DeliveryRequestsMenu" />
     <ui:VisualElement name="VisualElement" class="menuContainer">
-        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+        <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; flex-shrink: 1; bottom: 0; top: 0; left: 0; right: 0;">
             <ui:Label tabindex="-1" text="Delivery Requests" display-tooltip-when-elided="true" class="title" />
-            <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="height: 100%; display: flex;">
+            <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="height: 100%; display: flex; right: 0; left: 0; flex-grow: 1; bottom: 0; top: 0;">
                 <ui:VisualElement name="listContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start; white-space: nowrap; flex-wrap: nowrap; flex-direction: column; justify-content: flex-start; align-self: stretch; flex-shrink: 0;" />
             </ui:ScrollView>
         </ui:VisualElement>
-        <ui:VisualElement name="dialogButtonContainer" style="flex-direction: row-reverse; width: 100%;">
+        <ui:VisualElement name="dialogButtonContainer" style="flex-direction: row-reverse; width: 100%; max-width: 100%; min-width: 100%; flex-shrink: 0;">
             <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />
         </ui:VisualElement>
     </ui:VisualElement>
