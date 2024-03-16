@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEngine.UIElements;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 public class AnimalDetailMenuController : BaseDetailsMenuController
 {
@@ -23,6 +24,10 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
     {
         if (target != null)
             target.GetComponent<SmolbeanAnimal>().ThoughtsChanged -= ThoughtsChanged;
+
+        target = null;
+
+        animalDetailController.ClearSelection();
     }
 
     protected override void Clear()
@@ -35,44 +40,41 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 
     protected override void CloseButtonClicked()
     {
-        if (target != null)
-            target.GetComponent<SmolbeanAnimal>().ThoughtsChanged -= ThoughtsChanged;
         soundPlayer.Play("Click");
-        target = null;
-        animalDetailController.ClearSelection();
         MenuController.Instance.CloseAll();
     }
 
     protected override void Update()
     {
+        // Already showing this animal, just update the fields
         if (ReferenceEquals(animalDetailController.TargetTransform, target) && target != null)
         {
             UpdateValues();
             return;
         }
 
+        // Target transform cleared.  Close.
         if (animalDetailController.TargetTransform == null)
         {
-            if (target != null)
-                target.GetComponent<SmolbeanAnimal>().ThoughtsChanged -= ThoughtsChanged;
-
-            target = null;
-            Clear();
+            MenuController.Instance.CloseAll();
+            return;
         }
-        else
-        {
-            target = animalDetailController.TargetTransform;
 
-            if (target != null)
-                target.GetComponent<SmolbeanAnimal>().ThoughtsChanged += ThoughtsChanged;
+        // Must be a new target, hook up
+        // But first unhook any existing one...
+        if (target != null)
+            target.GetComponent<SmolbeanAnimal>().ThoughtsChanged -= ThoughtsChanged;
 
-            Clear();
-            DrawMenu();
-        }
+        target = animalDetailController.TargetTransform;
+        target.GetComponent<SmolbeanAnimal>().ThoughtsChanged += ThoughtsChanged;
+
+        Clear();
+        DrawMenu();
     }
 
     private void ThoughtsChanged(object sender, EventArgs e)
     {
+        Debug.Log("Thoughts updated");
         UpdateThoughts(target.GetComponent<SmolbeanAnimal>());
     }
 

@@ -62,13 +62,13 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         }
     }
 
-    public virtual void AdoptIdentity(SmolbeanAnimal parent)
+    public virtual void AdoptIdentity(SmolbeanAnimal original)
     {
         // Might be more to do here?
-        stats = parent.stats;
-        species = parent.species;
+        stats = original.stats;
+        species = original.species;
         thoughts.Clear();
-        thoughts.AddRange(parent.Thoughts);
+        thoughts.AddRange(original.Thoughts);
     }
 
     public void Think(string thought)

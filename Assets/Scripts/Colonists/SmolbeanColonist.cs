@@ -28,12 +28,17 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
         }
     }
 
-    public override void AdoptIdentity(SmolbeanAnimal parent)
+    public override void AdoptIdentity(SmolbeanAnimal original)
     {
-        base.AdoptIdentity(parent);
+        base.AdoptIdentity(original);
 
-        job = ((SmolbeanColonist)parent).job;
-        job.Colonist = (SmolbeanColonist)parent;
+        var originalColonist = (SmolbeanColonist)original;
+
+        if(originalColonist.job != null)
+        {
+            job = originalColonist.job;
+            job.Colonist = this;
+        }
     }
 
     protected override void Start()
