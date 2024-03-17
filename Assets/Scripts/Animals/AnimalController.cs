@@ -13,6 +13,8 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
     public string animalLayer = "Creatures";
     public string uiLayer = "UI";
     public AnimalSpec[] animalSpecs;
+
+    public GameObject[] animalPrefabs;
     public int Priority { get { return 150; } }
     public bool RunModeOnly { get { return true; } }
     public float edgeBuffer = 0.1f;
@@ -97,13 +99,32 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
 
     private void InstantiateAnimal(AnimalSaveData saveData)
     {
-        var prefab = animalSpecs[saveData.speciesIndex].prefab;
+        var spec = animalSpecs[saveData.speciesIndex];
+        var prefabIndex = spec.prefabIndex;
+        var prefab = animalPrefabs[prefabIndex];
         var pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
         var rot = Quaternion.Euler(0f, saveData.rotationY, 0f);
         var animal = Instantiate(prefab, pos, rot, transform).GetComponent<SmolbeanAnimal>();
-        animal.speciesIndex = saveData.speciesIndex;
-        animal.species = animalSpecs[saveData.speciesIndex];
-        animal.InitialiseStats(saveData.stats);
+        animal.species = spec;
+        animal.LoadFrom(saveData);
+    }
+
+    public void SwitchAnimal(SmolbeanAnimal original, GameObject prefab)
+    {
+        original.gameObject.SetActive(false);
+
+        Vector3 pos = original.transform.position;
+        Quaternion rot = original.transform.rotation;
+        Transform parent = original.transform.parent;
+
+        original.DropInventory();
+
+        var newAnimal = Instantiate(prefab, pos, rot, parent).GetComponent<SmolbeanAnimal>();
+        newAnimal.AdoptIdentity(original);
+        newAnimal.speciesIndex = Array.IndexOf(animalSpecs, newAnimal.species);
+        newAnimal.prefabIndex = Array.IndexOf(animalPrefabs, prefab);
+
+        Destroy(original.gameObject);
     }
 
     private AnimalSaveData GenerateAnimalData(Vector3 pos, AnimalSpec species)
@@ -118,7 +139,9 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
             positionY = pos.y,
             positionZ = pos.z,
             rotationY = rotationY,
-            speciesIndex = speciesIndex
+            speciesIndex = speciesIndex,
+            prefabIndex = species.prefabIndex,
+            thoughts = Array.Empty<Thought>()
         };
     }
 

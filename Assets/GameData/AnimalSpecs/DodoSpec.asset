@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DodoSpec
   m_EditorClassIdentifier: 
   animalName: Dodo
-  prefab: {fileID: 963902539609349758, guid: 0b9a57bcce777410c97202dc62498985, type: 3}
+  prefabIndex: 8
   dropSpec: {fileID: 11400000, guid: abfa08d2a5229475fb5e9e814c1cf06f, type: 2}
   deathParticleSystem: {fileID: 1572338817668193572, guid: e936c0a6f501449c58d506868894fdcd, type: 3}
   sleepParticleSystem: {fileID: 1572338817668193572, guid: 631718f0bff854df1b58a025e98baf49, type: 3}

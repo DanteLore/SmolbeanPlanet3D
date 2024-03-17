@@ -4,8 +4,6 @@ using UnityEngine.AI;
 public abstract class SmolbeanColonist : SmolbeanAnimal
 {
     public string dropLayer = "Drops";
-    
-    public Inventory Inventory { get; private set; }
 
     private Vector3 lastReportedPosition;
 
@@ -34,7 +32,7 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
 
         var originalColonist = (SmolbeanColonist)original;
 
-        if(originalColonist.job != null)
+        if(originalColonist.job != null && !originalColonist.job.IsTerminated)
         {
             job = originalColonist.job;
             job.Colonist = this;
@@ -46,7 +44,6 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
         base.Start();
 
         navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
-        Inventory = new Inventory();
     }    
 
     protected override void Update()

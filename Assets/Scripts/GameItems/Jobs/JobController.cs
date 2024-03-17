@@ -10,8 +10,8 @@ public class JobController : MonoBehaviour, IObjectGenerator
 
     public GameObject freeColonistPrefab;
 
-    private List<Job> vacancies = new();
-    private List<Job> assignedJobs = new();
+    private readonly List<Job> vacancies = new();
+    private readonly List<Job> assignedJobs = new();
 
     public IEnumerable<Job> Vacancies { get { return vacancies; } }
     public IEnumerable<Job> AssignedJobs { get { return assignedJobs; } }
@@ -51,6 +51,7 @@ public class JobController : MonoBehaviour, IObjectGenerator
     public void Clear()
     {
         vacancies.Clear();
+        assignedJobs.Clear();
     }
 
     public void SaveTo(SaveFileData saveData, string filename)

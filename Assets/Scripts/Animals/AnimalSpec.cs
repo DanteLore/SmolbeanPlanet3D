@@ -5,7 +5,7 @@ public class AnimalSpec : ScriptableObject
 {
     [Header("Basic")]
     public string animalName;
-    public GameObject prefab;
+    public int prefabIndex;
     public DropSpec dropSpec;
     public GameObject deathParticleSystem;
     public GameObject sleepParticleSystem;

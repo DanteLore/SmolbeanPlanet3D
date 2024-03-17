@@ -35,7 +35,8 @@ public class OperateMineState : CompoundState
 
     public override void OnExit()
     {
-        mine.StopMining();
+        if(mine != null) // Mine *could* have been destroyed while we were underground!
+            mine.StopMining();
         miner.Show();
         base.OnExit();
     }

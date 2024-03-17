@@ -74,7 +74,6 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 
     private void ThoughtsChanged(object sender, EventArgs e)
     {
-        Debug.Log("Thoughts updated");
         UpdateThoughts(target.GetComponent<SmolbeanAnimal>());
     }
 

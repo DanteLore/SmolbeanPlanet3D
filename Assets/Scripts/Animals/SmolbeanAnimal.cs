@@ -4,6 +4,7 @@ using System.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 public abstract class SmolbeanAnimal : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public string creatureLayer = "Creatures";
 
     public float destinationThreshold = 1.0f;
+
+    public Inventory Inventory { get; private set; }
 
     protected AnimalStats stats;
     public AnimalStats Stats
@@ -37,6 +40,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public IEnumerable<Thought> Thoughts { get { return thoughts; } }
     public int memoryLength = 12;
     public EventHandler ThoughtsChanged;
+    public int prefabIndex = -1;
 
     protected virtual void Start()
     {
@@ -46,6 +50,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
         body = transform.Find("Body").gameObject;
 
+        Inventory = new Inventory();
         StateMachine = new StateMachine(shouldLog: false);
     }
 
@@ -140,6 +145,15 @@ public abstract class SmolbeanAnimal : MonoBehaviour
             Die(); 
     }
 
+    public void LoadFrom(AnimalSaveData saveData)
+    {
+        speciesIndex = saveData.speciesIndex;
+        prefabIndex = saveData.prefabIndex;
+        thoughts.Clear();
+        thoughts.AddRange(saveData.thoughts);
+        InitialiseStats(saveData.stats);
+    }
+
     protected virtual void Die()
     {
         isDead = true;
@@ -177,7 +191,9 @@ public abstract class SmolbeanAnimal : MonoBehaviour
             positionZ = transform.position.z,
             rotationY = transform.rotation.eulerAngles.y,
             speciesIndex = speciesIndex,
-            stats = stats
+            prefabIndex = prefabIndex,
+            stats = stats,
+            thoughts = Thoughts.ToArray()
         };
     }
 
@@ -245,5 +261,21 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public virtual bool IsHungry()
     {
         return stats.foodLevel < species.hungryThreshold;
+    }
+
+    public void DropInventory()
+    {
+        var pos = transform.position;
+
+        while (!Inventory.IsEmpty())
+        {
+            var item = Inventory.DropLast();
+
+            Vector3 upPos = Vector3.up * 1f;
+            Vector3 outPos = Vector3.left * Random.Range(0f, 1f);
+            outPos = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f) * outPos;
+
+            DropController.Instance.Drop(item.dropSpec, pos + upPos + outPos, item.quantity);
+        }
     }
 }

@@ -38,7 +38,8 @@ public class ShipwreckManager : MonoBehaviour, IObjectGenerator
 
     public IEnumerator Load(SaveFileData data, string filename)
     {
-        // Nothing to do here.  Shipwreck is saved as a building once the game has started
+        // Shipwreck will have been loaded as a building, just grab a reference here...
+        Shipwreck = BuildingController.Instance.Buildings.FirstOrDefault(b => b is Shipwreck);
         return null;
     }
 
