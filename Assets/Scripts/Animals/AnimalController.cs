@@ -91,6 +91,11 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         }
     }
 
+    public T FindAnimalByNameAndType<T>(string name) where T : SmolbeanAnimal
+    {
+        return GetComponentsInChildren<T>().FirstOrDefault(x => x.Stats.name == name);
+    }
+
     public void CreateAnimal(AnimalSpec species, Vector3 pos)
     {
         var animalData = GenerateAnimalData(pos, species);
@@ -100,11 +105,12 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
     private void InstantiateAnimal(AnimalSaveData saveData)
     {
         var spec = animalSpecs[saveData.speciesIndex];
-        var prefabIndex = spec.prefabIndex;
+        var prefabIndex = saveData.prefabIndex;
         var prefab = animalPrefabs[prefabIndex];
         var pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
         var rot = Quaternion.Euler(0f, saveData.rotationY, 0f);
         var animal = Instantiate(prefab, pos, rot, transform).GetComponent<SmolbeanAnimal>();
+        animal.target = pos;
         animal.species = spec;
         animal.LoadFrom(saveData);
     }

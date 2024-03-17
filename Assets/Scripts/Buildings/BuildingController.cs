@@ -134,4 +134,9 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
 
         return building;
     }
+
+    public SmolbeanBuilding FindBuildingByName(string buildingName)
+    {
+        return GetComponentsInChildren<SmolbeanBuilding>().FirstOrDefault(b => b.name == buildingName);
+    }
 }

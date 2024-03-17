@@ -12,4 +12,6 @@ public class SaveFileData
     public List<AnimalSaveData> animalData;
     public CameraSaveData cameraData;
     public TimeOfDaySaveData timeData;
+    public List<JobSaveData> vacancyData;
+    public List<JobSaveData> assignedJobData;
 }

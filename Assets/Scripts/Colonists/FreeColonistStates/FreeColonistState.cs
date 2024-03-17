@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class FreeColonistState : CompoundState
 {
@@ -9,7 +10,7 @@ public class FreeColonistState : CompoundState
         var wander = new WalkToTargetState(colonist, navAgent, animator, soundPlayer);
         var findRestingPlace = new FindRestingPlaceState(colonist);
 
-        AT(idle, findRestingPlace, IdleFor(20f));
+        AT(idle, findRestingPlace, IdleForUpTo(20f));
         AT(findRestingPlace, wander, HasSomewhereToGo());
         AT(wander, idle, Arrived());
 
@@ -17,6 +18,6 @@ public class FreeColonistState : CompoundState
 
         Func<bool> HasSomewhereToGo() => () => !colonist.CloseEnoughTo(colonist.target);
         Func<bool> Arrived() => () => colonist.CloseEnoughTo(colonist.target);
-        Func<bool> IdleFor(float seconds) => () => idle.TimeIdle >= seconds;
+        Func<bool> IdleForUpTo(float seconds) => () => idle.TimeIdle >= Random.Range(0f, seconds);
     }
 }

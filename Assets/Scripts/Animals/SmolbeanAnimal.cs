@@ -56,7 +56,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!isDead)
+        if (!isDead && !GameStateManager.Instance.IsPaused)
         {
             UpdateStats();
 

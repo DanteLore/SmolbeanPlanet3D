@@ -43,6 +43,7 @@ public abstract class SmolbeanBuilding : MonoBehaviour
     {
         InvokeRepeating(nameof(RegisterWear), 0.0f, 0.5f);
 
+        // TODO:  Make this run when the game has fully initialised, NOT when the building is created.
         foreach (var jobSpec in jobSpecs)
             JobController.Instance.RegisterJob(jobSpec, this);
     }

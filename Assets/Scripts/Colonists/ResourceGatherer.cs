@@ -13,7 +13,15 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
 
     public GameObject Target { get; set; }
     public GameObject TargetDrop { get; set; }
-    public Vector3 DropPoint { get; private set; }
+
+    public Vector3 DropPoint
+    {
+        get
+        {
+            // Should only be null when we don't yet have a job assigned, which only happens when initialising
+            return Home != null ? Home.dropPoint.transform.position : Vector3.zero;
+        }
+    }
 
     public Type TargetType
     {
@@ -38,8 +46,6 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
     protected override void Start()
     {
         base.Start();
-
-        DropPoint = Home.GetDropPoint();
 
         var giveUpJob = new SwitchColonistToFreeState(this);
 
