@@ -53,7 +53,6 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         var dropInventory = new DropInventoryAtDropPointState(this, DropController.Instance);
 
         var idle = new IdleState(animator);
-        var sleeping = new ColonistSleepState(this);
         var waitForTargetToDie = new WaitForTargetToDieState(animator);
 
         AT(giveUpJob, JobTerminated());
@@ -78,9 +77,8 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         AT(walkToDropPoint, dropInventory,  IsAtDropPoint());
         AT(dropInventory,   walkHome,       InventoryEmpty());
 
-        AT(searchForDrops,  walkHome,           NoDropsFound());
-        AT(walkHome,        sleeping,           IsAtSpawnPoint());
-        AT(sleeping,        idle,               HasBeenSleepingForAWhile());
+        AT(searchForDrops,  walkHome,       NoDropsFound());
+        AT(walkHome,        idle,           IsAtSpawnPoint());
 
         StateMachine.SetStartState(idle);
 
@@ -97,7 +95,6 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint);
         Func<bool> IsAtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint);
         Func<bool> ReadyToGo() => () => idle.TimeIdle >= idleTime && !DropPointFull();
-        Func<bool> HasBeenSleepingForAWhile() => () => sleeping.TimeAsleep >= sleepTime;
     }
 
     private bool DropPointFull()

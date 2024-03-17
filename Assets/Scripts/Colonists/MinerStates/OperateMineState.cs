@@ -3,7 +3,14 @@ using System;
 public class OperateMineState : CompoundState
 {
     private readonly Miner miner;
-    private readonly Mine mine;
+
+    protected Mine Mine
+    {
+        get
+        {
+            return (Mine)miner.Job.Building;
+        }
+    }
 
     public OperateMineState(Miner miner, SoundPlayer soundPlayer): base()
     {
@@ -20,8 +27,8 @@ public class OperateMineState : CompoundState
 
         stateMachine.SetStartState(walkToJob);
 
-        Func<bool> WalkedToJob() => () => walkToJob.WalkingTime >= mine.TunnelTime;
-        Func<bool> WalkedBack() => () => walkBack.WalkingTime >= mine.TunnelTime;
+        Func<bool> WalkedToJob() => () => walkToJob.WalkingTime >= Mine.TunnelTime;
+        Func<bool> WalkedBack() => () => walkBack.WalkingTime >= Mine.TunnelTime;
         Func<bool> InventoryIsNotEmpty() => () => !miner.Inventory.IsEmpty();
     }
 
@@ -29,13 +36,13 @@ public class OperateMineState : CompoundState
     {
         base.OnEnter();
         miner.Hide();
-        mine.StartMining();
+        Mine.StartMining();
     }
 
     public override void OnExit()
     {
-        if(mine != null) // Mine *could* have been destroyed while we were underground!
-            mine.StopMining();
+        if(Mine != null) // Mine *could* have been destroyed while we were underground!
+            Mine.StopMining();
         miner.Show();
         base.OnExit();
     }

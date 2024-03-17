@@ -21,7 +21,6 @@ public class FindRestingPlaceState : IState
 
     public void Tick()
     {
-        colonist.Think("Looking for somewhere to rest");
         FindPlaceToGo();
     }
 

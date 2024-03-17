@@ -19,7 +19,6 @@ public class Builder : SmolbeanColonist
         var giveUpJob = new SwitchColonistToFreeState(this);
 
         var idle = new IdleState(animator);
-        var sleep = new ColonistSleepState(this);
         var chooseBuildingSite = new SearchForBuildingSiteState(this, buildingLayer);
         var walkToSite = new BuilderWalkToBuildingState(this, navAgent, animator, soundPlayer);
         var buildBuilding = new BuildBuildingState(this, soundPlayer);
@@ -29,8 +28,7 @@ public class Builder : SmolbeanColonist
 
         AT(idle, chooseBuildingSite, IdleForAWhile());
 
-        AT(chooseBuildingSite, sleep, TargetNotFound());
-        AT(sleep, idle, SleepingForAWhile());
+        AT(chooseBuildingSite, idle, TargetNotFound());
 
         AT(chooseBuildingSite, walkToSite, TargetFound());
         AT(walkToSite, buildBuilding, CloseEnoughToSite());
@@ -46,7 +44,6 @@ public class Builder : SmolbeanColonist
 
         Func<bool> JobTerminated() => () => Job.IsTerminated;
         Func<bool> IdleForAWhile() => () => idle.TimeIdle > 8f;
-        Func<bool> SleepingForAWhile() => () => sleep.TimeAsleep > sleepTime;
         Func<bool> CloseEnoughToSite() => () => TargetBuilding != null && CloseEnoughTo(TargetBuilding.GetSpawnPoint());
         Func<bool> TargetFound() => () => TargetBuilding != null;
         Func<bool> TargetNotFound() => () => TargetBuilding == null;
