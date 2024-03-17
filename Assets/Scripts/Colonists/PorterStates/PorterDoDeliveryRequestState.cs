@@ -7,8 +7,6 @@ public class PorterDoDeliveryRequestState : CompoundState
     public PorterDoDeliveryRequestState(Porter porter, Animator animator, NavMeshAgent navAgent, SoundPlayer soundPlayer, DeliveryManager deliveryManager)
         : base()
     {
-        stateMachine.shouldLog = true;
-
         var walkToDestination = new PorterWalkToBuildingState(porter, navAgent, animator, soundPlayer);
         var succeeded = new PorterFinishedDeliveryRequestState(this, porter, deliveryManager);
         var failed = new PorterFailedDeliveryRequestState(this, porter, deliveryManager);

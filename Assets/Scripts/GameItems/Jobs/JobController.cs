@@ -45,11 +45,13 @@ public class JobController : MonoBehaviour, IObjectGenerator
 
     public void RegisterJob(JobSpec jobSpec, SmolbeanBuilding building)
     {
+        /*
         if (
             vacancies.Any(job => job.JobSpec == jobSpec && job.Building == building) ||
             assignedJobs.Any(job => job.JobSpec == jobSpec && job.Building == building)
             )
             return; // Job already exists
+        */
 
         Job job = new(building, jobSpec);
         vacancies.Add(job);
