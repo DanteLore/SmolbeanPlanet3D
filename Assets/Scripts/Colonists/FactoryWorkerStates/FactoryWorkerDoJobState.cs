@@ -1,37 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FactoryWorkerDoJobState : IState
 {
-    private FactoryBuilding factory;
     private readonly DropController dropController;
-    private FactoryWorker worker;
-    private SoundPlayer soundPlayer;
+    private readonly FactoryWorker worker;
+    private readonly SoundPlayer soundPlayer;
 
-    public FactoryWorkerDoJobState(FactoryWorker worker, FactoryBuilding factory, SoundPlayer soundPlayer, DropController dropController)
+    protected FactoryBuilding Factory
+    {
+        get
+        {
+            Debug.Assert(worker.Job != null, "Should not get into this state if the colonist has no job!");
+            return (FactoryBuilding)worker.Job.Building;
+        }
+    }
+
+    public FactoryWorkerDoJobState(FactoryWorker worker, SoundPlayer soundPlayer, DropController dropController)
     {
         this.worker = worker;
-        this.factory = factory;
         this.soundPlayer = soundPlayer;
         this.dropController = dropController;
     }
 
     public void OnEnter()
     {
+
         worker.Hide();
         soundPlayer.Play("Working");
-        factory.StartProcessing();
+
+        Factory.StartProcessing();
     }
 
     public void OnExit()
     {
         worker.Show();
         soundPlayer.Stop("Working");
-        factory.StopProcessing();
+        Factory.StopProcessing();
 
-        var item = factory.recipe.createdItem;
-        var qtty = factory.recipe.quantity;
+        var item = Factory.recipe.createdItem;
+        var qtty = Factory.recipe.quantity;
 
         var drop = dropController.CreateInventoryItem(item, qtty);
         worker.Inventory.PickUp(drop);

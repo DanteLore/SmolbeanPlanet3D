@@ -1,17 +1,16 @@
 using System;
 using System.Linq;
-using UnityEngine;
 
 public abstract class FactoryWorker : SmolbeanColonist, IReturnDrops
 {
     public float idleTime = 1f;
     public int maxStacks = 5;
 
-    public Vector3 DropPoint
+    protected FactoryBuilding Factory
     {
         get
         {
-            return Home.GetDropPoint();
+            return (FactoryBuilding)Job.Building;
         }
     }
 
@@ -19,13 +18,11 @@ public abstract class FactoryWorker : SmolbeanColonist, IReturnDrops
     {
         base.Start();
 
-        var factory = (FactoryBuilding)Home;
-
         var giveUpJob = new SwitchColonistToFreeState(this);
         var idle = new IdleState(animator);
         var walkHome = new WalkHomeState(this, navAgent, animator, soundPlayer);
-        var pickupIngredients = new FactoryWorkerPickupIngredientsState(factory);
-        var doJob = new FactoryWorkerDoJobState(this, factory, soundPlayer, DropController.Instance);
+        var pickupIngredients = new FactoryWorkerPickupIngredientsState(this);
+        var doJob = new FactoryWorkerDoJobState(this, soundPlayer, DropController.Instance);
         var walkToDropPoint = new WalkToDropPointState(this, navAgent, animator, soundPlayer);
         var dropInventory = new DropInventoryAtDropPointState(this, DropController.Instance);
 
@@ -40,13 +37,13 @@ public abstract class FactoryWorker : SmolbeanColonist, IReturnDrops
 
         StateMachine.SetStartState(idle);
 
-        Func<bool> JobTerminated() => () => job.IsTerminated;
-        Func<bool> AtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
-        Func<bool> AtDropPoint() => () => CloseEnoughTo(DropPoint);
-        Func<bool> ReadyToMake() => () => factory.HasResources() && Home.DropPointContents().Where(s => s.IsFull()).Count() < maxStacks;
+        Func<bool> JobTerminated() => () => Job.IsTerminated;
+        Func<bool> AtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint);
+        Func<bool> AtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint);
+        Func<bool> ReadyToMake() => () => Factory.HasResources() && Job.Building.DropPointContents().Where(s => s.IsFull()).Count() < maxStacks;
         Func<bool> InventoryEmpty() => Inventory.IsEmpty;
-        Func<bool> FactoryReady() =>() => factory.IsReadyToStart;
-        Func<bool> JobDone() => () => factory.IsFinished;
+        Func<bool> FactoryReady() =>() => Factory.IsReadyToStart;
+        Func<bool> JobDone() => () => Factory.IsFinished;
     }
 
     public override void InitialiseStats(AnimalStats newStats = null)

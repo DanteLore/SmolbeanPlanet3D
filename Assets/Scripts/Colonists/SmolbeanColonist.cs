@@ -7,24 +7,7 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
 
     private Vector3 lastReportedPosition;
 
-    public Job job;
-
-    public SmolbeanBuilding Home
-    {
-        get
-        {
-            // TODO: Once colonists break free of their home buildings, this will go away!
-            return (job != null) ? job.Building : null;
-        }
-    }
-
-    public Vector3 SpawnPoint
-    {
-        get
-        {
-            return (Home != null) ? Home.spawnPoint.transform.position : Vector3.zero;
-        }
-    }
+    public Job Job { get; set; }
 
     public override void AdoptIdentity(SmolbeanAnimal original)
     {
@@ -32,10 +15,10 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
 
         var originalColonist = (SmolbeanColonist)original;
 
-        if(originalColonist.job != null && !originalColonist.job.IsTerminated)
+        if(originalColonist.Job != null && !originalColonist.Job.IsTerminated)
         {
-            job = originalColonist.job;
-            job.Colonist = this;
+            Job = originalColonist.Job;
+            Job.Colonist = this;
         }
     }
 

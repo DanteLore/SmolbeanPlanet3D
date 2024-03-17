@@ -26,7 +26,7 @@ public class PorterFetchDropsState : CompoundState
 
         Func<bool> NoTargetDropAssigned() => () => porter.TargetDrop == null;
         Func<bool> IsCloseEnoughToDrop() => () => porter.CloseEnoughTo(porter.TargetDrop);
-        Func<bool> IsAtSpawnPoint() => () => porter.CloseEnoughTo(porter.SpawnPoint);
+        Func<bool> IsAtSpawnPoint() => () => porter.CloseEnoughTo(porter.Job.Building.spawnPoint);
         Func<bool> InventoryIsEmpty() => porter.Inventory.IsEmpty;
     }
 }

@@ -9,14 +9,6 @@ public class Miner : SmolbeanColonist, IReturnDrops
     public int maxStacks = 3;
     public float sleepTime = 5.0f;
 
-    public Vector3 DropPoint
-    {
-        get
-        {
-            return Home.GetDropPoint();
-        }
-    }
-
     public override void InitialiseStats(AnimalStats newStats = null)
     {
         stats = newStats;
@@ -49,12 +41,12 @@ public class Miner : SmolbeanColonist, IReturnDrops
 
         StateMachine.SetStartState(getReady);
 
-        Func<bool> JobTerminated() => () => job.IsTerminated;
-        Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
-        Func<bool> IsAtDropPoint() => () => CloseEnoughTo(DropPoint);
+        Func<bool> JobTerminated() => () => Job.IsTerminated;
+        Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint);
+        Func<bool> IsAtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint);
         Func<bool> InventoryIsEmpty() => Inventory.IsEmpty;
         Func<bool> InventoryIsNotEmpty() => () => !Inventory.IsEmpty();
         Func<bool> MiningFinished() => () => operateMine.Finished;
-        Func<bool> ReadyToGo() => () => idle.TimeIdle >= idleTime && Home.DropPointContents().Where(s => s.IsFull()).Count() < maxStacks;
+        Func<bool> ReadyToGo() => () => idle.TimeIdle >= idleTime && Job.Building.DropPointContents().Where(s => s.IsFull()).Count() < maxStacks;
     }
 }

@@ -30,7 +30,7 @@ public class DropInventoryAtDropPointState : IState
         if (item != null)
         {
             ((SmolbeanColonist)colonist).Think($"Dropping {item.quantity} {item.dropSpec.dropName}");
-            DropController.Instance.Drop(item.dropSpec, colonist.DropPoint, item.quantity);
+            dropController.Drop(item.dropSpec, colonist.Job.Building.dropPoint.transform.position, item.quantity);
         }
     }
 }

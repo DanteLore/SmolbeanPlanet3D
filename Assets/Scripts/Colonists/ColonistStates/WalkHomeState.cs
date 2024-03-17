@@ -13,6 +13,6 @@ public class WalkHomeState : WalkStateBase
 
     protected override Vector3 GetDestination()
     {
-        return colonist.SpawnPoint;
+        return colonist.Job.Building.spawnPoint.transform.position;
     }
 }

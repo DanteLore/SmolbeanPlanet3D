@@ -18,7 +18,7 @@ public class HarvestResourcesInMineState : IState
     public void OnEnter()
     {
         miner.Think("Mining some minerals...");
-        mine = (Mine)miner.Home;
+        mine = (Mine)miner.Job.Building;
         soundPlayer.Play("Chopping");
     }
 

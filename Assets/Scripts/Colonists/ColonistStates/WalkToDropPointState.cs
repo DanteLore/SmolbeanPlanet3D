@@ -13,6 +13,6 @@ public class WalkToDropPointState : WalkStateBase
 
     protected override Vector3 GetDestination()
     {
-        return colonist.DropPoint;
+        return colonist.Job.Building.dropPoint.transform.position;
     }
 }

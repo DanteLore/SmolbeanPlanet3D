@@ -28,7 +28,7 @@ public class PorterStoreDropsState : IState
         if(!porter.Inventory.IsEmpty())
         {
             var item = porter.Inventory.DropLast();
-            var storehouse = (Storehouse)porter.Home;
+            var storehouse = (Storehouse)porter.Job.Building;
             storehouse.Inventory.PickUp(item);
         }
     }

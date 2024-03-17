@@ -25,7 +25,7 @@ public class PorterLoadDeliveryItemsState : IState
 
         if(!porter.Inventory.Contains(delivery.Item, delivery.Quantity))
         {
-            var storehouse = (Storehouse)porter.Home;
+            var storehouse = (Storehouse)porter.Job.Building;
             var item = storehouse.Inventory.TakeAtLeast(delivery.Item, delivery.Minimum, delivery.Quantity);
 
             if(item != null)

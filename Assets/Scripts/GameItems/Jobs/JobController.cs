@@ -112,7 +112,7 @@ public class JobController : MonoBehaviour, IObjectGenerator
                 {
                     var job = new Job(building, jobSpec) { Colonist = colonist };
                     assignedJobs.Add(job);
-                    colonist.job = job;
+                    colonist.Job = job;
                 }
             }
         }

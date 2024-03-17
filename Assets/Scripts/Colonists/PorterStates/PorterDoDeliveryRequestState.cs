@@ -7,6 +7,8 @@ public class PorterDoDeliveryRequestState : CompoundState
     public PorterDoDeliveryRequestState(Porter porter, Animator animator, NavMeshAgent navAgent, SoundPlayer soundPlayer, DeliveryManager deliveryManager)
         : base()
     {
+        stateMachine.shouldLog = true;
+
         var walkToDestination = new PorterWalkToBuildingState(porter, navAgent, animator, soundPlayer);
         var succeeded = new PorterFinishedDeliveryRequestState(this, porter, deliveryManager);
         var failed = new PorterFailedDeliveryRequestState(this, porter, deliveryManager);
@@ -34,8 +36,8 @@ public class PorterDoDeliveryRequestState : CompoundState
         stateMachine.SetStartState(goToStorehouse);
 
         Func<bool> IsAtDestinationBuilding() => () => porter.DeliveryRequest.Building != null && porter.CloseEnoughTo(porter.DeliveryRequest.Building.GetSpawnPoint());
-        Func<bool> IsAtStorehouseAndReadyToPickup() => () => porter.CloseEnoughTo(porter.SpawnPoint) && porter.DeliveryRequest != null && porter.DeliveryRequest.IsComplete == false;
-        Func<bool> IsAtStorehouseAndReadyToDropOff() => () => porter.CloseEnoughTo(porter.SpawnPoint) && (porter.DeliveryRequest == null || porter.DeliveryRequest.IsComplete);
+        Func<bool> IsAtStorehouseAndReadyToPickup() => () => porter.CloseEnoughTo(porter.Job.Building.spawnPoint) && porter.DeliveryRequest != null && porter.DeliveryRequest.IsComplete == false;
+        Func<bool> IsAtStorehouseAndReadyToDropOff() => () => porter.CloseEnoughTo(porter.Job.Building.spawnPoint) && (porter.DeliveryRequest == null || porter.DeliveryRequest.IsComplete);
         Func<bool> HasStuffInInventory() => () => porter.Inventory.Contains(porter.DeliveryRequest.Item, porter.DeliveryRequest.Quantity);
         Func<bool> DidNotGetTheStuff() => () => !porter.Inventory.Contains(porter.DeliveryRequest.Item, porter.DeliveryRequest.Quantity);
         Func<bool> DeliveryIsFinished() => () => porter.DeliveryRequest == null || porter.DeliveryRequest.IsComplete;

@@ -15,10 +15,10 @@ public class SearchForJobState : IState
 
     public void OnEnter()
     {
-        colonist.job = jobController.ClaimNextJob(colonist);
+        colonist.Job = jobController.ClaimNextJob(colonist);
 
-        if(colonist.job != null)
-            colonist.Think($"Picked up a job doing {colonist.job.JobSpec.jobName} at {colonist.job.Building.name}");
+        if(colonist.Job != null)
+            colonist.Think($"Picked up a job doing {colonist.Job.JobSpec.jobName} at {colonist.Job.Building.name}");
         else
             colonist.Think("Looking for work, but no work here to be found");
     }

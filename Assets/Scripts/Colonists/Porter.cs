@@ -18,6 +18,8 @@ public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
     {
         base.Start();
 
+        StateMachine.shouldLog = true;
+
         var idle = new IdleState(animator);
 
         var giveUpJob = new SwitchColonistToFreeState(this);
@@ -43,12 +45,12 @@ public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
 
         StateMachine.SetStartState(idle);
 
-        Func<bool> JobTerminated() => () => job.IsTerminated;
+        Func<bool> JobTerminated() => () => Job.IsTerminated;
         Func<bool> DropFound() => () => TargetDrop != null;
         Func<bool> NoDropFound() => () => TargetDrop == null && !searchForCollectionJob.InProgress;
         Func<bool> HasBeenIdleFor(float t) => () => idle.TimeIdle >= t;
-        Func<bool> FetchDropSucceeded() => () => fetchDrop.Finished && CloseEnoughTo(SpawnPoint);
-        Func<bool> FetchDropFailed() => () => fetchDrop.Finished && !CloseEnoughTo(SpawnPoint);
+        Func<bool> FetchDropSucceeded() => () => fetchDrop.Finished && CloseEnoughTo(Job.Building.spawnPoint);
+        Func<bool> FetchDropFailed() => () => fetchDrop.Finished && !CloseEnoughTo(Job.Building.spawnPoint);
         Func<bool> NoDeliveryToDo() => () => DeliveryRequest == null;
         Func<bool> DeliveryAssigned() => () => DeliveryRequest != null;
         Func<bool> DeliveryComplete() => () => doDelivery.Finished;

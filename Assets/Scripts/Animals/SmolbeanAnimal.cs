@@ -222,9 +222,13 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         if (target == null)
             return false;
 
+        // If we don't have a collider, just measure the distance
+        if (target.GetComponentInChildren<Collider>() == null)
+            return CloseEnoughTo(target.transform.position);
+
+        // Otherwise...
         // This DOES need to be a sphere collision, rather than a standard distance check, because the object might be big and
         // it's potition might be a point right in it's centre.
-
         var found = Physics.OverlapSphere(transform.position, destinationThreshold, LayerMask.GetMask(LayerMask.LayerToName(target.layer)));
         return found.Any(c => c.gameObject == target);
     }

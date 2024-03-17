@@ -1,7 +1,5 @@
-using UnityEngine;
-
 public interface IReturnDrops
 {
-    public Vector3 DropPoint { get; }
+    public Job Job { get; }
     public Inventory Inventory { get; }
 }

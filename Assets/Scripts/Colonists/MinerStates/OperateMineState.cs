@@ -8,7 +8,6 @@ public class OperateMineState : CompoundState
     public OperateMineState(Miner miner, SoundPlayer soundPlayer): base()
     {
         this.miner = miner;
-        mine = (Mine)miner.Home;
 
         var walkToJob = new WalkDownTunnelState(miner, soundPlayer);
         var doJob = new HarvestResourcesInMineState(miner, soundPlayer);

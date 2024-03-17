@@ -9,7 +9,7 @@ public class SwitchColonistToProfessionState : IState
 
     public void OnEnter()
     {
-        JobSpec spec = colonist.job.JobSpec;
+        JobSpec spec = colonist.Job.JobSpec;
         AnimalController.Instance.SwitchAnimal(colonist, spec.colonistPrefab);
     }
 

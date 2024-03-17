@@ -26,11 +26,11 @@ public class FreeColonist : SmolbeanColonist
 
         StateMachine.SetStartState(beFree);
 
-        Func<bool> JobAvailable() => () => job == null && JobController.Instance.Vacancies.Any();
+        Func<bool> JobAvailable() => () => Job == null && JobController.Instance.Vacancies.Any();
         Func<bool> IsNight() => () => DayNightCycleController.Instance.TimeIsBetween(21f, 5f);
         Func<bool> WakeupTime() => () => DayNightCycleController.Instance.TimeIsBetween(5f, 21f);
-        Func<bool> HasJob() => () => job != null;
-        Func<bool> NoJob() => () => job == null;
+        Func<bool> HasJob() => () => Job != null;
+        Func<bool> NoJob() => () => Job == null;
     }
 
     public override void InitialiseStats(AnimalStats newStats = null)

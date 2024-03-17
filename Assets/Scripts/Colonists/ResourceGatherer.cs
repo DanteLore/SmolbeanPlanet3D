@@ -14,15 +14,6 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
     public GameObject Target { get; set; }
     public GameObject TargetDrop { get; set; }
 
-    public Vector3 DropPoint
-    {
-        get
-        {
-            // Should only be null when we don't yet have a job assigned, which only happens when initialising
-            return Home != null ? Home.dropPoint.transform.position : Vector3.zero;
-        }
-    }
-
     public Type TargetType
     {
         get
@@ -93,7 +84,7 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
 
         StateMachine.SetStartState(idle);
 
-        Func<bool> JobTerminated() => () => job.IsTerminated;
+        Func<bool> JobTerminated() => () => Job.IsTerminated;
         Func<bool> HasTarget() => () => Target != null;
         Func<bool> IsCloseEnoughToTarget() => () => CloseEnoughTo(Target);
         Func<bool> IsCloseEnoughToDrop() => () => CloseEnoughTo(TargetDrop);
@@ -103,15 +94,15 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         Func<bool> NoDropsFound() => () => TargetDrop == null;
         Func<bool> InventoryEmpty() => () => Inventory.IsEmpty();
         Func<bool> InventoryNotEmpty() => () => !Inventory.IsEmpty();
-        Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(SpawnPoint);
-        Func<bool> IsAtDropPoint() => () => CloseEnoughTo(DropPoint);
+        Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint);
+        Func<bool> IsAtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint);
         Func<bool> ReadyToGo() => () => idle.TimeIdle >= idleTime && !DropPointFull();
         Func<bool> HasBeenSleepingForAWhile() => () => sleeping.TimeAsleep >= sleepTime;
     }
 
     private bool DropPointFull()
     {
-        return Home.DropPointContents().Where(i => i != null && i.dropSpec == dropSpec).Where(s => s.IsFull()).Count() >= maxStacks;
+        return Job.Building.DropPointContents().Where(i => i != null && i.dropSpec == dropSpec).Where(s => s.IsFull()).Count() >= maxStacks;
     }
 
     public override void InitialiseStats(AnimalStats newStats = null)

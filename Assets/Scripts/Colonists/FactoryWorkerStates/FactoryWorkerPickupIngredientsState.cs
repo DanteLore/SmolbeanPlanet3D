@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class FactoryWorkerPickupIngredientsState : IState
 {
-    FactoryBuilding factory;
+    private readonly SmolbeanColonist colonist;
 
-    public FactoryWorkerPickupIngredientsState(FactoryBuilding factory)
+    public FactoryWorkerPickupIngredientsState(SmolbeanColonist colonist)
     {
-        this.factory = factory;
+        this.colonist = colonist;
     }
 
     public void OnEnter()
     {
-        factory.LoadResources();
+        if (colonist.Job != null)
+        {
+            var factory = colonist.Job.Building as FactoryBuilding;
+            if (factory != null)
+                factory.LoadResources();
+        }
     }
 
     public void OnExit()
