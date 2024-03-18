@@ -9,11 +9,9 @@ public abstract class WalkStateBase : IState
     protected SoundPlayer soundPlayer;
     private Vector3 lastPosition;
     private float lastMoved;
-    private float distanceSteeringTarget;
     private float originalAnimatorSpeed;
-    private static readonly float gameSpeedNavJumpSize = 0.5f;
     protected bool navAgentResetEnabled = true;
-
+      
     public float StuckTime { get { return Time.time - lastMoved; } }
 
     public WalkStateBase(NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer)
@@ -63,6 +61,7 @@ public abstract class WalkStateBase : IState
 
     public void Tick()
     {
+        // Not finished planning our route yet...
         if (navAgent.pathPending)
         {
             if (animator != null)
@@ -71,6 +70,7 @@ public abstract class WalkStateBase : IState
             return;
         }
 
+        // Start walking
         if (animator != null)
             animator.SetBool("IsWalking", true);
 
@@ -84,36 +84,6 @@ public abstract class WalkStateBase : IState
         {
             lastMoved = time;
             lastPosition = pos;
-        }
-
-        // Commenting this out messes up colonists, but not (seemingly) animals!
-        if(navAgentResetEnabled && time - lastMoved > 5f * GameStateManager.Instance.SelectedGameSpeed)
-        {
-            // Kick the nav agent after small amount of inactivity
-            navAgent.isStopped = true;
-            navAgent.SetDestination(GetDestination());
-            navAgent.isStopped = false;
-        }
-
-        if(Time.timeScale > 1.0f)
-            CheckSteeringTargetPosition();
-    }
-
-    private void CheckSteeringTargetPosition()
-    {
-        float d = Vector3.Distance(navAgent.transform.position, navAgent.steeringTarget);
-        float jumpThreshold = gameSpeedNavJumpSize * Time.timeScale;
-
-        if(d <= jumpThreshold)
-        {
-            if(distanceSteeringTarget < d)
-            {
-                navAgent.transform.position = navAgent.steeringTarget;
-            }
-            else
-            {
-                distanceSteeringTarget = d;
-            }
         }
     }
 }
