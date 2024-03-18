@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,11 +6,11 @@ public class StateMachine
 {
     private IState currentState;
     public bool shouldLog = false;
-    private Dictionary<Type, List<Transition>> transitions = new Dictionary<Type, List<Transition>>();
-    private List<Transition> currentTransitions = new List<Transition>();
+    private readonly Dictionary<Type, List<Transition>> transitions = new();
+    private List<Transition> currentTransitions = new();
 
-    private List<Transition> anyTransitions = new List<Transition>();
-    private static List<Transition> EmptyTransitions = new List<Transition>(0); // Need this?
+    private readonly List<Transition> anyTransitions = new();
+    private static readonly List<Transition> EmptyTransitions = new(0); // Need this?
     private IState startState;
 
     private class Transition
@@ -109,5 +108,10 @@ public class StateMachine
     {
         if (shouldLog)
             Debug.Log(message);
+    }
+
+    public void ForceStop()
+    {
+        currentState?.OnExit();
     }
 }

@@ -18,6 +18,9 @@ public abstract class CompoundState : IState
 
     public virtual void OnExit()
     {
+        // As we close, call OnExit on the current child state to close things off nicely
+        stateMachine.ForceStop();
+
         Finished = true;
     }
 
