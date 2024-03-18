@@ -98,21 +98,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clips:
-  - name: Chopping
-    clip: {fileID: 8300000, guid: 4bb6c9a033b6142018eac2ca072cdba3, type: 3}
-    loop: 0
-    volume: 1
-    ignoreGamePause: 0
-  - name: Chopped
-    clip: {fileID: 8300000, guid: 08eebd7104c6e46bc8bff2094acd3d32, type: 3}
-    loop: 0
-    volume: 1
-    ignoreGamePause: 0
-  - name: Falling
-    clip: {fileID: 8300000, guid: 104bc6411797349e7afadf1b571900e3, type: 3}
-    loop: 0
-    volume: 1
-    ignoreGamePause: 0
   - name: Footsteps
     clip: {fileID: 8300000, guid: fe536c24d81564d2faf2711639d9b668, type: 3}
     loop: 1
@@ -138,6 +123,7 @@ MonoBehaviour:
   species: {fileID: 11400000, guid: 9cc68d1bc4c7b41bcb45f3d19e0f784c, type: 2}
   target: {x: 0, y: 0, z: 0}
   memoryLength: 6
+  prefabIndex: -1
   dropLayer: Drops
 --- !u!1001 &502959277502828767
 PrefabInstance:

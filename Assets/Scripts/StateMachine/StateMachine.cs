@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StateMachine
 {
     private IState currentState;
     public bool shouldLog = false;
-    private readonly Dictionary<Type, List<Transition>> transitions = new();
-    private List<Transition> currentTransitions = new();
+    private readonly Dictionary<Type, Transition[]> transitions = new();
+    private Transition[] currentTransitions = Array.Empty<Transition>();
 
-    private readonly List<Transition> anyTransitions = new();
-    private static readonly List<Transition> EmptyTransitions = new(0); // Need this?
+    private Transition[] anyTransitions = Array.Empty<Transition>();
+    private static readonly Transition[] EmptyTransitions = Array.Empty<Transition>();
     private IState startState;
 
     private class Transition
@@ -77,27 +78,23 @@ public class StateMachine
     public void AddTransition(IState from, IState to, Func<bool> predicate)
     {
         if(!transitions.TryGetValue(from.GetType(), out var trans))
-        {
-            trans = new List<Transition>();
-            transitions[from.GetType()] = trans;
-        }
+            trans = Array.Empty<Transition>();
 
-        trans.Add(new Transition(to, predicate));
+        transitions[from.GetType()] = trans.Append(new Transition(to, predicate)).ToArray();
     }
 
     public void AddAnyTransition(IState to, Func<bool> predicate)
     {
-        anyTransitions.Add(new Transition(to, predicate));
+        anyTransitions = anyTransitions.Append(new Transition(to, predicate)).ToArray();
     }
 
     private Transition GetTransition()
     {
-        // Quicker to do .ToArray() then unumerate, than to enumerate the list!
-        foreach (var t in anyTransitions.ToArray()) 
+        foreach (var t in anyTransitions) 
             if(t.Condition())
                 return t;
 
-        foreach(var t in currentTransitions.ToArray())
+        foreach(var t in currentTransitions)
             if(t.Condition())
                 return t;
         
