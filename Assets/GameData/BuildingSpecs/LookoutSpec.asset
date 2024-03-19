@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 828b6cfd66e994add93c56b51850a787, type: 3}
+  m_Name: LookoutSpec
+  m_EditorClassIdentifier: 
+  buildingName: Hunter's Lookout
+  prefab: {fileID: 8053860051191982046, guid: 997a3778a9cad428da7802b14cbdcbde, type: 3}
+  sitePrefab: {fileID: 6115743314038843104, guid: 0af61dd21b9e34a08814ff8289a34213, type: 3}
+  thumbnail: {fileID: 2800000, guid: 2bf0de0d935e4497087e86df8c88f191, type: 3}
+  siteThumbnail: {fileID: 2800000, guid: 5b19e04c048e44240b58658e5885a7e8, type: 3}
+  instantBuild: 0
+  ingredients:
+  - item: {fileID: 11400000, guid: edeccd8bca67e4f46b70aeec6790c583, type: 2}
+    quantity: 6
+  - item: {fileID: 11400000, guid: 22c90a52242ea4c2cb1d26c0ecd7262e, type: 2}
+    quantity: 2
+  buildTime: 24
+  showInToolbar: 1
+  deleteAllowed: 1
