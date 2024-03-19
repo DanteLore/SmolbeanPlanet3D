@@ -21,6 +21,11 @@ But first, to celebrate the colonists' newfound freedom, I'm going to implement 
 
 ![Screenshot](./Docs/Images/screenshot64.png)
 
+24 hours later and here are three new buildings, added to the game with prefabs, specs etc.  A Hunter's Lookout, a Small House and a Barn.  Two for the new Farmer and Hunter jobs (coming soon) and
+one for colonists to sleep and... erm... make more colonists as per above.
+
+![Screenshot](./Docs/Images/screenshot65.png)
+
 ## Last big scary job
 
 For a long time there have been changes I have needed to make that have seemed scary. The last of these is to separate colonists from buildings. This means giving them their own lifecycles,
