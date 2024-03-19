@@ -26,6 +26,10 @@ one for colonists to sleep and... erm... make more colonists as per above.
 
 ![Screenshot](./Docs/Images/screenshot65.png)
 
+![Screenshot](./Docs/Images/screenshot66.png)
+
+![Screenshot](./Docs/Images/screenshot67.png)
+
 ## Last big scary job
 
 For a long time there have been changes I have needed to make that have seemed scary. The last of these is to separate colonists from buildings. This means giving them their own lifecycles,

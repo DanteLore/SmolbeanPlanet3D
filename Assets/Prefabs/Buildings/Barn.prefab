@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 477819634078323747}
   - component: {fileID: 1633584644677042225}
   - component: {fileID: 3294056550741166857}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -116,7 +116,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3033073497256592192}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3528402990923963916}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DropPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,7 +181,7 @@ GameObject:
   - component: {fileID: 8954522060574267904}
   - component: {fileID: 6897308202142817666}
   - component: {fileID: 6806641129408011300}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Barn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
