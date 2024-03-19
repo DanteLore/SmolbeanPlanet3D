@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -7,8 +6,12 @@ using UnityEngine.AI;
 
 public class SearchForResourceState : IState
 {
-    private ResourceGatherer gatherer;
-    private string natureLayer;
+    private const float maxRadius = 496f;
+    private readonly ResourceGatherer gatherer;
+    private readonly string natureLayer;
+    private float radius;
+
+    public bool InProgress { get { return radius <= maxRadius; } }
 
     public SearchForResourceState(ResourceGatherer gatherer, string natureLayer)
     {
@@ -18,6 +21,7 @@ public class SearchForResourceState : IState
 
     public void OnEnter()
     {
+        radius = 32f;
     }
 
     public void OnExit()
@@ -26,17 +30,29 @@ public class SearchForResourceState : IState
 
     public void Tick()
     {
-        gatherer.Target = GetTargets(gatherer.transform.position)
+
+        if (!gatherer.Target)
+            FindTarget();
+    }
+
+    private void FindTarget()
+    {
+        var target = GetTargets(gatherer.transform.position)
                                 .Take(10)
                                 .Where(IsOnNavMesh)
                                 .ToList()
                                 .OrderBy(_ => Guid.NewGuid())
                                 .FirstOrDefault();
+
+        if (target)
+            gatherer.Target = target;
+        else
+            radius += 8f;
     }
 
     private IEnumerable<GameObject> GetTargets(Vector3 pos)
     {
-        var candidates = Physics.OverlapSphere(pos, 500f, LayerMask.GetMask(natureLayer));
+        var candidates = Physics.OverlapSphere(pos, radius, LayerMask.GetMask(natureLayer));
 
         return candidates
             .Select(c => c.gameObject)

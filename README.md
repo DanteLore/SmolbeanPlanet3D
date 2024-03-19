@@ -11,6 +11,16 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Colonists! Be FREE!
+
+Finally done it - colonists are separated from their home buildings.  This was, as I said, the last big scary bit of refactoring.  There's a new job system and some random colonists are sprinkled over the
+starting map.  Much more to do, to introduce food, recreation, sleep and reproduction/population growth (I kinda like the idea that population growth is a BAD thing - the colonists get unhappy if they don't have children,
+then overpopulate the island when they do...).
+
+But first, to celebrate the colonists' newfound freedom, I'm going to implement a few new buildings and jobs for them to do.  Hunters, farmers and the Stew Keeper.  Here's the first new building, hot off the press.
+
+![Screenshot](./Docs/Images/screenshot64.png)
+
 ## Last big scary job
 
 For a long time there have been changes I have needed to make that have seemed scary. The last of these is to separate colonists from buildings. This means giving them their own lifecycles,

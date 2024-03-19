@@ -62,28 +62,30 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         AT(walkToDropPoint, walkHome, () => walkToDropPoint.StuckTime > 5f);
 
         AT(idle, searchForResources, ReadyToGo());
-
+           
         AT(searchForResources,  walkToResource,     HasTarget());
+        AT(searchForResources,  idle,               NoTargetFound());
         AT(walkToResource,      harvestResource,    IsCloseEnoughToTarget());
         AT(harvestResource,     waitForTargetToDie, TargetIsDying());
         AT(waitForTargetToDie,  searchForDrops,     TargetIsDead());
 
-        AT(searchForDrops,  walkToDrop,         DropFound());
-        AT(walkToDrop,      pickupDrop,         IsCloseEnoughToDrop());
-        AT(walkToDrop,      walkHome,           NoDropsFound());
-        AT(pickupDrop,      walkHome,           InventoryEmpty());
-        AT(pickupDrop,      walkToDropPoint,    InventoryNotEmpty());
+        AT(searchForDrops,  walkToDrop,      DropFound());
+        AT(walkToDrop,      pickupDrop,      IsCloseEnoughToDrop());
+        AT(walkToDrop,      walkHome,        NoDropsFound());
+        AT(pickupDrop,      walkHome,        InventoryEmpty());
+        AT(pickupDrop,      walkToDropPoint, InventoryNotEmpty());
 
-        AT(walkToDropPoint, dropInventory,  IsAtDropPoint());
-        AT(dropInventory,   walkHome,       InventoryEmpty());
+        AT(walkToDropPoint, dropInventory, IsAtDropPoint());
+        AT(dropInventory,   walkHome,      InventoryEmpty());
 
-        AT(searchForDrops,  walkHome,       NoDropsFound());
-        AT(walkHome,        idle,           IsAtSpawnPoint());
+        AT(searchForDrops,  walkHome, NoDropsFound());
+        AT(walkHome,        idle,     IsAtSpawnPoint());
 
         StateMachine.SetStartState(idle);
 
         Func<bool> JobTerminated() => () => Job.IsTerminated;
         Func<bool> HasTarget() => () => Target != null;
+        Func<bool> NoTargetFound() => () => Target == null && !searchForResources.InProgress;
         Func<bool> IsCloseEnoughToTarget() => () => CloseEnoughTo(Target);
         Func<bool> IsCloseEnoughToDrop() => () => CloseEnoughTo(TargetDrop);
         Func<bool> TargetIsDying() => () => Target != null && Target.GetComponent<IDamagable>().IsDead;

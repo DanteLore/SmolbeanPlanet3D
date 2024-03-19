@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ColonistSpec
   m_EditorClassIdentifier: 
   animalName: Colonist
-  prefab: {fileID: 5678464011766705138, guid: c9e113ff2882f4146b4b977ec7a7d43b, type: 3}
+  prefabIndex: 0
   dropSpec: {fileID: 0}
   deathParticleSystem: {fileID: 1708857678183282219, guid: c0a8a93d928bb43529ca1831cdbf6913, type: 3}
   sleepParticleSystem: {fileID: 1572338817668193572, guid: 631718f0bff854df1b58a025e98baf49, type: 3}
@@ -24,9 +24,9 @@ MonoBehaviour:
   maxHealth: 100
   healthRecoveryPerSecond: 2
   sleepingHealthDecreaseMultiplier: 0.01
-  oldAgeSeconds: 6600
-  lifespanSeconds: 10000
-  oldAgeHealthImpactPerSecond: 0.1
+  oldAgeSeconds: 660000
+  lifespanSeconds: 1000000
+  oldAgeHealthImpactPerSecond: 0
   maturityAgeSeconds: 1200
   juvenileScale: 1
   gestationPeriodSeconds: 0

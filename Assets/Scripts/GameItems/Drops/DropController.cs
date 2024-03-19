@@ -35,6 +35,9 @@ public class DropController : MonoBehaviour, IObjectGenerator
 
     public GameObject Drop(DropSpec spec, Vector3 position, int quantity = 0)
     {
+        if (spec == null)
+            return null;
+
         var others = Physics.OverlapSphere(position, dropMergeRadius, LayerMask.GetMask(dropLayer))
             .Select(d => d.GetComponent<SmolbeanDrop>())
             .Where(d => d != null && d.dropSpec == spec)
