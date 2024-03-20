@@ -51,6 +51,12 @@ public class BuildingSite : SmolbeanBuilding
         CreateDeliveryRequests();
     }
 
+    protected override void RegisterJobs()
+    {
+        // Don't register jobs for an incomplete building.
+        // Yes, I know this is a nasty way to supress it...
+    }
+
     private void CreateDeliveryRequests()
     {
         foreach(var ingredient in BuildingSpec.ingredients)

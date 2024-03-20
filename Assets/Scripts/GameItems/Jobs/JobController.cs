@@ -63,6 +63,13 @@ public class JobController : MonoBehaviour, IObjectGenerator
         assignedJobs.Clear();
     }
 
+    public IEnumerable<Job> GetAllJobsForBuilding(SmolbeanBuilding building)
+    {
+        return vacancies
+            .Union(assignedJobs)
+            .Where(j => j.Building == building);
+    }
+
     public void SaveTo(SaveFileData saveData, string filename)
     {
         saveData.vacancyData = vacancies.Select(job => new JobSaveData()

@@ -26,3 +26,4 @@ MonoBehaviour:
   buildTime: 24
   showInToolbar: 1
   deleteAllowed: 1
+  jobSpecs: []

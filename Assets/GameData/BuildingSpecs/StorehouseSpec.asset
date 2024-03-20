@@ -26,3 +26,7 @@ MonoBehaviour:
   buildTime: 24
   showInToolbar: 1
   deleteAllowed: 1
+  jobSpecs:
+  - {fileID: 11400000, guid: 96a3dcf7ab375428491aa2d8d994d645, type: 2}
+  - {fileID: 11400000, guid: ac9592754f44d4ee7947ef32af0a32aa, type: 2}
+  - {fileID: 11400000, guid: ac9592754f44d4ee7947ef32af0a32aa, type: 2}

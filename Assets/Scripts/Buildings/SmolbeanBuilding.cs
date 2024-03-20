@@ -18,8 +18,6 @@ public abstract class SmolbeanBuilding : MonoBehaviour
     public float itemDropRadius = 2f;
     public float itemDropHeight = 1f;
 
-    public JobSpec[] jobSpecs;
-
     public Inventory Inventory { get; private set; }
 
     public virtual bool IsComplete { get { return true; } }
@@ -42,9 +40,12 @@ public abstract class SmolbeanBuilding : MonoBehaviour
     protected virtual void Start()
     {
         InvokeRepeating(nameof(RegisterWear), 0.0f, 0.5f);
+        RegisterJobs();
+    }
 
-        // TODO:  Make this run when the game has fully initialised, NOT when the building is created.
-        foreach (var jobSpec in jobSpecs)
+    protected virtual void RegisterJobs()
+    {
+        foreach (var jobSpec in BuildingSpec.jobSpecs)
             JobController.Instance.RegisterJob(jobSpec, this);
     }
 

@@ -13,4 +13,5 @@ public class BuildingSpec : ScriptableObject
     public float buildTime = 24f;
     public bool showInToolbar = true;
     public bool deleteAllowed = true;
+    public JobSpec[] jobSpecs;
 }

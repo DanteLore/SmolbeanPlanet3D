@@ -28,3 +28,5 @@ MonoBehaviour:
   buildTime: 24
   showInToolbar: 1
   deleteAllowed: 1
+  jobSpecs:
+  - {fileID: 11400000, guid: 359f622f858364ee1bb95f3f11b632a5, type: 2}

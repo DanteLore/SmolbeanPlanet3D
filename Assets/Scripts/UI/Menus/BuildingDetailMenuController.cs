@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -39,6 +41,9 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
         var buildingImage = document.rootVisualElement.Q<VisualElement>("buildingImage");
         buildingImage.style.backgroundImage = building.BuildingSpec.thumbnail;
 
+        var nameLabel = document.rootVisualElement.Q<Label>("nameLabel");
+        nameLabel.text = building.BuildingSpec.buildingName;
+
         var pos = gridManager.GetGameSquareFromWorldCoords(building.transform.position);
         var positionLabel = document.rootVisualElement.Q<Label>("positionLabel");
         positionLabel.text = $"{pos.x}λ \u00d7 {pos.y}φ";
@@ -46,28 +51,22 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
         var mainScrollView = document.rootVisualElement.Q<ScrollView>("mainScrollView");
 
         if (!building.IsComplete)
-        {
             BuildIngredients(building, mainScrollView);
-        }
 
         if(!building.Inventory.IsEmpty())
-        {
             BuildInventory(building, mainScrollView);
-        }
 
-        if (building is FactoryBuilding factory)
-        {
+        if(building is FactoryBuilding factory)
             BuildRecipe(mainScrollView, factory);
-        }
+
+        var jobs = JobController.Instance.GetAllJobsForBuilding(building).ToArray();
+        if (jobs.Length > 0)
+            BuildJobs(mainScrollView, jobs);
     }
 
     private static void BuildRecipe(ScrollView mainScrollView, FactoryBuilding factory)
     {
-        Label recipeLabel = new();
-        recipeLabel.AddToClassList("notoSansSymbols");
-        recipeLabel.AddToClassList("bigLabel");
-        mainScrollView.Add(recipeLabel);
-        recipeLabel.text = "⎌";
+        Title(mainScrollView, "⎌", "Recipes");
 
         var recipeContainer = new VisualElement();
         recipeContainer.AddToClassList("recipeContainer");
@@ -95,11 +94,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
 
     private static void BuildInventory(SmolbeanBuilding building, ScrollView mainScrollView)
     {
-        Label inventoryLabel = new();
-        inventoryLabel.AddToClassList("notoLinearA");
-        inventoryLabel.AddToClassList("bigLabel");
-        mainScrollView.Add(inventoryLabel);
-        inventoryLabel.text = "𐚱";
+        Title(mainScrollView, "𐚱", "Inventory");
 
         var inventoryContainer = new VisualElement();
         inventoryContainer.AddToClassList("inventoryContainer");
@@ -115,16 +110,49 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
         }
     }
 
+    private void BuildJobs(ScrollView mainScrollView, Job[] jobs)
+    {
+        Title(mainScrollView, "𐛌", "Jobs");
+
+        var jobContainer = new VisualElement();
+        jobContainer.AddToClassList("jobContainer");
+        mainScrollView.Add(jobContainer);
+
+        foreach (var job in jobs)
+        {
+            VisualElement jobRow = new();
+            jobRow.AddToClassList("jobRow");
+            jobContainer.Add(jobRow);
+
+            Button jobButton = new();
+            jobButton.style.backgroundColor = new Color(0, 0, 0, 0);
+            jobButton.style.backgroundImage = job.JobSpec.thumbnail;
+            jobRow.Add(jobButton);
+
+            Label jobLabel = new();
+            jobLabel.text = job.JobSpec.jobName;
+            jobRow.Add(jobLabel);
+
+            if (job.Colonist)
+            {
+                Button colonistButton = new();
+                colonistButton.style.backgroundColor = new Color(0, 0, 0, 0);
+                colonistButton.style.backgroundImage = job.Colonist.species.thumbnail;
+                jobRow.Add(colonistButton);
+
+                Label colonistLabel = new();
+                colonistLabel.text = job.Colonist.Stats.name;
+                jobRow.Add(colonistLabel);
+            }
+        }
+    }
+
     private static void BuildIngredients(SmolbeanBuilding building, ScrollView mainScrollView)
     {
-        Label ingredientsLabel = new();
-        ingredientsLabel.AddToClassList("notoEmoji");
-        ingredientsLabel.AddToClassList("bigLabel");
-        mainScrollView.Add(ingredientsLabel);
-        ingredientsLabel.text = "⚒";
+        Title(mainScrollView, "⚒", "Materials", "notoEmoji");
 
         var ingredientContainer = new VisualElement();
-        ingredientContainer.AddToClassList("ingredientContainer");
+        ingredientContainer.AddToClassList("recipeContainer");
         mainScrollView.Add(ingredientContainer);
 
         foreach (var ingredient in building.BuildingSpec.ingredients)
@@ -135,5 +163,22 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
             button.style.backgroundImage = ingredient.item.thumbnail;
             ingredientContainer.Add(button);
         }
+    }
+
+    private static void Title(ScrollView mainScrollView, string symbol, string text, string symbolClass = "notoLinearA")
+    {
+        var titleContainer = new VisualElement();
+        titleContainer.AddToClassList("titleRow");
+        mainScrollView.Add(titleContainer);
+
+        Label symbolLabel = new();
+        symbolLabel.AddToClassList(symbolClass);
+        symbolLabel.AddToClassList("bigLabel");
+        titleContainer.Add(symbolLabel);
+        symbolLabel.text = symbol;
+
+        Label textLabel = new();
+        titleContainer.Add(textLabel);
+        textLabel.text = text;
     }
 }

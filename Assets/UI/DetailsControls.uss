@@ -1,5 +1,6 @@
 .ingredientContainer,
 .inventoryContainer,
+.jobContainer,
 .recipeContainer
 {
     flex-direction: row;
@@ -20,8 +21,36 @@
     max-width: 30px;
     max-height: 30px;
     -unity-text-align: lower-right;
-    -unity-font-style: bold;
+    -unity-font-style: normal;
     font-size: 14px;
+}
+
+.jobContainer Button
+{
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    max-width: 30px;
+    max-height: 30px;
+    -unity-text-align: lower-right;
+    -unity-font-style: normal;
+    font-size: 14px;
+    border-width: 0px;
+}
+
+.ingredientContainer Button:hover,
+.inventoryContainer Button:hover,
+.recipeContainer Button:hover
+{
+    border-width: 1px;
+    border-color: rgb(255, 255, 255);
+    border-radius: 5px;
+}
+
+.jobContainer Button:hover
+{
+    border-width: 0px;
 }
 
 .bigLabel
@@ -68,16 +97,9 @@
     -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoSansSymbols-Regular.ttf?fileID=12800000&guid=96e32fe508410474b8b72399fd1900db&type=3#NotoSansSymbols-Regular");
 }
 
-.ingredientContainer Button:hover,
-.inventoryContainer Button:hover,
-.recipeContainer Button:hover
-{
-    border-width: 1px;
-    border-color: rgb(255, 255, 255);
-    border-radius: 5px;
-}
-
-.fieldRow
+.jobRow,
+.fieldRow,
+.titleRow
 {
     flex-direction: row;
     flex-grow: 1;
@@ -85,6 +107,13 @@
     justify-content: flex-start;
 }
 
+.jobContainer Label
+{
+    font-size: 10px;
+    -unity-font-style: normal;
+}
+
+.jobLabel,
 .fieldLabel
 {
     width: 45%;

@@ -30,6 +30,7 @@ public class PorterDoDeliveryRequestState : CompoundState
 
         // Handle deletion of destination building
         AT(walkToDestination, goToStorehouse, BuildingDeleted());
+        AT(goToStorehouse, succeeded, BuildingDeleted());
 
         stateMachine.SetStartState(goToStorehouse);
 
