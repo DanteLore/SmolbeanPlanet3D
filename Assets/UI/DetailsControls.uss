@@ -1,12 +1,20 @@
 .ingredientContainer,
 .inventoryContainer,
-.jobContainer,
 .recipeContainer
 {
     flex-direction: row;
     flex-wrap: wrap;
     padding: 5px;
     margin-left: 24px;
+    margin-bottom: 20px;
+}
+
+.jobContainer
+{
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px;
+    margin-left: 0px;
     margin-bottom: 20px;
 }
 
@@ -97,14 +105,17 @@
     -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoSansSymbols-Regular.ttf?fileID=12800000&guid=96e32fe508410474b8b72399fd1900db&type=3#NotoSansSymbols-Regular");
 }
 
-.jobRow,
 .fieldRow,
-.titleRow
+.titleRow,
+.jobRow
 {
     flex-direction: row;
     flex-grow: 1;
     flex-shrink: 1;
     justify-content: flex-start;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
 }
 
 .jobContainer Label

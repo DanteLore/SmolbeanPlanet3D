@@ -19,7 +19,7 @@ public class OperateMineState : CompoundState
         var walkToJob = new WalkDownTunnelState(miner, soundPlayer);
         var doJob = new HarvestResourcesInMineState(miner, soundPlayer);
         var walkBack = new WalkBackUpTunnelState(miner, soundPlayer);
-        var finished = new MiningCompleteState(this);
+        var finished = new FinishCompoundState(this);
 
         AT(walkToJob, doJob, WalkedToJob());
         AT(doJob, walkBack, InventoryIsNotEmpty());

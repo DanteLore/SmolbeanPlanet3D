@@ -98,6 +98,10 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 
         DisplayFields(animal);
 
+        var colonist = animal as SmolbeanColonist;
+        if (colonist)
+            DisplayColonistDetails(colonist);
+
         thoughtsContainer = new();
         thoughtsContainer.AddToClassList("thoughtsContainer");
         document.rootVisualElement.Q<ScrollView>("mainScrollView").Add(thoughtsContainer);
@@ -153,6 +157,34 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 
             fieldLookup.Add(field, valueLabel);
         }
+    }
+
+    private void DisplayColonistDetails(SmolbeanColonist colonist)
+    {
+        if (colonist.Job == null)
+            return;
+
+        VisualElement jobRow = new();
+        jobRow.AddToClassList("jobRow");
+        document.rootVisualElement.Q<ScrollView>("mainScrollView").Add(jobRow);
+
+        Label symbolLabel = new();
+        symbolLabel.text = "𐛌";
+        symbolLabel.AddToClassList("notoLinearA");
+        jobRow.Add(symbolLabel);
+
+        Label titleLabel = new();
+        titleLabel.text = "Job: ";
+        jobRow.Add(titleLabel);
+
+        Button jobButton = new();
+        jobButton.style.backgroundColor = new Color(0, 0, 0, 0);
+        jobButton.style.backgroundImage = colonist.Job.JobSpec.thumbnail;
+        jobRow.Add(jobButton);
+
+        Label jobLabel = new();
+        jobLabel.text = colonist.Job.JobSpec.jobName;
+        jobRow.Add(jobLabel);
     }
 
     private void UpdateValues()

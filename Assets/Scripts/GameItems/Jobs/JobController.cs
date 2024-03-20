@@ -12,11 +12,10 @@ public class JobController : MonoBehaviour, IObjectGenerator
 
     public JobSpec[] jobSpecs;
 
-    private readonly List<Job> vacancies = new();
-    private readonly List<Job> assignedJobs = new();
+    private readonly List<Job> jobs = new();
 
-    public IEnumerable<Job> Vacancies { get { return vacancies; } }
-    public IEnumerable<Job> AssignedJobs { get { return assignedJobs; } }
+    public IEnumerable<Job> Vacancies { get { return jobs.Where(j => j.Colonist == null && !j.IsTerminated); } }
+    public IEnumerable<Job> AssignedJobs { get { return jobs.Where(j => j.Colonist != null); } }
 
     public int Priority { get { return 150; } }
     public bool RunModeOnly { get { return true; } }
@@ -31,58 +30,39 @@ public class JobController : MonoBehaviour, IObjectGenerator
 
     public Job ClaimNextJob(SmolbeanColonist colonist)
     {
-        if (vacancies.Count == 0)
+        if (Vacancies.Count() == 0)
             return null;
 
-        // TODO:  Random for now.  Need to assign, like delivery requests
-        var job = vacancies[UnityEngine.Random.Range(0, vacancies.Count - 1)];
-        vacancies.Remove(job);
-        assignedJobs.Add(job);
+        var job = Vacancies.ToArray()[UnityEngine.Random.Range(0, Vacancies.Count() - 1)];
         job.Colonist = colonist;
+        colonist.Job = job;
 
         return job;
     }
 
     public void RegisterJob(JobSpec jobSpec, SmolbeanBuilding building)
     {
-        /*
-        if (
-            vacancies.Any(job => job.JobSpec == jobSpec && job.Building == building) ||
-            assignedJobs.Any(job => job.JobSpec == jobSpec && job.Building == building)
-            )
-            return; // Job already exists
-        */
-
         Job job = new(building, jobSpec);
-        vacancies.Add(job);
+        jobs.Add(job);
     }
 
     public void Clear()
     {
-        vacancies.Clear();
-        assignedJobs.Clear();
+        jobs.Clear();
     }
 
     public IEnumerable<Job> GetAllJobsForBuilding(SmolbeanBuilding building)
     {
-        return vacancies
-            .Union(assignedJobs)
-            .Where(j => j.Building == building);
+        return jobs.Where(j => j.Building == building);
     }
 
     public void SaveTo(SaveFileData saveData, string filename)
     {
-        saveData.vacancyData = vacancies.Select(job => new JobSaveData()
-        {
-            jobSpecIndex = Array.IndexOf(jobSpecs, job.JobSpec),
-            buildingName = job.Building.name
-        }).ToList();
-
-        saveData.assignedJobData = assignedJobs.Select(job => new JobSaveData()
+        saveData.jobData = jobs.Select(job => new JobSaveData()
         {
             jobSpecIndex = Array.IndexOf(jobSpecs, job.JobSpec),
             buildingName = job.Building.name,
-            colonistName = job.Colonist.Stats.name
+            colonistName = job.Colonist != null ? job.Colonist.Stats.name : null
         }).ToList();
     }
 
@@ -93,35 +73,21 @@ public class JobController : MonoBehaviour, IObjectGenerator
 
     public IEnumerator Load(SaveFileData data, string filename)
     {
-        if (data.vacancyData != null)
+        if (data.jobData != null)
         {
-            vacancies.Clear();
-            foreach (var row in data.vacancyData)
+            jobs.Clear();
+            foreach (var row in data.jobData)
             {
                 var building = BuildingController.Instance.FindBuildingByName(row.buildingName);
-                var jobSpec = jobSpecs[row.jobSpecIndex];
-
-                if (building != null)
-                {
-                    vacancies.Add(new Job(building, jobSpec));
-                }
-            }
-        }
-
-        if (data.assignedJobData != null)
-        {
-            assignedJobs.Clear();
-            foreach (var row in data.assignedJobData)
-            {
-                var building = BuildingController.Instance.FindBuildingByName(row.buildingName);
-                var colonist = AnimalController.Instance.FindAnimalByNameAndType<SmolbeanColonist>(row.colonistName);
+                var colonist = (row.colonistName != null) ? AnimalController.Instance.FindAnimalByNameAndType<SmolbeanColonist>(row.colonistName) : null;
                 var jobSpec = jobSpecs[row.jobSpecIndex];
 
                 if (building != null && colonist != null)
                 {
                     var job = new Job(building, jobSpec) { Colonist = colonist };
-                    assignedJobs.Add(job);
+                    jobs.Add(job);
                     colonist.Job = job;
+                    job.Colonist = colonist;
                 }
             }
         }
@@ -131,17 +97,11 @@ public class JobController : MonoBehaviour, IObjectGenerator
 
     public void BuildingDestroyed(SmolbeanBuilding building)
     {
-        var vacanciesToRemove = vacancies.Where(v => v.Building == building).ToArray();
-        foreach (var job in vacanciesToRemove)
-        {
-            vacancies.Remove(job);
-        }
-
-        var jobsToTerminate = assignedJobs.Where(v => v.Building == building).ToArray();
+        var jobsToTerminate = jobs.Where(v => v.Building == building).ToArray();
         foreach (var job in jobsToTerminate)
         {
             job.Terminate();
-            assignedJobs.Remove(job);
+            jobs.Remove(job);
         }
     }
 }

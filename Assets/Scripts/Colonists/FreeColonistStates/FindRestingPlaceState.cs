@@ -12,7 +12,10 @@ public class FindRestingPlaceState : IState
     }
 
     public void OnEnter()
-    { 
+    {
+        // TODO:  This would probably go better in the idle state, but these deep thoughts might be too much for a Dodo!
+        if(Random.Range(0f, 10f) >= 5f)
+            colonist.Think(RandomThoughtGenerator.GetThought());
     }
 
     public void OnExit()

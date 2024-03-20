@@ -13,6 +13,9 @@ public class SwitchColonistToFreeState : IState
     {
         colonist.Think("I lost my job!  Guess I'm a free agent again.");
 
+        if (colonist.Job != null)
+            colonist.Job.Colonist = null;
+
         AnimalController.Instance.SwitchAnimal(colonist, JobController.Instance.freeColonistPrefab);
     }
 

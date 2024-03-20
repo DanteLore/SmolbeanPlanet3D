@@ -124,6 +124,17 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
             jobRow.AddToClassList("jobRow");
             jobContainer.Add(jobRow);
 
+            Toggle jobEnabledToggle = new();
+            jobRow.Add(jobEnabledToggle);
+            jobEnabledToggle.value = job.IsOpen;
+            jobEnabledToggle.RegisterValueChangedCallback(v =>
+            {
+                if (v.newValue)
+                    job.Open();
+                else
+                    job.Terminate();
+            });
+
             Button jobButton = new();
             jobButton.style.backgroundColor = new Color(0, 0, 0, 0);
             jobButton.style.backgroundImage = job.JobSpec.thumbnail;
