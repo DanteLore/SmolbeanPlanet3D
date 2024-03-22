@@ -7,6 +7,8 @@ public class JobsMenuController : SmolbeanMenu
     private UIDocument document;
 
     VisualElement listContainer;
+    private Label colonistCountLabel;
+    private Label jobCountLabel;
     SoundPlayer soundPlayer;
 
     void OnEnable()
@@ -16,8 +18,11 @@ public class JobsMenuController : SmolbeanMenu
 
         var closeButton = document.rootVisualElement.Q<Button>("closeButton");
         closeButton.clicked += CloseButtonClicked;
-        
+
         listContainer = document.rootVisualElement.Q<VisualElement>("listContainer");
+
+        colonistCountLabel = document.rootVisualElement.Q<Label>("colonistCountLabel");
+        jobCountLabel = document.rootVisualElement.Q<Label>("jobCountLabel");
 
         InvokeRepeating(nameof(RefreshJobsList), 0f, 1.0f);
     }
@@ -29,6 +34,12 @@ public class JobsMenuController : SmolbeanMenu
 
     private void RefreshJobsList()
     {
+        int colonistCount = AnimalController.Instance.GetAnimalsByType<SmolbeanColonist>().Count();
+        int jobCount = JobController.Instance.AllJobs.Count();
+
+        colonistCountLabel.text = $"Colonists: {colonistCount}";
+        jobCountLabel.text = $"Jobs: {jobCount}";
+
         listContainer.Clear();
 
         if (JobController.Instance.Vacancies.Any())

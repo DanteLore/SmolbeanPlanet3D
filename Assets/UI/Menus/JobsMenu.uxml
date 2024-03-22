@@ -4,7 +4,14 @@
     <Style src="project://database/Assets/UI/JobsMenu.uss?fileID=7433441132597879392&amp;guid=2fc8ed31c39a54711a72d5a99ac0ac4f&amp;type=3#JobsMenu" />
     <ui:VisualElement name="VisualElement" class="menuContainer">
         <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; flex-shrink: 1; bottom: 0; top: 0; left: 0; right: 0;">
-            <ui:Label tabindex="-1" text="Jobs" display-tooltip-when-elided="true" name="Label" class="title" />
+            <ui:VisualElement style="flex-grow: 1; flex-direction: row; -unity-text-align: middle-left;">
+                <ui:Label text="𐛌" class="title" style="-unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/NotoSansLinearA-Regular%20SDF.asset?fileID=11400000&amp;guid=fbfca0ecf33e64a0885ddbfa55617ba0&amp;type=2#NotoSansLinearA-Regular SDF&quot;); font-size: 32px; -unity-font-style: normal;" />
+                <ui:Label tabindex="-1" text="Jobs" display-tooltip-when-elided="true" name="Label" class="title" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+                <ui:Label text="Colonists: 12" name="colonistCountLabel" />
+                <ui:Label text="Jobs: 0" name="jobCountLabel" emoji-fallback-support="false" />
+            </ui:VisualElement>
             <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="height: 100%; display: flex; right: 0; left: 0; flex-grow: 1; bottom: 0; top: 0;">
                 <ui:VisualElement name="listContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start; white-space: nowrap; flex-wrap: nowrap; flex-direction: column; justify-content: flex-start; align-self: stretch; flex-shrink: 0;" />
             </ui:ScrollView>

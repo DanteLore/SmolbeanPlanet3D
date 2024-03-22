@@ -14,11 +14,13 @@ public class JobController : MonoBehaviour, IObjectGenerator
 
     private readonly List<Job> jobs = new();
 
+    public IEnumerable<Job> AllJobs { get { return jobs; } }
     public IEnumerable<Job> Vacancies { get { return jobs.Where(j => j.Colonist == null && !j.IsTerminated); } }
     public IEnumerable<Job> AssignedJobs { get { return jobs.Where(j => j.Colonist != null); } }
 
     public int Priority { get { return 150; } }
     public bool RunModeOnly { get { return true; } }
+
 
     void Awake()
     {

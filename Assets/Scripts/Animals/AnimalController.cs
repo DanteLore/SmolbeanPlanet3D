@@ -96,6 +96,11 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         return GetComponentsInChildren<T>().FirstOrDefault(x => x.Stats.name == name);
     }
 
+    public IEnumerable<T> GetAnimalsByType<T>() where T : SmolbeanAnimal
+    {
+        return GetComponentsInChildren<T>();
+    }
+
     public void CreateAnimal(AnimalSpec species, Vector3 pos)
     {
         var animalData = GenerateAnimalData(pos, species);
