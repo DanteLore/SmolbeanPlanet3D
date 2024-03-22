@@ -4,9 +4,15 @@ using System;
 
 public class PorterDoDeliveryRequestState : CompoundState
 {
+    private readonly Porter porter;
+    private readonly DeliveryManager deliveryManager;
+
     public PorterDoDeliveryRequestState(Porter porter, Animator animator, NavMeshAgent navAgent, SoundPlayer soundPlayer, DeliveryManager deliveryManager)
         : base()
     {
+        this.porter = porter;
+        this.deliveryManager = deliveryManager;
+
         var walkToDestination = new PorterWalkToBuildingState(porter, navAgent, animator, soundPlayer);
         var succeeded = new PorterFinishedDeliveryRequestState(this, porter, deliveryManager);
         var failed = new PorterFailedDeliveryRequestState(this, porter, deliveryManager);
@@ -43,5 +49,16 @@ public class PorterDoDeliveryRequestState : CompoundState
         Func<bool> DeliveryRequestCancelled() => () => DeliveryIsFinished().Invoke() && HasStuffInInventory().Invoke();
         Func<bool> InventoryEmpty() => () => porter.Inventory.IsEmpty();
         Func<bool> BuildingDeleted() => () => porter.DeliveryRequest == null || porter.DeliveryRequest.Building == null;
+    }
+
+    public override void OnExit()
+    {
+        if(porter.DeliveryRequest != null && !porter.DeliveryRequest.IsComplete)
+        {
+            deliveryManager.ReturnDelivery(porter, porter.DeliveryRequest);
+            porter.DeliveryRequest = null;
+        }
+
+        base.OnExit();
     }
 }

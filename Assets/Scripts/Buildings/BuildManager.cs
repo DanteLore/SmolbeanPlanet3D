@@ -71,7 +71,8 @@ public class BuildManager : MonoBehaviour
         buildingEditWidget = Instantiate(buildingEditWidgetPrefab, target.position, target.rotation, target);
         var edit = buildingEditWidget.GetComponent<BuildingEdit>();
         edit.BuildingDelete += DeleteTargetBuilding;
-        edit.AllowDelete = target.gameObject.GetComponent<SmolbeanBuilding>().BuildingSpec.deleteAllowed;
+        SmolbeanBuilding building = target.gameObject.GetComponent<SmolbeanBuilding>();
+        edit.AllowDelete = building.BuildingSpec.deleteAllowed;
         MenuController.Instance.ShowMenu("BuildingDetailsMenu");
     }
 
