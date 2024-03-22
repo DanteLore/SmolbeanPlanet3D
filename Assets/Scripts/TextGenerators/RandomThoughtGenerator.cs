@@ -98,7 +98,8 @@ public static class RandomThoughtGenerator
         "Maybe this island isn't as bad as all that... except for the [thing]s",
         "[presentParticipal], [presentParticipal], [presentParticipal] all day long!",
         "I once saw a [presentParticipal] [thing].  Or maybe it was a dream?",
-        "The [thing] does not care for material things, it simply is"
+        "The [thing] does not care for material things, it simply is",
+        "Do dodos dream of electric [thing]?"
     };
 
     public static string GetThought()

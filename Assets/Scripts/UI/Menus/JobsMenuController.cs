@@ -42,19 +42,9 @@ public class JobsMenuController : SmolbeanMenu
 
         listContainer.Clear();
 
-        if (JobController.Instance.Vacancies.Any())
+        if (JobController.Instance.AllJobs.Any())
         {
-            listContainer.Add(new Label { text = "Vacancies:" });
-
-            foreach (Job job in JobController.Instance.Vacancies)
-                AddRow(job);
-        }
-
-        if (JobController.Instance.AssignedJobs.Any())
-        {
-            listContainer.Add(new Label { text = "Assigned Jobs:" });
-
-            foreach (Job job in JobController.Instance.AssignedJobs)
+            foreach (Job job in JobController.Instance.AllJobs)
                 AddRow(job);
         }
     }
@@ -64,6 +54,17 @@ public class JobsMenuController : SmolbeanMenu
         var row = new VisualElement();
         row.AddToClassList("jobRow");
         listContainer.Add(row);
+
+        Toggle jobEnabledToggle = new();
+        row.Add(jobEnabledToggle);
+        jobEnabledToggle.value = job.IsOpen;
+        jobEnabledToggle.RegisterValueChangedCallback(v =>
+        {
+            if (v.newValue)
+                job.Open();
+            else
+                job.Terminate();
+        });
 
         var jobIcon = new Button();
         jobIcon.AddToClassList("icon");
