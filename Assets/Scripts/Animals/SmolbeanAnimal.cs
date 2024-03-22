@@ -14,7 +14,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public string natureLayer = "Nature";
     public string creatureLayer = "Creatures";
 
-    public float destinationThreshold = 1.0f;
+    protected static readonly float destinationThreshold = 2.0f;
 
     public Inventory Inventory { get; private set; }
 

@@ -1,15 +1,15 @@
+using System.Text;
 using UnityEngine;
 
 public static class RandomThoughtGenerator
 {
-    private static string[] things =
+    private static readonly string[] things =
     {
         "dodo",
         "tree",
         "wave",
         "rock",
         "cloud",
-        "colonist",
         "mountain",
         "ship",
         "house",
@@ -18,13 +18,18 @@ public static class RandomThoughtGenerator
         "wreck",
         "sea",
         "ocean",
-        "stone",
-        "blade of grass",
-        "dodo feather",
-        "steak"
+        "stone"
     };
 
-    private static string[] verbs =
+    private static readonly string[] foods =
+    {
+        "steak",
+        "soup",
+        "stew",
+        "bread"
+    };
+
+    private static readonly string[] verbs =
     {
         "swim",
         "run",
@@ -38,7 +43,7 @@ public static class RandomThoughtGenerator
         "sing"
     };
 
-    private static string[] presentParticipals =
+    private static readonly string[] presentParticipals =
     {
         "swimming",
         "running",
@@ -52,7 +57,7 @@ public static class RandomThoughtGenerator
         "singing"
     };
 
-    private static string[] pastParticipals =
+    private static readonly string[] pastParticipals =
     {
         "swam",
         "ran",
@@ -66,7 +71,7 @@ public static class RandomThoughtGenerator
         "sang"
     };
 
-    private static string[] sentences =
+    private static readonly string[] sentences =
     {
         "I wonder if [thing]s can [verb]?",
         "Hanging around can get boring at times",
@@ -84,16 +89,31 @@ public static class RandomThoughtGenerator
         "Every [thing] has an epic saga of its own",
         "I [pastParticipal] for hours yeterday",
         "I can't remember when I last [pastParticipal]",
-        "Which [thing] [pastParticipal] best?"
+        "Feels like a lifetime since I last ate good [food]",
+        "Dreaming of [food]",
+        "I think I get less [food] than that [thing]",
+        "Glory to you! Your [presentParticipal] is a credit to us all",
+        "I wish I was better at [presentParticipal]",
+        "The Gods sure have blessed us with [thing]s",
+        "Maybe this island isn't as bad as all that... except for the [thing]s",
+        "[presentParticipal], [presentParticipal], [presentParticipal] all day long!",
+        "I once saw a [presentParticipal] [thing].  Or maybe it was a dream?",
+        "The [thing] does not care for material things, it simply is"
     };
 
     public static string GetThought()
     {
-        return Get(sentences)
+        StringBuilder result = new(
+            Get(sentences)
             .Replace("[thing]", Get(things))
             .Replace("[verb]", Get(verbs))
             .Replace("[presentParticipal]", Get(presentParticipals))
-            .Replace("[pastParticipal]", Get(pastParticipals));
+            .Replace("[pastParticipal]", Get(pastParticipals))
+            .Replace("[food]", Get(foods))
+            );
+
+        result[0] = char.ToUpper(result[0]);
+        return result.ToString();
     }
 
     private static string Get(string[] strs)
