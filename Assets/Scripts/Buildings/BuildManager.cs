@@ -6,7 +6,8 @@ public class BuildManager : MonoBehaviour
 {
     public static BuildManager Instance;
     public GameObject mapCursorPrefab;
-    public GameObject buildingEditWidgetPrefab;
+    public GameObject selectionCursorPrefab;
+    public GameObject spawnPointMarkerPrefab;
     public string groundLayer = "Ground";
     public string buildingLayer = "Buildings";
     public string widgetLayer = "Widgets";
@@ -25,8 +26,12 @@ public class BuildManager : MonoBehaviour
     public bool IsEditing { get; private set; }
 
     public Transform EditTargetTransform { get; private set; }
+
+    private GameObject cursor;
     private int selectedBuildingIndex;
     private SoundPlayer soundPlayer;
+    private GameObject spawnPointX;
+    private GameObject dropPointX;
 
     void Awake()
     {
@@ -67,6 +72,21 @@ public class BuildManager : MonoBehaviour
     {
         IsEditing = true;
         EditTargetTransform = target;
+
+        cursor = Instantiate(selectionCursorPrefab, target);
+        var pos = cursor.transform.position;
+        float y = target.GetComponentInChildren<Renderer>().bounds.max.y;
+        pos = new Vector3(pos.x, y, pos.z);
+        cursor.transform.position = pos;
+
+        var building = target.gameObject.GetComponent<SmolbeanBuilding>();
+        var spawnPos = building.spawnPoint.transform.position;
+        var dropPos = building.dropPoint.transform.position;
+        spawnPointX = Instantiate(spawnPointMarkerPrefab, building.spawnPoint.transform);
+
+        if(Vector3.SqrMagnitude(spawnPos - dropPos) >= 4f)
+            dropPointX = Instantiate(spawnPointMarkerPrefab, building.dropPoint.transform);
+
         MenuController.Instance.ShowMenu("BuildingDetailsMenu");
     }
 
@@ -74,6 +94,12 @@ public class BuildManager : MonoBehaviour
     {
         IsEditing = false;
         EditTargetTransform = null;
+        if(cursor) 
+            Destroy(cursor);
+        if(spawnPointX)
+            Destroy(spawnPointX);
+        if(dropPointX) 
+            Destroy(dropPointX);
         MenuController.Instance.Close("BuildingDetailsMenu");
     }
 
@@ -91,6 +117,13 @@ public class BuildManager : MonoBehaviour
 
     void Update()
     {
+        // Over UI
+        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            return;
+
+        if (!GameStateManager.Instance.IsStarted)
+            return;
+
         if (Mouse.current.rightButton.wasPressedThisFrame)
         {
             EndEdit();
@@ -148,6 +181,7 @@ public class BuildManager : MonoBehaviour
             BeginEdit(hitInfo.transform);
         }
     }
+
     private void UpdateBuildMode()
     {
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
