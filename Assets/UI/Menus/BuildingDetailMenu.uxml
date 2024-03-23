@@ -16,7 +16,7 @@
                 <ui:Button text="⭮" name="rotateButton" style="-unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/NotoSansSymbols2-Regular%20SDF.asset?fileID=11400000&amp;guid=50b82a52dd34c46a2879c92e644dc952&amp;type=2#NotoSansSymbols2-Regular SDF&quot;); -unity-text-align: middle-center; font-size: 24px; padding-top: 4px;" />
                 <ui:Button text="X" name="deleteButton" class="dangerButton" style="font-size: 24px;" />
             </ui:VisualElement>
-            <ui:ScrollView name="mainScrollView" style="min-height: auto;" />
+            <ui:ScrollView name="mainScrollView" style="min-height: auto; min-width: 100%; max-width: 100%; width: 100%;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
