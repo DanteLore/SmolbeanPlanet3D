@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -5,12 +6,19 @@ using UnityEngine.UIElements;
 public class BuildingDetailsMenuController : BaseDetailsMenuController
 {
     private BuildManager buildManager;
+    private Button deleteButton;
+    private Button rotateButton;
 
     protected override void OnEnable()
     {
-        buildManager = FindFirstObjectByType<BuildManager>();
-
         base.OnEnable();
+
+        buildManager = FindFirstObjectByType<BuildManager>();
+        deleteButton = document.rootVisualElement.Q<Button>("deleteButton");
+        rotateButton = document.rootVisualElement.Q<Button>("rotateButton");
+
+        deleteButton.clicked += DeleteButtonClicked;
+        rotateButton.clicked += RotateButtonClicked;
     }
 
     protected override void CloseButtonClicked()
@@ -28,9 +36,27 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
         target = buildManager.EditTargetTransform;
 
         Clear();
+        UpdateControls();
 
         if (target != null)
             DrawMenu();
+    }
+
+    private void UpdateControls()
+    {
+        deleteButton.visible = target != null && target.GetComponent<SmolbeanBuilding>().BuildingSpec.deleteAllowed;
+    }
+
+    private void RotateButtonClicked()
+    {
+        if(target) 
+            target.Rotate(Vector3.up, 90);
+    }
+
+    private void DeleteButtonClicked()
+    {
+        if (target)
+            BuildManager.Instance.DeleteTargetBuilding();
     }
 
     private void DrawMenu()

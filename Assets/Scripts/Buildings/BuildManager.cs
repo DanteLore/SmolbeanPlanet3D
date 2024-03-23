@@ -26,7 +26,6 @@ public class BuildManager : MonoBehaviour
 
     public Transform EditTargetTransform { get; private set; }
     private int selectedBuildingIndex;
-    private GameObject buildingEditWidget;
     private SoundPlayer soundPlayer;
 
     void Awake()
@@ -68,11 +67,6 @@ public class BuildManager : MonoBehaviour
     {
         IsEditing = true;
         EditTargetTransform = target;
-        buildingEditWidget = Instantiate(buildingEditWidgetPrefab, target.position, target.rotation, target);
-        var edit = buildingEditWidget.GetComponent<BuildingEdit>();
-        edit.BuildingDelete += DeleteTargetBuilding;
-        SmolbeanBuilding building = target.gameObject.GetComponent<SmolbeanBuilding>();
-        edit.AllowDelete = building.BuildingSpec.deleteAllowed;
         MenuController.Instance.ShowMenu("BuildingDetailsMenu");
     }
 
@@ -80,10 +74,6 @@ public class BuildManager : MonoBehaviour
     {
         IsEditing = false;
         EditTargetTransform = null;
-        
-        if(buildingEditWidget != null)
-            Destroy(buildingEditWidget);
-
         MenuController.Instance.Close("BuildingDetailsMenu");
     }
 
@@ -203,7 +193,7 @@ public class BuildManager : MonoBehaviour
         }
     }
 
-    private void DeleteTargetBuilding()
+    public void DeleteTargetBuilding()
     {
         Instantiate(buildingDeletedParticleSystem, EditTargetTransform.position, EditTargetTransform.rotation);
         Destroy(EditTargetTransform.gameObject); 

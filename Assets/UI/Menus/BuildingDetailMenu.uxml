@@ -2,9 +2,9 @@
     <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
     <Style src="project://database/Assets/UI/GameControls.uss?fileID=7433441132597879392&amp;guid=334dd8ec426a145ba9561e6ccafddaa1&amp;type=3#GameControls" />
     <Style src="project://database/Assets/UI/DetailsControls.uss?fileID=7433441132597879392&amp;guid=94f4ac6f5a4554e8ea89412efec2b645&amp;type=3#DetailsControls" />
-    <ui:VisualElement name="VisualElement" style="flex-grow: 1; position: absolute; top: 60px; right: 60px; bottom: 100px;">
-        <ui:VisualElement name="gameInfoControlsContainer" class="gameControlsContainer" style="flex-grow: 1; justify-content: flex-start; width: 300px; max-width: 300px; min-width: 300px; height: auto; max-height: none; min-height: auto; flex-direction: column;">
-            <ui:VisualElement style="flex-grow: 1; flex-direction: row; min-height: 40px; height: 40px; max-height: 40px; top: 2px; left: 5px; right: 5px; position: absolute;">
+    <ui:VisualElement name="VisualElement" style="flex-grow: 1; position: absolute; top: 60px; right: 60px; bottom: 100px; width: 300px;">
+        <ui:VisualElement name="gameInfoControlsContainer" class="gameControlsContainer" style="flex-grow: 1; min-height: 100%; height: 100%; min-width: 100%; max-height: 100%; width: 100%; max-width: 100%; flex-direction: column;">
+            <ui:VisualElement name="VisualElement" style="flex-direction: row; position: relative; min-width: 100%; max-width: 100%; width: 288px; height: 90px; min-height: 90px; max-height: 90px;">
                 <ui:VisualElement name="buildingImage" style="flex-grow: 1; width: 80px; max-width: 80px; min-width: 80px; min-height: 80px; max-height: 80px; height: 80px;" />
                 <ui:VisualElement style="flex-grow: 1;">
                     <ui:Label text="12λ \u00d7 34φ" name="positionLabel" />
@@ -12,7 +12,11 @@
                 </ui:VisualElement>
                 <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="closeButton" style="-unity-font: url(&quot;project://database/Assets/UI/Fonts/NotoSansSymbols2-Regular.ttf?fileID=12800000&amp;guid=d2daced2fbadb4088b20c9a65c4e75ea&amp;type=3#NotoSansSymbols2-Regular&quot;); -unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/Acme-Regular%20SDF.asset?fileID=11400000&amp;guid=188be3c69c8cc496c90c64d17f6c8bb4&amp;type=2#Acme-Regular SDF&quot;); font-size: 16px; -unity-text-align: middle-center; right: 0; white-space: nowrap; position: absolute; top: 2px;" />
             </ui:VisualElement>
-            <ui:ScrollView name="mainScrollView" style="position: absolute; top: 90px; left: 5px; right: 5px; bottom: 5px; flex-grow: 1;" />
+            <ui:VisualElement class="controlButtonContainer" style="flex-grow: 1; width: 100%; max-width: 100%; min-width: 100%; flex-direction: row; justify-content: space-around;">
+                <ui:Button text="⭮" name="rotateButton" style="-unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/NotoSansSymbols2-Regular%20SDF.asset?fileID=11400000&amp;guid=50b82a52dd34c46a2879c92e644dc952&amp;type=2#NotoSansSymbols2-Regular SDF&quot;); -unity-text-align: middle-center; font-size: 24px; padding-top: 4px;" />
+                <ui:Button text="X" name="deleteButton" class="dangerButton" style="font-size: 24px;" />
+            </ui:VisualElement>
+            <ui:ScrollView name="mainScrollView" style="min-height: auto;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
