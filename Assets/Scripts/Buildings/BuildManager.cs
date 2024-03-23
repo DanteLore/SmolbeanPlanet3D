@@ -16,6 +16,7 @@ public class BuildManager : MonoBehaviour
     public ParticleSystem buildingDeletedParticleSystem;
     public float allowedHeightDifferential = 0.2f;
     public float buildingMarginSize = 0.75f;
+    public float cursorOffsetY = 2f;
 
     private GridManager gridManager;
 
@@ -76,7 +77,7 @@ public class BuildManager : MonoBehaviour
 
         cursor = Instantiate(selectionCursorPrefab, target);
         var pos = cursor.transform.position;
-        float y = target.GetComponentInChildren<Renderer>().bounds.max.y;
+        float y = target.GetComponentInChildren<Renderer>().bounds.max.y + cursorOffsetY;
         pos = new Vector3(pos.x, y, pos.z);
         cursor.transform.position = pos;
 

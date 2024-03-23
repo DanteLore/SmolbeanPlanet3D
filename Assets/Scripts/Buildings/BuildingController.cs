@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Collections;
+using UnityEngine.AI;
 
 public class BuildingController : MonoBehaviour, IObjectGenerator
 {
@@ -11,6 +12,7 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
     public bool RunModeOnly { get { return true; } }
     public static BuildingController Instance;
     private GridManager gridManager;
+    public string groundLayer = "Ground";
 
     public IEnumerable<SmolbeanBuilding> Buildings
     {
@@ -129,10 +131,19 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
         building.BuildingSpec = buildings[saveData.prefabIndex];
         building.name = $"{buildings[saveData.prefabIndex].buildingName} ({worldPos.y}N {worldPos.x}E)";
 
+        ClampToGround(building.spawnPoint);
+        ClampToGround(building.dropPoint);
+
         if (saveData.inventory != null)
             building.Inventory.LoadFrom(saveData.inventory);
 
         return building;
+    }
+
+    private void ClampToGround(GameObject obj)
+    {
+        if(NavMesh.SamplePosition(obj.transform.position, out var hit, 8f, NavMesh.AllAreas))
+            obj.transform.position = hit.position;
     }
 
     public SmolbeanBuilding FindBuildingByName(string buildingName)
