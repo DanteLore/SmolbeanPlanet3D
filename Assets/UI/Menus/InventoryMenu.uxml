@@ -4,7 +4,10 @@
     <Style src="project://database/Assets/UI/InventoryMenu.uss?fileID=7433441132597879392&amp;guid=41743bd5a123e4239ac52a3322564b4a&amp;type=3#InventoryMenu" />
     <ui:VisualElement name="VisualElement" class="menuContainer" style="flex-grow: 1;">
         <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%;">
-            <ui:Label tabindex="-1" text="Inventory" display-tooltip-when-elided="true" class="title" />
+            <ui:VisualElement style="flex-grow: 1; flex-direction: row; -unity-text-align: middle-left;">
+                <ui:Label text="𐚱" class="title" style="-unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/NotoSansLinearA-Regular%20SDF.asset?fileID=11400000&amp;guid=fbfca0ecf33e64a0885ddbfa55617ba0&amp;type=2#NotoSansLinearA-Regular SDF&quot;); font-size: 32px;" />
+                <ui:Label tabindex="-1" text="Inventory" display-tooltip-when-elided="true" class="title" />
+            </ui:VisualElement>
             <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="height: 100%; display: flex; width: 100%;">
                 <ui:VisualElement name="buildingListContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start; white-space: nowrap; flex-wrap: nowrap; flex-direction: column; justify-content: flex-start; align-self: stretch; flex-shrink: 0; width: 100%;" />
             </ui:ScrollView>

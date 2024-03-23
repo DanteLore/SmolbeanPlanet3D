@@ -6,34 +6,20 @@ using UnityEngine.UIElements;
 
 public class MainToolbarController : MonoBehaviour
 {
-    UIDocument document;
+    UIDocument doc;
 
     void OnEnable()
     {
-        document = GetComponent<UIDocument>();
-        
-        var buildToolbarButton = document.rootVisualElement.Q<Button>("buildToolbarButton");
-        buildToolbarButton.clicked += BuildToolbarButtonClicked;
-        
-        var mapButton = document.rootVisualElement.Q<Button>("mapButton");
-        mapButton.clicked += MapButtonClicked;
-        
-        var inventoryButton = document.rootVisualElement.Q<Button>("inventoryButton");
-        inventoryButton.clicked += InventoryButtonClicked;
-    }
+        doc = GetComponent<UIDocument>();
 
-    private void BuildToolbarButtonClicked()
-    {
-        ToolbarController.Instance.ShowToolbar("BuildToolbar");
-    }
+        doc.rootVisualElement.Q<Button>("buildToolbarButton").clicked += () => ToolbarController.Instance.ShowToolbar("BuildToolbar");
 
-    private void MapButtonClicked()
-    {
-        MenuController.Instance.ShowMenu("MapMenu");
-    }
+        doc.rootVisualElement.Q<Button>("mapButton").clicked += () => MenuController.Instance.ShowMenu("MapMenu");
 
-    private void InventoryButtonClicked()
-    {
-        MenuController.Instance.ShowMenu("InventoryMenu");
+        doc.rootVisualElement.Q<Button>("inventoryButton").clicked += () => MenuController.Instance.ShowMenu("InventoryMenu");
+
+        doc.rootVisualElement.Q<Button>("jobsButton").clicked += () => MenuController.Instance.ShowMenu("JobsMenu");
+        
+        doc.rootVisualElement.Q<Button>("deliveryRequestsButton").clicked += () => MenuController.Instance.ShowMenu("DeliveryRequestsMenu");
     }
 }
