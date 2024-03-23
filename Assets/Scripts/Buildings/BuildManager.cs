@@ -11,10 +11,11 @@ public class BuildManager : MonoBehaviour
     public string groundLayer = "Ground";
     public string buildingLayer = "Buildings";
     public string widgetLayer = "Widgets";
-    public string[] collisionLayers = { "Nature", "Buildings", "Creatures" };
+    public string[] collisionLayers = { "Nature", "Buildings" };
     public ParticleSystem buildingPlacedParticleSystem;
     public ParticleSystem buildingDeletedParticleSystem;
     public float allowedHeightDifferential = 0.2f;
+    public float buildingMarginSize = 0.75f;
 
     private GridManager gridManager;
 
@@ -208,11 +209,19 @@ public class BuildManager : MonoBehaviour
         {
             currentSquare = newSquare;
 
-            var bounds = gridManager.GetSquareBounds(currentSquare.x, currentSquare.y);
+            Rect squareBounds = gridManager.GetSquareBounds(currentSquare.x, currentSquare.y);
+            var prefab = BuildingController.Instance.buildings[selectedBuildingIndex].prefab;
+            Bounds buildingBounds = prefab.GetComponentInChildren<MeshRenderer>().bounds;
 
-            float worldX = bounds.center.x;
-            float worldZ = bounds.center.y;
+            for(int i = 0; i < prefab.transform.childCount; i++)
+                buildingBounds.Encapsulate(prefab.transform.GetChild(i).position);
+            buildingBounds.Expand(buildingMarginSize);
+
+            float worldX = squareBounds.center.x;
+            float worldZ = squareBounds.center.y;
             float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
+
+            Bounds bounds = new(squareBounds.center, buildingBounds.size);
 
             if (!float.IsNaN(worldY))
             {
@@ -258,39 +267,48 @@ public class BuildManager : MonoBehaviour
         return objects.Length == 0;
     }
 
-    private bool CheckFlat(Rect bounds)
+    private bool CheckFlat(Bounds bounds)
     {
-        float marginSize = 0.05f;
-        float rayStartHeight = 1000f;
+        float rayStartHeight = 10000f;
+        int groundMask = LayerMask.GetMask(groundLayer);
 
-        float rayLength = 2.0f * rayStartHeight;
-        float margin = bounds.width * marginSize;
+        var ray0 = new Ray(new Vector3(bounds.center.x, rayStartHeight, bounds.center.y), Vector3.down);
+        if (!Physics.Raycast(ray0, out var hit0, float.PositiveInfinity, groundMask))
+            return false;
+        //Debug.Log("Hit 0: " + hit0.point);
 
-        var ray1 = new Ray(new Vector3(bounds.xMin + margin, rayStartHeight, bounds.yMin + margin), Vector3.down);
-        if(!Physics.Raycast(ray1, out var hit1, rayLength, LayerMask.GetMask(groundLayer)))
+        float height = hit0.point.y;
+
+        var ray1 = new Ray(new Vector3(bounds.min.x, rayStartHeight, bounds.min.y), Vector3.down);
+        if (!Physics.Raycast(ray1, out var hit1, float.PositiveInfinity, groundMask))
+            return false;
+        //Debug.Log("Hit 1: " + hit1.point);
+
+        if (Mathf.Abs(hit1.point.y - height) > allowedHeightDifferential)
             return false;
 
-        float height = hit1.point.y;
+        var ray2 = new Ray(new Vector3(bounds.max.x, rayStartHeight, bounds.min.y), Vector3.down);
+        if(!Physics.Raycast(ray2, out var hit2, float.PositiveInfinity, groundMask))
+            return false;
+        //Debug.Log("Hit 2: " + hit2.point);
 
-        var ray2 = new Ray(new Vector3(bounds.xMax - margin, rayStartHeight, bounds.yMin + margin), Vector3.down);
-        if(!Physics.Raycast(ray2, out var hit2, rayLength, LayerMask.GetMask(groundLayer)))
+        if (Mathf.Abs(hit2.point.y - height) > allowedHeightDifferential)
             return false;
 
-        if(Mathf.Abs(hit2.point.y - height) > allowedHeightDifferential)
+        var ray3 = new Ray(new Vector3(bounds.min.x, rayStartHeight, bounds.max.y), Vector3.down);
+        if(!Physics.Raycast(ray3, out var hit3, float.PositiveInfinity, groundMask))
+            return false;
+        //Debug.Log("Hit 3: " + hit3.point);
+
+        if (Mathf.Abs(hit3.point.y - height) > allowedHeightDifferential)
             return false;
 
-        var ray3 = new Ray(new Vector3(bounds.xMin + margin, rayStartHeight, bounds.yMax - margin), Vector3.down);
-        if(!Physics.Raycast(ray3, out var hit3, rayLength, LayerMask.GetMask(groundLayer)))
+        var ray4 = new Ray(new Vector3(bounds.max.x, rayStartHeight, bounds.max.y), Vector3.down);
+        if(!Physics.Raycast(ray4, out var hit4, float.PositiveInfinity, groundMask))
             return false;
+        //Debug.Log("Hit 4: " + hit4.point);
 
-        if(Mathf.Abs(hit3.point.y - height) > allowedHeightDifferential)
-            return false;
-
-        var ray4 = new Ray(new Vector3(bounds.xMax - margin, rayStartHeight, bounds.yMax - margin), Vector3.down);
-        if(!Physics.Raycast(ray4, out var hit4, rayLength, LayerMask.GetMask(groundLayer)))
-            return false;
-
-        if(Mathf.Abs(hit4.point.y - height) > allowedHeightDifferential)
+        if (Mathf.Abs(hit4.point.y - height) > allowedHeightDifferential)
             return false;
 
         return true;
