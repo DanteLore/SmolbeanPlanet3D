@@ -23,7 +23,6 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     public float mapWidth = 400f;
     public float mapHeight = 400f;
     public float mapOffsetX = -200f;
-
     public float mapOffsetY = -200f;
 
     private Color[] data;

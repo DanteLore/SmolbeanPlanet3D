@@ -21,6 +21,11 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     public int minBatchSize = 256;
     public Mesh mesh;
     public Material material;
+    public Texture2D wearTexture;
+    public float mapWidth = 400f;
+    public float mapHeight = 400f;
+    public float mapOffsetX = -200f;
+    public float mapOffsetY = -200f;
     public string groundLayer = "Ground";
     public string[] occlusionLayers = { "Nature" };
     public float maxSlopeAngle = 45f;
@@ -31,11 +36,11 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     public float maxTilt = 10f;
     public float noiseScale = 0.1f;
     public float renderThreshold = 100f;
+    public AnimationCurve grassWeightCurve;
 
     private List<Batch> batches;
     private int occlusionLayerMask;
     private int groundLayerMask;
-    private int groundLayerNum;
     private float xNoiseOffset;
     private float yNoiseOffset;
     private Bounds mapBounds;
@@ -95,7 +100,6 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         yNoiseOffset = Random.Range(0f, 1000f);
 
         occlusionLayerMask = LayerMask.GetMask(occlusionLayers.ToArray());
-        groundLayerNum = LayerMask.NameToLayer(groundLayer);
         groundLayerMask = LayerMask.GetMask(groundLayer);
 
         List<Vector3> grassBlades = new();
@@ -123,8 +127,8 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
     private IEnumerator GenerateGrassBlades(List<Vector3> grassBlades)
     {
-        Vector3 size = mapBounds.size;
         float tileArea = gridManager.tileSize * gridManager.tileSize;
+        Color[] groundTextureData = wearTexture.GetPixels();
 
         foreach (var meshRenderer in gridManager.GetAllGroundMeshes())
         {
@@ -134,7 +138,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
             for (int i = 0; i < instanceCount; i++)
             {
-                if (TryCreateGrassBlade(bounds.min, bounds.max, size, out Vector3 pos))
+                if (TryCreateGrassBlade(bounds.min, bounds.max, groundTextureData, out Vector3 pos))
                 {
                     grassBlades.Add(pos);
                 }
@@ -195,18 +199,27 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         return matrix;
     }
 
-    private bool TryCreateGrassBlade(Vector3 min, Vector3 max, Vector3 size, out Vector3 pos)
+    private bool TryCreateGrassBlade(Vector3 min, Vector3 max, Color[] groundTextureData, out Vector3 pos)
     {
-        float posX = Random.Range(min.x, max.x);
-        float posZ = Random.Range(min.z, max.z);
         pos = Vector3.zero;
 
-        float noise = Mathf.PerlinNoise((posX + xNoiseOffset) / (size.x * noiseScale), (posZ + yNoiseOffset) / (size.z * noiseScale));
-        if (Random.Range(0.1f, 1.0f) > noise)
+        float posX = Random.Range(min.x, max.x);
+        float posZ = Random.Range(min.z, max.z);
+
+        float mapX = (posX - mapOffsetX) / mapWidth;
+        float mapZ = (posZ - mapOffsetY) / mapHeight;
+
+        int texX = Mathf.CeilToInt(wearTexture.width * mapX);
+        int texY = Mathf.CeilToInt(wearTexture.height * mapZ);
+
+        float noise = groundTextureData[texY * wearTexture.width + texX].g;
+        noise = grassWeightCurve.Evaluate(noise);
+        
+        if (Random.Range(0.0f, 1.0f) < noise)
             return false;
 
-        Ray ray = new (new Vector3(posX, 1000f, posZ), Vector3.down);
-        if (!Physics.Raycast(ray, out RaycastHit groundHit, float.PositiveInfinity, groundLayerMask))
+        Ray ray = new (new Vector3(posX, 10000f, posZ), Vector3.down);
+        if (!Physics.Raycast(ray, out var groundHit, float.PositiveInfinity, groundLayerMask))
             return false;
 
         float angle = Vector3.Angle(Vector3.up, groundHit.normal);
@@ -217,7 +230,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         if (posY < minHeight)
             return false;
 
-        if (Physics.Raycast(ray, out RaycastHit _, float.PositiveInfinity, occlusionLayerMask))
+        if (Physics.Raycast(ray, out var _, float.PositiveInfinity, occlusionLayerMask))
             return false;
 
         pos = new Vector3(posX, posY, posZ);
@@ -236,19 +249,19 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         {
             for (int i = 0; i < xSlices; i++)
             {
-                Vector3 subMin = new Vector3(
+                Vector3 subMin = new(
                     min.x + i * subSizeX,
                     min.y,
                     min.z + j * subSizeZ
                 );
 
-                Vector3 subMax = new Vector3(
+                Vector3 subMax = new(
                     subMin.x + subSizeX,
                     originalBounds.max.y,
                     subMin.z + subSizeZ
                 );
 
-                Bounds subBounds = new Bounds(
+                Bounds subBounds = new(
                     subMin + 0.5f * (subMax - subMin),
                     subMax - subMin
                 );
