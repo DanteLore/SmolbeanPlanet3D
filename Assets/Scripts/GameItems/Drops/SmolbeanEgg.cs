@@ -39,6 +39,8 @@ public class SmolbeanEgg : SmolbeanDrop
         if (saveData is not EggDropSaveData eggSpec)
             throw new Exception("Failed to load extra egg data");
 
+        base.LoadExtraData(saveData);
+
         species = AnimalController.Instance.animalSpecs[eggSpec.speciesIndex] as BirdSpec;
     }
 }

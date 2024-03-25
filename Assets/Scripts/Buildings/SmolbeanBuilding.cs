@@ -57,7 +57,16 @@ public abstract class SmolbeanBuilding : MonoBehaviour
     {
         CancelInvoke(nameof(RegisterWear));
 
-        while(!Inventory.IsEmpty() && !GameStateManager.Instance.IsStarted)
+        if(GameStateManager.Instance.IsStarted)
+            DropInventory();
+
+        DeliveryManager.Instance.BuildingDestroyed(this);
+        JobController.Instance.BuildingDestroyed(this);
+    }
+
+    private void DropInventory()
+    {
+        while (!Inventory.IsEmpty() && !GameStateManager.Instance.IsStarted)
         {
             var item = Inventory.DropLast();
 
@@ -67,9 +76,6 @@ public abstract class SmolbeanBuilding : MonoBehaviour
 
             DropController.Instance.Drop(item.dropSpec, transform.position + upPos + outPos, item.quantity);
         }
-
-        DeliveryManager.Instance.BuildingDestroyed(this);
-        JobController.Instance.BuildingDestroyed(this);
     }
 
     private void RegisterWear()
