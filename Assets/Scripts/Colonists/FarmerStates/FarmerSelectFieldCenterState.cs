@@ -1,0 +1,77 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class FarmerSelectFieldCenterState : IState
+{
+    internal struct SearchResult
+    {
+        internal Vector3 pos;
+        internal float grassQtty;
+    }
+
+    private readonly float fieldRadius;
+    private readonly Farmer farmer;
+    private int searchAttemptCount;
+    private readonly List<SearchResult> fieldLocations = new();
+
+    public bool FieldFound { get; private set; }
+
+    public FarmerSelectFieldCenterState(Farmer farmer, float fieldRadius)
+    {
+        this.farmer = farmer;
+        this.fieldRadius = fieldRadius;
+    }
+
+    public void OnEnter()
+    {
+        FieldFound = false;
+        searchAttemptCount = 0;
+        fieldLocations.Clear();
+    }
+
+    public void OnExit()
+    {
+
+    }
+
+    public void Tick()
+    {
+        if (searchAttemptCount < 120)
+        {
+            FindFieldLocation();
+            return;
+        }
+
+        if (fieldLocations.Any())
+        {
+            FieldFound = true;
+            farmer.target = fieldLocations.OrderByDescending(fl => fl.grassQtty).First().pos;
+        }
+        else
+        {
+            FieldFound = false;
+            farmer.target = farmer.transform.position;
+        }
+    }
+
+    private void FindFieldLocation()
+    {
+        float range = Random.Range(fieldRadius, fieldRadius * 3f);
+        float angle = Random.Range(0f, 360f);
+
+        var center = farmer.Job.Building.transform.position;
+        var pos = center + (Quaternion.AngleAxis(angle, Vector3.up) * (Vector3.forward * range));
+
+        Ray ray = new(pos + (Vector3.up * 1000f), Vector3.down);
+        if (Physics.Raycast(ray, out var rayHit, float.MaxValue, LayerMask.GetMask(farmer.groundLayer)) &&
+            Physics.OverlapSphere(rayHit.point, fieldRadius, LayerMask.GetMask(farmer.buildingLayer, farmer.natureLayer)).Length == 0 &&
+            NavMesh.SamplePosition(rayHit.point, out var navHit, 1f, NavMesh.AllAreas))
+        {
+            float grassQtty = GroundWearManager.Instance.GetAvailableGrass(navHit.position, fieldRadius);
+            fieldLocations.Add(new SearchResult { pos = navHit.position, grassQtty = grassQtty });
+            searchAttemptCount++;
+        }
+    }
+}

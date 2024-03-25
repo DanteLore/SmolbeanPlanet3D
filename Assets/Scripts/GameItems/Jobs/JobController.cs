@@ -18,7 +18,7 @@ public class JobController : MonoBehaviour, IObjectGenerator
     public IEnumerable<Job> Vacancies { get { return jobs.Where(j => j.Colonist == null && !j.IsTerminated); } }
     public IEnumerable<Job> AssignedJobs { get { return jobs.Where(j => j.Colonist != null); } }
 
-    public int Priority { get { return 150; } }
+    public int Priority { get { return 160; } }
     public bool RunModeOnly { get { return true; } }
 
 

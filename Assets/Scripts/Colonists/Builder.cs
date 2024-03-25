@@ -2,7 +2,6 @@ using System;
 
 public class Builder : SmolbeanColonist
 {
-    public string buildingLayer = "Buildings";
     public float sleepTime = 5f;
 
     public BuildingSite TargetBuilding { get; set; }

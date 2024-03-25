@@ -3,8 +3,6 @@ using UnityEngine.AI;
 
 public abstract class SmolbeanColonist : SmolbeanAnimal
 {
-    public string dropLayer = "Drops";
-
     private Vector3 lastReportedPosition;
 
     public Job Job { get; set; }

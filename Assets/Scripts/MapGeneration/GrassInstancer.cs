@@ -215,8 +215,8 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         float noise = groundTextureData[texY * wearTexture.width + texX].g;
         noise = grassWeightCurve.Evaluate(noise);
         
-        if (Random.Range(0.0f, 1.0f) < noise)
-            return false;
+        if (Random.Range(0.0f, 1.0f) > noise) 
+            return false; 
 
         Ray ray = new (new Vector3(posX, 10000f, posZ), Vector3.down);
         if (!Physics.Raycast(ray, out var groundHit, float.PositiveInfinity, groundLayerMask))

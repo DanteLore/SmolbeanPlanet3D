@@ -87,12 +87,14 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         }
     }
 
-    public float GetAvailableGrass(Vector3 worldPosition)
+    public float GetAvailableGrass(Vector3 worldPosition, float searchRadius = 0.5f)
     {
         Vector2Int center = WorldToTexture(worldPosition);
+        Vector2Int p = WorldToTexture(worldPosition + Vector3.forward * searchRadius);
+
         int x = center.x;
         int y = center.y;
-        int radius = wearRadius - 1;
+        int radius = Mathf.CeilToInt(Vector2Int.Distance(center, p));
         float rSquared = radius * radius;
         float grassAvailable = 0f;
         int squares = 0;

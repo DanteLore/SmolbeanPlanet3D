@@ -13,6 +13,9 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public string natureLayer = "Nature";
     public string creatureLayer = "Creatures";
+    public string groundLayer = "Ground";
+    public string buildingLayer = "Buildings";
+    public string dropLayer = "Drops";
 
     protected static readonly float destinationThreshold = 2.0f;
 
