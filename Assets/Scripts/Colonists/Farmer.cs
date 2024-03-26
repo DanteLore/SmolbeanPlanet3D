@@ -28,6 +28,7 @@ public class Farmer : SmolbeanColonist
         AT(giveUpJob, JobTerminated());
 
         AT(idle, findFieldCenter, BeenIdleFor(5));
+        AT(findFieldCenter, idle, SearchFailed());
         AT(findFieldCenter, wander, HasSomewhereToGo());
 
         StateMachine.SetStartState(idle);
@@ -35,5 +36,6 @@ public class Farmer : SmolbeanColonist
         Func<bool> JobTerminated() => () => Job.IsTerminated;
         Func<bool> BeenIdleFor(float t) => () => idle.TimeIdle > t;
         Func<bool> HasSomewhereToGo() => () => !CloseEnoughTo(target);
+        Func<bool> SearchFailed() => () => !findFieldCenter.FieldFound && !findFieldCenter.InProgress;
     }
 }

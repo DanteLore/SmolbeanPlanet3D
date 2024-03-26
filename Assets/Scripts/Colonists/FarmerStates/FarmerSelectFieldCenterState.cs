@@ -17,6 +17,7 @@ public class FarmerSelectFieldCenterState : IState
     private readonly List<SearchResult> fieldLocations = new();
 
     public bool FieldFound { get; private set; }
+    public bool InProgress { get; private set; }
 
     public FarmerSelectFieldCenterState(Farmer farmer, float fieldRadius)
     {
@@ -26,14 +27,15 @@ public class FarmerSelectFieldCenterState : IState
 
     public void OnEnter()
     {
+        farmer.target = farmer.transform.position;
         FieldFound = false;
         searchAttemptCount = 0;
         fieldLocations.Clear();
+        InProgress = true;
     }
 
     public void OnExit()
     {
-
     }
 
     public void Tick()
@@ -47,13 +49,16 @@ public class FarmerSelectFieldCenterState : IState
         if (fieldLocations.Any())
         {
             FieldFound = true;
-            farmer.target = fieldLocations.OrderByDescending(fl => fl.grassQtty).First().pos;
+            var choices = fieldLocations.OrderByDescending(fl => fl.grassQtty).Take(5).ToArray();
+            farmer.target = choices[Random.Range(0, choices.Length)].pos;
         }
         else
         {
             FieldFound = false;
             farmer.target = farmer.transform.position;
         }
+
+        InProgress = false;
     }
 
     private void FindFieldLocation()
