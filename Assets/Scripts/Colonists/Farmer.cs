@@ -76,6 +76,9 @@ public class Farmer : SmolbeanColonist, IReturnDrops
 
     private bool FieldFinished()
     {
+        if (grassHarvested >= 1000f)
+            return true;
+
         float ammt = GroundWearManager.Instance.GetAvailableGrass(fieldCenter, fieldRadius * 0.75f);
         return ammt < 10f;
     }
