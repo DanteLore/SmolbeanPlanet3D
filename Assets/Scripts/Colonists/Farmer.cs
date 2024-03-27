@@ -1,8 +1,11 @@
 using System;
+using UnityEngine;
 
-public class Farmer : SmolbeanColonist
+public class Farmer : SmolbeanColonist, IReturnDrops
 {
     public float fieldRadius = 4f;
+    public Vector3 fieldCenter;
+    internal float grassHarvested;
 
     public override void InitialiseStats(AnimalStats newStats = null)
     {
@@ -23,19 +26,46 @@ public class Farmer : SmolbeanColonist
         var idle = new IdleState(animator);
         var giveUpJob = new SwitchColonistToFreeState(this);
         var findFieldCenter = new FarmerSelectFieldCenterState(this, fieldRadius);
-        var wander = new WalkToTargetState(this, navAgent, animator, soundPlayer);
-
+        var harvest = new FarmerHarvestState(this, animator);
+        var walkToField = new WalkToTargetState(this, navAgent, animator, soundPlayer);
+        var walkAroundField = new WalkToTargetState(this, navAgent, animator, soundPlayer);
+        var walkToDropPoint = new WalkToDropPointState(this, navAgent, animator, soundPlayer);
+        var nextSpotInField = new FindNextSpotInFieldState(this);
+        var walkToSpawnPoint = new WalkHomeState(this, navAgent, animator, soundPlayer);
+        var dropStuff = new GenericState(tick: () => { Debug.Log($"Harvested {grassHarvested}"); grassHarvested = 0f; });
+        
         AT(giveUpJob, JobTerminated());
 
-        AT(idle, findFieldCenter, BeenIdleFor(5));
+        AT(idle, findFieldCenter, BeenIdleFor(2f));
         AT(findFieldCenter, idle, SearchFailed());
-        AT(findFieldCenter, wander, HasSomewhereToGo());
+        AT(findFieldCenter, walkToField, HasSomewhereToGo());
+        AT(walkToField, harvest, AtTarget(0.25f));
+        AT(harvest, nextSpotInField, NoGrassLeft());
+        AT(nextSpotInField, walkToDropPoint, FieldSpotNotFound());
+        AT(nextSpotInField, walkAroundField, HasSomewhereToGo());
+        AT(walkAroundField, harvest, AtTarget(0.25f));
+        AT(harvest, walkToDropPoint, FieldIsFinished());
+        AT(walkToDropPoint, dropStuff, AtDropPoint());
+        AT(dropStuff, walkToSpawnPoint, () => grassHarvested <= 0.1f);
+        AT(walkToSpawnPoint, idle, AtSpawnPoint());
 
         StateMachine.SetStartState(idle);
 
         Func<bool> JobTerminated() => () => Job.IsTerminated;
         Func<bool> BeenIdleFor(float t) => () => idle.TimeIdle > t;
-        Func<bool> HasSomewhereToGo() => () => !CloseEnoughTo(target);
+        Func<bool> HasSomewhereToGo() => () => !CloseEnoughTo(target, 0.25f);
         Func<bool> SearchFailed() => () => !findFieldCenter.FieldFound && !findFieldCenter.InProgress;
+        Func<bool> NoGrassLeft() => () => harvest.NoGrassLeft;
+        Func<bool> AtTarget(float d) => () => CloseEnoughTo(target, d);
+        Func<bool> FieldSpotNotFound() => () => !nextSpotInField.LocationFound;
+        Func<bool> FieldIsFinished() => () => FieldFinished();
+        Func<bool> AtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint, 2f);
+        Func<bool> AtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint, 4f);
+    }
+    
+    private bool FieldFinished()
+    {
+        float ammt = GroundWearManager.Instance.GetAvailableGrass(fieldCenter, fieldRadius * 0.75f);
+        return ammt < 10f;
     }
 }

@@ -87,17 +87,16 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         }
     }
 
-    public float GetAvailableGrass(Vector3 worldPosition, float searchRadius = 0.5f)
+    public float GetAvailableGrass(Vector3 worldPosition, float searchRadius = 0.75f)
     {
         Vector2Int center = WorldToTexture(worldPosition);
         Vector2Int p = WorldToTexture(worldPosition + Vector3.forward * searchRadius);
+        int radius = Mathf.CeilToInt(Vector2Int.Distance(center, p));
 
         int x = center.x;
         int y = center.y;
-        int radius = Mathf.CeilToInt(Vector2Int.Distance(center, p));
         float rSquared = radius * radius;
         float grassAvailable = 0f;
-        int squares = 0;
 
         for (int u = x - radius; u < x + radius + 1; u++)
         {  
@@ -106,14 +105,13 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
                 float dSquared = (x - u) * (x - u) + (y - v) * (y - v);
                 if (dSquared < rSquared)
                 {
-                    squares++;
-                    Color c = data[y * textureWidth + x];
+                    Color c = data[v * textureWidth + u];
                     grassAvailable += c.g * (1 - c.r); // Green is the grass density, red is the wear level
                 }
             }
         }
 
-        return grassAvailable / squares;
+        return grassAvailable;
     }
 
     public void WalkedOn(Vector3 position)
@@ -121,9 +119,13 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         WearCircle(WorldToTexture(position), wearRadius);
     }
 
-    public void RegisterHarvest(Vector3 position, float weight = 1f)
+    public void RegisterHarvest(Vector3 position, float weight = 1f, float wearRadius = 0.75f)
     {
-        WearCircle(WorldToTexture(position), wearRadius, weight);
+        Vector2Int center = WorldToTexture(position);
+        Vector2Int p = WorldToTexture(position + Vector3.forward * wearRadius);
+        int radius = Mathf.CeilToInt(Vector2Int.Distance(center, p));
+
+        WearCircle(WorldToTexture(position), radius, weight);
     }
 
     public void BuildingOn(Bounds bounds, BuildingWearPattern wearPattern, Vector2 wearScale)
@@ -161,7 +163,6 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
                     Color px = data[v * textureWidth + u];
                     float r = px.r + c; // Wear is on the RED channel
                     r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01?
-                    data[v * textureWidth + u] = px;
                     data[v * textureWidth + u].r = r;
                 }
             }

@@ -38,8 +38,8 @@ public abstract class FactoryWorker : SmolbeanColonist, IReturnDrops
         StateMachine.SetStartState(idle);
 
         Func<bool> JobTerminated() => () => Job.IsTerminated;
-        Func<bool> AtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint);
-        Func<bool> AtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint);
+        Func<bool> AtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint, 0.5f);
+        Func<bool> AtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint, 0.5f);
         Func<bool> ReadyToMake() => () => Factory.HasResources() && Job.Building.DropPointContents().Where(s => s.IsFull()).Count() < maxStacks;
         Func<bool> InventoryEmpty() => Inventory.IsEmpty;
         Func<bool> FactoryReady() =>() => Factory.IsReadyToStart;

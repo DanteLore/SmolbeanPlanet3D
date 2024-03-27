@@ -86,16 +86,16 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         Func<bool> JobTerminated() => () => Job.IsTerminated;
         Func<bool> HasTarget() => () => Target != null;
         Func<bool> NoTargetFound() => () => Target == null && !searchForResources.InProgress;
-        Func<bool> IsCloseEnoughToTarget() => () => CloseEnoughTo(Target);
-        Func<bool> IsCloseEnoughToDrop() => () => CloseEnoughTo(TargetDrop);
+        Func<bool> IsCloseEnoughToTarget() => () => CloseEnoughTo(Target, 1f);
+        Func<bool> IsCloseEnoughToDrop() => () => CloseEnoughTo(TargetDrop, 1f);
         Func<bool> TargetIsDying() => () => Target != null && Target.GetComponent<IDamagable>().IsDead;
         Func<bool> TargetIsDead() => () => Target == null;
         Func<bool> DropFound() => () => TargetDrop != null;
         Func<bool> NoDropsFound() => () => TargetDrop == null;
         Func<bool> InventoryEmpty() => () => Inventory.IsEmpty();
         Func<bool> InventoryNotEmpty() => () => !Inventory.IsEmpty();
-        Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint);
-        Func<bool> IsAtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint);
+        Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint, 0.5f);
+        Func<bool> IsAtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint, 0.5f);
         Func<bool> ReadyToGo() => () => idle.TimeIdle >= idleTime && !DropPointFull();
     }
 

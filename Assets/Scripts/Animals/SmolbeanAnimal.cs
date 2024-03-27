@@ -17,8 +17,6 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public string buildingLayer = "Buildings";
     public string dropLayer = "Drops";
 
-    protected static readonly float destinationThreshold = 2.0f;
-
     public Inventory Inventory { get; private set; }
 
     protected AnimalStats stats;
@@ -210,7 +208,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         body.SetActive(true);
     }
 
-    public bool CloseEnoughTo(Vector3 dest)
+    public bool CloseEnoughTo(Vector3 dest, float destinationThreshold)
     {
         var pos = transform.position;
 
@@ -220,14 +218,14 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         return Vector3.SqrMagnitude(v1 - v2) < destinationThreshold * destinationThreshold;
     }
 
-    public bool CloseEnoughTo(GameObject target)
+    public bool CloseEnoughTo(GameObject target, float destinationThreshold)
     {
         if (target == null)
             return false;
 
         // If we don't have a collider, just measure the distance
         if (target.GetComponentInChildren<Collider>() == null)
-            return CloseEnoughTo(target.transform.position);
+            return CloseEnoughTo(target.transform.position, destinationThreshold);
 
         // Otherwise...
         // This DOES need to be a sphere collision, rather than a standard distance check, because the object might be big and

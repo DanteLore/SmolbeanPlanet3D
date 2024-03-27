@@ -25,8 +25,8 @@ public class PorterFetchDropsState : CompoundState
         void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
 
         Func<bool> NoTargetDropAssigned() => () => porter.TargetDrop == null;
-        Func<bool> IsCloseEnoughToDrop() => () => porter.CloseEnoughTo(porter.TargetDrop);
-        Func<bool> IsAtSpawnPoint() => () => porter.CloseEnoughTo(porter.Job.Building.spawnPoint);
+        Func<bool> IsCloseEnoughToDrop() => () => porter.CloseEnoughTo(porter.TargetDrop, 1f);
+        Func<bool> IsAtSpawnPoint() => () => porter.CloseEnoughTo(porter.Job.Building.spawnPoint, 1f);
         Func<bool> InventoryIsEmpty() => porter.Inventory.IsEmpty;
     }
 }

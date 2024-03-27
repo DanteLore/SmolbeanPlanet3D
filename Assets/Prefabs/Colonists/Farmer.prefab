@@ -226,12 +226,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   natureLayer: Nature
   creatureLayer: Creatures
+  groundLayer: Ground
+  buildingLayer: Buildings
+  dropLayer: Drops
   speciesIndex: 0
   species: {fileID: 11400000, guid: 9cc68d1bc4c7b41bcb45f3d19e0f784c, type: 2}
   target: {x: 0, y: 0, z: 0}
   memoryLength: 12
   prefabIndex: -1
-  dropLayer: Drops
+  fieldRadius: 4
+  fieldCenter: {x: 0, y: 0, z: 0}
 --- !u!1 &7299820954455769483
 GameObject:
   m_ObjectHideFlags: 0

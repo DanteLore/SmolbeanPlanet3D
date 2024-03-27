@@ -42,8 +42,8 @@ public class Miner : SmolbeanColonist, IReturnDrops
         StateMachine.SetStartState(getReady);
 
         Func<bool> JobTerminated() => () => Job.IsTerminated;
-        Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint);
-        Func<bool> IsAtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint);
+        Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint, 0.5f);
+        Func<bool> IsAtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint, 0.5f);
         Func<bool> InventoryIsEmpty() => Inventory.IsEmpty;
         Func<bool> InventoryIsNotEmpty() => () => !Inventory.IsEmpty();
         Func<bool> MiningFinished() => () => operateMine.Finished;

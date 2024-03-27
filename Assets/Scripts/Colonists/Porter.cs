@@ -47,8 +47,8 @@ public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
         Func<bool> DropFound() => () => TargetDrop != null;
         Func<bool> NoDropFound() => () => TargetDrop == null && !searchForCollectionJob.InProgress;
         Func<bool> HasBeenIdleFor(float t) => () => idle.TimeIdle >= t;
-        Func<bool> FetchDropSucceeded() => () => fetchDrop.Finished && CloseEnoughTo(Job.Building.spawnPoint);
-        Func<bool> FetchDropFailed() => () => fetchDrop.Finished && !CloseEnoughTo(Job.Building.spawnPoint);
+        Func<bool> FetchDropSucceeded() => () => fetchDrop.Finished && CloseEnoughTo(Job.Building.spawnPoint, 1f);
+        Func<bool> FetchDropFailed() => () => fetchDrop.Finished && !CloseEnoughTo(Job.Building.spawnPoint, 1f);
         Func<bool> NoDeliveryToDo() => () => DeliveryRequest == null;
         Func<bool> DeliveryAssigned() => () => DeliveryRequest != null;
         Func<bool> DeliveryComplete() => () => doDelivery.Finished;

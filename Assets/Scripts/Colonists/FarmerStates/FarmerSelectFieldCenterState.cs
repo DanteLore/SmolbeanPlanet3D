@@ -40,7 +40,7 @@ public class FarmerSelectFieldCenterState : IState
 
     public void Tick()
     {
-        if (searchAttemptCount < 120)
+        if (searchAttemptCount < 60)
         {
             FindFieldLocation();
             return;
@@ -49,8 +49,13 @@ public class FarmerSelectFieldCenterState : IState
         if (fieldLocations.Any())
         {
             FieldFound = true;
-            var choices = fieldLocations.OrderByDescending(fl => fl.grassQtty).Take(5).ToArray();
+            var choices = fieldLocations
+                .OrderByDescending(fl => fl.grassQtty)
+                .Take(5)
+                .ToArray();
+
             farmer.target = choices[Random.Range(0, choices.Length)].pos;
+            farmer.fieldCenter = farmer.target;
         }
         else
         {
@@ -63,7 +68,9 @@ public class FarmerSelectFieldCenterState : IState
 
     private void FindFieldLocation()
     {
-        float range = Random.Range(fieldRadius, fieldRadius * 3f);
+        searchAttemptCount++;
+
+        float range = Random.Range(fieldRadius * 1.5f, fieldRadius * 6f);
         float angle = Random.Range(0f, 360f);
 
         var center = farmer.Job.Building.transform.position;
@@ -72,11 +79,14 @@ public class FarmerSelectFieldCenterState : IState
         Ray ray = new(pos + (Vector3.up * 1000f), Vector3.down);
         if (Physics.Raycast(ray, out var rayHit, float.MaxValue, LayerMask.GetMask(farmer.groundLayer)) &&
             Physics.OverlapSphere(rayHit.point, fieldRadius, LayerMask.GetMask(farmer.buildingLayer, farmer.natureLayer)).Length == 0 &&
-            NavMesh.SamplePosition(rayHit.point, out var navHit, 1f, NavMesh.AllAreas))
+            NavMesh.SamplePosition(rayHit.point, out var navHit, 1f, NavMesh.AllAreas) &&
+            navHit.position.y >= -0.5f // Not in the sea :)
+            )
         {
             float grassQtty = GroundWearManager.Instance.GetAvailableGrass(navHit.position, fieldRadius);
-            fieldLocations.Add(new SearchResult { pos = navHit.position, grassQtty = grassQtty });
-            searchAttemptCount++;
+
+            if(grassQtty >= 50f)
+                fieldLocations.Add(new SearchResult { pos = navHit.position, grassQtty = grassQtty });
         }
     }
 }
