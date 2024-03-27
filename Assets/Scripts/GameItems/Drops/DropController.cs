@@ -54,7 +54,7 @@ public class DropController : MonoBehaviour, IObjectGenerator
             DestroyImmediate(other.gameObject);
         }
 
-        var gameObject = Instantiate(spec.GetPrefabFor(qtty), position, Quaternion.identity, transform);
+        var gameObject = Instantiate(spec.GetPrefabFor(qtty), new Vector3(position.x, position.y + 1.5f, position.z), Quaternion.identity, transform);
         var itemStack = gameObject.GetComponent<SmolbeanDrop>();
         itemStack.dropSpec = spec;
         itemStack.quantity = qtty;

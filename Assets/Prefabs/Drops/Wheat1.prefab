@@ -12,7 +12,9 @@ GameObject:
   - component: {fileID: 8358642819043298139}
   - component: {fileID: 9058972106933575790}
   - component: {fileID: -651417043580281333}
-  m_Layer: 0
+  - component: {fileID: -1308854852433256955}
+  - component: {fileID: 8275729597337481060}
+  m_Layer: 12
   m_Name: Wheat1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,3 +102,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropSpec: {fileID: 11400000, guid: 6bfc8ff2c644f40b7b6f4f07951ad703, type: 2}
   quantity: 0
+--- !u!54 &-1308854852433256955
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7173859731698632696}
+  serializedVersion: 4
+  m_Mass: 3
+  m_Drag: 1
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &8275729597337481060
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7173859731698632696}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.18666938, y: 0.48296693, z: 0.18424882}
+  m_Center: {x: -0.001646582, y: 0.24317057, z: 0}

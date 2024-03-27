@@ -234,8 +234,10 @@ MonoBehaviour:
   target: {x: 0, y: 0, z: 0}
   memoryLength: 12
   prefabIndex: -1
+  dropSpec: {fileID: 11400000, guid: 6bfc8ff2c644f40b7b6f4f07951ad703, type: 2}
   fieldRadius: 4
   fieldCenter: {x: 0, y: 0, z: 0}
+  grassHarvested: 0
 --- !u!1 &7299820954455769483
 GameObject:
   m_ObjectHideFlags: 0

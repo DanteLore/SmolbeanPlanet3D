@@ -16,7 +16,7 @@ MonoBehaviour:
   dropRate: 3
   stackSize: 9
   thumbnail: {fileID: 2800000, guid: de7e78f4cdfe04653961388b63c1b7e2, type: 3}
-  singlePrefab: {fileID: 0}
-  somePrefab: {fileID: 0}
-  lotsPrefab: {fileID: 0}
-  lifeSpanSeconds: 0
+  singlePrefab: {fileID: 7173859731698632696, guid: 6239bf095f17244438d2c4744ec65573, type: 3}
+  somePrefab: {fileID: 143960949020443193, guid: 656a9bc64326a498bab23368c41bf5cf, type: 3}
+  lotsPrefab: {fileID: 1216849017120631133, guid: 8de89a34b8bf6433594a20d0d8ce7bd9, type: 3}
+  lifeSpanSeconds: 120

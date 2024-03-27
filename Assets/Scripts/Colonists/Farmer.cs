@@ -3,9 +3,10 @@ using UnityEngine;
 
 public class Farmer : SmolbeanColonist, IReturnDrops
 {
+    public DropSpec dropSpec;
     public float fieldRadius = 4f;
     public Vector3 fieldCenter;
-    internal float grassHarvested;
+    public float grassHarvested;
 
     public override void InitialiseStats(AnimalStats newStats = null)
     {
@@ -32,7 +33,7 @@ public class Farmer : SmolbeanColonist, IReturnDrops
         var walkToDropPoint = new WalkToDropPointState(this, navAgent, animator, soundPlayer);
         var nextSpotInField = new FindNextSpotInFieldState(this);
         var walkToSpawnPoint = new WalkHomeState(this, navAgent, animator, soundPlayer);
-        var dropStuff = new GenericState(tick: () => { Debug.Log($"Harvested {grassHarvested}"); grassHarvested = 0f; });
+        var dropStuff = new GenericState(tick: DropStuff);
         
         AT(giveUpJob, JobTerminated());
 
@@ -62,7 +63,17 @@ public class Farmer : SmolbeanColonist, IReturnDrops
         Func<bool> AtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint, 2f);
         Func<bool> AtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint, 4f);
     }
-    
+
+    private void DropStuff()
+    {
+        int qtty = Mathf.CeilToInt(grassHarvested * dropSpec.stackSize / 1000f);
+        qtty = Mathf.Min(dropSpec.stackSize, qtty);
+        DropController.Instance.Drop(dropSpec, Job.Building.dropPoint.transform.position, qtty);
+        Debug.Log($"{stats.name} dropped {grassHarvested} grass as {qtty} wheat");
+        grassHarvested = 0f;
+
+    }
+
     private bool FieldFinished()
     {
         float ammt = GroundWearManager.Instance.GetAvailableGrass(fieldCenter, fieldRadius * 0.75f);
