@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82318625a37943d3a4fec9d0e7e748b, type: 3}
+  m_Name: BreadDropSpec
+  m_EditorClassIdentifier: 
+  dropName: Bread
+  dropRate: 3
+  stackSize: 9
+  thumbnail: {fileID: 2800000, guid: 90ee39da759f244f0bad59e33dca16d5, type: 3}
+  singlePrefab: {fileID: 1225675332152182186, guid: 526c1368d0c424037858d03aa1d34a07, type: 3}
+  somePrefab: {fileID: 2649386578026940594, guid: 87f8e353d3fc84b35acf1edb8289906f, type: 3}
+  lotsPrefab: {fileID: 8381236513740868972, guid: 32cd02cd5b2c4498db89ff38d21a67f4, type: 3}
+  lifeSpanSeconds: 240

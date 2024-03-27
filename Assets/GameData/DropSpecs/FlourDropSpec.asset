@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82318625a37943d3a4fec9d0e7e748b, type: 3}
+  m_Name: FlourDropSpec
+  m_EditorClassIdentifier: 
+  dropName: Flour
+  dropRate: 3
+  stackSize: 9
+  thumbnail: {fileID: 2800000, guid: c1df7edaa534941d794ed3569364909b, type: 3}
+  singlePrefab: {fileID: 4072397106698813134, guid: d79715dd2d1e844da92a0c1bb0ae27de, type: 3}
+  somePrefab: {fileID: 7193672449683433102, guid: fd95fe5ca94414be0a51dc877dcdcfc5, type: 3}
+  lotsPrefab: {fileID: 2951399288023583951, guid: 026ddaec9f49d45a7b24f6b629ac4a52, type: 3}
+  lifeSpanSeconds: 240
