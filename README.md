@@ -11,6 +11,13 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## New production chains underway!
+
+Been working hard on new models and behaviours for a new food production chain - from farmers, who chop _real_ grass (wearing out the ground just like Dodos and walking wear patterns) to a new windmill where a miller will turn wheat into flour
+and finally on to a Baker, who will make bread from that flour.  This is just a classic production chain, as ubiquitous as `Iron Ore + Coal = Iron`, and I just had to have it!
+
+![Screenshot](./Docs/Images/screenshot68.png)
+
 ## Colonists! Be FREE!
 
 Finally done it - colonists are separated from their home buildings.  This was, as I said, the last big scary bit of refactoring.  There's a new job system and some random colonists are sprinkled over the

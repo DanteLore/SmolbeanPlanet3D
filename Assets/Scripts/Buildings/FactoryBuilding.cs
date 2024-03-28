@@ -12,7 +12,6 @@ public abstract class FactoryBuilding : SmolbeanBuilding
     public int ingredientDeliveryPriority = 8;
 
     private List<DeliveryRequest> deliveryRequests;
-
     private float startTime;
 
     protected override void Start()
