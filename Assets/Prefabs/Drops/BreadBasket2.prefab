@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 973995709185560827}
   - component: {fileID: 6918998746215350382}
   - component: {fileID: -2193305800347000604}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BreadBasket2
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3deb80622f8dc4004b8543031d9e52f6, type: 3}
   m_Name: FarmerJobSpec
   m_EditorClassIdentifier: 
-  jobName: Farmer
+  jobName: Farming
   thumbnail: {fileID: 2800000, guid: 281aa0ee178bb48199f0f6d9814ab04f, type: 3}
   colonistPrefab: {fileID: 5678464011766705138, guid: a65afcc7d951c46edaad4ced516f6168, type: 3}

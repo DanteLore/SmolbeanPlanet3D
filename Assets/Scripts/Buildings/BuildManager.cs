@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -27,7 +28,7 @@ public class BuildManager : MonoBehaviour
     public bool IsBuilding { get; private set; }
     public bool IsEditing { get; private set; }
 
-    public Transform EditTargetTransform { get; private set; }
+    public SmolbeanBuilding EditTarget { get; private set; }
 
     private GameObject cursor;
     private int selectedBuildingIndex;
@@ -70,32 +71,57 @@ public class BuildManager : MonoBehaviour
         mapCursor.SetActive(false);
     }
 
-    private void BeginEdit(Transform target)
+    private void BeginEdit(SmolbeanBuilding clicked)
     {
         IsEditing = true;
-        EditTargetTransform = target;
 
-        cursor = Instantiate(selectionCursorPrefab, target);
+        EditTarget = clicked;
+
+        cursor = Instantiate(selectionCursorPrefab, clicked.transform);
         var pos = cursor.transform.position;
-        float y = target.GetComponentInChildren<Renderer>().bounds.max.y + cursorOffsetY;
+        float y = GetBounds(clicked).max.y + cursorOffsetY;
         pos = new Vector3(pos.x, y, pos.z);
         cursor.transform.position = pos;
 
-        var building = target.gameObject.GetComponent<SmolbeanBuilding>();
-        var spawnPos = building.spawnPoint.transform.position;
-        var dropPos = building.dropPoint.transform.position;
-        spawnPointX = Instantiate(spawnPointMarkerPrefab, building.spawnPoint.transform);
+        var spawnPos = clicked.spawnPoint.transform.position;
+        var dropPos = clicked.dropPoint.transform.position;
+        spawnPointX = Instantiate(spawnPointMarkerPrefab, clicked.spawnPoint.transform);
 
-        if(Vector3.SqrMagnitude(spawnPos - dropPos) >= 4f)
-            dropPointX = Instantiate(spawnPointMarkerPrefab, building.dropPoint.transform);
+        if (Vector3.SqrMagnitude(spawnPos - dropPos) >= 4f)
+            dropPointX = Instantiate(spawnPointMarkerPrefab, clicked.dropPoint.transform);
 
         MenuController.Instance.ShowMenu("BuildingDetailsMenu");
+    }
+
+    private static Bounds GetBounds(SmolbeanBuilding building)
+    {
+        var allBounds = building.transform.GetComponentsInChildren<Renderer>().Select(r => r.bounds).ToArray();
+
+        var bounds = allBounds[0];
+
+        for (int i = 1; i < allBounds.Length; i++)
+            bounds.Encapsulate(allBounds[i]);
+
+        return bounds;
+    }
+
+    private static SmolbeanBuilding GetBuilding(Transform target)
+    {
+        var building = target.gameObject.GetComponent<SmolbeanBuilding>();
+
+        if (building != null)
+            return building;
+
+        if (target.gameObject.GetComponent<BuildManager>() != null)
+            return null;
+
+        return GetBuilding(target.parent);
     }
 
     private void EndEdit()
     {
         IsEditing = false;
-        EditTargetTransform = null;
+        EditTarget = null;
         if(cursor) 
             Destroy(cursor);
         if(spawnPointX)
@@ -172,15 +198,18 @@ public class BuildManager : MonoBehaviour
         {
             // User clicked off the building
             EndEdit();
+            return;
         }
-        else if(IsEditing && hitInfo.transform != EditTargetTransform)
+
+        var clicked = GetBuilding(hitInfo.transform);
+        if (IsEditing && clicked != EditTarget)
         {
             EndEdit();
-            BeginEdit(hitInfo.transform);
+            BeginEdit(clicked);
         }
         else if(!IsEditing && hitSomething)
         {
-            BeginEdit(hitInfo.transform);
+            BeginEdit(clicked);
         }
     }
 
@@ -239,8 +268,8 @@ public class BuildManager : MonoBehaviour
 
     public void DeleteTargetBuilding()
     {
-        Instantiate(buildingDeletedParticleSystem, EditTargetTransform.position, EditTargetTransform.rotation);
-        Destroy(EditTargetTransform.gameObject); 
+        Instantiate(buildingDeletedParticleSystem, EditTarget.transform.position, EditTarget.transform.rotation);
+        Destroy(EditTarget.gameObject); 
         soundPlayer.Play("Demolish");
         EndEdit();
     }

@@ -12,7 +12,8 @@ public class Windmill : FactoryBuilding
 
     protected override void Update()
     {
-        sail.transform.transform.Rotate(-Vector3.forward, sailRotationsPerSecond * 360f * Time.deltaTime);
+        if(IsOperating)
+            sail.transform.transform.Rotate(-Vector3.forward, sailRotationsPerSecond * 360f * Time.deltaTime);
     }
 
     public override void StartProcessing()

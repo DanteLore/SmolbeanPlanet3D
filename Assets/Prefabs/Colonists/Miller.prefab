@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 5678464011766705148}
   - component: {fileID: 5678464011766705149}
   - component: {fileID: -7699975937507873008}
-  - component: {fileID: 7413844353760469568}
+  - component: {fileID: 2756923997171481990}
   m_Layer: 9
-  m_Name: Porter
+  m_Name: Miller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103,8 +103,13 @@ MonoBehaviour:
     loop: 1
     volume: 1
     ignoreGamePause: 0
+  - name: Working
+    clip: {fileID: 8300000, guid: 7984bfdebf6f5430cb5bc61388f20bcd, type: 3}
+    loop: 1
+    volume: 1
+    ignoreGamePause: 0
   mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
---- !u!114 &7413844353760469568
+--- !u!114 &2756923997171481990
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -113,7 +118,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5678464011766705138}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3543cf5b92a549bfbbdf51286aebe62, type: 3}
+  m_Script: {fileID: 11500000, guid: 7eaa5339013324b379466e4929425db6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   natureLayer: Nature
@@ -122,11 +127,12 @@ MonoBehaviour:
   buildingLayer: Buildings
   dropLayer: Drops
   speciesIndex: 0
-  species: {fileID: 0}
+  species: {fileID: 11400000, guid: 9cc68d1bc4c7b41bcb45f3d19e0f784c, type: 2}
   target: {x: 0, y: 0, z: 0}
   memoryLength: 12
   prefabIndex: -1
   idleTime: 1
+  maxStacks: 5
 --- !u!1001 &502959277502828767
 PrefabInstance:
   m_ObjectHideFlags: 0

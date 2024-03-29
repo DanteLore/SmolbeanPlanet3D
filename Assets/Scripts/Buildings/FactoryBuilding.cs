@@ -7,6 +7,7 @@ public abstract class FactoryBuilding : SmolbeanBuilding
     public Recipe recipe;
     public bool IsFinished { get { return (Time.time  - startTime) >= recipe.craftingTime; } }
     public bool IsReadyToStart { get; private set; }
+    public bool IsOperating { get; private set; }
 
     public int orderMultiplier = 3;
     public int ingredientDeliveryPriority = 8;
@@ -17,6 +18,7 @@ public abstract class FactoryBuilding : SmolbeanBuilding
     protected override void Start()
     {
         base.Start();
+        IsOperating = false;
 
         deliveryRequests = new List<DeliveryRequest>();
 
@@ -97,12 +99,14 @@ public abstract class FactoryBuilding : SmolbeanBuilding
 
     public virtual void StartProcessing()
     {
+        IsOperating = true;
         startTime = Time.time;
         IsReadyToStart = false;
     }
 
     public virtual DropSpec StopProcessing()
     {
+        IsOperating = false;
         return IsFinished ? recipe.createdItem : null;
     }
 }

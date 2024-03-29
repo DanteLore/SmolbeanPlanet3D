@@ -30,10 +30,10 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
 
     protected override void Update()
     {
-        if (ReferenceEquals(buildManager.EditTargetTransform, target))
+        if (ReferenceEquals(buildManager.EditTarget, target))
             return;
 
-        target = buildManager.EditTargetTransform;
+        target = buildManager.EditTarget.transform;
 
         Clear();
         UpdateControls();
@@ -91,7 +91,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
 
     private static void BuildRecipe(ScrollView mainScrollView, FactoryBuilding factory)
     {
-        Title(mainScrollView, "⎌", "Recipes");
+        Title(mainScrollView, "𐜫", "Recipes");
 
         var recipeContainer = new VisualElement();
         recipeContainer.AddToClassList("recipeContainer");

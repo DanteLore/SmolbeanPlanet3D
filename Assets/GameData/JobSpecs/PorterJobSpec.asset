@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3deb80622f8dc4004b8543031d9e52f6, type: 3}
   m_Name: PorterJobSpec
   m_EditorClassIdentifier: 
-  jobName: Porterage
+  jobName: Portering
   thumbnail: {fileID: 2800000, guid: 63368b7e836e64a3ebd156d4bcb0f7fb, type: 3}
   colonistPrefab: {fileID: 5678464011766705138, guid: fd07e7047b08443eab281c57cf0ff590, type: 3}

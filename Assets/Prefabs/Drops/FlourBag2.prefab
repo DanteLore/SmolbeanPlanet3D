@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8516935828123935921}
   - component: {fileID: 8784597613061354050}
   - component: {fileID: 6867108423443680248}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FlourBag2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
