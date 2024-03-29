@@ -71,17 +71,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropLayer: Drops
   spawnPoint: {fileID: 4461010311040620285}
-  dropPoint: {fileID: 0}
+  dropPoint: {fileID: 4461010311040620285}
   wearPattern: 1
   wearScale: {x: 0.6, y: 0.6}
   building: {fileID: 6719174780933112508}
   itemDropRadius: 2
   itemDropHeight: 1
-  jobSpecs:
-  - {fileID: 11400000, guid: ac9592754f44d4ee7947ef32af0a32aa, type: 2}
-  - {fileID: 11400000, guid: ac9592754f44d4ee7947ef32af0a32aa, type: 2}
-  - {fileID: 11400000, guid: ac9592754f44d4ee7947ef32af0a32aa, type: 2}
-  - {fileID: 11400000, guid: ac9592754f44d4ee7947ef32af0a32aa, type: 2}
 --- !u!208 &7554533456020058687
 NavMeshObstacle:
   m_ObjectHideFlags: 0

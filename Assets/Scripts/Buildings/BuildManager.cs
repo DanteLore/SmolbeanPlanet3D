@@ -194,10 +194,10 @@ public class BuildManager : MonoBehaviour
             return;
         }
 
-        if(IsEditing && !hitSomething) 
+        if (!hitSomething)
         {
-            // User clicked off the building
-            EndEdit();
+            if (IsEditing)
+                EndEdit();
             return;
         }
 
