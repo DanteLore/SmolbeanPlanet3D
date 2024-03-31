@@ -35,9 +35,22 @@ public class SmolbeanDrop : MonoBehaviour
             Destroy(gameObject);
 
         // If we fell off the nav mesh, we must die
-        if (age > 5 &&
-            !NavMesh.SamplePosition(transform.position, out var _, 0.5f, NavMesh.AllAreas))
+        var pos = transform.position;
+        if (age > 5f &&
+            (!NavMesh.SamplePosition(pos, out var hit, 2f, NavMesh.AllAreas) ||
+             !OnOrAboveMesh(hit.position, pos)))
             Destroy(gameObject);
+    }
+
+    private bool OnOrAboveMesh(Vector3 navPos, Vector3 pos)
+    {
+        if (navPos.y > pos.y + 1f) // Fallen through mesh!
+            return false;
+
+        var p1 = new Vector3(navPos.x, 0, navPos.z);
+        var p2 = new Vector3(pos.x, 0, pos.z);
+
+        return Vector3.Distance(p1, p2) < 0.1f;
     }
 
     public bool IsFull()
