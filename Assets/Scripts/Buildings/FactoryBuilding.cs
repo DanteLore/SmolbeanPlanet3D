@@ -22,7 +22,7 @@ public abstract class FactoryBuilding : SmolbeanBuilding
 
         deliveryRequests = new List<DeliveryRequest>();
 
-        InvokeRepeating("UpdateDeliveryRequests", 1.0f, 0.5f);
+        InvokeRepeating(nameof(UpdateDeliveryRequests), 1.0f, 0.5f);
     }
 
     private void UpdateDeliveryRequests()

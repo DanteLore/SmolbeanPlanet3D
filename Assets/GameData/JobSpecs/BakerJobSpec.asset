@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3deb80622f8dc4004b8543031d9e52f6, type: 3}
+  m_Name: BakerJobSpec
+  m_EditorClassIdentifier: 
+  jobName: Baking
+  thumbnail: {fileID: 2800000, guid: 90ee39da759f244f0bad59e33dca16d5, type: 3}
+  colonistPrefab: {fileID: 5678464011766705138, guid: a8eadc1344134435c97f9edf1aef8c64, type: 3}
