@@ -18,6 +18,10 @@ and finally on to a Baker, who will make bread from that flour.  This is just a 
 
 ![Screenshot](./Docs/Images/screenshot68.png)
 
+And here's a Baker... which means the whole production chain is finished!
+
+![Screenshot](./Docs/Images/screenshot69.png)
+
 ## Colonists! Be FREE!
 
 Finally done it - colonists are separated from their home buildings.  This was, as I said, the last big scary bit of refactoring.  There's a new job system and some random colonists are sprinkled over the

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ingredients:
   - item: {fileID: 11400000, guid: 4ad18eaee805d4bf58234c56d39f3e62, type: 2}
-    quantity: 6
-  craftingTime: 32
+    quantity: 3
+  craftingTime: 60
   createdItem: {fileID: 11400000, guid: b7f4b13d2b8824b6c8acb13a2519ab11, type: 2}
   quantity: 3

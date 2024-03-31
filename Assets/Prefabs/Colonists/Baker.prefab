@@ -104,7 +104,7 @@ MonoBehaviour:
     volume: 1
     ignoreGamePause: 0
   - name: Working
-    clip: {fileID: 8300000, guid: 7984bfdebf6f5430cb5bc61388f20bcd, type: 3}
+    clip: {fileID: 8300000, guid: e5bb7fc4e31a240fc9749ef33be2028f, type: 3}
     loop: 1
     volume: 1
     ignoreGamePause: 0
@@ -133,6 +133,91 @@ MonoBehaviour:
   prefabIndex: -1
   idleTime: 1
   maxStacks: 5
+--- !u!1 &8963861482582627728
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5895982103537178586}
+  - component: {fileID: 8037457522614405436}
+  - component: {fileID: 1210463943488942415}
+  m_Layer: 0
+  m_Name: BakersHat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5895982103537178586
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8963861482582627728}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.78073525, y: -9.1926446e-14, z: -5.1569846e-14, w: 0.62486196}
+  m_LocalPosition: {x: -0.002, y: -0.126, z: 0.076}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9076598127780732803}
+  m_LocalEulerAnglesHint: {x: 102.656006, y: 0, z: 0}
+--- !u!33 &8037457522614405436
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8963861482582627728}
+  m_Mesh: {fileID: -8208032994195426673, guid: 8c65ecdd499b54f11ab7c6b28132e8c7, type: 3}
+--- !u!23 &1210463943488942415
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8963861482582627728}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 69b817f126e7e4c23a5ace3237c8e81f, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1001 &502959277502828767
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -331,7 +416,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -356818855993831588, guid: fdb2b9d1eddea4b16adc1463aa9e1c8c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5895982103537178586}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: fdb2b9d1eddea4b16adc1463aa9e1c8c, type: 3}
       insertIndex: -1
@@ -395,3 +483,8 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &9076598127780732803 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -356818855993831588, guid: fdb2b9d1eddea4b16adc1463aa9e1c8c, type: 3}
+  m_PrefabInstance: {fileID: 502959277502828767}
+  m_PrefabAsset: {fileID: 0}
