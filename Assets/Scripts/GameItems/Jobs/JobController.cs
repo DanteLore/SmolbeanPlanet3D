@@ -63,6 +63,7 @@ public class JobController : MonoBehaviour, IObjectGenerator
         saveData.jobData = jobs.Select(job => new JobSaveData()
         {
             jobSpecIndex = Array.IndexOf(jobSpecs, job.JobSpec),
+            isTerminated = job.IsTerminated,
             buildingName = job.Building.name,
             colonistName = job.Colonist != null ? job.Colonist.Stats.name : null
         }).ToList();
@@ -84,12 +85,12 @@ public class JobController : MonoBehaviour, IObjectGenerator
                 var colonist = (row.colonistName != null) ? AnimalController.Instance.FindAnimalByNameAndType<SmolbeanColonist>(row.colonistName) : null;
                 var jobSpec = jobSpecs[row.jobSpecIndex];
 
-                if (building != null && colonist != null)
+                if (building != null)
                 {
-                    var job = new Job(building, jobSpec) { Colonist = colonist };
+                    var job = new Job(building, jobSpec, startTerminated: row.isTerminated) { Colonist = colonist };
                     jobs.Add(job);
-                    colonist.Job = job;
-                    job.Colonist = colonist;
+                    if(colonist != null)
+                        colonist.Job = job;
                 }
             }
         }
