@@ -13,4 +13,5 @@ public class SaveFileData
     public CameraSaveData cameraData;
     public TimeOfDaySaveData timeData;
     public List<JobSaveData> jobData;
+    public WindSaveData windData;
 }

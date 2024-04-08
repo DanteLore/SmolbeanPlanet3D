@@ -114,10 +114,6 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
         return null;
     }
 
-    public void LoadState(TimeOfDaySaveData loadedData)
-    {
-    }
-
     void Update()
     {
         if(Application.isPlaying)

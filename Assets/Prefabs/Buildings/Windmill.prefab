@@ -62,6 +62,7 @@ MonoBehaviour:
   ingredientDeliveryPriority: 8
   sailRotationsPerSecond: 0.05
   sail: {fileID: 1426347775242750963}
+  mainBody: {fileID: 547174497880113516}
 --- !u!65 &-1531457064113025235
 BoxCollider:
   m_ObjectHideFlags: 0

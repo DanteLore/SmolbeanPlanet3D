@@ -4,6 +4,7 @@ public class Windmill : FactoryBuilding
 {
     public float sailRotationsPerSecond;
     public GameObject sail;
+    public GameObject mainBody;
 
     protected override void Start()
     {
@@ -12,8 +13,12 @@ public class Windmill : FactoryBuilding
 
     protected override void Update()
     {
-        if(IsOperating)
+        if (IsOperating)
+        {
             sail.transform.Rotate(Vector3.forward, sailRotationsPerSecond * -360f * Time.deltaTime);
+
+            mainBody.transform.localRotation = Quaternion.Inverse(WindController.Instance.WindRotation);
+        }
     }
 
     public override void StartProcessing()
