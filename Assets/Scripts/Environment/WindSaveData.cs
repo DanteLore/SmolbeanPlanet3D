@@ -3,5 +3,5 @@ using System;
 [Serializable]
 public class WindSaveData
 {
-    public float windDirection;
+    public float windTimeOffset;
 }
