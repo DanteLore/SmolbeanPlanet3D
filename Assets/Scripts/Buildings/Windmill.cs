@@ -18,7 +18,7 @@ public class Windmill : FactoryBuilding
         {
             sail.transform.Rotate(Vector3.forward, sailRotationsPerSecond * -360f * Time.deltaTime);
 
-            mainBody.transform.localRotation = Quaternion.RotateTowards(mainBody.transform.localRotation, WindController.Instance.WindRotation, maxBodyRotationDegreesPerSecond * Time.deltaTime);
+            mainBody.transform.rotation = Quaternion.RotateTowards(mainBody.transform.rotation, WindController.Instance.WindRotation, maxBodyRotationDegreesPerSecond * Time.deltaTime);
         }
     }
 

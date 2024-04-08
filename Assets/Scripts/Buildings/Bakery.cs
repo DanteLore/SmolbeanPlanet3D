@@ -11,6 +11,14 @@ public class Bakery : FactoryBuilding
             ps.Stop();
     }
 
+    protected override void Update()
+    {
+        base.Update();
+
+        foreach (var ps in smokeParticleSystems)
+            ps.transform.rotation = WindController.Instance.WindRotation;
+    }
+
     public override void StartProcessing()
     {
         base.StartProcessing();
