@@ -211,14 +211,11 @@ MonoBehaviour:
   building: {fileID: 962766812587171540}
   itemDropRadius: 2
   itemDropHeight: 1
-  jobSpecs:
-  - {fileID: 11400000, guid: cee27ca57a5604f41a8451401fd26be5, type: 2}
   recipe: {fileID: 11400000, guid: 7f36b8c57616a452fb4af65d9b053461, type: 2}
   orderMultiplier: 3
   ingredientDeliveryPriority: 8
   fireObject: {fileID: 6919524366760482725}
   smokeParticleSystem: {fileID: 7862884398460389280}
-  jobSpec: {fileID: 0}
 --- !u!1 &6126572693105457676
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,6 +452,22 @@ PrefabInstance:
     - target: {fileID: 8181850166927728932, guid: 5e9b5352e6c5a407b85701ff6dad12c9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8229637925370370038, guid: 5e9b5352e6c5a407b85701ff6dad12c9, type: 3}
+      propertyPath: ForceModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8229637925370370038, guid: 5e9b5352e6c5a407b85701ff6dad12c9, type: 3}
+      propertyPath: ForceModule.z.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8229637925370370038, guid: 5e9b5352e6c5a407b85701ff6dad12c9, type: 3}
+      propertyPath: ForceModule.inWorldSpace
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8229637925370370038, guid: 5e9b5352e6c5a407b85701ff6dad12c9, type: 3}
+      propertyPath: InitialModule.startSpeed.minScalar
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

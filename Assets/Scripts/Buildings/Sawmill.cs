@@ -20,7 +20,8 @@ public class Sawmill : FactoryBuilding
 
     public override DropSpec StopProcessing()
     {
-        sawingParticleSystem.Stop();
+        if(sawingParticleSystem != null)
+            sawingParticleSystem.Stop();
 
         return base.StopProcessing();
     }

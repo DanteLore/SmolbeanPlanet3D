@@ -14,6 +14,13 @@ public class Smeltery : FactoryBuilding
         smokeParticleSystem.Stop();
     }
 
+    protected override void Update()
+    {
+        base.Update();
+
+        smokeParticleSystem.transform.rotation = WindController.Instance.WindRotation;
+    }
+
     public override void StartProcessing()
     {
         base.StartProcessing();
