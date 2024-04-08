@@ -35,13 +35,17 @@ public class FactoryWorkerDoJobState : IState
     {
         worker.Show();
         soundPlayer.Stop("Working");
-        Factory.StopProcessing();
+        
+        if (Factory != null) // In case factory deleted while in progress
+        {
+            Factory.StopProcessing();
 
-        var item = Factory.recipe.createdItem;
-        var qtty = Factory.recipe.quantity;
+            var item = Factory.recipe.createdItem;
+            var qtty = Factory.recipe.quantity;
 
-        var drop = dropController.CreateInventoryItem(item, qtty);
-        worker.Inventory.PickUp(drop);
+            var drop = dropController.CreateInventoryItem(item, qtty);
+            worker.Inventory.PickUp(drop);
+        }
     }
 
     public void Tick()
