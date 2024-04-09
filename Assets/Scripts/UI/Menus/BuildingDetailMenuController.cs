@@ -8,6 +8,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
     private BuildManager buildManager;
     private Button deleteButton;
     private Button rotateButton;
+    private Button placeWorkingAreaButton;
 
     protected override void OnEnable()
     {
@@ -16,9 +17,11 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
         buildManager = FindFirstObjectByType<BuildManager>();
         deleteButton = document.rootVisualElement.Q<Button>("deleteButton");
         rotateButton = document.rootVisualElement.Q<Button>("rotateButton");
+        placeWorkingAreaButton = document.rootVisualElement.Q<Button>("placeWorkingAreaButton");
 
         deleteButton.clicked += DeleteButtonClicked;
         rotateButton.clicked += RotateButtonClicked;
+        placeWorkingAreaButton.clicked += PlaceWorkingAreaClicked;
     }
 
     protected override void CloseButtonClicked()
@@ -44,7 +47,9 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
 
     private void UpdateControls()
     {
-        deleteButton.visible = target != null && target.GetComponent<SmolbeanBuilding>().BuildingSpec.deleteAllowed;
+        var sbb = target.GetComponent<SmolbeanBuilding>();
+        deleteButton.visible = target != null && sbb.BuildingSpec.deleteAllowed;
+        placeWorkingAreaButton.visible = sbb is ResourceCollectionBuilding;
     }
 
     private void RotateButtonClicked()
@@ -57,6 +62,11 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
     {
         if (target)
             BuildManager.Instance.DeleteTargetBuilding();
+    }
+
+    private void PlaceWorkingAreaClicked()
+    {
+        WorkingAreaPlacementManager.Instance.StartPlacement(target.GetComponent<ResourceCollectionBuilding>());
     }
 
     private void DrawMenu()

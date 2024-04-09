@@ -53,7 +53,10 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _noiseScale: 10
+    - _noiseSpeed: 0.1
+    - _noiseWeight: 0.545
     m_Colors:
-    - _baseColor: {r: 1, g: 0, b: 0, a: 0.627451}
+    - _baseColor: {r: 2, g: 0, b: 0, a: 0.627451}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

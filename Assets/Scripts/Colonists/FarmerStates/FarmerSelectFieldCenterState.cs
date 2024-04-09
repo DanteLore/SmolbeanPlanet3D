@@ -70,10 +70,12 @@ public class FarmerSelectFieldCenterState : IState
     {
         searchAttemptCount++;
 
-        float range = Random.Range(fieldRadius * 1.5f, fieldRadius * 6f);
+        var barn = (Barn)farmer.Job.Building;
+
+        Vector3 center = barn.collectionZoneCenter;
+        float range = Random.Range(0f, barn.collectionZoneRadius);
         float angle = Random.Range(0f, 360f);
 
-        var center = farmer.Job.Building.transform.position;
         var pos = center + (Quaternion.AngleAxis(angle, Vector3.up) * (Vector3.forward * range));
 
         Ray ray = new(pos + (Vector3.up * 1000f), Vector3.down);

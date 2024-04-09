@@ -211,7 +211,7 @@ MonoBehaviour:
   itemDropRadius: 2
   itemDropHeight: 1
   collectionZoneCenter: {x: 0, y: 0, z: 0}
-  collectionZoneRadius: 100
+  collectionZoneRadius: 50
 --- !u!1 &8891788620962936461
 GameObject:
   m_ObjectHideFlags: 0

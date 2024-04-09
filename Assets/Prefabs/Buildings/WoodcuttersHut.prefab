@@ -195,7 +195,7 @@ MonoBehaviour:
   itemDropRadius: 2
   itemDropHeight: 1
   collectionZoneCenter: {x: 0, y: 0, z: 0}
-  collectionZoneRadius: 100
+  collectionZoneRadius: 50
 --- !u!208 &4150118438198778675
 NavMeshObstacle:
   m_ObjectHideFlags: 0

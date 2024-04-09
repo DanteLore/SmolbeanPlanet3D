@@ -37,6 +37,7 @@ public class BuildManager : MonoBehaviour
     private GameObject spawnPointX;
     private GameObject dropPointX;
     private GameObject workingAreaMarker;
+    private bool isLocked;
 
     void Awake()
     {
@@ -71,6 +72,21 @@ public class BuildManager : MonoBehaviour
     {
         IsBuilding = false;
         mapCursor.SetActive(false);
+    }
+
+    public void Lock()
+    {
+        isLocked = true;
+    }
+
+    public void Unlock()
+    {
+        isLocked = false;
+
+        if (EditTarget is ResourceCollectionBuilding rcb)
+        {
+            workingAreaMarker.transform.position = rcb.collectionZoneCenter;
+        }
     }
 
     private void BeginEdit(SmolbeanBuilding clicked)
@@ -162,21 +178,11 @@ public class BuildManager : MonoBehaviour
         if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             return;
 
+        if (isLocked)
+            return;
+
         if (!GameStateManager.Instance.IsStarted)
             return;
-
-        //if (Mouse.current.rightButton.wasPressedThisFrame)
-        //{
-        //    EndEdit();
-        //    EndBuild();
-        //}
-
-        bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
-        if (isOverUI)
-        {
-            mapCursor.SetActive(false);
-            return;
-        }
 
         if (IsBuilding)
             UpdateBuildMode();
