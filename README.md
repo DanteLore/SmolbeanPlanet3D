@@ -11,6 +11,17 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Work areas
+
+Resource collection buildings, like the Woodcutter, Stonecutter, Lookout and Farm now have a designated work area, which can be selected by the player.  So you can
+clear the annoying trees off the top of a mountain, or whatever you want to do.  You can also send your collectors right to the other side of the island to collect \
+stuff, if you so desire.
+
+Setting this up meant learning to build an intersection shader, which is a very cool thing indeed!
+
+![Screenshot](./Docs/Images/screenshot70.png)
+
+
 ## Smoke in the wind...
 
 After a few days break, last night I went on a coding binge and implemented global wind direction, which spins the windmill, blows smoke,
