@@ -1,3 +1,3 @@
-public class StonecuttersHut : SmolbeanBuilding
+public class StonecuttersHut : ResourceCollectionBuilding
 {
 }

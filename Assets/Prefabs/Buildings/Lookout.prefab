@@ -210,7 +210,8 @@ MonoBehaviour:
   building: {fileID: 2425288973246429060}
   itemDropRadius: 2
   itemDropHeight: 1
-  jobSpecs: []
+  collectionZoneCenter: {x: 0, y: 0, z: 0}
+  collectionZoneRadius: 100
 --- !u!1 &8891788620962936461
 GameObject:
   m_ObjectHideFlags: 0

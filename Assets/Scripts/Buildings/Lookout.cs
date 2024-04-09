@@ -1,3 +1,3 @@
-public class Lookout : SmolbeanBuilding
+public class Lookout : ResourceCollectionBuilding
 {
 }

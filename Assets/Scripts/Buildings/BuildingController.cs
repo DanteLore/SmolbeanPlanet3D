@@ -50,16 +50,7 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
     public void SaveTo(SaveFileData saveData, string filename)
     {
         saveData.buildingData = GetComponentsInChildren<SmolbeanBuilding>()
-            .Select(b => new BuildingObjectSaveData
-            {
-                positionX = b.transform.position.x,
-                positionY = b.transform.position.y,
-                positionZ = b.transform.position.z,
-                rotationY = b.transform.rotation.eulerAngles.y,
-                prefabIndex = b.PrefabIndex,
-                inventory = b.Inventory.GetSaveData().ToArray(),
-                complete = !(b is BuildingSite)
-            })
+            .Select(b => b.GetSaveData())
             .ToList();
     }
 
@@ -130,6 +121,8 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
         building.PrefabIndex = saveData.prefabIndex;
         building.BuildingSpec = buildings[saveData.prefabIndex];
         building.name = $"{buildings[saveData.prefabIndex].buildingName} ({worldPos.y}N {worldPos.x}E)";
+
+        building.LoadFrom(saveData);
 
         ClampToGround(building.spawnPoint);
         ClampToGround(building.dropPoint);

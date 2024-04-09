@@ -37,7 +37,7 @@ public class SearchForResourceState : IState
 
     private void FindTarget()
     {
-        var target = GetTargets(gatherer.transform.position)
+        var target = GetTargets()
                                 .Take(10)
                                 .Where(IsOnNavMesh)
                                 .ToList()
@@ -50,8 +50,15 @@ public class SearchForResourceState : IState
             radius += 8f;
     }
 
-    private IEnumerable<GameObject> GetTargets(Vector3 pos)
+    private IEnumerable<GameObject> GetTargets()
     {
+        var building = gatherer.Job.Building as ResourceCollectionBuilding;
+        if (building == null)
+            return Enumerable.Empty<GameObject>();
+        
+        Vector3 pos = building.collectionZoneCenter;
+        float radius = building.collectionZoneRadius;
+
         var candidates = Physics.OverlapSphere(pos, radius, LayerMask.GetMask(natureLayer));
 
         return candidates

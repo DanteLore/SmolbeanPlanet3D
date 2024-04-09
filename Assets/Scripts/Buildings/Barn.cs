@@ -1,3 +1,3 @@
-public class Barn : SmolbeanBuilding
+public class Barn : ResourceCollectionBuilding
 {
 }

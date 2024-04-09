@@ -9,6 +9,7 @@ public class BuildManager : MonoBehaviour
     public GameObject mapCursorPrefab;
     public GameObject selectionCursorPrefab;
     public GameObject spawnPointMarkerPrefab;
+    public GameObject circularAreaMarkerPrefab;
     public string groundLayer = "Ground";
     public string buildingLayer = "Buildings";
     public string widgetLayer = "Widgets";
@@ -35,6 +36,7 @@ public class BuildManager : MonoBehaviour
     private SoundPlayer soundPlayer;
     private GameObject spawnPointX;
     private GameObject dropPointX;
+    private GameObject workingAreaMarker;
 
     void Awake()
     {
@@ -90,6 +92,14 @@ public class BuildManager : MonoBehaviour
         if (Vector3.SqrMagnitude(spawnPos - dropPos) >= 4f)
             dropPointX = Instantiate(spawnPointMarkerPrefab, clicked.dropPoint.transform);
 
+        if(clicked is ResourceCollectionBuilding rcb)
+        {
+            workingAreaMarker = Instantiate(circularAreaMarkerPrefab, clicked.transform);
+            workingAreaMarker.transform.position = rcb.collectionZoneCenter;
+            float s = rcb.collectionZoneRadius * 2;
+            workingAreaMarker.transform.localScale = new Vector3(s, 1000f, s);
+        }
+
         MenuController.Instance.ShowMenu("BuildingDetailsMenu");
     }
 
@@ -128,6 +138,9 @@ public class BuildManager : MonoBehaviour
             Destroy(spawnPointX);
         if(dropPointX) 
             Destroy(dropPointX);
+        if (workingAreaMarker)
+            Destroy(workingAreaMarker);
+
         MenuController.Instance.Close("BuildingDetailsMenu");
     }
 
@@ -152,11 +165,11 @@ public class BuildManager : MonoBehaviour
         if (!GameStateManager.Instance.IsStarted)
             return;
 
-        if (Mouse.current.rightButton.wasPressedThisFrame)
-        {
-            EndEdit();
-            EndBuild();
-        }
+        //if (Mouse.current.rightButton.wasPressedThisFrame)
+        //{
+        //    EndEdit();
+        //    EndBuild();
+        //}
 
         bool isOverUI = UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
         if (isOverUI)

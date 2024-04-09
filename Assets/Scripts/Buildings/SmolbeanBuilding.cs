@@ -89,4 +89,23 @@ public abstract class SmolbeanBuilding : MonoBehaviour
             .Select(c => c.gameObject.GetComponent<SmolbeanDrop>())
             .ToList();
     }
+
+    public virtual BuildingObjectSaveData GetSaveData()
+    {
+        return new BuildingObjectSaveData
+        {
+            positionX = transform.position.x,
+            positionY = transform.position.y,
+            positionZ = transform.position.z,
+            rotationY = transform.rotation.eulerAngles.y,
+            prefabIndex = PrefabIndex,
+            inventory = Inventory.GetSaveData().ToArray(),
+            complete = !(this is BuildingSite)
+        };
+    }
+
+    public virtual void LoadFrom(BuildingObjectSaveData saveData)
+    {
+        // Actually nothing to do in the base case :D
+    }
 }

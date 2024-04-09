@@ -241,3 +241,5 @@ MonoBehaviour:
   building: {fileID: 2492157895635043495}
   itemDropRadius: 2
   itemDropHeight: 1
+  collectionZoneCenter: {x: 0, y: 0, z: 0}
+  collectionZoneRadius: 100
