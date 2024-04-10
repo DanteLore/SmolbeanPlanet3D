@@ -32,7 +32,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
 
     protected override void Update()
     {
-        if (ReferenceEquals(buildManager.EditTarget, target))
+        if (ReferenceEquals(buildManager.EditTarget.transform, target))
             return;
 
         target = buildManager.EditTarget.transform;
