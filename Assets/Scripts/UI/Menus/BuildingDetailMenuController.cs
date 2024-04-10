@@ -21,27 +21,24 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
         deleteButton.clicked += DeleteButtonClicked;
         rotateButton.clicked += RotateButtonClicked;
         placeWorkingAreaButton.clicked += PlaceWorkingAreaClicked;
+
+        target = MapInteractionManager.Instance.SelectedTransform;
+
+        Clear();
+        UpdateControls();
+        DrawMenu();
+    }
+
+    private void OnDisable()
+    {
+        target = null;
     }
 
     protected override void CloseButtonClicked()
     {
         soundPlayer.Play("Click");
-        buildManager.ClearSelection();
+        MapInteractionManager.Instance.ForceDeselect();
         MenuController.Instance.CloseAll();
-    }
-
-    protected override void Update()
-    {
-        if (ReferenceEquals(buildManager.EditTarget.transform, target))
-            return;
-
-        target = buildManager.EditTarget.transform;
-
-        Clear();
-        UpdateControls();
-
-        if (target != null)
-            DrawMenu();
     }
 
     private void UpdateControls()

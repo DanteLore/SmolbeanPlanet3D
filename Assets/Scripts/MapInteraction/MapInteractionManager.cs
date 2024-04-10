@@ -50,16 +50,24 @@ public class MapInteractionManager : MonoBehaviour
 
         var idle = new MapIdleState();
         var animalSelected = new AnimalSelectedState(this, selectionCursorPrefab);
+        var buildingSelected = new BuildingSelectedState(this, selectionCursorPrefab);
 
-        AT(idle, animalSelected, NewAnimalClicked());
-        AT(animalSelected, animalSelected, NewAnimalClicked());
+        AT(idle, animalSelected, NewItemClicked<SmolbeanAnimal>());
+        AT(animalSelected, animalSelected, NewItemClicked<SmolbeanAnimal>());
+        AT(animalSelected, buildingSelected, NewItemClicked<SmolbeanBuilding>());
         AT(animalSelected, idle, MapClicked());
         AT(animalSelected, idle, NothingSelected());
+
+        AT(idle, buildingSelected, NewItemClicked<SmolbeanBuilding>());
+        AT(buildingSelected, buildingSelected, NewItemClicked<SmolbeanBuilding>());
+        AT(buildingSelected, animalSelected, NewItemClicked<SmolbeanAnimal>());
+        AT(buildingSelected, idle, MapClicked());
+        AT(buildingSelected, idle, NothingSelected());
 
         stateMachine.SetStartState(idle);
 
         Func<bool> MapClicked() => () => LeftButtonClicked && SelectedGameObject.layer == groundLayer;
-        Func<bool> NewAnimalClicked() => () => LeftButtonClicked && newObjectClicked && SelectedGameObject.GetComponent<SmolbeanAnimal>() != null;
+        Func<bool> NewItemClicked<T>() => () => LeftButtonClicked && newObjectClicked && SelectedGameObject.GetComponent<T>() != null;
         Func<bool> NothingSelected() => () => selectedTransform == null;
     }
 
