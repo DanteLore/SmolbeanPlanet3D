@@ -23,7 +23,7 @@ public abstract class BaseDetailsMenuController : SmolbeanMenu
         target = null;
     }
 
-    protected abstract void Update();
+    protected virtual void Update() { }
 
     protected abstract void CloseButtonClicked();
 

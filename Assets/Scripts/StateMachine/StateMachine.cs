@@ -54,8 +54,9 @@ public class StateMachine
 
     private void SetState(IState state)
     {
-        if(state == currentState)
-            return;
+        // ALLOW SELF TRANSITIONS
+        //if(state == currentState)
+        //    return;
 
         Log("Changed state to: " + state.GetType().Name);
 

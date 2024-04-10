@@ -8,26 +8,29 @@ using UnityEngine;
 
 public class AnimalDetailMenuController : BaseDetailsMenuController
 {
-    private AnimalDetailController animalDetailController;
     private readonly Dictionary<FieldInfo, Label> fieldLookup = new();
     private VisualElement thoughtsContainer;
 
     protected override void OnEnable()
     {
-        animalDetailController = FindFirstObjectByType<AnimalDetailController>();
-        target = null;
-
         base.OnEnable();
+
+        target = MapInteractionManager.Instance.SelectedTransform;
+
+        Clear();
+        DrawMenu();
+
+        InvokeRepeating(nameof(UpdateValues), 1f, 1f);
+        target.GetComponent<SmolbeanAnimal>().ThoughtsChanged += ThoughtsChanged;
     }
 
     protected void OnDisable()
     {
         if (target != null)
             target.GetComponent<SmolbeanAnimal>().ThoughtsChanged -= ThoughtsChanged;
+        CancelInvoke(nameof(UpdateValues));
 
         target = null;
-
-        animalDetailController.ClearSelection();
     }
 
     protected override void Clear()
@@ -41,35 +44,8 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
     protected override void CloseButtonClicked()
     {
         soundPlayer.Play("Click");
+        MapInteractionManager.Instance.ForceDeselect();
         MenuController.Instance.CloseAll();
-    }
-
-    protected override void Update()
-    {
-        // Already showing this animal, just update the fields
-        if (ReferenceEquals(animalDetailController.TargetTransform, target) && target != null)
-        {
-            UpdateValues();
-            return;
-        }
-
-        // Target transform cleared.  Close.
-        if (animalDetailController.TargetTransform == null)
-        {
-            MenuController.Instance.CloseAll();
-            return;
-        }
-
-        // Must be a new target, hook up
-        // But first unhook any existing one...
-        if (target != null)
-            target.GetComponent<SmolbeanAnimal>().ThoughtsChanged -= ThoughtsChanged;
-
-        target = animalDetailController.TargetTransform;
-        target.GetComponent<SmolbeanAnimal>().ThoughtsChanged += ThoughtsChanged;
-
-        Clear();
-        DrawMenu();
     }
 
     private void ThoughtsChanged(object sender, EventArgs e)

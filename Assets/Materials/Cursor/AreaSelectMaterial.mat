@@ -73,6 +73,6 @@ Material:
     - _noiseScale: 10
     - _noiseSpeed: 0.1
     m_Colors:
-    - _color: {r: 2.670157, g: 0, b: 0, a: 1}
+    - _color: {r: 1.3350785, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

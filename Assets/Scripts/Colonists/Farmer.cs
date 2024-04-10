@@ -69,9 +69,8 @@ public class Farmer : SmolbeanColonist, IReturnDrops
         int qtty = Mathf.CeilToInt(grassHarvested * dropSpec.stackSize / 1000f);
         qtty = Mathf.Min(dropSpec.stackSize, qtty);
         DropController.Instance.Drop(dropSpec, Job.Building.dropPoint.transform.position, qtty);
-        Debug.Log($"{stats.name} dropped {grassHarvested} grass as {qtty} wheat");
+        Think($"I dropped {grassHarvested} grass as {qtty} wheat");
         grassHarvested = 0f;
-
     }
 
     private bool FieldFinished()
