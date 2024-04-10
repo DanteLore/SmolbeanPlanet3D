@@ -59,8 +59,10 @@ public class SmolbeanTree : SmolbeanItem
         startRotation = transform.rotation;
     }
 
-    void FixedUpdate()
+    protected override void Update()
     {
+        base.Update();
+
         if(recoiling)
         {
             float t = (Time.fixedTime - recoilStart);
