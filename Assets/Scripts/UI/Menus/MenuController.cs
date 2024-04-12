@@ -14,6 +14,7 @@ public class MenuController : MonoBehaviour
 
     private Dictionary<KeyCode, string> hotkeyLookup;
     private SoundPlayer soundPlayer;
+    private bool closedThisFrame = false;
 
     void Awake()
     {
@@ -46,7 +47,7 @@ public class MenuController : MonoBehaviour
         {    
             CloseAll();
         }
-        else
+        else if(!closedThisFrame)
         {        
             // Check hotkeys
             foreach(KeyCode key in hotkeyLookup.Keys)
@@ -62,6 +63,8 @@ public class MenuController : MonoBehaviour
                 }
             }
         }
+
+        closedThisFrame = false;
     }
 
     public void ShowMenu(string menuName = "MainMenu")
@@ -99,6 +102,8 @@ public class MenuController : MonoBehaviour
         isVisible = false;
         GameStateManager.Instance.Resume();
         ToolbarController.Instance.ShowToolbar();
+
+        closedThisFrame = true;
     }
 
     public void Close(string name)

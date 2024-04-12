@@ -52,12 +52,14 @@ public class MapInteractionManager : MonoBehaviour
         var animalSelected = new AnimalSelectedState(this, selectionCursorPrefab);
         var buildingSelected = new BuildingSelectedState(this, selectionCursorPrefab);
 
+        AT(idle, KeyDown(Key.Escape));
+
         AT(idle, animalSelected, NewItemClicked<SmolbeanAnimal>());
         AT(animalSelected, animalSelected, NewItemClicked<SmolbeanAnimal>());
         AT(animalSelected, buildingSelected, NewItemClicked<SmolbeanBuilding>());
         AT(animalSelected, idle, MapClicked());
         AT(animalSelected, idle, NothingSelected());
-
+         
         AT(idle, buildingSelected, NewItemClicked<SmolbeanBuilding>());
         AT(buildingSelected, buildingSelected, NewItemClicked<SmolbeanBuilding>());
         AT(buildingSelected, animalSelected, NewItemClicked<SmolbeanAnimal>());
@@ -69,6 +71,7 @@ public class MapInteractionManager : MonoBehaviour
         Func<bool> MapClicked() => () => LeftButtonClicked && SelectedGameObject.layer == groundLayer;
         Func<bool> NewItemClicked<T>() => () => LeftButtonClicked && newObjectClicked && SelectedGameObject.GetComponent<T>() != null;
         Func<bool> NothingSelected() => () => selectedTransform == null;
+        Func<bool> KeyDown(Key key) => () => Keyboard.current[key].wasPressedThisFrame;
     }
 
     void Update()

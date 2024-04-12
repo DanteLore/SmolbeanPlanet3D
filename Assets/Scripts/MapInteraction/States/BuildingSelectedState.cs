@@ -37,7 +37,12 @@ public class BuildingSelectedState : IState
 
     private static Bounds GetBounds(GameObject building)
     {
-        var allBounds = building.transform.GetComponentsInChildren<Renderer>().Select(r => r.bounds).ToArray();
+        var allBounds = building.transform
+            .GetComponentsInChildren<Renderer>()
+            .Where(c => c.gameObject.activeInHierarchy)
+            .Where(c => c.GetComponent<ParticleSystem>() == null)
+            .Select(r => r.bounds)
+            .ToArray();
 
         var bounds = allBounds[0];
 
