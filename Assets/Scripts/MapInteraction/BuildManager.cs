@@ -1,7 +1,4 @@
-using System;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class BuildManager : MonoBehaviour
 {
@@ -15,29 +12,14 @@ public class BuildManager : MonoBehaviour
     public string widgetLayer = "Widgets";
     public string[] collisionLayers = { "Nature", "Buildings" };
     public ParticleSystem buildingPlacedParticleSystem;
-    public ParticleSystem buildingDeletedParticleSystem;
     public float allowedHeightDifferential = 0.2f;
     public float buildingMarginSize = 0.75f;
     public float cursorOffsetY = 2f;
 
-    private GridManager gridManager;
-
-    private GameObject mapCursor;
-    private Vector2Int currentSquare;
-    private Vector3 center;
-    private bool okToBuild;
     public bool IsBuilding { get; private set; }
     public bool IsEditing { get; private set; }
 
     public SmolbeanBuilding EditTarget { get; private set; }
-
-    private GameObject cursor;
-    private int selectedBuildingIndex;
-    private SoundPlayer soundPlayer;
-    private GameObject spawnPointX;
-    private GameObject dropPointX;
-    private GameObject workingAreaMarker;
-    private bool isLocked;
 
     void Awake()
     {
@@ -45,90 +27,6 @@ public class BuildManager : MonoBehaviour
             Destroy(this);
         else   
             Instance = this;
-    }
-
-    void Start()
-    {
-        gridManager = FindFirstObjectByType<GridManager>();
-        currentSquare = new Vector2Int(int.MaxValue, int.MaxValue);
-        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
-
-        mapCursor = Instantiate(mapCursorPrefab, Vector3.zero, Quaternion.identity, transform.parent);
-        mapCursor.SetActive(false);
-
-        GameStateManager.Instance.GamePauseStateChanged += GamePauseStateChanged;
-    }
-
-    public void BeginBuild(BuildingSpec spec)
-    {
-        if (IsEditing)
-            EndEdit();
-
-        selectedBuildingIndex = Array.IndexOf(BuildingController.Instance.buildings, spec);
-        IsBuilding = true;
-    }
-
-    public void EndBuild()
-    {
-        IsBuilding = false;
-        mapCursor.SetActive(false);
-    }
-
-    public void Lock()
-    {
-        isLocked = true;
-    }
-
-    public void Unlock()
-    {
-        isLocked = false;
-
-        if (EditTarget is ResourceCollectionBuilding rcb)
-        {
-            workingAreaMarker.transform.position = rcb.collectionZoneCenter;
-        }
-    }
-
-    private void BeginEdit(SmolbeanBuilding clicked)
-    {
-        IsEditing = true;
-
-        EditTarget = clicked;
-
-        cursor = Instantiate(selectionCursorPrefab, clicked.transform);
-        var pos = cursor.transform.position;
-        float y = GetBounds(clicked).max.y + cursorOffsetY;
-        pos = new Vector3(pos.x, y, pos.z);
-        cursor.transform.position = pos;
-
-        var spawnPos = clicked.spawnPoint.transform.position;
-        var dropPos = clicked.dropPoint.transform.position;
-        spawnPointX = Instantiate(spawnPointMarkerPrefab, clicked.spawnPoint.transform);
-
-        if (Vector3.SqrMagnitude(spawnPos - dropPos) >= 4f)
-            dropPointX = Instantiate(spawnPointMarkerPrefab, clicked.dropPoint.transform);
-
-        if(clicked is ResourceCollectionBuilding rcb)
-        {
-            workingAreaMarker = Instantiate(circularAreaMarkerPrefab, clicked.transform);
-            workingAreaMarker.transform.position = rcb.collectionZoneCenter;
-            float s = rcb.collectionZoneRadius * 2;
-            workingAreaMarker.transform.localScale = new Vector3(s, 1000f, s);
-        }
-
-        MenuController.Instance.ShowMenu("BuildingDetailsMenu");
-    }
-
-    private static Bounds GetBounds(SmolbeanBuilding building)
-    {
-        var allBounds = building.transform.GetComponentsInChildren<Renderer>().Select(r => r.bounds).ToArray();
-
-        var bounds = allBounds[0];
-
-        for (int i = 1; i < allBounds.Length; i++)
-            bounds.Encapsulate(allBounds[i]);
-
-        return bounds;
     }
 
     private static SmolbeanBuilding GetBuilding(Transform target)
@@ -142,157 +40,6 @@ public class BuildManager : MonoBehaviour
             return null;
 
         return GetBuilding(target.parent);
-    }
-
-    private void EndEdit()
-    {
-        IsEditing = false;
-        EditTarget = null;
-        if(cursor) 
-            Destroy(cursor);
-        if(spawnPointX)
-            Destroy(spawnPointX);
-        if(dropPointX) 
-            Destroy(dropPointX);
-        if (workingAreaMarker)
-            Destroy(workingAreaMarker);
-
-        MenuController.Instance.Close("BuildingDetailsMenu");
-    }
-
-    public void ClearSelection()
-    {
-        EndEdit();
-    }
-
-    // TODO:  The following three "Update" methods should be illegal.  This is a shameful implementation of a state machine
-    //        and if I weren't so tired of this code, I'd do some kind of massive refactor.
-    //        as is stands though, just gonna leave it for Future Dan(tm) to sort out!
-
-    // Future Dan(tm) refactored out the building controller stuff to it's own file, so this mess is just the building placement
-    // logic now - which is still a mess.  Good luck, Future Dan(tm)
-
-    void Update()
-    {
-        return; // Disabled for refactor
-
-        // Over UI
-        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
-            return;
-
-        if (isLocked)
-            return;
-
-        if (!GameStateManager.Instance.IsStarted)
-            return;
-
-        if (IsBuilding)
-            UpdateBuildMode();
-        else 
-            UpdateSelectBuildingMode();
-    }
-
-    private void GamePauseStateChanged(object sender, bool isPaused)
-    {
-        if (isPaused)
-        {
-            EndEdit();
-            EndBuild();
-        }
-    }
-
-    private void UpdateSelectBuildingMode()
-    {
-        if (!Mouse.current.leftButton.wasPressedThisFrame)
-            return;
-
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        bool hitSomething = Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(buildingLayer, widgetLayer));
-
-        if(hitSomething && hitInfo.transform.gameObject.layer == LayerMask.NameToLayer(widgetLayer))
-        {
-            // If we hit a widget, do nothing here
-            return;
-        }
-
-        if (!hitSomething)
-        {
-            if (IsEditing)
-                EndEdit();
-            return;
-        }
-
-        var clicked = GetBuilding(hitInfo.transform);
-        if (IsEditing && clicked != EditTarget)
-        {
-            EndEdit();
-            BeginEdit(clicked);
-        }
-        else if(!IsEditing && hitSomething)
-        {
-            BeginEdit(clicked);
-        }
-    }
-
-    private void UpdateBuildMode()
-    {
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (!Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(groundLayer)))
-        {
-            mapCursor.SetActive(false);
-            return;
-        }
-
-        Vector2Int newSquare = gridManager.GetGameSquareFromWorldCoords(hitInfo.point);
-
-        bool mouseDown = Mouse.current.leftButton.wasPressedThisFrame;
-
-        if (mouseDown && okToBuild)
-        {
-            BuildingController.Instance.PlaceBuilding(center, selectedBuildingIndex);
-
-            soundPlayer.Play("Thud");
-            Instantiate(buildingPlacedParticleSystem, center, Quaternion.identity);
-
-            EndBuild();
-        }
-        else if (newSquare != currentSquare)
-        {
-            currentSquare = newSquare;
-
-            Rect squareBounds = gridManager.GetSquareBounds(currentSquare.x, currentSquare.y);
-            var prefab = BuildingController.Instance.buildings[selectedBuildingIndex].prefab;
-            Bounds buildingBounds = prefab.GetComponentInChildren<MeshRenderer>().bounds;
-
-            for(int i = 0; i < prefab.transform.childCount; i++)
-                buildingBounds.Encapsulate(prefab.transform.GetChild(i).position);
-            buildingBounds.Expand(buildingMarginSize);
-
-            float worldX = squareBounds.center.x;
-            float worldZ = squareBounds.center.y;
-            float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
-
-            Bounds bounds = new(squareBounds.center, buildingBounds.size);
-
-            if (!float.IsNaN(worldY))
-            {
-                center = new Vector3(worldX, worldY, worldZ);
-                okToBuild = CheckFlat(bounds) && CheckEmpty(center);
-
-                Color color = okToBuild ? Color.blue : Color.red;
-                mapCursor.transform.position = center;
-                mapCursor.GetComponent<Renderer>().material.SetColor("_baseColor", color);
-                mapCursor.SetActive(true);
-            }
-        }
-    }
-
-    public void DeleteTargetBuilding()
-    {
-        Instantiate(buildingDeletedParticleSystem, EditTarget.transform.position, EditTarget.transform.rotation);
-        Destroy(EditTarget.gameObject); 
-        soundPlayer.Play("Demolish");
-        EndEdit();
     }
 
     public SmolbeanBuilding CompleteBuild(BuildingSite site)
@@ -309,59 +56,5 @@ public class BuildManager : MonoBehaviour
 
         DestroyImmediate(site.gameObject);
         return BuildingController.Instance.InstantiateBuilding(saveData);
-    }
-
-    private bool CheckEmpty(Vector3 center)
-    {
-        var halfExtents = new Vector3(gridManager.tileSize / 2.0f, gridManager.tileSize / 2.0f, gridManager.tileSize / 2.0f);
-        var objects = Physics.OverlapBox(center, halfExtents, Quaternion.identity, LayerMask.GetMask(collisionLayers));
-        return objects.Length == 0;
-    }
-
-    private bool CheckFlat(Bounds bounds)
-    {
-        float rayStartHeight = 10000f;
-        int groundMask = LayerMask.GetMask(groundLayer);
-
-        var ray0 = new Ray(new Vector3(bounds.center.x, rayStartHeight, bounds.center.y), Vector3.down);
-        if (!Physics.Raycast(ray0, out var hit0, float.PositiveInfinity, groundMask))
-            return false;
-        //Debug.Log("Hit 0: " + hit0.point);
-
-        float height = hit0.point.y;
-
-        var ray1 = new Ray(new Vector3(bounds.min.x, rayStartHeight, bounds.min.y), Vector3.down);
-        if (!Physics.Raycast(ray1, out var hit1, float.PositiveInfinity, groundMask))
-            return false;
-        //Debug.Log("Hit 1: " + hit1.point);
-
-        if (Mathf.Abs(hit1.point.y - height) > allowedHeightDifferential)
-            return false;
-
-        var ray2 = new Ray(new Vector3(bounds.max.x, rayStartHeight, bounds.min.y), Vector3.down);
-        if(!Physics.Raycast(ray2, out var hit2, float.PositiveInfinity, groundMask))
-            return false;
-        //Debug.Log("Hit 2: " + hit2.point);
-
-        if (Mathf.Abs(hit2.point.y - height) > allowedHeightDifferential)
-            return false;
-
-        var ray3 = new Ray(new Vector3(bounds.min.x, rayStartHeight, bounds.max.y), Vector3.down);
-        if(!Physics.Raycast(ray3, out var hit3, float.PositiveInfinity, groundMask))
-            return false;
-        //Debug.Log("Hit 3: " + hit3.point);
-
-        if (Mathf.Abs(hit3.point.y - height) > allowedHeightDifferential)
-            return false;
-
-        var ray4 = new Ray(new Vector3(bounds.max.x, rayStartHeight, bounds.max.y), Vector3.down);
-        if(!Physics.Raycast(ray4, out var hit4, float.PositiveInfinity, groundMask))
-            return false;
-        //Debug.Log("Hit 4: " + hit4.point);
-
-        if (Mathf.Abs(hit4.point.y - height) > allowedHeightDifferential)
-            return false;
-
-        return true;
     }
 }

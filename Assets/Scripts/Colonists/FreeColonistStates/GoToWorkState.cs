@@ -9,8 +9,11 @@ public class GoToWorkState : IState
 
     public void OnEnter()
     {
-        colonist.Think($"Heading to work at {colonist.Job.Building.name}");
-        colonist.target = colonist.Job.Building.spawnPoint.transform.position;
+        if (colonist.Job != null && colonist.Job.Building != null)
+        {
+            colonist.Think($"Heading to work at {colonist.Job.Building.name}");
+            colonist.target = colonist.Job.Building.spawnPoint.transform.position;
+        }
     }
 
     public void OnExit()

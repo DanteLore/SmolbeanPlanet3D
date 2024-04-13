@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 public class MapInteractionManager : MonoBehaviour
 {
     public static MapInteractionManager Instance;
+    private GridManager gridManager;
+    private SoundPlayer soundPlayer;
     private StateMachine stateMachine;
 
     protected void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
@@ -17,7 +19,12 @@ public class MapInteractionManager : MonoBehaviour
     public string buildingLayerName = "Buildings";
     public string dropLayerName = "Drops";
 
+    public string[] buildCollisionLayers = new string[] { "Nature", "Buildings" };
+
     public GameObject selectionCursorPrefab;
+    public GameObject buildingPlacementCursorPrefab;
+    public GameObject spawnPointMarkerPrefab;
+    public GameObject circularAreaMarkerPrefab;
 
     private LayerMask allLayers;
     private int natureLayer;
@@ -28,10 +35,19 @@ public class MapInteractionManager : MonoBehaviour
     private bool newObjectClicked;
     private Transform selectedTransform;
     private Vector3 hitPoint;
+    private bool startBuild = false;
+    private BuildingSpec selectedBuildingSpec;
+    private bool overMenu;
+    private bool cancelled = false;
+    private Vector3 selectedPoint;
 
     public Transform SelectedTransform { get { return selectedTransform; } }
+    public Vector3 HitPoint { get { return hitPoint; } }
+    public bool IsOverMap { get { return !overMenu && SelectedGameObject != null && SelectedGameObject.layer == groundLayer; } }
+    public BuildingSpec SelectedBuildingSpec { get { return selectedBuildingSpec; } }
+    public Vector3 SelectedPoint {  get { return selectedPoint; } }
 
-    private GameObject SelectedGameObject { get { return selectedTransform.gameObject; } }
+    private GameObject SelectedGameObject { get { return selectedTransform != null ? selectedTransform.gameObject : null; } }
     protected bool LeftButtonClicked { get { return Mouse.current.leftButton.wasPressedThisFrame; } }
     protected bool RightButtonClicked { get { return Mouse.current.rightButton.wasPressedThisFrame; } }
 
@@ -45,12 +61,16 @@ public class MapInteractionManager : MonoBehaviour
 
     void Start()
     {
-        stateMachine = new StateMachine(shouldLog: true);
+        gridManager = FindFirstObjectByType<GridManager>();
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
+        stateMachine = new StateMachine(shouldLog: true, allowSelfTransitions: true);
         SetupLayerData();
 
         var idle = new MapIdleState();
         var animalSelected = new AnimalSelectedState(this, selectionCursorPrefab);
-        var buildingSelected = new BuildingSelectedState(this, selectionCursorPrefab);
+        var buildingSelected = new BuildingSelectedState(this, selectionCursorPrefab, spawnPointMarkerPrefab, circularAreaMarkerPrefab);
+        var chooseBuildingLocation = new ChooseBuildingLocationState(this, buildingPlacementCursorPrefab, gridManager, groundLayerName, buildCollisionLayers);
+        var placeBuilding = new PlaceBuildingState(this, soundPlayer);
 
         AT(idle, KeyDown(Key.Escape));
 
@@ -66,39 +86,72 @@ public class MapInteractionManager : MonoBehaviour
         AT(buildingSelected, idle, MapClicked());
         AT(buildingSelected, idle, NothingSelected());
 
-        stateMachine.SetStartState(idle);
+        AT(idle, chooseBuildingLocation, BuildButtonClicked());
+        AT(chooseBuildingLocation, chooseBuildingLocation, BuildButtonClicked());
+        AT(chooseBuildingLocation, idle, BuildCancelled());
+        AT(chooseBuildingLocation, placeBuilding, BuildTriggered());
+        AT(placeBuilding, idle, BuildComplete());
 
-        Func<bool> MapClicked() => () => LeftButtonClicked && SelectedGameObject.layer == groundLayer;
-        Func<bool> NewItemClicked<T>() => () => LeftButtonClicked && newObjectClicked && SelectedGameObject.GetComponent<T>() != null;
+        stateMachine.SetStartState(idle);
+        
+        Func<bool> BuildButtonClicked() => () => startBuild;
+        Func<bool> MapClicked() => () => !overMenu && LeftButtonClicked && SelectedGameObject.layer == groundLayer;
+        Func<bool> NewItemClicked<T>() => () => !overMenu && LeftButtonClicked && newObjectClicked && SelectedGameObject.GetComponent<T>() != null;
         Func<bool> NothingSelected() => () => selectedTransform == null;
         Func<bool> KeyDown(Key key) => () => Keyboard.current[key].wasPressedThisFrame;
+        Func<bool> BuildCancelled() => () => RightButtonClicked || cancelled;
+        Func<bool> BuildTriggered() => () => LeftButtonClicked && chooseBuildingLocation.okToBuild;
+        Func<bool> BuildComplete() => () => placeBuilding.IsComplete;
     }
 
     void Update()
     {
-        bool overMenu = EventSystem.current.IsPointerOverGameObject();
-
-        if (overMenu || GameStateManager.Instance.IsPaused)
+        if (GameStateManager.Instance.IsPaused)
             return;
 
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out var hit, float.MaxValue, allLayers))
-        {
-            hitPoint = hit.point;
+        overMenu = EventSystem.current.IsPointerOverGameObject();
 
-            if(LeftButtonClicked)
+        if (!overMenu)
+        {
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out var hit, float.MaxValue, allLayers))
             {
-                newObjectClicked = !ReferenceEquals(selectedTransform, hit.transform);
-                selectedTransform = hit.transform;
+                hitPoint = hit.point;
+
+                if (LeftButtonClicked)
+                {
+                    newObjectClicked = !ReferenceEquals(selectedTransform, hit.transform);
+                    selectedTransform = hit.transform;
+                }
             }
         }
 
         stateMachine.Tick();
+
+        // Clear single frame flags
+        startBuild = false;
+        cancelled = false;
     }
 
     public void ForceDeselect()
     {
         selectedTransform = null;
+    }
+
+    public void StartBuild(BuildingSpec spec)
+    {
+        startBuild = true;
+        selectedBuildingSpec = spec;
+    }
+
+    public void Cancel()
+    {
+        cancelled = true;
+    }
+
+    public void SetSelectedPoint(Vector3 point)
+    {
+        selectedPoint = point;
     }
 
     private void SetupLayerData()

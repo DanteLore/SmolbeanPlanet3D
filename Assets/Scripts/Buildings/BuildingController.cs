@@ -14,6 +14,10 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
     private GridManager gridManager;
     public string groundLayer = "Ground";
 
+    public ParticleSystem buildingDeletedParticleSystem;
+
+    private SoundPlayer soundPlayer;
+
     public IEnumerable<SmolbeanBuilding> Buildings
     {
         get
@@ -33,6 +37,7 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
     void Start()
     {
         gridManager = FindFirstObjectByType<GridManager>();
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
     }
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
@@ -142,5 +147,12 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
     public SmolbeanBuilding FindBuildingByName(string buildingName)
     {
         return GetComponentsInChildren<SmolbeanBuilding>().FirstOrDefault(b => b.name == buildingName);
+    }
+
+    public void DeleteBuilding(GameObject target)
+    {
+        Instantiate(buildingDeletedParticleSystem, target.transform.position, target.transform.rotation);
+        Destroy(target);
+        soundPlayer.Play("Demolish");
     }
 }

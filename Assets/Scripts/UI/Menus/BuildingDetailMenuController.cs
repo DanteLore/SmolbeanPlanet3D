@@ -57,7 +57,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
     private void DeleteButtonClicked()
     {
         if (target)
-            BuildManager.Instance.DeleteTargetBuilding();
+            BuildingController.Instance.DeleteBuilding(target.gameObject);
     }
 
     private void PlaceWorkingAreaClicked()

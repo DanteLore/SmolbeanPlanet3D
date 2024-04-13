@@ -29,7 +29,6 @@ public class WorkingAreaPlacementManager : MonoBehaviour
         var s = building.collectionZoneRadius * 2;
         areaMarker.transform.localScale = new Vector3(s, 1000f, s);
         isEditing = true;
-        BuildManager.Instance.Lock();
     }
 
     private void Update()
@@ -59,6 +58,5 @@ public class WorkingAreaPlacementManager : MonoBehaviour
         isEditing = false;
         yield return new WaitForEndOfFrame();
         Destroy(areaMarker);
-        BuildManager.Instance.Unlock();
     }
 }

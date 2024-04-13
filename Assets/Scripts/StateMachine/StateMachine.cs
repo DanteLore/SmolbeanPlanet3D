@@ -7,6 +7,7 @@ public class StateMachine
 {
     private IState currentState;
     public bool shouldLog = false;
+    private readonly bool allowSelfTransitions;
     private readonly Dictionary<Type, Transition[]> transitions = new();
     private Transition[] currentTransitions = Array.Empty<Transition>();
 
@@ -26,9 +27,10 @@ public class StateMachine
         }
     }
 
-    public StateMachine(bool shouldLog = false)
+    public StateMachine(bool shouldLog = false, bool allowSelfTransitions = false)
     {
         this.shouldLog = shouldLog;
+        this.allowSelfTransitions = allowSelfTransitions;
     }
 
     public void Tick()
@@ -54,9 +56,8 @@ public class StateMachine
 
     private void SetState(IState state)
     {
-        // ALLOW SELF TRANSITIONS
-        //if(state == currentState)
-        //    return;
+        if(!allowSelfTransitions && state == currentState)
+            return;
 
         Log("Changed state to: " + state.GetType().Name);
 

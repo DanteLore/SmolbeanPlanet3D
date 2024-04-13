@@ -212,10 +212,10 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     {
         var pos = transform.position;
 
-        Vector3 v1 = new(pos.x, 0.0f, pos.z);
-        Vector3 v2 = new(dest.x, 0.0f, dest.z);
+        Vector2 v1 = new(pos.x,  pos.z);
+        Vector2 v2 = new(dest.x, dest.z);
 
-        return Vector3.SqrMagnitude(v1 - v2) < destinationThreshold * destinationThreshold;
+        return Vector2.SqrMagnitude(v1 - v2) < destinationThreshold * destinationThreshold;
     }
 
     public bool CloseEnoughTo(GameObject target, float destinationThreshold)
