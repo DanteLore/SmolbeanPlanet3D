@@ -26,6 +26,11 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
         }
     }
 
+    public IEnumerable<T> GetBuildingsOfType<T>() where T : SmolbeanBuilding
+    {
+        return GetComponentsInChildren<T>();
+    }
+
     void Awake()
     {
         if (Instance != null && Instance != this)

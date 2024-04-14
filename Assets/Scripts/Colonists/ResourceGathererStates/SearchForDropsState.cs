@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
 public class SearchForDropsState : IState
 {
-    private ResourceGatherer gatherer;
-    private string dropLayer;
+    private readonly ResourceGatherer gatherer;
+    private readonly string dropLayer;
 
     public SearchForDropsState(ResourceGatherer gatherer, string dropLayer)
     {
@@ -16,6 +14,7 @@ public class SearchForDropsState : IState
 
     public void OnEnter()
     {
+        gatherer.TargetDrop = null;
     }
 
     public void OnExit()

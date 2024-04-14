@@ -3,12 +3,15 @@ using UnityEngine;
 using System.Linq;
 using System;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class SearchForResourceState : IState
 {
-    private const float maxRadius = 496f;
+    private float maxRadius;
+    private Vector3 center;
     private readonly ResourceGatherer gatherer;
     private readonly string natureLayer;
+    private ResourceCollectionBuilding building;
     private float radius;
 
     public bool InProgress { get { return radius <= maxRadius; } }
@@ -21,7 +24,11 @@ public class SearchForResourceState : IState
 
     public void OnEnter()
     {
-        radius = 32f;
+        building = (ResourceCollectionBuilding)gatherer.Job.Building;
+        radius = Math.Min(building.collectionZoneRadius, 8f);
+        maxRadius = building.collectionZoneRadius;
+        center = building.collectionZoneCenter;
+        gatherer.Target = null;
     }
 
     public void OnExit()
@@ -30,7 +37,6 @@ public class SearchForResourceState : IState
 
     public void Tick()
     {
-
         if (!gatherer.Target)
             FindTarget();
     }
@@ -38,10 +44,10 @@ public class SearchForResourceState : IState
     private void FindTarget()
     {
         var target = GetTargets()
-                                .Take(10)
                                 .Where(IsOnNavMesh)
+                                .Take(10)
                                 .ToList()
-                                .OrderBy(_ => Guid.NewGuid())
+                                .OrderBy(_ => Random.Range(0, 100))
                                 .FirstOrDefault();
 
         if (target)
@@ -51,20 +57,13 @@ public class SearchForResourceState : IState
     }
 
     private IEnumerable<GameObject> GetTargets()
-    {
-        var building = gatherer.Job.Building as ResourceCollectionBuilding;
-        if (building == null)
-            return Enumerable.Empty<GameObject>();
-        
-        Vector3 pos = building.collectionZoneCenter;
-        float radius = building.collectionZoneRadius;
-
-        var candidates = Physics.OverlapSphere(pos, radius, LayerMask.GetMask(natureLayer));
+    {   
+        var candidates = Physics.OverlapSphere(center, radius, LayerMask.GetMask(natureLayer));
 
         return candidates
             .Select(c => c.gameObject)
             .Where(go => go.GetComponent(gatherer.TargetType) != null)
-            .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - pos))
+            .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - center))
             .ToList();
     }
 
