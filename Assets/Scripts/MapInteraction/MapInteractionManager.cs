@@ -10,6 +10,8 @@ public class MapInteractionManager : MonoBehaviour
     private SoundPlayer soundPlayer;
     private StateMachine stateMachine;
 
+    public readonly MapInteractionData Data = new(); 
+
     protected void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
     protected void AT(IState to, Func<bool> condition) => stateMachine.AddAnyTransition(to, condition);
 
@@ -25,6 +27,7 @@ public class MapInteractionManager : MonoBehaviour
     public GameObject buildingPlacementCursorPrefab;
     public GameObject spawnPointMarkerPrefab;
     public GameObject circularAreaMarkerPrefab;
+    public GameObject buildingPlacedParticleSystem;
 
     private LayerMask allLayers;
     private int natureLayer;
@@ -32,22 +35,9 @@ public class MapInteractionManager : MonoBehaviour
     private int groundLayer;
     private int buildingLayer;
     private int dropLayer;
-    private bool newObjectClicked;
-    private Transform selectedTransform;
-    private Vector3 hitPoint;
-    private bool startBuild = false;
-    private BuildingSpec selectedBuildingSpec;
-    private bool overMenu;
-    private bool cancelled = false;
-    private Vector3 selectedPoint;
 
-    public Transform SelectedTransform { get { return selectedTransform; } }
-    public Vector3 HitPoint { get { return hitPoint; } }
-    public bool IsOverMap { get { return !overMenu && SelectedGameObject != null && SelectedGameObject.layer == groundLayer; } }
-    public BuildingSpec SelectedBuildingSpec { get { return selectedBuildingSpec; } }
-    public Vector3 SelectedPoint {  get { return selectedPoint; } }
+    public bool IsOverMap { get { return !Data.OverMenu && Data.SelectedGameObject != null && Data.SelectedGameObject.layer == groundLayer; } }
 
-    private GameObject SelectedGameObject { get { return selectedTransform != null ? selectedTransform.gameObject : null; } }
     protected bool LeftButtonClicked { get { return Mouse.current.leftButton.wasPressedThisFrame; } }
     protected bool RightButtonClicked { get { return Mouse.current.rightButton.wasPressedThisFrame; } }
 
@@ -67,10 +57,10 @@ public class MapInteractionManager : MonoBehaviour
         SetupLayerData();
 
         var idle = new MapIdleState();
-        var animalSelected = new AnimalSelectedState(this, selectionCursorPrefab);
-        var buildingSelected = new BuildingSelectedState(this, selectionCursorPrefab, spawnPointMarkerPrefab, circularAreaMarkerPrefab);
-        var chooseBuildingLocation = new ChooseBuildingLocationState(this, buildingPlacementCursorPrefab, gridManager, groundLayerName, buildCollisionLayers);
-        var placeBuilding = new PlaceBuildingState(this, soundPlayer);
+        var animalSelected = new AnimalSelectedState(Data, selectionCursorPrefab);
+        var buildingSelected = new BuildingSelectedState(Data, selectionCursorPrefab, spawnPointMarkerPrefab, circularAreaMarkerPrefab);
+        var chooseBuildingLocation = new ChooseBuildingLocationState(Data, transform, buildingPlacementCursorPrefab, gridManager, groundLayerName, buildCollisionLayers);
+        var placeBuilding = new PlaceBuildingState(Data, soundPlayer, buildingPlacedParticleSystem);
 
         AT(idle, KeyDown(Key.Escape));
 
@@ -94,12 +84,12 @@ public class MapInteractionManager : MonoBehaviour
 
         stateMachine.SetStartState(idle);
         
-        Func<bool> BuildButtonClicked() => () => startBuild;
-        Func<bool> MapClicked() => () => !overMenu && LeftButtonClicked && SelectedGameObject.layer == groundLayer;
-        Func<bool> NewItemClicked<T>() => () => !overMenu && LeftButtonClicked && newObjectClicked && SelectedGameObject.GetComponent<T>() != null;
-        Func<bool> NothingSelected() => () => selectedTransform == null;
+        Func<bool> BuildButtonClicked() => () => Data.StartBuild;
+        Func<bool> MapClicked() => () => !Data.OverMenu && LeftButtonClicked && Data.SelectedGameObject.layer == groundLayer;
+        Func<bool> NewItemClicked<T>() where T : MonoBehaviour => () => Data.NewObjectClicked && Data.SelectedGameObject.GetComponent<T>() != null;
+        Func<bool> NothingSelected() => () => Data.SelectedTransform == null;
         Func<bool> KeyDown(Key key) => () => Keyboard.current[key].wasPressedThisFrame;
-        Func<bool> BuildCancelled() => () => RightButtonClicked || cancelled;
+        Func<bool> BuildCancelled() => () => RightButtonClicked || Data.Cancelled;
         Func<bool> BuildTriggered() => () => LeftButtonClicked && chooseBuildingLocation.okToBuild;
         Func<bool> BuildComplete() => () => placeBuilding.IsComplete;
     }
@@ -109,49 +99,32 @@ public class MapInteractionManager : MonoBehaviour
         if (GameStateManager.Instance.IsPaused)
             return;
 
-        overMenu = EventSystem.current.IsPointerOverGameObject();
+        Data.OverMenu = EventSystem.current.IsPointerOverGameObject();
 
-        if (!overMenu)
+        if (!Data.OverMenu)
         {
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit, float.MaxValue, allLayers))
             {
-                hitPoint = hit.point;
+                Data.HitPoint = hit.point;
 
                 if (LeftButtonClicked)
                 {
-                    newObjectClicked = !ReferenceEquals(selectedTransform, hit.transform);
-                    selectedTransform = hit.transform;
+                    if (!ReferenceEquals(Data.SelectedTransform, hit.transform))
+                        Data.SetNewObjectClicked();
+                    Data.SelectedTransform = hit.transform;
                 }
             }
         }
 
         stateMachine.Tick();
 
-        // Clear single frame flags
-        startBuild = false;
-        cancelled = false;
+        Data.ClearSingleFrameFlags();
     }
 
     public void ForceDeselect()
     {
-        selectedTransform = null;
-    }
-
-    public void StartBuild(BuildingSpec spec)
-    {
-        startBuild = true;
-        selectedBuildingSpec = spec;
-    }
-
-    public void Cancel()
-    {
-        cancelled = true;
-    }
-
-    public void SetSelectedPoint(Vector3 point)
-    {
-        selectedPoint = point;
+        Data.SelectedTransform = null;
     }
 
     private void SetupLayerData()

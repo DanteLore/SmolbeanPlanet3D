@@ -95,6 +95,6 @@ public class BuildingSite : SmolbeanBuilding
         buildingInProgress = false;
         buildParticleSystem.Stop();
 
-        BuildManager.Instance.CompleteBuild(this);
+        BuildingController.Instance.CompleteBuild(this);
     }
 }

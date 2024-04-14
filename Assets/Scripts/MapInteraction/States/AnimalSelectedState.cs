@@ -2,19 +2,19 @@ using UnityEngine;
 
 public class AnimalSelectedState : IState
 {
-    private readonly MapInteractionManager parent;
+    private readonly MapInteractionData data;
     private readonly GameObject selectionCursorPrefab;
     private GameObject cursor;
 
-    public AnimalSelectedState(MapInteractionManager parent, GameObject selectionCursorPrefab)
+    public AnimalSelectedState(MapInteractionData data, GameObject selectionCursorPrefab)
     {
-        this.parent = parent;
+        this.data = data;
         this.selectionCursorPrefab = selectionCursorPrefab;
     }
 
     public void OnEnter()
     {
-        cursor = Object.Instantiate(selectionCursorPrefab, parent.SelectedTransform);
+        cursor = Object.Instantiate(selectionCursorPrefab, data.SelectedTransform);
         MenuController.Instance.ShowMenu("AnimalDetailsMenu");
     }
 

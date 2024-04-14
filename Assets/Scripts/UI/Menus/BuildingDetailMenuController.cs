@@ -4,7 +4,6 @@ using UnityEngine.UIElements;
 
 public class BuildingDetailsMenuController : BaseDetailsMenuController
 {
-    private BuildManager buildManager;
     private Button deleteButton;
     private Button rotateButton;
     private Button placeWorkingAreaButton;
@@ -12,8 +11,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
     protected override void OnEnable()
     {
         base.OnEnable();
-
-        buildManager = FindFirstObjectByType<BuildManager>();
+        
         deleteButton = document.rootVisualElement.Q<Button>("deleteButton");
         rotateButton = document.rootVisualElement.Q<Button>("rotateButton");
         placeWorkingAreaButton = document.rootVisualElement.Q<Button>("placeWorkingAreaButton");
@@ -22,7 +20,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
         rotateButton.clicked += RotateButtonClicked;
         placeWorkingAreaButton.clicked += PlaceWorkingAreaClicked;
 
-        target = MapInteractionManager.Instance.SelectedTransform;
+        target = MapInteractionManager.Instance.Data.SelectedTransform;
 
         Clear();
         UpdateControls();

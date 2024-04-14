@@ -66,12 +66,12 @@ public class BuildToolbarController : MonoBehaviour
     {
         soundPlayer.Play("Click");
         var spec = (BuildingSpec)((Button)eventBase.target).userData;
-        MapInteractionManager.Instance.StartBuild(spec);
+        MapInteractionManager.Instance.Data.SetStartBuild(spec);
     }
 
     private void MainMenuButtonClicked()
     {
-        MapInteractionManager.Instance.Cancel();
+        MapInteractionManager.Instance.Data.SetCancelled();
         ToolbarController.Instance.ShowToolbar();
     }
 }

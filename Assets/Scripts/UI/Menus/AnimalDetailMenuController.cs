@@ -15,7 +15,7 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
     {
         base.OnEnable();
 
-        target = MapInteractionManager.Instance.SelectedTransform;
+        target = MapInteractionManager.Instance.Data.SelectedTransform;
 
         Clear();
         DrawMenu();

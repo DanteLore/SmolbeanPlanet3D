@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BuildingSelectedState : IState
 {
-    private readonly MapInteractionManager parent;
+    private readonly MapInteractionData data;
     private readonly GameObject selectionCursorPrefab;
     private readonly GameObject spawnPointMarkerPrefab;
     private readonly GameObject circularAreaMarkerPrefab;
@@ -12,9 +12,9 @@ public class BuildingSelectedState : IState
     private GameObject dropPointX;
     private GameObject workingAreaMarker;
 
-    public BuildingSelectedState(MapInteractionManager parent, GameObject selectionCursorPrefab, GameObject spawnPointMarkerPrefab, GameObject circularAreaMarkerPrefab)
+    public BuildingSelectedState(MapInteractionData data, GameObject selectionCursorPrefab, GameObject spawnPointMarkerPrefab, GameObject circularAreaMarkerPrefab)
     {
-        this.parent = parent;
+        this.data = data;
         this.selectionCursorPrefab = selectionCursorPrefab;
         this.spawnPointMarkerPrefab = spawnPointMarkerPrefab;
         this.circularAreaMarkerPrefab = circularAreaMarkerPrefab;
@@ -22,8 +22,8 @@ public class BuildingSelectedState : IState
 
     public void OnEnter()
     {
-        var building = parent.SelectedTransform.gameObject.GetComponent<SmolbeanBuilding>();
-        cursor = Object.Instantiate(selectionCursorPrefab, parent.SelectedTransform);
+        var building = data.SelectedTransform.gameObject.GetComponent<SmolbeanBuilding>();
+        cursor = Object.Instantiate(selectionCursorPrefab, data.SelectedTransform);
         var pos = cursor.transform.position;
         float y = GetBounds(building.gameObject).max.y + 1f;
         pos = new Vector3(pos.x, y, pos.z);

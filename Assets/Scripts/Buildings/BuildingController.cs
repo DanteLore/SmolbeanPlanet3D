@@ -112,6 +112,22 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
         return InstantiateBuilding(saveData);
     }
 
+    public SmolbeanBuilding CompleteBuild(BuildingSite site)
+    {
+        BuildingObjectSaveData saveData = new()
+        {
+            positionX = site.transform.position.x,
+            positionY = site.transform.position.y,
+            positionZ = site.transform.position.z,
+            rotationY = site.transform.rotation.eulerAngles.y,
+            prefabIndex = site.PrefabIndex,
+            complete = true
+        };
+
+        DestroyImmediate(site.gameObject);
+        return InstantiateBuilding(saveData);
+    }
+
     public SmolbeanBuilding InstantiateBuilding(BuildingObjectSaveData saveData)
     {
         var pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);

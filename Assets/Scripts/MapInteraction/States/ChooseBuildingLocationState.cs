@@ -3,8 +3,8 @@ using UnityEngine;
 public class ChooseBuildingLocationState : IState
 {
     private const float allowedHeightDifferential = 0.2f;
-
-    private readonly MapInteractionManager mapInteractionManager;
+    private readonly MapInteractionData data;
+    private readonly Transform parent;
     private readonly GameObject buildingPlacementCursorPrefab;
     private readonly GridManager gridManager;
     private readonly string groundLayer;
@@ -16,13 +16,15 @@ public class ChooseBuildingLocationState : IState
     public bool okToBuild;
 
     public ChooseBuildingLocationState(
-        MapInteractionManager mapInteractionManager,
+        MapInteractionData data,
+        Transform parent,
         GameObject buildingPlacementCursorPrefab,
         GridManager gridManager,
         string groundLayer,
         string[] collisionLayers)
     {
-        this.mapInteractionManager = mapInteractionManager;
+        this.data = data;
+        this.parent = parent;
         this.buildingPlacementCursorPrefab = buildingPlacementCursorPrefab;
         this.gridManager = gridManager;
         this.groundLayer = groundLayer;
@@ -31,7 +33,7 @@ public class ChooseBuildingLocationState : IState
 
     public void OnEnter()
     {
-        cursor = Object.Instantiate(buildingPlacementCursorPrefab, mapInteractionManager.HitPoint, Quaternion.identity, mapInteractionManager.transform);
+        cursor = Object.Instantiate(buildingPlacementCursorPrefab, data.HitPoint, Quaternion.identity, parent);
     }
 
     public void OnExit()
@@ -55,7 +57,7 @@ public class ChooseBuildingLocationState : IState
             currentSquare = newSquare;
 
             Rect squareBounds = gridManager.GetSquareBounds(currentSquare.x, currentSquare.y);
-            var prefab = mapInteractionManager.SelectedBuildingSpec.prefab;
+            var prefab = data.SelectedBuildingSpec.prefab;
             Bounds buildingBounds = prefab.GetComponentInChildren<MeshRenderer>().bounds;
 
             for (int i = 0; i < prefab.transform.childCount; i++)
@@ -77,7 +79,7 @@ public class ChooseBuildingLocationState : IState
                 cursor.transform.position = center;
                 cursor.GetComponent<Renderer>().material.SetColor("_baseColor", color);
                 cursor.SetActive(true);
-                mapInteractionManager.SetSelectedPoint(center);
+                data.SelectedPoint = center;
             }
         }
     }

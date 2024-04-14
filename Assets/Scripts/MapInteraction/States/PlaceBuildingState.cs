@@ -1,21 +1,26 @@
+using UnityEngine;
+
 public class PlaceBuildingState : IState
 {
-    private readonly MapInteractionManager mapInteractionManager;
+    private readonly MapInteractionData data;
     private readonly SoundPlayer soundPlayer;
+    private readonly GameObject buildingPlacedParticleSystem;
 
     public bool IsComplete { get { return true; } } // Seems daft, but in future it might take more than a frame!
 
-    public PlaceBuildingState(MapInteractionManager mapInteractionManager, SoundPlayer soundPlayer)
+    public PlaceBuildingState(MapInteractionData data, SoundPlayer soundPlayer, GameObject buildingPlacedParticleSystem)
     {
-        this.mapInteractionManager = mapInteractionManager;
+        this.data = data;
         this.soundPlayer = soundPlayer;
+        this.buildingPlacedParticleSystem = buildingPlacedParticleSystem;
     }
 
     public void OnEnter()
     {
-        BuildingController.Instance.PlaceBuilding(mapInteractionManager.SelectedPoint, mapInteractionManager.SelectedBuildingSpec);
+        Vector3 pos = data.SelectedPoint;
+        BuildingController.Instance.PlaceBuilding(pos, data.SelectedBuildingSpec);
         soundPlayer.Play("Thud");
-        //Instantiate(buildingPlacedParticleSystem, center, Quaternion.identity);
+        Object.Instantiate(buildingPlacedParticleSystem, pos, Quaternion.identity);
     }
 
     public void OnExit()
