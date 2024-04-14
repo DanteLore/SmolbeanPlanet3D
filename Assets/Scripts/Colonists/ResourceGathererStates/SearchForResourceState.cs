@@ -44,11 +44,11 @@ public class SearchForResourceState : IState
     private void FindTarget()
     {
         var target = GetTargets()
-                                .Where(IsOnNavMesh)
-                                .Take(10)
-                                .ToList()
-                                .OrderBy(_ => Random.Range(0, 100))
-                                .FirstOrDefault();
+                        .Where(IsOnNavMesh)
+                        .Take(5)
+                        .ToList()
+                        .OrderBy(_ => Random.Range(0, 100))
+                        .FirstOrDefault();
 
         if (target)
             gatherer.Target = target;

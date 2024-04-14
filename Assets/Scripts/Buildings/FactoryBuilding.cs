@@ -5,9 +5,10 @@ using UnityEngine;
 public abstract class FactoryBuilding : SmolbeanBuilding
 {
     public Recipe recipe;
-    public bool IsFinished { get { return (Time.time  - startTime) >= recipe.craftingTime; } }
+    public bool IsFinished { get { return (Time.time - startTime) * Speed >= recipe.craftingTime; } }
     public bool IsReadyToStart { get; private set; }
     public bool IsOperating { get; private set; }
+    public float Speed { get; protected set; } = 1f;
 
     public int orderMultiplier = 3;
     public int ingredientDeliveryPriority = 8;

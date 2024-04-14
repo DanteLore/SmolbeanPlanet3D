@@ -24,7 +24,6 @@ public class FactoryWorkerDoJobState : IState
 
     public void OnEnter()
     {
-
         worker.Hide();
         soundPlayer.Play("Working");
 

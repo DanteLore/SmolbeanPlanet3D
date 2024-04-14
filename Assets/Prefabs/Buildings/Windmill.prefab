@@ -60,11 +60,12 @@ MonoBehaviour:
   recipe: {fileID: 11400000, guid: 3b02da1e985444ce1aed0482ea85b72c, type: 2}
   orderMultiplier: 3
   ingredientDeliveryPriority: 8
-  sailRotationsPerSecond: 0.05
+  sailRotationsPerSecond: 0.02
   sail: {fileID: 1426347775242750963}
   mainBody: {fileID: 547174497880113516}
-  flag: {fileID: 0}
   maxBodyRotationDegreesPerSecond: 5
+  heightAtWhichMaxSpeed: 30
+  maxSpeed: 4
 --- !u!65 &-1531457064113025235
 BoxCollider:
   m_ObjectHideFlags: 0
