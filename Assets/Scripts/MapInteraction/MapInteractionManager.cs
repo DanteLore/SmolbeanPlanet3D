@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class MapInteractionManager : MonoBehaviour
@@ -10,7 +9,7 @@ public class MapInteractionManager : MonoBehaviour
     private SoundPlayer soundPlayer;
     private StateMachine stateMachine;
 
-    public readonly MapInteractionData Data = new(); 
+    public readonly MapInteractionData Data = new();
 
     protected void AT(IState from, IState to, Func<bool> condition) => stateMachine.AddTransition(from, to, condition);
     protected void AT(IState to, Func<bool> condition) => stateMachine.AddAnyTransition(to, condition);
@@ -21,25 +20,12 @@ public class MapInteractionManager : MonoBehaviour
     public string buildingLayerName = "Buildings";
     public string dropLayerName = "Drops";
 
-    public string[] buildCollisionLayers = new string[] { "Nature", "Buildings" };
-
     public GameObject selectionCursorPrefab;
     public GameObject buildingPlacementCursorPrefab;
     public GameObject spawnPointMarkerPrefab;
     public GameObject circularAreaMarkerPrefab;
+    public GameObject selectedCircularAreaMarkerPrefab;
     public GameObject buildingPlacedParticleSystem;
-
-    private LayerMask allLayers;
-    private int natureLayer;
-    private int creatureLayer;
-    private int groundLayer;
-    private int buildingLayer;
-    private int dropLayer;
-
-    public bool IsOverMap { get { return !Data.OverMenu && Data.SelectedGameObject != null && Data.SelectedGameObject.layer == groundLayer; } }
-
-    protected bool LeftButtonClicked { get { return Mouse.current.leftButton.wasPressedThisFrame; } }
-    protected bool RightButtonClicked { get { return Mouse.current.rightButton.wasPressedThisFrame; } }
 
     void Awake()
     {
@@ -56,11 +42,12 @@ public class MapInteractionManager : MonoBehaviour
         stateMachine = new StateMachine(shouldLog: true, allowSelfTransitions: true);
         SetupLayerData();
 
-        var idle = new MapIdleState();
+        var idle = new MapInteractionIdleState(Data);
         var animalSelected = new AnimalSelectedState(Data, selectionCursorPrefab);
         var buildingSelected = new BuildingSelectedState(Data, selectionCursorPrefab, spawnPointMarkerPrefab, circularAreaMarkerPrefab);
-        var chooseBuildingLocation = new ChooseBuildingLocationState(Data, transform, buildingPlacementCursorPrefab, gridManager, groundLayerName, buildCollisionLayers);
+        var chooseBuildingLocation = new ChooseBuildingLocationState(Data, transform, buildingPlacementCursorPrefab, gridManager, groundLayerName, Data.BuildCollisionLayers);
         var placeBuilding = new PlaceBuildingState(Data, soundPlayer, buildingPlacedParticleSystem);
+        var chooseWorkingArea = new ChooseWorkingAreaState(Data, transform, selectedCircularAreaMarkerPrefab);
 
         AT(idle, KeyDown(Key.Escape));
 
@@ -69,7 +56,7 @@ public class MapInteractionManager : MonoBehaviour
         AT(animalSelected, buildingSelected, NewItemClicked<SmolbeanBuilding>());
         AT(animalSelected, idle, MapClicked());
         AT(animalSelected, idle, NothingSelected());
-         
+
         AT(idle, buildingSelected, NewItemClicked<SmolbeanBuilding>());
         AT(buildingSelected, buildingSelected, NewItemClicked<SmolbeanBuilding>());
         AT(buildingSelected, animalSelected, NewItemClicked<SmolbeanAnimal>());
@@ -82,58 +69,43 @@ public class MapInteractionManager : MonoBehaviour
         AT(chooseBuildingLocation, placeBuilding, BuildTriggered());
         AT(placeBuilding, idle, BuildComplete());
 
+        AT(buildingSelected, chooseWorkingArea, WorkingAreaButtonClicked());
+        AT(chooseWorkingArea, buildingSelected, WorkAreaPlacementFinished());
+
         stateMachine.SetStartState(idle);
-        
+
         Func<bool> BuildButtonClicked() => () => Data.StartBuild;
-        Func<bool> MapClicked() => () => !Data.OverMenu && LeftButtonClicked && Data.SelectedGameObject.layer == groundLayer;
+        Func<bool> MapClicked() => () => !Data.OverMenu && Data.LeftButtonClicked && Data.SelectedGameObject.layer == Data.GroundLayer;
         Func<bool> NewItemClicked<T>() where T : MonoBehaviour => () => Data.NewObjectClicked && Data.SelectedGameObject.GetComponent<T>() != null;
         Func<bool> NothingSelected() => () => Data.SelectedTransform == null;
         Func<bool> KeyDown(Key key) => () => Keyboard.current[key].wasPressedThisFrame;
-        Func<bool> BuildCancelled() => () => RightButtonClicked || Data.Cancelled;
-        Func<bool> BuildTriggered() => () => LeftButtonClicked && chooseBuildingLocation.okToBuild;
+        Func<bool> BuildCancelled() => () => Data.RightButtonClicked || Data.Cancelled;
+        Func<bool> BuildTriggered() => () => Data.LeftButtonClicked && chooseBuildingLocation.okToBuild;
         Func<bool> BuildComplete() => () => placeBuilding.IsComplete;
+        Func<bool> WorkingAreaButtonClicked() => () => Data.StartWorkAreaPlacement;
+        Func<bool> WorkAreaPlacementFinished() => () => Data.LeftButtonClicked;
     }
 
     void Update()
     {
-        if (GameStateManager.Instance.IsPaused)
-            return;
-
-        Data.OverMenu = EventSystem.current.IsPointerOverGameObject();
-
-        if (!Data.OverMenu)
-        {
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out var hit, float.MaxValue, allLayers))
-            {
-                Data.HitPoint = hit.point;
-
-                if (LeftButtonClicked)
-                {
-                    if (!ReferenceEquals(Data.SelectedTransform, hit.transform))
-                        Data.SetNewObjectClicked();
-                    Data.SelectedTransform = hit.transform;
-                }
-            }
-        }
-
-        stateMachine.Tick();
-
-        Data.ClearSingleFrameFlags();
-    }
-
-    public void ForceDeselect()
-    {
-        Data.SelectedTransform = null;
+        if (!GameStateManager.Instance.IsPaused)
+            stateMachine.Tick();
     }
 
     private void SetupLayerData()
     {
-        allLayers = LayerMask.GetMask(natureLayerName, creatureLayerName, groundLayerName, buildingLayerName, dropLayerName);
-        natureLayer = LayerMask.NameToLayer(natureLayerName);
-        creatureLayer = LayerMask.NameToLayer(creatureLayerName);
-        groundLayer = LayerMask.NameToLayer(groundLayerName);
-        buildingLayer = LayerMask.NameToLayer(buildingLayerName);
-        dropLayer = LayerMask.NameToLayer(dropLayerName);
+        Data.NatureLayerName = natureLayerName;
+        Data.CreatureLayerName = creatureLayerName;
+        Data.GroundLayerName = groundLayerName;
+        Data.BuildingLayerName = buildingLayerName;
+        Data.DropLayerName = dropLayerName;
+
+        Data.AllLayers = LayerMask.GetMask(natureLayerName, creatureLayerName, groundLayerName, buildingLayerName, dropLayerName);
+        Data.NatureLayer = LayerMask.NameToLayer(natureLayerName);
+        Data.CreatureLayer = LayerMask.NameToLayer(creatureLayerName);
+        Data.GroundLayer = LayerMask.NameToLayer(groundLayerName);
+        Data.BuildingLayer = LayerMask.NameToLayer(buildingLayerName);
+        Data.DropLayer = LayerMask.NameToLayer(dropLayerName);
+        Data.BuildCollisionLayers = new string[] { natureLayerName, buildingLayerName };
     }
 }

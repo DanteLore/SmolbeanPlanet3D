@@ -44,7 +44,7 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
     protected override void CloseButtonClicked()
     {
         soundPlayer.Play("Click");
-        MapInteractionManager.Instance.ForceDeselect();
+        MapInteractionManager.Instance.Data.ForceDeselect();
         MenuController.Instance.CloseAll();
     }
 

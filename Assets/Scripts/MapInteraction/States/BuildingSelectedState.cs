@@ -1,9 +1,8 @@
 using System.Linq;
 using UnityEngine;
 
-public class BuildingSelectedState : IState
+public class BuildingSelectedState : BaseMapInteractionState
 {
-    private readonly MapInteractionData data;
     private readonly GameObject selectionCursorPrefab;
     private readonly GameObject spawnPointMarkerPrefab;
     private readonly GameObject circularAreaMarkerPrefab;
@@ -12,17 +11,16 @@ public class BuildingSelectedState : IState
     private GameObject dropPointX;
     private GameObject workingAreaMarker;
 
-    public BuildingSelectedState(MapInteractionData data, GameObject selectionCursorPrefab, GameObject spawnPointMarkerPrefab, GameObject circularAreaMarkerPrefab)
+    public BuildingSelectedState(MapInteractionData data, GameObject selectionCursorPrefab, GameObject spawnPointMarkerPrefab, GameObject circularAreaMarkerPrefab) : base(data)
     {
-        this.data = data;
         this.selectionCursorPrefab = selectionCursorPrefab;
         this.spawnPointMarkerPrefab = spawnPointMarkerPrefab;
         this.circularAreaMarkerPrefab = circularAreaMarkerPrefab;
     }
 
-    public void OnEnter()
+    public override void OnEnter()
     {
-        var building = data.SelectedTransform.gameObject.GetComponent<SmolbeanBuilding>();
+        var building = data.Selected<SmolbeanBuilding>();
         cursor = Object.Instantiate(selectionCursorPrefab, data.SelectedTransform);
         var pos = cursor.transform.position;
         float y = GetBounds(building.gameObject).max.y + 1f;
@@ -47,7 +45,7 @@ public class BuildingSelectedState : IState
         MenuController.Instance.ShowMenu("BuildingDetailsMenu");
     }
 
-    public void OnExit()
+    public override void OnExit()
     {
         Object.Destroy(cursor);
         cursor = null;
@@ -57,11 +55,8 @@ public class BuildingSelectedState : IState
             Object.Destroy(dropPointX);
         if (workingAreaMarker)
             Object.Destroy(workingAreaMarker);
-        MenuController.Instance.Close("BuildingDetailsMenu");
-    }
 
-    public void Tick()
-    {
+        MenuController.Instance.Close("BuildingDetailsMenu");
     }
 
     private static Bounds GetBounds(GameObject building)

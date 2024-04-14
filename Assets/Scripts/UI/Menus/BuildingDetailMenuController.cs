@@ -35,7 +35,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
     protected override void CloseButtonClicked()
     {
         soundPlayer.Play("Click");
-        MapInteractionManager.Instance.ForceDeselect();
+        MapInteractionManager.Instance.Data.ForceDeselect();
         MenuController.Instance.CloseAll();
     }
 
@@ -60,7 +60,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
 
     private void PlaceWorkingAreaClicked()
     {
-        WorkingAreaPlacementManager.Instance.StartPlacement(target.GetComponent<ResourceCollectionBuilding>());
+        MapInteractionManager.Instance.Data.SetStartWorkAreaPlacement();
     }
 
     private void DrawMenu()

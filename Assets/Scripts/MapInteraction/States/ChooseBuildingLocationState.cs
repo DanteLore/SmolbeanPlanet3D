@@ -1,9 +1,8 @@
 using UnityEngine;
 
-public class ChooseBuildingLocationState : IState
+public class ChooseBuildingLocationState : BaseMapInteractionState
 {
     private const float allowedHeightDifferential = 0.2f;
-    private readonly MapInteractionData data;
     private readonly Transform parent;
     private readonly GameObject buildingPlacementCursorPrefab;
     private readonly GridManager gridManager;
@@ -22,8 +21,8 @@ public class ChooseBuildingLocationState : IState
         GridManager gridManager,
         string groundLayer,
         string[] collisionLayers)
+        : base(data)
     {
-        this.data = data;
         this.parent = parent;
         this.buildingPlacementCursorPrefab = buildingPlacementCursorPrefab;
         this.gridManager = gridManager;
@@ -31,18 +30,20 @@ public class ChooseBuildingLocationState : IState
         this.collisionLayers = collisionLayers;
     }
 
-    public void OnEnter()
+    public override void OnEnter()
     {
         cursor = Object.Instantiate(buildingPlacementCursorPrefab, data.HitPoint, Quaternion.identity, parent);
     }
 
-    public void OnExit()
+    public override void OnExit()
     {
         Object.Destroy(cursor);
     }
 
-    public void Tick()
+    public override void Tick()
     {
+        base.Tick();
+
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(groundLayer)))
         {
