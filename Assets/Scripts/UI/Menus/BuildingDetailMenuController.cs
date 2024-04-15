@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -91,6 +92,35 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
         var jobs = JobController.Instance.GetAllJobsForBuilding(building).ToArray();
         if (jobs.Length > 0)
             BuildJobs(mainScrollView, jobs);
+
+        var home = building.GetComponent<SmolbeanHome>();
+        if(home != null)
+            BuildResidents(mainScrollView, home);
+    }
+
+    private void BuildResidents(ScrollView mainScrollView, SmolbeanHome home)
+    {
+        Title(mainScrollView, "𐘦", "Residents");
+
+        var residentContainer = new VisualElement();
+        residentContainer.AddToClassList("residentContainer");
+        mainScrollView.Add(residentContainer);
+
+        foreach(var colonist in home.Colonists)
+        {
+            VisualElement residentRow = new();
+            residentRow.AddToClassList("residentRow");
+            residentContainer.Add(residentRow);
+
+            Button colonistButton = new();
+            colonistButton.style.backgroundColor = new Color(0, 0, 0, 0);
+            colonistButton.style.backgroundImage = colonist.species.thumbnail;
+            residentRow.Add(colonistButton);
+
+            Label colonistLabel = new();
+            colonistLabel.text = colonist.Stats.name;
+            residentRow.Add(colonistLabel);
+        }
     }
 
     private static void BuildRecipe(ScrollView mainScrollView, FactoryBuilding factory)

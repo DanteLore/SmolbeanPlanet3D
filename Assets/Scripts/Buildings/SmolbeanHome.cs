@@ -16,6 +16,8 @@ public class SmolbeanHome : MonoBehaviour
     private readonly List<SmolbeanColonist> colonists = new();
     public string BuildingName { get { return building.name; }}
 
+    public IEnumerable<SmolbeanColonist> Colonists { get { return colonists; } }
+
     private void Start()
     {
         building = GetComponent<SmolbeanBuilding>();

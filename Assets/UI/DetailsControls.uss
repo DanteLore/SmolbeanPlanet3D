@@ -1,6 +1,7 @@
 .ingredientContainer,
 .inventoryContainer,
-.recipeContainer
+.recipeContainer,
+.residentContainer
 {
     flex-direction: row;
     flex-wrap: wrap;
@@ -18,6 +19,7 @@
     margin-bottom: 20px;
 }
 
+.residentContainer Button,
 .ingredientContainer Button,
 .inventoryContainer Button,
 .recipeContainer Button
@@ -49,7 +51,8 @@
 
 .ingredientContainer Button:hover,
 .inventoryContainer Button:hover,
-.recipeContainer Button:hover
+.recipeContainer Button:hover,
+.residentContainer Button:hover
 {
     border-width: 1px;
     border-color: rgb(255, 255, 255);
@@ -107,7 +110,8 @@
 
 .fieldRow,
 .titleRow,
-.jobRow
+.jobRow,
+.residentRow
 {
     flex-direction: row;
     flex-grow: 1;
@@ -118,6 +122,8 @@
     min-width: 100%;
 }
 
+
+.residentContainer Label,
 .jobContainer Label
 {
     font-size: 10px;
