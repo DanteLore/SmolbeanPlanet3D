@@ -215,7 +215,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         Vector2 v1 = new(pos.x,  pos.z);
         Vector2 v2 = new(dest.x, dest.z);
 
-        return Vector2.Distance(v1, v2) <= destinationThreshold;
+        return Vector2.SqrMagnitude(v1 - v2) <= destinationThreshold * destinationThreshold;
     }
 
     public bool CloseEnoughTo(GameObject target, float destinationThreshold)
