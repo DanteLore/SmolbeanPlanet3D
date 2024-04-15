@@ -11,6 +11,7 @@ public abstract class WalkStateBase : IState
     private float lastMoved;
     private float originalAnimatorSpeed;
     protected bool navAgentResetEnabled = true;
+    protected float destSetAt;
       
     public float StuckTime { get { return Time.time - lastMoved; } }
 
@@ -27,6 +28,7 @@ public abstract class WalkStateBase : IState
     {
         navAgent.SetDestination(GetDestination());
         navAgent.isStopped = false;
+        destSetAt = Time.time;
 
         lastPosition = navAgent.transform.position;
         lastMoved = Time.time;
@@ -70,6 +72,13 @@ public abstract class WalkStateBase : IState
                 animator.SetBool("IsWalking", false);
 
             return;
+        }
+
+        if(time - destSetAt > 1f)
+        {
+            // This might happen if the destination has moved, for example if a building was rotated
+            navAgent.SetDestination(GetDestination());
+            destSetAt = time;
         }
 
         // Start walking
