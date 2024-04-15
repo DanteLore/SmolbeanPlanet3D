@@ -20,11 +20,10 @@ MonoBehaviour:
   instantBuild: 0
   ingredients:
   - item: {fileID: 11400000, guid: edeccd8bca67e4f46b70aeec6790c583, type: 2}
-    quantity: 3
-  - item: {fileID: 11400000, guid: 22c90a52242ea4c2cb1d26c0ecd7262e, type: 2}
-    quantity: 6
+    quantity: 10
   - item: {fileID: 11400000, guid: 0f9b0f898ed5a495aab57be747c4a3ac, type: 2}
     quantity: 6
   buildTime: 24
   showInToolbar: 1
   deleteAllowed: 1
+  jobSpecs: []

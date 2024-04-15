@@ -5,7 +5,7 @@ using System;
 
 public class PorterSearchForDropToCollectState : IState
 {
-    private const float maxRadius = 496f;
+    private const float maxRadius = 3200f;
 
     public bool InProgress { get { return radius <= maxRadius; } }
     private Porter porter;

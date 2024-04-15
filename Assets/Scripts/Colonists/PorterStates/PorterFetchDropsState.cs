@@ -18,7 +18,7 @@ public class PorterFetchDropsState : CompoundState
         AT(storeDrops, finished, InventoryIsEmpty());
 
         AT(walkToJobStart, finished, NoTargetDropAssigned()); // Drop picked up or deleted while I was en route, go home
-        AT(walkToJobStart, walkHome, () => walkToJobStart.StuckTime > 2f); // Stuck
+        AT(walkToJobStart, walkHome, () => walkToJobStart.StuckTime > 5f * Time.timeScale); // Stuck
 
         stateMachine.SetStartState(walkToJobStart);
 

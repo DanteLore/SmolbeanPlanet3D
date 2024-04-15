@@ -1,6 +1,6 @@
 public class PorterClaimDeliveryRequest : IState
 {
-    private Porter porter;
+    private readonly Porter porter;
     private readonly DeliveryManager deliveryManager;
 
     public PorterClaimDeliveryRequest(Porter porter, DeliveryManager deliveryManager)

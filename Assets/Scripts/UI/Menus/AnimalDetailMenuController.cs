@@ -78,6 +78,9 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
         if (colonist)
             DisplayColonistDetails(colonist);
 
+        if(!animal.Inventory.IsEmpty())
+            DisplayInventory(animal);
+
         thoughtsContainer = new();
         thoughtsContainer.AddToClassList("thoughtsContainer");
         document.rootVisualElement.Q<ScrollView>("mainScrollView").Add(thoughtsContainer);
@@ -161,6 +164,31 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
         Label jobLabel = new();
         jobLabel.text = colonist.Job.JobSpec.jobName;
         jobRow.Add(jobLabel);
+    }
+
+    private void DisplayInventory(SmolbeanAnimal animal)
+    {
+        VisualElement inventoryRow = new();
+        inventoryRow.AddToClassList("inventoryRow");
+        document.rootVisualElement.Q<ScrollView>("mainScrollView").Add(inventoryRow);
+
+        Label symbolLabel = new();
+        symbolLabel.text = "𐚱";
+        symbolLabel.AddToClassList("notoLinearA");
+        inventoryRow.Add(symbolLabel);
+
+        Label titleLabel = new();
+        titleLabel.text = "Inventory: ";
+        inventoryRow.Add(titleLabel);
+
+        foreach (var item in animal.Inventory.Totals)
+        {
+            Button button = new();
+            button.text = item.quantity.ToString();
+            button.style.backgroundColor = new Color(0, 0, 0, 0);
+            button.style.backgroundImage = item.dropSpec.thumbnail;
+            inventoryRow.Add(button);
+        }
     }
 
     private void UpdateValues()

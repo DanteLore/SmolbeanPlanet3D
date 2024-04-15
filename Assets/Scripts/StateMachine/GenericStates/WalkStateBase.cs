@@ -61,6 +61,8 @@ public abstract class WalkStateBase : IState
 
     public void Tick()
     {
+        var time = Time.time;
+
         // Not finished planning our route yet...
         if (navAgent.pathPending)
         {
@@ -75,7 +77,6 @@ public abstract class WalkStateBase : IState
             animator.SetBool("IsWalking", true);
 
         var pos = navAgent.transform.position;
-        var time = Time.time;
 
         if(animator != null && navAgent != null)
             animator.speed = Mathf.InverseLerp(0f, navAgent.speed, navAgent.velocity.magnitude);

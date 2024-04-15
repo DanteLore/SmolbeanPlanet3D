@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class Builder : SmolbeanColonist
 {
@@ -43,11 +44,11 @@ public class Builder : SmolbeanColonist
 
         Func<bool> JobTerminated() => () => Job.IsTerminated;
         Func<bool> IdleForAWhile() => () => idle.TimeIdle > 8f;
-        Func<bool> CloseEnoughToSite() => () => TargetBuilding != null && CloseEnoughTo(TargetBuilding.GetSpawnPoint(), 1f);
+        Func<bool> CloseEnoughToSite() => () => TargetBuilding != null && CloseEnoughTo(TargetBuilding.GetSpawnPoint(), 5f);
         Func<bool> TargetFound() => () => TargetBuilding != null;
         Func<bool> TargetNotFound() => () => TargetBuilding == null;
         Func<bool> CloseEnoughToHome() => () => CloseEnoughTo(Job.Building.spawnPoint, 2f);
         Func<bool> BuildingComplete() => () => TargetBuilding.IsComplete;
-        Func<bool> IsStuck() => () => walkToSite.StuckTime >= 2f;
+        Func<bool> IsStuck() => () => walkToSite.StuckTime >= 10f * Time.timeScale;
     }
 }

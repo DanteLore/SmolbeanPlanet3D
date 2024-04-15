@@ -215,7 +215,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         Vector2 v1 = new(pos.x,  pos.z);
         Vector2 v2 = new(dest.x, dest.z);
 
-        return Vector2.SqrMagnitude(v1 - v2) < destinationThreshold * destinationThreshold;
+        return Vector2.Distance(v1, v2) <= destinationThreshold;
     }
 
     public bool CloseEnoughTo(GameObject target, float destinationThreshold)
@@ -230,7 +230,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         // Otherwise...
         // This DOES need to be a sphere collision, rather than a standard distance check, because the object might be big and
         // it's potition might be a point right in it's centre.
-        var found = Physics.OverlapSphere(transform.position, destinationThreshold, LayerMask.GetMask(LayerMask.LayerToName(target.layer)));
+        var found = Physics.OverlapSphere(transform.position, destinationThreshold);
         return found.Any(c => c.gameObject == target);
     }
 

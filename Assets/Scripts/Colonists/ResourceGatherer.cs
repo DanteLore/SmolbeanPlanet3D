@@ -57,9 +57,9 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
 
         AT(giveUpJob, JobTerminated());
 
-        AT(walkToResource,  walkHome, () => walkToResource.StuckTime > 5f);
-        AT(walkToDrop,      walkHome, () => walkToDrop.StuckTime > 5f);
-        AT(walkToDropPoint, walkHome, () => walkToDropPoint.StuckTime > 5f);
+        AT(walkToResource,  walkHome, () => walkToResource.StuckTime > 10f * Time.timeScale);
+        AT(walkToDrop,      walkHome, () => walkToDrop.StuckTime > 10f * Time.timeScale);
+        AT(walkToDropPoint, walkHome, () => walkToDropPoint.StuckTime > 10f * Time.timeScale);
 
         AT(idle, searchForResources, ReadyToGo());
            
@@ -94,8 +94,8 @@ public abstract class ResourceGatherer : SmolbeanColonist, IGatherDrops, IReturn
         Func<bool> NoDropsFound() => () => TargetDrop == null;
         Func<bool> InventoryEmpty() => () => Inventory.IsEmpty();
         Func<bool> InventoryNotEmpty() => () => !Inventory.IsEmpty();
-        Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint, 0.5f);
-        Func<bool> IsAtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint, 0.5f);
+        Func<bool> IsAtSpawnPoint() => () => CloseEnoughTo(Job.Building.spawnPoint, 1f);
+        Func<bool> IsAtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint, 1f);
         Func<bool> ReadyToGo() => () => idle.TimeIdle >= idleTime && !DropPointFull();
     }
 
