@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class SmolbeanHome : MonoBehaviour
 
     private SmolbeanBuilding building;
     private readonly List<SmolbeanColonist> colonists = new();
+    public string BuildingName { get { return building.name; }}
 
     private void Start()
     {
@@ -41,5 +43,18 @@ public class SmolbeanHome : MonoBehaviour
     private bool SpawnPointEmpty()
     {
         return !Physics.CheckSphere(building.dropPoint.transform.position, 2f, LayerMask.GetMask(creatureLayer));
+    }
+
+    public void SwapColonist(SmolbeanColonist originalColonist, SmolbeanColonist newColonist)
+    {
+        colonists.Remove(originalColonist);
+        colonists.Add(newColonist);
+    }
+
+    public void AddColonist(SmolbeanColonist colonist)
+    {
+        Debug.Assert(colonists.Count < maxCapacity - 1, "No room for colonist");
+
+        colonists.Add(colonist);
     }
 }

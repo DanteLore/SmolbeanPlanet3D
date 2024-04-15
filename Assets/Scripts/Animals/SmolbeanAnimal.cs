@@ -146,7 +146,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
             Die(); 
     }
 
-    public void LoadFrom(AnimalSaveData saveData)
+    public virtual void LoadFrom(AnimalSaveData saveData)
     {
         speciesIndex = saveData.speciesIndex;
         prefabIndex = saveData.prefabIndex;
@@ -183,7 +183,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         return delta;
     }
 
-    public AnimalSaveData GetSaveData()
+    public virtual AnimalSaveData GetSaveData()
     {
         return new AnimalSaveData
         {

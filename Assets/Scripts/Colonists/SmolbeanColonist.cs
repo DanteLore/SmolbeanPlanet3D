@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,6 +20,9 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
             Job = originalColonist.Job;
             Job.Colonist = this;
         }
+        
+        Home = originalColonist.Home;
+        Home.SwapColonist(originalColonist, this);
     }
 
     protected override void Start()
@@ -45,6 +49,36 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
         {
             lastReportedPosition = transform.position;
             GroundWearManager.Instance.WalkedOn(transform.position);
+        }
+    }
+
+    public override AnimalSaveData GetSaveData()
+    {
+        return new ColonistSaveData
+        {
+            positionX = transform.position.x,
+            positionY = transform.position.y,
+            positionZ = transform.position.z,
+            rotationY = transform.rotation.eulerAngles.y,
+            speciesIndex = speciesIndex,
+            prefabIndex = prefabIndex,
+            stats = stats,
+            thoughts = Thoughts.ToArray(),
+            homeName = Home.BuildingName,
+        };
+    }
+
+    public override void LoadFrom(AnimalSaveData saveData)
+    {
+        base.LoadFrom(saveData);
+
+        if(saveData is ColonistSaveData colonistData)
+        {
+            // If we're being created by the AnimalController, it won't know what a colonist is, so the Home will be set later
+            // Not very neat, but I'm hanging onto the hope that colonists can continue to be treated as animals :S
+            string name = colonistData.homeName;
+            Home = BuildingController.Instance.FindBuildingByName(name).GetComponent<SmolbeanHome>();
+            Home.AddColonist(this);
         }
     }
 }
