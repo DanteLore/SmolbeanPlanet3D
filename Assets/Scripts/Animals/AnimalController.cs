@@ -101,13 +101,13 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         return GetComponentsInChildren<T>();
     }
 
-    public void CreateAnimal(AnimalSpec species, Vector3 pos)
+    public SmolbeanAnimal CreateAnimal(AnimalSpec species, Vector3 pos)
     {
         var animalData = GenerateAnimalData(pos, species);
-        InstantiateAnimal(animalData);
+        return InstantiateAnimal(animalData);
     }
 
-    private void InstantiateAnimal(AnimalSaveData saveData)
+    private SmolbeanAnimal InstantiateAnimal(AnimalSaveData saveData)
     {
         var spec = animalSpecs[saveData.speciesIndex];
         var prefabIndex = saveData.prefabIndex;
@@ -118,6 +118,8 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         animal.target = pos;
         animal.species = spec;
         animal.LoadFrom(saveData);
+
+        return animal;
     }
 
     public void SwitchAnimal(SmolbeanAnimal original, GameObject prefab)
@@ -166,7 +168,8 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
     public IEnumerator Load(SaveFileData data, string filename)
     {
         if (data.animalData != null)
-            data.animalData.ForEach(InstantiateAnimal);
+            foreach(var d in data.animalData)
+                InstantiateAnimal(d);
         
         return null;
     }

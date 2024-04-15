@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 292819486184734960}
   - component: {fileID: 2038859958326261303}
   - component: {fileID: 4569317360785493095}
+  - component: {fileID: 5652251506319075785}
   m_Layer: 8
   m_Name: Shipwreck
   m_TagString: Untagged
@@ -34,6 +35,7 @@ Transform:
   m_Children:
   - {fileID: 2276443798209477853}
   - {fileID: 2568138693603881852}
+  - {fileID: 1900425887331369804}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &292819486184734960
@@ -50,17 +52,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropLayer: Drops
   spawnPoint: {fileID: 3667666061171474278}
-  dropPoint: {fileID: 3667666061171474278}
+  dropPoint: {fileID: 5802716421774057644}
   wearPattern: 0
   wearScale: {x: 1, y: 1}
   building: {fileID: 2706048682174353356}
   itemDropRadius: 2
   itemDropHeight: 1
-  jobSpecs:
-  - {fileID: 11400000, guid: 96a3dcf7ab375428491aa2d8d994d645, type: 2}
-  - {fileID: 11400000, guid: ac9592754f44d4ee7947ef32af0a32aa, type: 2}
-  - {fileID: 11400000, guid: ac9592754f44d4ee7947ef32af0a32aa, type: 2}
-  - {fileID: 11400000, guid: ac9592754f44d4ee7947ef32af0a32aa, type: 2}
 --- !u!65 &2038859958326261303
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -98,6 +95,24 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0.28800002, y: 2.206, z: 0.305}
   m_TimeToStationary: 0.5
+--- !u!114 &5652251506319075785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028433529981818323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22ab8f2cf5ae74b68b4722421df3abd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colonistsToSpawn: 6
+  maxCapacity: 4
+  colonistSpec: {fileID: 11400000, guid: 9cc68d1bc4c7b41bcb45f3d19e0f784c, type: 2}
+  creatureLayer: Creatures
+  initialSpawnDelay: 2
+  intermediateSpawnDelay: 30
 --- !u!1 &2706048682174353356
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,6 +224,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.5, y: 0.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2328865976376160404}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5802716421774057644
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1900425887331369804}
+  m_Layer: 8
+  m_Name: DropPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1900425887331369804
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5802716421774057644}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.5, y: 0.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

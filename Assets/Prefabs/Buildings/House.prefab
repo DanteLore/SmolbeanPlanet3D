@@ -74,6 +74,7 @@ GameObject:
   - component: {fileID: 1034544405203028236}
   - component: {fileID: 4015589113625409301}
   - component: {fileID: 6884497547414095115}
+  - component: {fileID: 935752363583027349}
   m_Layer: 8
   m_Name: House
   m_TagString: Untagged
@@ -156,7 +157,22 @@ MonoBehaviour:
   building: {fileID: 8601801415115155774}
   itemDropRadius: 2
   itemDropHeight: 1
-  jobSpecs: []
+--- !u!114 &935752363583027349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8427047222086387538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22ab8f2cf5ae74b68b4722421df3abd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colonistsToSpawn: 4
+  maxCapacity: 4
+  colonistSpec: {fileID: 11400000, guid: 9cc68d1bc4c7b41bcb45f3d19e0f784c, type: 2}
+  creatureLayer: Creatures
 --- !u!1 &8601801415115155774
 GameObject:
   m_ObjectHideFlags: 0

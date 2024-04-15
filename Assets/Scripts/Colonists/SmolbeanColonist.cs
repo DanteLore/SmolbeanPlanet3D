@@ -6,6 +6,7 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
     private Vector3 lastReportedPosition;
 
     public Job Job { get; set; }
+    public SmolbeanHome Home { get; set; }
 
     public override void AdoptIdentity(SmolbeanAnimal original)
     {
