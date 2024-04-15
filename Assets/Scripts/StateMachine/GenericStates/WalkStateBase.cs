@@ -77,7 +77,9 @@ public abstract class WalkStateBase : IState
         if(time - destSetAt > 1f)
         {
             // This might happen if the destination has moved, for example if a building was rotated
-            navAgent.SetDestination(GetDestination());
+            Vector3 dest = GetDestination();
+            if (navAgent.destination != dest)
+                navAgent.SetDestination(dest);
             destSetAt = time;
         }
 
