@@ -75,19 +75,19 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
         return null;
     }
 
-    public SmolbeanBuilding PlaceBuilding(Vector3 pos, BuildingSpec spec)
+    public SmolbeanBuilding PlaceBuilding(Vector3 pos, float rotationY, BuildingSpec spec)
     {
-        return PlaceBuilding(pos, Array.IndexOf(buildings, spec));
+        return PlaceBuilding(pos, rotationY, Array.IndexOf(buildings, spec));
     }
 
-    public SmolbeanBuilding PlaceBuilding(Vector3 pos, int selectedBuildingIndex)
+    public SmolbeanBuilding PlaceBuilding(Vector3 pos, float rotationY, int selectedBuildingIndex)
     {
         BuildingObjectSaveData saveData = new()
         {
             positionX = pos.x,
             positionY = pos.y,
             positionZ = pos.z,
-            rotationY = 0,
+            rotationY = rotationY,
             prefabIndex = selectedBuildingIndex,
             complete = buildings[selectedBuildingIndex].instantBuild
         };

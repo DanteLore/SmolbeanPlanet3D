@@ -17,8 +17,13 @@ public class PlaceBuildingState : IState
 
     public void OnEnter()
     {
+        var cameraController = Object.FindFirstObjectByType<CameraController>(); // Probably a better way to find this ;)
+        float rotationY = cameraController.CameraRotationY;
+        rotationY += 180f; // Opposite
+        rotationY = Mathf.Round(rotationY / 90f) * 90f; // Round to nearest 90deg
+
         Vector3 pos = data.SelectedPoint;
-        BuildingController.Instance.PlaceBuilding(pos, data.SelectedBuildingSpec);
+        BuildingController.Instance.PlaceBuilding(pos, rotationY, data.SelectedBuildingSpec);
         soundPlayer.Play("Thud");
         Object.Instantiate(buildingPlacedParticleSystem, pos, Quaternion.identity);
     }

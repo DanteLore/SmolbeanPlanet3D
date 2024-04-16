@@ -32,6 +32,8 @@ public class CameraController : MonoBehaviour, IObjectGenerator
     public float minTilt = 10.0f;
     public float maxTilt = 80.0f;
 
+    public float CameraRotationY { get { return transform.rotation.eulerAngles.y; }}
+
     public float flySpeedMetresPerSec = 20f;
     public float zoomVectorMaxLength = 80f;
 
