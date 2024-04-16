@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +10,7 @@ public class SmolbeanHome : MonoBehaviour
     public string creatureLayer = "Creatures";
     public float initialSpawnDelay = 2f;
     public float intermediateSpawnDelay = 30f;
+    public ParticleSystem birthParticleSystem;
 
     private SmolbeanBuilding building;
     private readonly List<SmolbeanColonist> colonists = new();

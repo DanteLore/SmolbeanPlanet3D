@@ -104,6 +104,8 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
     public SmolbeanAnimal CreateAnimal(AnimalSpec species, Vector3 pos)
     {
         var animalData = GenerateAnimalData(pos, species);
+        if(species.birthParticleSystem)
+            Instantiate(species.birthParticleSystem, pos, Quaternion.identity);
         return InstantiateAnimal(animalData);
     }
 

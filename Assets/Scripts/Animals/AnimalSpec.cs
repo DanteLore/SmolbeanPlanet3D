@@ -7,6 +7,7 @@ public class AnimalSpec : ScriptableObject
     public string animalName;
     public int prefabIndex;
     public DropSpec dropSpec;
+    public GameObject birthParticleSystem;
     public GameObject deathParticleSystem;
     public GameObject sleepParticleSystem;
     public Texture2D thumbnail;

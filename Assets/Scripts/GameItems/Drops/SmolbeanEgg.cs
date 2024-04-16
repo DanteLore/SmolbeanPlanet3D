@@ -16,8 +16,6 @@ public class SmolbeanEgg : SmolbeanDrop
     private void Hatch()
     {
         AnimalController.Instance.CreateAnimal(species, transform.position);
-        Instantiate(species.eggLaidParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
-
         Destroy(gameObject);
     }
 
