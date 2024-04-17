@@ -38,7 +38,7 @@ public class MapGeneratorManager : MonoBehaviour
         MaxLevelNumber = gameMap.Max();
         GameMap = gameMap;
 
-        if(!Application.isEditor) // Bit hacky, but this runs in design mode too :(
+        if(Application.isPlaying) // Bit hacky, but this runs in design mode too :(
             GameStateManager.Instance.EndGame();
 
         Clear();

@@ -1,9 +1,7 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Collections;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 
 public class SmolbeanHome : MonoBehaviour
 {
@@ -33,7 +31,10 @@ public class SmolbeanHome : MonoBehaviour
     }
 
     private void OnDestroy()
-    {
+    {  
+        if(!GameStateManager.Instance.IsStarted)
+            return; // In the case where the map itself is being destroyed - e.g. new game or quit
+
         while(colonists.Count > 0)
         {
             var colonist = colonists[0];
