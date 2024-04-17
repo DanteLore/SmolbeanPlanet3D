@@ -55,8 +55,9 @@ public class SmolbeanHome : MonoBehaviour
 
     public void AddColonist(SmolbeanColonist colonist)
     {
-        Debug.Assert(colonists.Count < maxCapacity - 1, "No room for colonist");
-
-        colonists.Add(colonist);
+        if(colonists.Count < maxCapacity)
+            colonists.Add(colonist);
+        else
+            Debug.LogError($"Can not add additional colonist {colonist.Stats.name} to {building.name} because it's full");
     }
 }
