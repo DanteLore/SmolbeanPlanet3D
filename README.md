@@ -11,6 +11,14 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Charts as a form of procrastination
+
+Spent some spare time this week getting colonists to spawn out of houses - which is a key game feature.  You can now increase your population by building more houses.
+
+That was fun, but there was also a big chunk of debugging NavMeshAgents, annoying infinite loops and trivial details and corner cases that, this evening I decided to start playing with graphs.  So far, I have a rough sine wave and a better view of how far there is to go...
+
+![Screenshot](./Docs/Images/screenshot71.png)
+
 ## Work areas
 
 Resource collection buildings, like the Woodcutter, Stonecutter, Lookout and Farm now have a designated work area, which can be selected by the player.  So you can

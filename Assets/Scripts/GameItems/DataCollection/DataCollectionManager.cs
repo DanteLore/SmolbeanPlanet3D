@@ -4,22 +4,32 @@ using UnityEngine;
 
 public class DataCollectionManager : MonoBehaviour, IObjectGenerator
 {
+    public static DataCollectionManager Instance;
+
     public int Priority { get { return 500; } }
     public bool RunModeOnly { get { return true; } }
 
-    private readonly List<DataCollectionSeries> series = new ();
+    public List<DataCollectionSeries> Series {get; private set; } = new ();
+
+    private void Awake()
+    {
+        if(Instance != null && Instance != this)
+            Destroy(this);
+        else
+            Instance = this;
+    }
 
     public void Clear()
     {
         StopCoroutine(nameof(GetData));
 
-        series.Clear();
+        Series.Clear();
     }
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
         var sine = new DataCollectionSeries();
-        series.Add(sine);
+        Series.Add(sine);
         StartCoroutine(nameof(GetData));
         
         yield return null;
@@ -36,13 +46,15 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
 
     private IEnumerator GetData()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1f);
 
         while(true)
         {
-            series[0].AddValue(Mathf.Sin(Time.time / 60f));
+            float x = Mathf.Sin(Time.time / 10f);
+            Series[0].AddValue(x);
+            Debug.Log(x);
 
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(1f);
         }
     }
 }

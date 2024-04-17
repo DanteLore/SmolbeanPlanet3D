@@ -12,7 +12,10 @@ public class GraphMenuController : SmolbeanMenu
 
         var graphBox = document.rootVisualElement.Q<VisualElement>("graphBox");
 
-        var graph = new LineChart();
+        var graph = new LineChart
+        {
+            Series = DataCollectionManager.Instance.Series[0]
+        };
         graphBox.Add(graph);
     }
 }
