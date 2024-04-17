@@ -1,11 +1,15 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Assertions.Must;
 
 public class SmolbeanHome : MonoBehaviour
 {
     public int colonistsToSpawn = 4;
     public int maxCapacity = 4;
+    public bool unlimitedCapacity = false;
     public AnimalSpec colonistSpec;
     public string creatureLayer = "Creatures";
     public float initialSpawnDelay = 2f;
@@ -18,12 +22,36 @@ public class SmolbeanHome : MonoBehaviour
 
     public IEnumerable<SmolbeanColonist> Colonists { get { return colonists; } }
 
+    public bool HasVacancy { get { return unlimitedCapacity || colonists.Count < maxCapacity; }}
+
     private void Start()
     {
         building = GetComponent<SmolbeanBuilding>();
         Debug.Assert(building != null, "A home must be a building!");
 
         StartCoroutine(nameof(CreateColonists));
+    }
+
+    private void OnDestroy()
+    {
+        foreach(var colonist in colonists)
+        {
+            var newHome = FindNewHome();
+            colonist.Home = newHome;
+            newHome.AddColonist(colonist);
+        }
+    }
+
+    private SmolbeanHome FindNewHome()
+    {
+        var newHome = BuildingController.Instance.GetAllHomes()
+            .Where(h => h.HasVacancy)
+            .Where(h => h.GetComponent<Shipwreck>() == null) // Try houses first
+            .OrderBy(h => Vector3.SqrMagnitude(h.transform.position - transform.position))
+            .FirstOrDefault();
+
+        // Default to shipwreck if no other homes found
+        return newHome != null ? newHome : ShipwreckManager.Instance.Shipwreck.GetComponent<SmolbeanHome>();
     }
 
     private IEnumerator CreateColonists()
@@ -55,7 +83,7 @@ public class SmolbeanHome : MonoBehaviour
 
     public void AddColonist(SmolbeanColonist colonist)
     {
-        if(colonists.Count < maxCapacity)
+        if(HasVacancy)
             colonists.Add(colonist);
         else
             Debug.LogError($"Can not add additional colonist {colonist.Stats.name} to {building.name} because it's full");

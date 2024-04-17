@@ -31,6 +31,11 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
         return GetComponentsInChildren<T>();
     }
 
+    public IEnumerable<SmolbeanHome> GetAllHomes()
+    {
+        return GetComponentsInChildren<SmolbeanHome>();
+    }
+
     void Awake()
     {
         if (Instance != null && Instance != this)

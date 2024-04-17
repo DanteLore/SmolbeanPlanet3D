@@ -108,11 +108,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colonistsToSpawn: 6
-  maxCapacity: 6
+  maxCapacity: 0
+  unlimitedCapacity: 1
   colonistSpec: {fileID: 11400000, guid: 9cc68d1bc4c7b41bcb45f3d19e0f784c, type: 2}
   creatureLayer: Creatures
   initialSpawnDelay: 2
   intermediateSpawnDelay: 30
+  birthParticleSystem: {fileID: 0}
 --- !u!1 &2706048682174353356
 GameObject:
   m_ObjectHideFlags: 0
