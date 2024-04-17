@@ -31,12 +31,12 @@ public class SmolbeanHome : MonoBehaviour
     }
 
     private void OnDestroy()
-    {  
+    {    
         if(!GameStateManager.Instance.IsStarted)
             return; // In the case where the map itself is being destroyed - e.g. new game or quit
 
-        while(colonists.Count > 0)
-        {
+        while(colonists.Count > 0)  
+        {   
             var colonist = colonists[0];
             var newHome = FindNewHome();
             colonist.Home = newHome;

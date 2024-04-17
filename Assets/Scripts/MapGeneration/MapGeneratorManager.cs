@@ -38,8 +38,7 @@ public class MapGeneratorManager : MonoBehaviour
         MaxLevelNumber = gameMap.Max();
         GameMap = gameMap;
 
-        if(Application.isPlaying) // Bit hacky, but this runs in design mode too :(
-            GameStateManager.Instance.EndGame();
+        GameStateManager.Instance.EndGame();  
 
         Clear();
 
@@ -95,8 +94,8 @@ public class MapGeneratorManager : MonoBehaviour
         return FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
                     .OfType<IObjectGenerator>();
     }
-
-    public void Clear()
+  
+    private void Clear()
     {
         foreach (var gen in GetAllGenerators().OrderByDescending(x => x.Priority))
             gen.Clear();

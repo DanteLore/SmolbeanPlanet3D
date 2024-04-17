@@ -31,6 +31,11 @@ public class GameStateManager : MonoBehaviour
         IsStarted = false;
     }
 
+    void OnApplicationQuit()
+    {
+        EndGame();
+    }
+
     public void Pause()
     {
         IsPaused = true;
@@ -45,10 +50,10 @@ public class GameStateManager : MonoBehaviour
         Time.timeScale = SelectedGameSpeed;
         AudioListener.pause = false;
         GamePauseStateChanged?.Invoke(this, IsPaused);
-    }
+    }    
 
-    public void EndGame()
-    {
+    public void EndGame()  
+    { 
         IsStarted = false;
         GameStatusChanged?.Invoke(this, IsStarted);
     }
