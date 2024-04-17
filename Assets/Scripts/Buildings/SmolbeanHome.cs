@@ -34,11 +34,13 @@ public class SmolbeanHome : MonoBehaviour
 
     private void OnDestroy()
     {
-        foreach(var colonist in colonists)
+        while(colonists.Count > 0)
         {
+            var colonist = colonists[0];
             var newHome = FindNewHome();
             colonist.Home = newHome;
             newHome.AddColonist(colonist);
+            colonists.Remove(colonist);
         }
     }
 
@@ -65,6 +67,8 @@ public class SmolbeanHome : MonoBehaviour
             var colonist = (SmolbeanColonist)AnimalController.Instance.CreateAnimal(colonistSpec, building.dropPoint.transform.position);
             colonist.Home = this;
             colonists.Add(colonist);
+
+            colonist.GetComponent<SoundPlayer>().Play("Appear");
             
             yield return new WaitForSeconds(intermediateSpawnDelay);
         }

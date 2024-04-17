@@ -98,6 +98,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clips:
+  - name: Appear
+    clip: {fileID: 8300000, guid: db99b34b4520d4af98c66480a5dc7900, type: 3}
+    loop: 0
+    volume: 1
+    ignoreGamePause: 0
   - name: Footsteps
     clip: {fileID: 8300000, guid: fe536c24d81564d2faf2711639d9b668, type: 3}
     loop: 1
@@ -118,13 +123,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   natureLayer: Nature
   creatureLayer: Creatures
-  destinationThreshold: 1
+  groundLayer: Ground
+  buildingLayer: Buildings
+  dropLayer: Drops
   speciesIndex: 1
   species: {fileID: 11400000, guid: 9cc68d1bc4c7b41bcb45f3d19e0f784c, type: 2}
   target: {x: 0, y: 0, z: 0}
   memoryLength: 6
   prefabIndex: -1
-  dropLayer: Drops
 --- !u!1001 &502959277502828767
 PrefabInstance:
   m_ObjectHideFlags: 0
