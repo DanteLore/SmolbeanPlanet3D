@@ -50,7 +50,7 @@ public class MapMenuController : SmolbeanMenu
         mapBox.style.backgroundImage = mapTexture;
 
         Debug.Log("Drawing map");
-       DrawMap(mapTexture);
+        DrawMap(mapTexture);
     }
 
     private void DrawMap(Texture2D mapTexture)
