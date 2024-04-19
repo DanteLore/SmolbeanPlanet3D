@@ -178,7 +178,11 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
 
     public int AnimalCount(AnimalSpec species)
     {
-        // This gon' be slow
         return GetComponentsInChildren<SmolbeanAnimal>().Count(animal => animal.species == species);
+    }
+
+    public int AnimalCount()
+    {
+        return GetComponentsInChildren<SmolbeanAnimal>().Count();
     }
 }

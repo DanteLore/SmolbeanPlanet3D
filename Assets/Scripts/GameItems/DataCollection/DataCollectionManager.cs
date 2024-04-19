@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DataCollectionManager : MonoBehaviour, IObjectGenerator
 {
     public static DataCollectionManager Instance;
-
+    
     public int Priority { get { return 500; } }
     public bool RunModeOnly { get { return true; } }
 
-    public List<DataCollectionSeries> Series {get; private set; } = new ();
+    public List<DataCollectionSeries> Series {get; private set; }
 
     private void Awake()
     {
@@ -21,16 +23,16 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
 
     public void Clear()
     {
-        StopCoroutine(nameof(GetData));
+        StopCoroutine(nameof(FetchDataLoop));
 
-        Series.Clear();
+        Series = null;
     }
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        var sine = new DataCollectionSeries();
-        Series.Add(sine);
-        StartCoroutine(nameof(GetData));
+        Series = FindObjectsByType<DataCollectionSeries>(sortMode: FindObjectsSortMode.None).OrderBy(s => s.displayName).ToList();
+
+        StartCoroutine(nameof(FetchDataLoop));
         
         yield return null;
     }
@@ -44,17 +46,22 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
     {
     }
 
-    private IEnumerator GetData()
+    private IEnumerator FetchDataLoop()
     {
         yield return new WaitForSeconds(1f);
+        Debug.Assert(Series.Count < 30, "Getting enough data collection series to need a new algo here!");
 
         while(true)
         {
-            float x = Mathf.Sin(Time.time / 10f);
-            Series[0].AddValue(x);
-            Debug.Log(x);
+            float startTime = Time.time;
+            foreach(var series in Series)
+            {
+                series.AddValue();
+                yield return null;
+            }
+            float timeElapsed =  Time.time - startTime;
 
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1f - timeElapsed);
         }
     }
 }

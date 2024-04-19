@@ -226,18 +226,9 @@ GroupBox {
 
 .unity-scroller--vertical:active .unity-base-slider__dragger {
     background-color: rgb(0, 0, 0);
-    border-left-color: rgb(255, 255, 255);
-    border-right-color: rgb(255, 255, 255);
-    border-top-color: rgb(255, 255, 255);
-    border-bottom-color: rgb(255, 255, 255);
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-top-left-radius: 4px;
-    border-bottom-left-radius: 4px;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
+    border-color: rgb(255, 255, 255);
+    border-width: 1px;
+    border-radius: 3px;
 }
 
 .unity-scroller--vertical:focus .unity-base-slider__dragger {
@@ -328,4 +319,48 @@ GroupBox {
     border-width: 1px;
     border-radius: 3px;
     -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+
+
+
+
+
+DropdownField > .unity-base-field__input {
+    background-color: rgb(0, 0, 0);
+    border-color: rgb(255, 255, 255);
+    border-radius: 3px;
+}
+
+DropdownField > .unity-base-popup-field__arrow {
+    -unity-background-image-tint-color: rgb(105, 255, 155);
+}
+
+DropdownField .unity-base-field__label {
+    color: rgb(204, 204, 204);
+    font-size: 28px;
+}
+
+DropdownField .unity-base-dropdown .unity-scroll-view {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    border-color: rgb(255, 255, 255);
+    border-radius: 3px;
+}
+
+DropdownField > .unity-base-dropdown__item {
+    flex-grow: 1;
+}
+
+DropdownField > .unity-base-dropdown #unity-content-container {
+    flex-direction: column;
+}
+
+DropdownField > .unity-base-dropdown__checkmark {
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+}
+
+DropdownField > .unity-base-dropdown__container-outer {
+    border-color: rgb(255, 255, 255);
+    border-radius: 3px;
 }
