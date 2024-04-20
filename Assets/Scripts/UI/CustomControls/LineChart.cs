@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public class LineChart : VisualElement
@@ -62,7 +63,13 @@ public class LineChart : VisualElement
 
         GetChartDrawArea();
         GetMinMaxValues();
+        DrawGridlines(painter);
+        DrawAxes(painter);
+        DrawSeries(painter);
+    }
 
+    private void DrawSeries(Painter2D painter)
+    {
         foreach (var s in Series)
         {
             painter.strokeColor = s.lineColor;
@@ -71,20 +78,69 @@ public class LineChart : VisualElement
             painter.lineWidth = 2.0f;
 
             painter.BeginPath();
-            var start = new Vector2((float)NormaliseX(s.Readings[0].startTime), (float)NormaliseY(s.Readings[0].value));
-            var end = new Vector2((float)NormaliseX(s.Readings[0].endTime), (float)NormaliseY(s.Readings[0].value));
+            var start = new Vector2(NormaliseX(s.Readings[0].startTime), NormaliseY(s.Readings[0].value));
+            var end = new Vector2(NormaliseX(s.Readings[0].endTime), NormaliseY(s.Readings[0].value));
             painter.MoveTo(start);
             painter.LineTo(end);
-            
+
             for (int i = 1; i < s.Readings.Count; i++)
             {
-                start = new Vector2((float)NormaliseX(s.Readings[i].startTime), (float)NormaliseY(s.Readings[i].value));
-                end = new Vector2((float)NormaliseX(s.Readings[i].endTime), (float)NormaliseY(s.Readings[i].value));
+                start = new Vector2(NormaliseX(s.Readings[i].startTime), NormaliseY(s.Readings[i].value));
+                end = new Vector2(NormaliseX(s.Readings[i].endTime), NormaliseY(s.Readings[i].value));
                 painter.LineTo(start);
                 painter.LineTo(end);
             }
             painter.Stroke();
         }
+    }
+
+    private void DrawAxes(Painter2D painter)
+    {
+        // Axes
+        painter.BeginPath();
+        painter.lineWidth = 2.0f;
+        painter.strokeColor = new Color(1f, 1f, 1f, 0.2f);
+        painter.MoveTo(new Vector2(0f, drawHeight));
+        painter.LineTo(new Vector2(drawWidth, drawHeight));
+        painter.MoveTo(new Vector2(0f, 0f));
+        painter.LineTo(new Vector2(0f, drawHeight));
+        painter.Stroke();
+    }
+
+    private void DrawGridlines(Painter2D painter)
+    {
+        painter.BeginPath();
+        painter.lineWidth = 1.0f;
+        painter.strokeColor = new Color(1f, 1f, 1f, 0.1f);
+
+        // Vertical 
+        float duration = endTime - startTime;
+        float dayLength = DayNightCycleController.Instance.hourLengthSeconds * 24;
+        float horizontalStep = duration < dayLength ? DayNightCycleController.Instance.hourLengthSeconds : dayLength;
+        float x = Mathf.Ceil(startTime / horizontalStep) * horizontalStep;
+        while (x < endTime)
+        {
+            var start = new Vector2(NormaliseX(x), NormaliseY(minValue));
+            var end = new Vector2(NormaliseX(x), NormaliseY(maxValue));
+            painter.MoveTo(start);
+            painter.LineTo(end);
+            x += horizontalStep;
+        }
+
+        // Horizontal
+        float range = maxValue - minValue;
+        float verticalStep = Mathf.Ceil(range / 100) * 10;
+        float y = Mathf.Ceil(minValue / verticalStep) * verticalStep;
+        while (y < maxValue)
+        {
+            var start = new Vector2(NormaliseX(startTime), NormaliseY(y));
+            var end = new Vector2(NormaliseX(endTime), NormaliseY(y));
+            painter.MoveTo(start);
+            painter.LineTo(end);
+            y += verticalStep;
+        }
+
+        painter.Stroke();
     }
 
     private void GetMinMaxValues()
