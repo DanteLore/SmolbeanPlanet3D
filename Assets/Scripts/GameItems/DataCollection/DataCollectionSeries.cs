@@ -5,22 +5,15 @@ using UnityEngine;
 
 public abstract class DataCollectionSeries : MonoBehaviour
 {
-    public class Reading 
-    {
-        public float value;
-        public float startTime;
-        public float endTime;
-    }
-
     public string seriesGroup = "Other";
     public string seriesName;
     public string description;
     public Color lineColor;
     public int maxSamples = 100000;
     
-    private readonly List<Reading> readings = new();
+    private readonly List<DataCollectionReading> readings = new();
     
-    public IReadOnlyList<Reading> Readings { get { return readings; } }
+    public IReadOnlyList<DataCollectionReading> Readings { get { return readings; } }
     public float MinValue { get; private set; } = float.MaxValue;
     public float MaxValue { get; private set; } = float.MinValue;
     public float StartTime { get { return readings[0].startTime; } }
@@ -38,7 +31,7 @@ public abstract class DataCollectionSeries : MonoBehaviour
             MinValue = value;
 
         if(readings.Count == 0 || readings[^1].value != value)
-            readings.Add(new Reading { startTime = time, endTime = time, value = value });
+            readings.Add(new DataCollectionReading { startTime = time, endTime = time, value = value });
         else
             readings[^1].endTime = time;
 
@@ -49,4 +42,32 @@ public abstract class DataCollectionSeries : MonoBehaviour
     }
 
     protected abstract float GetDataValue();
+
+    public void Clear()
+    {
+        readings.Clear();
+
+        MinValue = float.MaxValue;
+        MaxValue = float.MinValue;
+    }
+
+    public DataCollectionSeriesSaveData GetSaveData()
+    {   
+        return new DataCollectionSeriesSaveData 
+        { 
+            seriesName = seriesName, 
+            readings = Readings.ToArray(), 
+            minValue = MinValue, 
+            maxValue = MaxValue 
+        };
+    }
+
+    public void LoadFrom(DataCollectionSeriesSaveData seriesData)
+    {
+        Clear();
+
+        readings.AddRange(seriesData.readings);
+        MaxValue = seriesData.maxValue;
+        MinValue = seriesData.minValue;
+    }
 }

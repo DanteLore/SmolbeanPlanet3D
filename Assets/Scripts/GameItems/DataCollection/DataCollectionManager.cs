@@ -24,25 +24,50 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
     {
         StopCoroutine(nameof(FetchDataLoop));
 
-        Series = null;
+        InitialiseSeries();
     }
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        Series = FindObjectsByType<DataCollectionSeries>(sortMode: FindObjectsSortMode.None).OrderBy(s => s.seriesName).ToList();
+        InitialiseSeries();
 
         StartCoroutine(nameof(FetchDataLoop));
-        
+
         yield return null;
+    }
+
+    private void InitialiseSeries()
+    {
+        Series = FindObjectsByType<DataCollectionSeries>(sortMode: FindObjectsSortMode.None).OrderBy(s => s.seriesName).ToList();
+        foreach (var series in Series)
+            series.Clear();
     }
 
     public IEnumerator Load(SaveFileData data, string filename)
     {
+        InitialiseSeries();
+
+        if(data.dataCollectionSeries != null)
+        {
+            foreach(var seriesData in data.dataCollectionSeries)
+            {
+                var series = Series.FirstOrDefault(s => s.seriesName == seriesData.seriesName);
+                if(series != null)
+                {
+                    series.LoadFrom(seriesData);
+                }
+                yield return null;
+            }
+        }
+
+        StartCoroutine(nameof(FetchDataLoop));
+
         yield return null;
     }
 
     public void SaveTo(SaveFileData saveData, string filename)
     {
+        saveData.dataCollectionSeries = Series.Select(s => s.GetSaveData()).ToList();
     }
 
     private IEnumerator FetchDataLoop()
@@ -53,9 +78,13 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
         while(true)
         {
             float startTime = Time.time;
+
+            // Yeah yeah yeah... this is a weird way to store the time... I know... I know
+            float gameTime = DayNightCycleController.Instance.day * 24 + DayNightCycleController.Instance.timeOfDay;
+
             foreach(var series in Series)
             {
-                series.AddValue(startTime);
+                series.AddValue(gameTime);
                 yield return null;
             }
             float timeElapsed =  Time.time - startTime;

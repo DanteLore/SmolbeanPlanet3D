@@ -14,4 +14,5 @@ public class SaveFileData
     public TimeOfDaySaveData timeData;
     public List<JobSaveData> jobData;
     public WindSaveData windData;
+    public List<DataCollectionSeriesSaveData> dataCollectionSeries;
 }
