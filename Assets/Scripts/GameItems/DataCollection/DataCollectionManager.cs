@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class DataCollectionManager : MonoBehaviour, IObjectGenerator
@@ -30,7 +29,7 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        Series = FindObjectsByType<DataCollectionSeries>(sortMode: FindObjectsSortMode.None).OrderBy(s => s.displayName).ToList();
+        Series = FindObjectsByType<DataCollectionSeries>(sortMode: FindObjectsSortMode.None).OrderBy(s => s.seriesName).ToList();
 
         StartCoroutine(nameof(FetchDataLoop));
         
@@ -56,7 +55,7 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
             float startTime = Time.time;
             foreach(var series in Series)
             {
-                series.AddValue();
+                series.AddValue(startTime);
                 yield return null;
             }
             float timeElapsed =  Time.time - startTime;

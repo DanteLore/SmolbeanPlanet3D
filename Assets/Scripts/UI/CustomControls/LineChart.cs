@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -26,20 +25,29 @@ public class LineChart : VisualElement
         generateVisualContent += OnGenerateVisualContent;
     }
 
-    private DataCollectionSeries series;
-    public DataCollectionSeries Series
+    private DataCollectionSeries[] series;
+    private float drawWidth;
+    private float drawHeight;
+    private float minValue;
+    private float maxValue;
+    private float startTime;
+    private float endTime;
+
+    public DataCollectionSeries[] Series
     {
         get { return series; }
         set 
         {
             if(series != null)
-                series.OnValuesChanged -= SeriesChanged;
+                foreach(var s in series)
+                    s.OnValuesChanged -= SeriesChanged;
 
             series = value; 
             MarkDirtyRepaint();
 
             if(series != null)
-                series.OnValuesChanged += SeriesChanged;
+                foreach(var s in series)
+                    s.OnValuesChanged += SeriesChanged;
         }
     }
 
@@ -52,35 +60,70 @@ public class LineChart : VisualElement
     {
         var painter = mgc.painter2D;
 
-        painter.strokeColor = Series.lineColor;
-        painter.lineJoin = LineJoin.Round;
-        painter.lineCap = LineCap.Round;
-        painter.lineWidth = 2.0f;
-  
-        painter.BeginPath();
-        painter.MoveTo(VectorAt(0));
-        for(int i = 1; i < Series.Values.Count; i++)
-            painter.LineTo(VectorAt(i));
-        painter.Stroke();
+        GetChartDrawArea();
+        GetMinMaxValues();
+
+        foreach (var s in Series)
+        {
+            painter.strokeColor = s.lineColor;
+            painter.lineJoin = LineJoin.Round;
+            painter.lineCap = LineCap.Round;
+            painter.lineWidth = 2.0f;
+
+            painter.BeginPath();
+            var start = new Vector2((float)NormaliseX(s.Readings[0].startTime), (float)NormaliseY(s.Readings[0].value));
+            var end = new Vector2((float)NormaliseX(s.Readings[0].endTime), (float)NormaliseY(s.Readings[0].value));
+            painter.MoveTo(start);
+            painter.LineTo(end);
+            
+            for (int i = 1; i < s.Readings.Count; i++)
+            {
+                start = new Vector2((float)NormaliseX(s.Readings[i].startTime), (float)NormaliseY(s.Readings[i].value));
+                end = new Vector2((float)NormaliseX(s.Readings[i].endTime), (float)NormaliseY(s.Readings[i].value));
+                painter.LineTo(start);
+                painter.LineTo(end);
+            }
+            painter.Stroke();
+        }
     }
 
-    private Vector2 VectorAt(int i)
+    private void GetMinMaxValues()
     {
-        float x = NormaliseX(i);
-        float y = NormaliseY(Series.Values[i]);
-        var v = new Vector2(x, y);
-        return v;
+        // This gets called quite a bit, so don't use Linq ;)
+        minValue = float.MaxValue;
+        maxValue = float.MinValue;
+        startTime = float.MaxValue;
+        endTime = float.MinValue;
+        
+        for (int i = 0; i < Series.Length; i++)
+        {
+            if (series[i].MaxValue > maxValue)
+                maxValue = series[i].MaxValue;
+            if (series[i].MinValue < minValue)
+                minValue = series[i].MinValue;
+            if(series[i].StartTime < startTime)
+                startTime = series[i].StartTime;
+            if(series[i].EndTime > endTime)
+                endTime = series[i].EndTime;
+        }
     }
 
-    private float NormaliseX(float v)
+    private void GetChartDrawArea()
     {
-        float dx = v / Series.Values.Count;
-        return (float)Mathf.Lerp(0, contentRect.width, dx);
+        var rect = contentRect; // Very expensive call to a property.  Only do it once!
+        drawWidth = rect.width;
+        drawHeight = rect.height;
     }
 
-    private float NormaliseY(float v)
+    private float NormaliseX(float time)
     {
-        float dy = Mathf.InverseLerp(Series.MinValue, Series.MaxValue, v);
-        return (float)Mathf.Lerp(0, contentRect.height, 1 - dy);
+        float dx = Mathf.InverseLerp(startTime, endTime, time);
+        return Mathf.Lerp(0.0f, drawWidth, dx);
+    }
+
+    private float NormaliseY(float value)
+    {
+        float dy = Mathf.InverseLerp(minValue, maxValue, value);
+        return (float)Mathf.Lerp(0, drawHeight, 1 - dy);
     }
 }

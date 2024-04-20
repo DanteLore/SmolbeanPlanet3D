@@ -1,39 +1,49 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class DataCollectionSeries : MonoBehaviour
 {
-    public string seriesName;
-    public string displayName;
-    public string description;
-    public Texture2D thumbnail;
-    public Color lineColor;
-    public int maxSamples = 1000;
-    
-    private readonly List<float> values = new();
-    private float minValue = float.MaxValue;
-    private float maxValue = float.MinValue;
+    public class Reading 
+    {
+        public float value;
+        public float startTime;
+        public float endTime;
+    }
 
-    public IReadOnlyList<float> Values { get { return values; } }
-    public float MinValue { get { return minValue; } }
-    public float MaxValue { get { return maxValue; } }
+    public string seriesGroup = "Other";
+    public string seriesName;
+    public string description;
+    public Color lineColor;
+    public int maxSamples = 100000;
+    
+    private readonly List<Reading> readings = new();
+    
+    public IReadOnlyList<Reading> Readings { get { return readings; } }
+    public float MinValue { get; private set; } = float.MaxValue;
+    public float MaxValue { get; private set; } = float.MinValue;
+    public float StartTime { get { return readings[0].startTime; } }
+    public float EndTime { get { return readings[^1].endTime; } }
 
     public event Action OnValuesChanged;
 
-    public void AddValue()
+    public void AddValue(float time)
     {
         float value = GetDataValue();
 
-        if(value > maxValue)
-            maxValue = value;
-        if(value < minValue)
-            minValue = value;
+        if(value > MaxValue)
+            MaxValue = value;
+        if(value < MinValue)
+            MinValue = value;
 
-        values.Add(value);
+        if(readings.Count == 0 || readings[^1].value != value)
+            readings.Add(new Reading { startTime = time, endTime = time, value = value });
+        else
+            readings[^1].endTime = time;
 
-        while(values.Count > maxSamples)
-            values.RemoveAt(0);
+        while(readings.Count > maxSamples)
+            readings.RemoveAt(0);
 
         OnValuesChanged?.Invoke();
     }
