@@ -44,6 +44,9 @@ public class ChooseBuildingLocationState : BaseMapInteractionState
     {
         base.Tick();
 
+       // if(data.OverMenu)
+        //    return;
+
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (!Physics.Raycast(ray, out var hitInfo, float.MaxValue, LayerMask.GetMask(groundLayer)))
         {
@@ -53,36 +56,37 @@ public class ChooseBuildingLocationState : BaseMapInteractionState
 
         Vector2Int newSquare = gridManager.GetGameSquareFromWorldCoords(hitInfo.point);
 
-        if (newSquare != currentSquare)
-        {
-            currentSquare = newSquare;
+        if (newSquare == currentSquare)
+            return;
 
-            Rect squareBounds = gridManager.GetSquareBounds(currentSquare.x, currentSquare.y);
-            var prefab = data.SelectedBuildingSpec.prefab;
-            Bounds buildingBounds = prefab.GetComponentInChildren<MeshRenderer>().bounds;
+        currentSquare = newSquare;
 
-            for (int i = 0; i < prefab.transform.childCount; i++)
-                buildingBounds.Encapsulate(prefab.transform.GetChild(i).position);
-            buildingBounds.Expand(0.75f);
+        Rect squareBounds = gridManager.GetSquareBounds(currentSquare.x, currentSquare.y);
+        var prefab = data.SelectedBuildingSpec.prefab;
+        Bounds buildingBounds = prefab.GetComponentInChildren<MeshRenderer>().bounds;
 
-            float worldX = squareBounds.center.x;
-            float worldZ = squareBounds.center.y;
-            float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
+        for (int i = 0; i < prefab.transform.childCount; i++)
+            buildingBounds.Encapsulate(prefab.transform.GetChild(i).position);
+        buildingBounds.Expand(1.0f);
 
-            Bounds bounds = new(squareBounds.center, buildingBounds.size);
+        float worldX = squareBounds.center.x;
+        float worldZ = squareBounds.center.y;
+        float worldY = gridManager.GetGridHeightAt(worldX, worldZ);
 
-            if (!float.IsNaN(worldY))
-            {
-                var center = new Vector3(worldX, worldY, worldZ);
-                okToBuild = CheckFlat(bounds) && CheckEmpty(center);
+        if(float.IsNaN(worldY))  
+            return;
 
-                Color color = okToBuild ? Color.blue : Color.red;
-                cursor.transform.position = center;
-                cursor.GetComponent<Renderer>().material.SetColor("_baseColor", color);
-                cursor.SetActive(true);
-                data.SelectedPoint = center;
-            }
-        }
+        var center = new Vector3(worldX, worldY, worldZ);
+
+        Bounds bounds = new(squareBounds.center, buildingBounds.size);
+
+        okToBuild = CheckFlat(bounds) && CheckEmpty(center);
+
+        Color color = okToBuild ? Color.blue : Color.red;
+        cursor.transform.position = center;
+        cursor.GetComponent<Renderer>().material.SetColor("_baseColor", color);
+        cursor.SetActive(true);
+        data.SelectedPoint = center;
     }
 
     private bool CheckEmpty(Vector3 center)
@@ -97,7 +101,8 @@ public class ChooseBuildingLocationState : BaseMapInteractionState
         float rayStartHeight = 10000f;
         int groundMask = LayerMask.GetMask(groundLayer);
 
-        var ray0 = new Ray(new Vector3(bounds.center.x, rayStartHeight, bounds.center.y), Vector3.down);
+        // Slightly off center, in case there's a small gap between meshes!
+        var ray0 = new Ray(new Vector3(bounds.center.x + 0.01f, rayStartHeight, bounds.center.y + 0.01f), Vector3.down);
         if (!Physics.Raycast(ray0, out var hit0, float.PositiveInfinity, groundMask))
             return false;
         //Debug.Log("Hit 0: " + hit0.point);

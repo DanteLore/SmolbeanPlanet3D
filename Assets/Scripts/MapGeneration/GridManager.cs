@@ -196,8 +196,9 @@ public class GridManager : MonoBehaviour, IObjectGenerator
 
     public float GetGridHeightAt(float worldX, float worldZ)
     { 
-        Ray ray = new(new Vector3(worldX, 1000f, worldZ), Vector3.down);
-        if(Physics.Raycast(ray, out RaycastHit hit, 2000f, LayerMask.GetMask(groundLayer, seaLayer))) 
+        // Slightly off center, in case there's a small gap between meshes!
+        Ray ray = new(new Vector3(worldX + 0.01f, 5000f, worldZ + 0.01f), Vector3.down);
+        if(Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, LayerMask.GetMask(groundLayer, seaLayer))) 
         {
             return hit.point.y;
         }

@@ -80,7 +80,7 @@ public class MapInteractionManager : MonoBehaviour
         Func<bool> NothingSelected() => () => Data.SelectedTransform == null;
         Func<bool> KeyDown(Key key) => () => Keyboard.current[key].wasPressedThisFrame;
         Func<bool> BuildCancelled() => () => Data.RightButtonClicked || Data.Cancelled;
-        Func<bool> BuildTriggered() => () => Data.LeftButtonClicked && chooseBuildingLocation.okToBuild;
+        Func<bool> BuildTriggered() => () => Data.LeftButtonClicked && !Data.OverMenu && chooseBuildingLocation.okToBuild;
         Func<bool> BuildComplete() => () => placeBuilding.IsComplete;
         Func<bool> WorkingAreaButtonClicked() => () => Data.StartWorkAreaPlacement;
         Func<bool> WorkAreaPlacementFinished() => () => Data.LeftButtonClicked;
