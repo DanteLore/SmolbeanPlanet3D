@@ -19,6 +19,11 @@ That was fun, but there was also a big chunk of debugging NavMeshAgents, annoyin
 
 ![Screenshot](./Docs/Images/screenshot71.png)
 
+Now with added legend and gridlines...
+
+![Screenshot](./Docs/Images/screenshot72.png)
+![Screenshot](./Docs/Images/screenshot73.png)
+
 ## Work areas
 
 Resource collection buildings, like the Woodcutter, Stonecutter, Lookout and Farm now have a designated work area, which can be selected by the player.  So you can

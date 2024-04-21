@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 public class LineChart : VisualElement
@@ -72,6 +72,9 @@ public class LineChart : VisualElement
     {
         foreach (var s in Series)
         {
+            if(!s.IsVisible)
+                continue;
+                
             painter.strokeColor = s.lineColor;
             painter.lineJoin = LineJoin.Round;
             painter.lineCap = LineCap.Round;

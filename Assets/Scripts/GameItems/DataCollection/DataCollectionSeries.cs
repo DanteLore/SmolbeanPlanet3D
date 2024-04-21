@@ -18,6 +18,7 @@ public abstract class DataCollectionSeries : MonoBehaviour
     public float MaxValue { get; private set; } = float.MinValue;
     public float StartTime { get { return readings[0].startTime; } }
     public float EndTime { get { return readings[^1].endTime; } }
+    public bool IsVisible { get; private set; } = true;
 
     public event Action OnValuesChanged;
 
@@ -69,5 +70,11 @@ public abstract class DataCollectionSeries : MonoBehaviour
         readings.AddRange(seriesData.readings);
         MaxValue = seriesData.maxValue;
         MinValue = seriesData.minValue;
+    }
+
+    public void ToggleVisibility()
+    {
+        IsVisible = !IsVisible;
+        OnValuesChanged?.Invoke();
     }
 }

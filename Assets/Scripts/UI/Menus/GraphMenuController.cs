@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public class GraphMenuController : SmolbeanMenu
@@ -31,11 +32,40 @@ public class GraphMenuController : SmolbeanMenu
             Series = series.Where(s => s.seriesGroup == groups[selectedGroupIndex]).ToArray()
         };
         graphBox.Add(chart);
+
+        UpdateKey();
     }
 
     private void GroupSelected(ChangeEvent<string> evt)
     {
         selectedGroupIndex = groupSelect.index;
         chart.Series = series.Where(s => s.seriesGroup == groups[selectedGroupIndex]).ToArray();
+
+        UpdateKey();
+    }
+
+    private void UpdateKey()
+    {
+        var keyContainer = document.rootVisualElement.Q<VisualElement>("keyContainer");
+        keyContainer.Clear();
+
+        foreach(var series in chart.Series)
+        {
+            var item = new VisualElement();
+            item.AddToClassList("chartKeyItemContainer");
+            keyContainer.Add(item);
+
+            var colorButton = new Button();
+            colorButton.AddToClassList("chartKeyColorButton");
+            colorButton.style.backgroundColor = series.IsVisible ? series.lineColor : new StyleColor(Color.grey);
+            colorButton.clicked += () => {
+                series.ToggleVisibility();
+                colorButton.style.backgroundColor = series.IsVisible ? series.lineColor : new StyleColor(Color.grey);
+            };
+            item.Add(colorButton);
+
+            var label = new Label(series.seriesName);
+            item.Add(label);
+        }
     }
 }
