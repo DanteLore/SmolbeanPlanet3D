@@ -1,18 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
-    <Style src="project://database/Assets/UI/GameControls.uss?fileID=7433441132597879392&amp;guid=334dd8ec426a145ba9561e6ccafddaa1&amp;type=3#GameControls" />
+    <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
     <Style src="project://database/Assets/UI/DetailsControls.uss?fileID=7433441132597879392&amp;guid=94f4ac6f5a4554e8ea89412efec2b645&amp;type=3#DetailsControls" />
-    <ui:VisualElement name="VisualElement" style="flex-grow: 1; position: absolute; top: 60px; right: 60px; bottom: 100px;">
-        <ui:VisualElement name="gameInfoControlsContainer" class="gameControlsContainer" style="flex-grow: 1; justify-content: flex-start; width: 300px; max-width: 300px; min-width: 300px; height: auto; max-height: none; min-height: auto; flex-direction: column;">
-            <ui:VisualElement style="flex-grow: 1; flex-direction: row; min-height: 40px; height: 40px; max-height: 40px; top: 2px; left: 5px; right: 5px; position: absolute;">
-                <ui:VisualElement name="animalImage" style="flex-grow: 1; width: 80px; max-width: 80px; min-width: 80px; min-height: 80px; max-height: 80px; height: 80px;" />
-                <ui:VisualElement style="flex-grow: 1;">
-                    <ui:Label text="12λ \u00d7 34φ" name="positionLabel" />
-                    <ui:Label text="Mr A Dodo" name="nameLabel" style="white-space: normal; font-size: 12px;" />
-                </ui:VisualElement>
-                <ui:Button text="X" parse-escape-sequences="true" display-tooltip-when-elided="true" name="closeButton" style="-unity-font: url(&quot;project://database/Assets/UI/Fonts/NotoSansSymbols2-Regular.ttf?fileID=12800000&amp;guid=d2daced2fbadb4088b20c9a65c4e75ea&amp;type=3#NotoSansSymbols2-Regular&quot;); -unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/Acme-Regular%20SDF.asset?fileID=11400000&amp;guid=188be3c69c8cc496c90c64d17f6c8bb4&amp;type=2#Acme-Regular SDF&quot;); font-size: 16px; -unity-text-align: middle-center; right: 0; white-space: nowrap; position: absolute; top: 2px;" />
+    <ui:VisualElement class="menuContainer" style="flex-grow: 1; position: absolute; top: 60px; right: 30px; bottom: 30px; margin-bottom: 20px; width: 340px; max-width: 340px; min-width: 340px;">
+        <ui:VisualElement name="VisualElement" class="toolButtonContainer" style="flex-grow: 1; flex-direction: row; flex-wrap: nowrap; align-self: stretch; height: 80px;">
+            <ui:VisualElement name="animalImage" style="flex-grow: 1; width: 60px; max-width: 60px; min-width: 60px; min-height: 60px; max-height: 60px; height: 60px;" />
+            <ui:VisualElement style="flex-grow: 1;">
+                <ui:Label text="12λ \u00d7 34φ" name="positionLabel" />
+                <ui:Label text="Mr A Dodo" name="nameLabel" style="white-space: normal; font-size: 12px;" />
             </ui:VisualElement>
-            <ui:ScrollView name="mainScrollView" style="position: absolute; top: 90px; left: 5px; right: 5px; bottom: 5px; flex-grow: 1;" />
+        </ui:VisualElement>
+        <ui:ScrollView name="mainScrollView" class="toolButtonContainer" style="flex-grow: 1; width: 100%; max-width: 100%; min-width: 100%; height: 100%;" />
+        <ui:VisualElement name="dialogButtonContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 60px; max-height: 60px; min-height: 60px; align-items: center;">
+            <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

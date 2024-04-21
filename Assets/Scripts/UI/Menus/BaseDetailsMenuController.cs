@@ -31,4 +31,22 @@ public abstract class BaseDetailsMenuController : SmolbeanMenu
     {
         document.rootVisualElement.Q<ScrollView>("mainScrollView").Clear();
     }
+
+    protected static void Title(VisualElement parent, string symbol, string text, string symbolClass = "notoLinearA")
+    {
+        var titleContainer = new VisualElement();
+        titleContainer.AddToClassList("titleRow");
+        parent.Add(titleContainer);
+
+        Label symbolLabel = new();
+        symbolLabel.AddToClassList(symbolClass);
+        symbolLabel.AddToClassList("bigLabel");
+        titleContainer.Add(symbolLabel);
+        symbolLabel.text = symbol;
+
+        Label textLabel = new();
+        titleContainer.Add(textLabel);
+        textLabel.AddToClassList("titleLabel");
+        textLabel.text = text;
+    }
 }

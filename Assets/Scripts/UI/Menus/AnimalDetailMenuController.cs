@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class AnimalDetailMenuController : BaseDetailsMenuController
 {
@@ -143,19 +144,14 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
         if (colonist.Job == null)
             return;
 
+        var scrollView = document.rootVisualElement.Q<ScrollView>("mainScrollView");
+
+        Title(scrollView, "𐛌", "Job");
+
         VisualElement jobRow = new();
         jobRow.AddToClassList("jobRow");
-        document.rootVisualElement.Q<ScrollView>("mainScrollView").Add(jobRow);
-
-        Label symbolLabel = new();
-        symbolLabel.text = "𐛌";
-        symbolLabel.AddToClassList("notoLinearA");
-        jobRow.Add(symbolLabel);
-
-        Label titleLabel = new();
-        titleLabel.text = "Job: ";
-        jobRow.Add(titleLabel);
-
+        scrollView.Add(jobRow);
+        
         Button jobButton = new();
         jobButton.style.backgroundColor = new Color(0, 0, 0, 0);
         jobButton.style.backgroundImage = colonist.Job.JobSpec.thumbnail;
@@ -168,18 +164,13 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 
     private void DisplayInventory(SmolbeanAnimal animal)
     {
+        var scrollView = document.rootVisualElement.Q<ScrollView>("mainScrollView");
+
+        Title(scrollView, "𐚱", "Inventory");
+
         VisualElement inventoryRow = new();
         inventoryRow.AddToClassList("inventoryRow");
-        document.rootVisualElement.Q<ScrollView>("mainScrollView").Add(inventoryRow);
-
-        Label symbolLabel = new();
-        symbolLabel.text = "𐚱";
-        symbolLabel.AddToClassList("notoLinearA");
-        inventoryRow.Add(symbolLabel);
-
-        Label titleLabel = new();
-        titleLabel.text = "Inventory: ";
-        inventoryRow.Add(titleLabel);
+        scrollView.Add(inventoryRow);
 
         foreach (var item in animal.Inventory.Totals)
         {

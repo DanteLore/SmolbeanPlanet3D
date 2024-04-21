@@ -80,3 +80,42 @@
 .chartKeyColorButton:hover {
     scale: 1.2 1.2;
 }
+
+.toolButtonContainer Button {
+    width: 24px;
+    height: 24px;
+    border-ft-width: 1px;
+    border-radius: 5px;
+    border-color: rgb(255, 255, 255);
+    max-width: 24px;
+    max-height: 24px;
+    min-height: 24px;
+    min-width: 24px;
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    font-size: 12px;
+    -unity-font-style: bold;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.toolButtonContainer Button:hover {
+    scale: 1.2 1.2;
+    border-color: rgb(255, 255, 255);
+}
+
+.toolButtonContainer Label {
+    height: 24px;
+    background-color: rgba(0, 0, 0, 0);
+    -unity-text-align: middle-left;
+    max-height: 24px;
+    min-height: 24px;
+    margin-right: 10px;
+}

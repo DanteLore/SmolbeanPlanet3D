@@ -1,18 +1,9 @@
 .gameControlsContainer Button {
     width: 24px;
     height: 24px;
-    border-left-width: 1px;
-    border-right-width: 1px;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-left-color: rgb(255, 255, 255);
-    border-right-color: rgb(255, 255, 255);
-    border-top-color: rgb(255, 255, 255);
-    border-bottom-color: rgb(255, 255, 255);
+    border-ft-width: 1px;
+    border-radius: 5px;
+    border-color: rgb(255, 255, 255);
     max-width: 24px;
     max-height: 24px;
     min-height: 24px;
@@ -21,14 +12,8 @@
     white-space: nowrap;
     font-size: 12px;
     -unity-font-style: bold;
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-left: 2px;
-    margin-right: 2px;
-    margin-top: 2px;
-    margin-bottom: 2px;
+    padding: 0;
+    margin: 2px;
     background-color: rgba(0, 0, 0, 0);
 }
 
@@ -37,10 +22,7 @@
     padding-right: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-radius: 8px;
     background-color: rgba(0, 0, 0, 0.78);
     position: relative;
     right: auto;

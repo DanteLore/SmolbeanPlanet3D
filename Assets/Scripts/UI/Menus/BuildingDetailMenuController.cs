@@ -234,21 +234,4 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
             ingredientContainer.Add(button);
         }
     }
-
-    private static void Title(ScrollView mainScrollView, string symbol, string text, string symbolClass = "notoLinearA")
-    {
-        var titleContainer = new VisualElement();
-        titleContainer.AddToClassList("titleRow");
-        mainScrollView.Add(titleContainer);
-
-        Label symbolLabel = new();
-        symbolLabel.AddToClassList(symbolClass);
-        symbolLabel.AddToClassList("bigLabel");
-        titleContainer.Add(symbolLabel);
-        symbolLabel.text = symbol;
-
-        Label textLabel = new();
-        titleContainer.Add(textLabel);
-        textLabel.text = text;
-    }
 }

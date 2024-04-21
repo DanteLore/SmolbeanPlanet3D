@@ -77,6 +77,12 @@
     -unity-text-align: middle-center;
 }
 
+.titleLabel
+{
+    font-size: 16px;
+    -unity-text-align: middle-center;
+}
+
 .recipeContainerLabel
 {
     width: 30px;
@@ -108,9 +114,23 @@
     -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoSansSymbols-Regular.ttf?fileID=12800000&guid=96e32fe508410474b8b72399fd1900db&type=3#NotoSansSymbols-Regular");
 }
 
+.jobRow,
+.inventoryRow
+{
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    padding-left: 16px;
+    padding-top: 5px;
+    margin-bottom: 5px;
+}
+
 .fieldRow,
 .titleRow,
-.jobRow,
 .residentRow
 {
     flex-direction: row;
