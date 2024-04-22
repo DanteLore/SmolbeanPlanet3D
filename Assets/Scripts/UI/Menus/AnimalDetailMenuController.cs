@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using Unity.VisualScripting;
 
 public class AnimalDetailMenuController : BaseDetailsMenuController
 {
