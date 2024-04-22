@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.AI;
 using System.Collections;
 using System.Threading;
+using System;
 
 public class GridManager : MonoBehaviour, IObjectGenerator
 {
@@ -206,6 +207,28 @@ public class GridManager : MonoBehaviour, IObjectGenerator
         {
             return float.NaN;
         }
+    }
+
+    public float GetMeanGridHightAt(float worldX, float worldZ)
+    {
+        float d = tileSize / 2f;
+        float total = 0f;
+        total += GetGridHeightAt(worldX - d, worldZ - d);
+        total += GetGridHeightAt(worldX + d, worldZ - d); 
+        total += GetGridHeightAt(worldX - d, worldZ + d);
+        total += GetGridHeightAt(worldX + d, worldZ + d);
+        return total / 4f;
+    }
+
+    public float GetMaxGridHightAt(float worldX, float worldZ)
+    {
+        float d = tileSize / 2f;
+        return Mathf.Max(
+                    GetGridHeightAt(worldX - d, worldZ - d),
+                    GetGridHeightAt(worldX + d, worldZ - d),
+                    GetGridHeightAt(worldX - d, worldZ + d),
+                    GetGridHeightAt(worldX + d, worldZ + d)
+                );
     }
 
     public Vector2Int GetGameSquareFromWorldCoords(Vector3 point)

@@ -7,7 +7,7 @@ public class ShipwreckManager : MonoBehaviour, IObjectGenerator
 {
     public static ShipwreckManager Instance { get; private set; }
 
-    public CameraController cameraController;
+    //public CameraController cameraController;
     public BuildingSpec shipwreckSpec;
     public Ingredient[] startingInventory;
     public float shipwreckClearingRadius = 6f;
@@ -49,7 +49,7 @@ public class ShipwreckManager : MonoBehaviour, IObjectGenerator
         ClearNatureObjectsAround(pos);
         yield return null;
 
-        cameraController.gameStartPositon = pos;
+        FindFirstObjectByType<CameraController>().transform.position = pos;
         yield return null;
     }
 

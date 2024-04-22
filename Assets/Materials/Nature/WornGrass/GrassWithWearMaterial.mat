@@ -70,7 +70,7 @@ Material:
     - _baseColor: {r: 0.45594516, g: 0.8867924, b: 0.47164807, a: 1}
     - _mapOffset: {r: -0.4995, g: -0.4995, b: 0, a: 0}
     - _mapSize: {r: 648, g: 648, b: 0, a: 0}
-    - _windDirection: {r: -0.41190958, g: 0, b: -0.9112247, a: 0}
+    - _windDirection: {r: -0.26198107, g: 0, b: -0.96507305, a: 0}
     - _wornColor: {r: 0.7924528, g: 0.7040658, b: 0.5420078, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

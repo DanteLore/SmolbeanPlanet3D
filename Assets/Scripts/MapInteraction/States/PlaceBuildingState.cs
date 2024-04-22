@@ -17,8 +17,7 @@ public class PlaceBuildingState : IState
 
     public void OnEnter()
     {
-        var cameraController = Object.FindFirstObjectByType<CameraController>(); // Probably a better way to find this ;)
-        float rotationY = cameraController.CameraRotationY;
+        float rotationY = Camera.main.transform.rotation.eulerAngles.y;
         rotationY += 180f; // Opposite
         rotationY = Mathf.Round(rotationY / 90f) * 90f; // Round to nearest 90deg
 
