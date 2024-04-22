@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -156,15 +155,21 @@ public class LineChart : VisualElement
         
         for (int i = 0; i < Series.Length; i++)
         {
-            if (series[i].MaxValue > maxValue)
-                maxValue = series[i].MaxValue;
-            if (series[i].MinValue < minValue)
-                minValue = series[i].MinValue;
-            if(series[i].StartTime < startTime)
-                startTime = series[i].StartTime;
-            if(series[i].EndTime > endTime)
-                endTime = series[i].EndTime;
+            if(series[i].IsVisible)
+            {
+                if (series[i].MaxValue > maxValue)
+                    maxValue = series[i].MaxValue;
+                if (series[i].MinValue < minValue)
+                    minValue = series[i].MinValue;
+                if(series[i].StartTime < startTime)
+                    startTime = series[i].StartTime;
+                if(series[i].EndTime > endTime)
+                    endTime = series[i].EndTime;
+            }
         }
+
+        // No compressed Y axes here
+        minValue = Mathf.Min(0f, minValue);
     }
 
     private void GetChartDrawArea()
