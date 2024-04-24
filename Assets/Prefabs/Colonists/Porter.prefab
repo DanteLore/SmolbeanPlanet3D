@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5678464011766705149}
   - component: {fileID: -7699975937507873008}
   - component: {fileID: 7413844353760469568}
+  - component: {fileID: -430070039862455547}
   m_Layer: 9
   m_Name: Porter
   m_TagString: Untagged
@@ -127,6 +128,19 @@ MonoBehaviour:
   memoryLength: 12
   prefabIndex: -1
   idleTime: 1
+--- !u!114 &-430070039862455547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5678464011766705138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c7c8ddac78b84a028ea3feb28243e3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  virtualCameraName: FollowCamera
 --- !u!1001 &502959277502828767
 PrefabInstance:
   m_ObjectHideFlags: 0

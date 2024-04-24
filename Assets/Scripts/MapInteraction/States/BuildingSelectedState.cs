@@ -23,7 +23,7 @@ public class BuildingSelectedState : BaseMapInteractionState
         var building = data.Selected<SmolbeanBuilding>();
         cursor = Object.Instantiate(selectionCursorPrefab, data.SelectedTransform);
         var pos = cursor.transform.position;
-        float y = GetBounds(building.gameObject).max.y + 1f;
+        float y = building.gameObject.GetRendererBounds().max.y + 1f;
         pos = new Vector3(pos.x, y, pos.z);
         cursor.transform.position = pos;
 
@@ -57,22 +57,5 @@ public class BuildingSelectedState : BaseMapInteractionState
             Object.Destroy(workingAreaMarker);
 
         MenuController.Instance.Close("BuildingDetailsMenu");
-    }
-
-    private static Bounds GetBounds(GameObject building)
-    {
-        var allBounds = building.transform
-            .GetComponentsInChildren<Renderer>()
-            .Where(c => c.gameObject.activeInHierarchy)
-            .Where(c => c.GetComponent<ParticleSystem>() == null)
-            .Select(r => r.bounds)
-            .ToArray();
-
-        var bounds = allBounds[0];
-
-        for (int i = 1; i < allBounds.Length; i++)
-            bounds.Encapsulate(allBounds[i]);
-
-        return bounds;
     }
 }

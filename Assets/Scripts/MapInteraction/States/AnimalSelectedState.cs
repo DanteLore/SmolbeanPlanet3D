@@ -4,6 +4,7 @@ public class AnimalSelectedState : BaseMapInteractionState
 {
     private readonly GameObject selectionCursorPrefab;
     private GameObject cursor;
+    private Transform target;
 
     public AnimalSelectedState(MapInteractionData data, GameObject selectionCursorPrefab) : base(data)
     {
@@ -12,12 +13,19 @@ public class AnimalSelectedState : BaseMapInteractionState
 
     public override void OnEnter()
     {
-        cursor = Object.Instantiate(selectionCursorPrefab, data.SelectedTransform);
+        target = data.SelectedTransform;
+
+        if(target.TryGetComponent<FollowCameraTarget>(out var followCameraTarget))
+            FollowCameraController.Instance.SetTarget(followCameraTarget);
+
+        cursor = Object.Instantiate(selectionCursorPrefab, target);
         MenuController.Instance.ShowMenu("AnimalDetailsMenu");
     }
 
     public override void OnExit()
     {
+        FollowCameraController.Instance.SetTarget(null);
+
         Object.Destroy(cursor);
         cursor = null;
         MenuController.Instance.Close("AnimalDetailsMenu");
