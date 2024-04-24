@@ -54,9 +54,17 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         zoomDistance = transposer.m_FollowOffset.magnitude;
         targetZoom = zoomDistance;
 
+        GameStateManager.Instance.GamePauseStateChanged += PauseStateChanged;
+        virtualCamera.gameObject.SetActive(!GameStateManager.Instance.IsPaused);
+
         actions.GodView.Enable();
 
         Clear();
+    }
+
+    private void PauseStateChanged(object sender, bool isPaused)
+    {
+        virtualCamera.gameObject.SetActive(!isPaused);
     }
 
     private void CameraZoomInput(InputAction.CallbackContext context)
