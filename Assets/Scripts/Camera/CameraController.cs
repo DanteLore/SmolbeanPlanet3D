@@ -1,10 +1,13 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 // https://www.youtube.com/watch?v=pJQndtJ2rk0
 // https://www.youtube.com/watch?v=ZSP3bFaZm-o
-public class CameraController : MonoBehaviour
+public class CameraController : MonoBehaviour, IObjectGenerator
 {    
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
     [SerializeField] private float speedMin = 30f;
@@ -17,6 +20,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private float zoomDistanceMax = 500f;
     [SerializeField] private Vector3 lookAngleMin = new(0f, 0.1f, 0.8f);
     [SerializeField] private Vector3 lookAngleMax = new(0f, 0.8f, -0.1f);
+    [SerializeField] private Vector3 startPosition;
+    [SerializeField] private float startZoomDistance;
 
     private GridManager gridManager;
     private CinemachineTransposer transposer;
@@ -29,6 +34,10 @@ public class CameraController : MonoBehaviour
     private InputAction rotationAction;
     private float rotationInput;
     private float zoomInput;
+
+    public int Priority { get { return 500; }}
+
+    public bool RunModeOnly { get { return true; }}
 
     void Awake()
     {
@@ -46,11 +55,8 @@ public class CameraController : MonoBehaviour
         targetZoom = zoomDistance;
 
         actions.GodView.Enable();
-    }
 
-    private void CameraRotationInput(InputAction.CallbackContext context)
-    {
-        rotationInput = context.ReadValue<Vector2>().x;
+        Clear();
     }
 
     private void CameraZoomInput(InputAction.CallbackContext context)
@@ -63,17 +69,19 @@ public class CameraController : MonoBehaviour
         if (GameStateManager.Instance.IsPaused)
             return;
 
+        var trans = transform;
+
         if(movementAction.inProgress)
         {
             Vector2 input = movementAction.ReadValue<Vector2>();
             speed = input.magnitude < 1.0f ? speedMin : Mathf.Lerp(speed, speedMax, Time.unscaledDeltaTime);
-            Vector3 move = transform.forward * input.y + transform.right * input.x;
+            Vector3 move = trans.forward * input.y + trans.right * input.x;
             move *= speed * Time.unscaledDeltaTime;
-            var newPos = transform.position + move;
+            var newPos = trans.position + move;
             float y = gridManager.GetMaxGridHightAt(newPos.x, newPos.z);
             y = float.IsNaN(y) ? 1f : y;
             y = Mathf.Max(y, 1f);
-            transform.position = new Vector3(newPos.x, y, newPos.z);
+            trans.position = new Vector3(newPos.x, y, newPos.z);
         }
 
         if(rotationAction.activeControl != null && 
@@ -82,7 +90,7 @@ public class CameraController : MonoBehaviour
             rotationInput = rotationAction.ReadValue<Vector2>().x;
             rotateSpeed = Mathf.Abs(rotationInput) < 1 ? rotateSpeedMin : Mathf.Lerp(rotateSpeed, rotateSpeedMax, Time.unscaledDeltaTime);
             rotationInput *= rotateSpeed * Time.unscaledDeltaTime;
-            transform.eulerAngles += new Vector3(0f, rotationInput, 0f);
+            trans.eulerAngles += new Vector3(0f, rotationInput, 0f);
         }
 
         if(zoomInput > 0f)
@@ -93,12 +101,69 @@ public class CameraController : MonoBehaviour
         targetZoom = Mathf.Clamp(targetZoom, zoomDistanceMin, zoomDistanceMax);
 
         float zoomNorm = Mathf.InverseLerp(zoomDistanceMin, zoomDistanceMax, zoomDistance);
-        Vector3 lookVector = Quaternion.Euler(0f, transform.rotation.y, 0f) * Vector3.Lerp(lookAngleMin, lookAngleMax, zoomNorm).normalized;
+        Vector3 lookVector = Quaternion.Euler(0f, trans.rotation.y, 0f) * Vector3.Lerp(lookAngleMin, lookAngleMax, zoomNorm).normalized;
         
         zoomDistance = Mathf.Lerp(zoomDistance, targetZoom, Time.unscaledDeltaTime * zoomSpeed);
         transposer.m_FollowOffset = lookVector * zoomDistance;
 
         // Reset inputs we've digested
         zoomInput = 0f;
+    }
+
+    public void Clear()
+    {
+        targetZoom = startZoomDistance;
+        SetTarget(startPosition);
+    }
+
+    public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
+    {
+        return null; // Nothing to do here
+    }
+
+    public void SaveTo(SaveFileData saveData, string filename)
+    {
+        var pos = transform.position;
+        var rot = transform.rotation.eulerAngles;
+        var camPos = virtualCamera.transform.position;
+        var camRot = virtualCamera.transform.rotation.eulerAngles;
+
+        saveData.cameraData = new CameraSaveData {
+            positionX = pos.x,
+            positionY = pos.y,
+            positionZ = pos.z,
+            rotationX = rot.x,
+            rotationY = rot.y,
+            rotationZ = rot.z,
+            cameraPositionX = camPos.x,
+            cameraPositionY = camPos.y,
+            cameraPositionZ = camPos.z,
+            cameraRotationX = camRot.x,
+            cameraRotationY = camRot.y,
+            cameraRotationZ = camRot.z,
+            zoomHeight = zoomDistance
+        };
+    }
+
+    public IEnumerator Load(SaveFileData data, string filename)
+    {
+        var d = data.cameraData;
+        var pos = new Vector3(d.positionX, d.positionY, d.positionZ);
+        var rot = new Vector3(d.rotationX, d.rotationY, d.rotationZ);
+        var camPos = new Vector3(d.cameraPositionX, d.cameraPositionY, d.cameraPositionZ);
+        var camRot = new Vector3(d.cameraRotationX, d.cameraRotationY, d.cameraRotationZ);
+
+        transform.SetPositionAndRotation(pos, Quaternion.Euler(rot));
+        virtualCamera.transform.SetPositionAndRotation(camPos, Quaternion.Euler(camRot));
+
+        zoomDistance = d.zoomHeight;
+        targetZoom = zoomDistance;
+
+        return null;
+    }
+
+    public void SetTarget(Vector3 pos)
+    {
+        transform.position = pos;
     }
 }

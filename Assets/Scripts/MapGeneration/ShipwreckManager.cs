@@ -7,11 +7,10 @@ public class ShipwreckManager : MonoBehaviour, IObjectGenerator
 {
     public static ShipwreckManager Instance { get; private set; }
 
-    //public CameraController cameraController;
-    public BuildingSpec shipwreckSpec;
-    public Ingredient[] startingInventory;
-    public float shipwreckClearingRadius = 6f;
-    public string natureLayer = "Nature";
+    [SerializeField] private BuildingSpec shipwreckSpec;
+    [SerializeField] private Ingredient[] startingInventory;
+    [SerializeField] private float shipwreckClearingRadius = 6f;
+    [SerializeField] private string natureLayer = "Nature";
 
     public SmolbeanBuilding Shipwreck { get; private set; }
     public int Priority { get { return 200; } }
