@@ -37,7 +37,7 @@ public class CameraController : MonoBehaviour, IObjectGenerator
     private float zoomInput;
     private bool isMouseOverUI;
 
-    public int Priority { get { return 500; }}
+    public int Priority { get { return 600; }}
 
     public bool RunModeOnly { get { return true; }}
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,12 +15,12 @@ public class MainMenuController : SmolbeanMenu
 
         var newGameButton = document.rootVisualElement.Q<Button>("newGameButton");
         newGameButton.clicked += NewGameButtonClicked;
-        
+
         var resumeButton = document.rootVisualElement.Q<Button>("resumeButton");
         resumeButton.clicked += ResumeButtonClicked;
-        resumeButton.visible = GameStateManager.Instance.IsStarted;
-        GameStateManager.Instance.GameStatusChanged += (o, started) => resumeButton.visible = started;
-        
+        resumeButton.visible = CanResume();
+        GameStateManager.Instance.GameStatusChanged += (o, started) => resumeButton.visible = CanResume();
+
         var saveGameButton = document.rootVisualElement.Q<Button>("saveGameButton");
         saveGameButton.clicked += SaveGameButtonClicked;
         saveGameButton.visible = GameStateManager.Instance.IsStarted;
@@ -27,12 +28,22 @@ public class MainMenuController : SmolbeanMenu
 
         var loadGameButton = document.rootVisualElement.Q<Button>("loadGameButton");
         loadGameButton.clicked += LoadGameButtonClicked;
-        
+
         var settingsButton = document.rootVisualElement.Q<Button>("settingsButton");
         settingsButton.clicked += SettingsButtonClicked;
-        
+
         var quitButton = document.rootVisualElement.Q<Button>("quitButton");
         quitButton.clicked += QuitButtonClicked;
+    }
+
+    private static bool CanResume()
+    {
+        return 
+            GameStateManager.Instance.IsStarted ||
+            (
+                !string.IsNullOrEmpty(PrefsManager.Instance.LastSaveName) &&
+                SaveGameManager.Instance.SaveFileExists(PrefsManager.Instance.LastSaveName)
+            );
     }
 
     private void SettingsButtonClicked()
@@ -62,6 +73,19 @@ public class MainMenuController : SmolbeanMenu
     private void ResumeButtonClicked()
     {
         soundPlayer.Play("Click");
+
+        if(GameStateManager.Instance.IsStarted)
+            MenuController.Instance.CloseAll();
+        else    
+            StartCoroutine(LoadGame());
+    }
+
+    private IEnumerator LoadGame()
+    {
+        document.rootVisualElement.style.display = DisplayStyle.None;
+        yield return SaveGameManager.Instance.LoadGame(PrefsManager.Instance.LastSaveName);
+        yield return null;
+        GameStateManager.Instance.StartGame();
         MenuController.Instance.CloseAll();
     }
 

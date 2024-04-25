@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using Newtonsoft.Json;
 using System.Collections;
+using System;
 
 public class SaveGameManager : MonoBehaviour
 {
@@ -44,6 +45,8 @@ public class SaveGameManager : MonoBehaviour
             };
             serializer.Serialize(file, saveData);
         }
+
+        PrefsManager.Instance.LastSaveName = name;
     }
 
     private static string GetFilename(string name)
@@ -81,6 +84,13 @@ public class SaveGameManager : MonoBehaviour
             saveData = (SaveFileData)serializer.Deserialize(file, typeof(SaveFileData));
         }
 
+        PrefsManager.Instance.LastSaveName = name;
+
         yield return mapGenerator.Load(saveData, filename);
+    }
+
+    public bool SaveFileExists(string name)
+    {
+        return File.Exists(GetFilename(name));
     }
 }

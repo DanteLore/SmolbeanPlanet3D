@@ -75,6 +75,18 @@ public class PrefsManager : MonoBehaviour
         }
     }
 
+    public string LastSaveName
+    {
+        get 
+        { 
+            return PlayerPrefs.GetString("LastSaveName", null);
+        }
+        set 
+        {
+            PlayerPrefs.SetString("LastSaveName", value);
+        }
+    }
+
     void Awake()
     {
         if(Instance != null && Instance != this)

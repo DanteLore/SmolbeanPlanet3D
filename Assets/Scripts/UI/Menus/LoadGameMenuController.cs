@@ -43,8 +43,6 @@ public class LoadGameMenuController : SmolbeanMenu
 
     private IEnumerator LoadGame()
     {
-        soundPlayer.Play("Click");
-        yield return null;
         document.rootVisualElement.style.display = DisplayStyle.None;
         yield return SaveGameManager.Instance.LoadGame((string)fileListView.selectedItem);
         yield return null;
