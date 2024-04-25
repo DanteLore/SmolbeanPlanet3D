@@ -42,13 +42,16 @@ public class FollowCameraController : MonoBehaviour
 
     private void SetupCamera()
     {
-        var targetTransform = Target.transform;
+        if(Target != null)
+        {
+            var targetTransform = Target.transform;
 
-        float y = targetTransform.GetRendererBounds().max.y;
-        composer.m_TrackedObjectOffset.y = y;
-        transposer.m_FollowOffset = new Vector3(0f, y * 2f, y * -4f);
+            float y = targetTransform.GetRendererBounds().max.y;
+            composer.m_TrackedObjectOffset.y = y;
+            transposer.m_FollowOffset = new Vector3(0f, y * 2f, y * -4f);
 
-        virtualCamera.Follow = targetTransform;
-        virtualCamera.LookAt = targetTransform;
+            virtualCamera.Follow = targetTransform;
+            virtualCamera.LookAt = targetTransform;
+        }
     }
 }
