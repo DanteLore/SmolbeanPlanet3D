@@ -14,6 +14,7 @@ public class MapInteractionData
     public bool OverMenu { get; set; }
     public bool LeftButtonClicked { get; set; }
     public bool RightButtonClicked { get; set; }
+    public bool ColonistSwappedIdentity { get; set; }
 
     public string NatureLayerName;
     public string CreatureLayerName;
@@ -26,7 +27,7 @@ public class MapInteractionData
     public int GroundLayer;
     public int BuildingLayer;
     public int DropLayer;
-    internal string[] BuildCollisionLayers;
+    public string[] BuildCollisionLayers;
 
     public GameObject SelectedGameObject { get { return SelectedTransform != null ? SelectedTransform.gameObject : null; } }
 
@@ -59,6 +60,12 @@ public class MapInteractionData
     public void SetStartWorkAreaPlacement()
     {
         StartWorkAreaPlacement = true;
+    }
+
+    public void ForceSelect(Transform target)
+    {
+        SelectedTransform = target;
+        NewObjectClicked = true;
     }
 
     public void ForceDeselect()

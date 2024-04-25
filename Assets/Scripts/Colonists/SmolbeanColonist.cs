@@ -9,6 +9,9 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
     public Job Job { get; set; }
     public SmolbeanHome Home { get; set; }
 
+    public delegate void ColonistSwapEvent(SmolbeanColonist orignal, SmolbeanColonist replacement);
+    public ColonistSwapEvent IdentitySwapped;
+
     public override void AdoptIdentity(SmolbeanAnimal original)
     {
         base.AdoptIdentity(original);
@@ -23,6 +26,8 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
         
         Home = originalColonist.Home;
         Home.SwapColonist(originalColonist, this);
+
+        originalColonist.IdentitySwapped?.Invoke(originalColonist, this);
     }
 
     protected override void Start()

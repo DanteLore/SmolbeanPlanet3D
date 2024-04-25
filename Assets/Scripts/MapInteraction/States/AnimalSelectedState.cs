@@ -15,6 +15,9 @@ public class AnimalSelectedState : BaseMapInteractionState
     {
         target = data.SelectedTransform;
 
+        if(target != null && target.TryGetComponent<SmolbeanColonist>(out var colonist))
+            colonist.IdentitySwapped += ColonistIdentitySwapped;
+
         if(target.TryGetComponent<FollowCameraTarget>(out var followCameraTarget))
             FollowCameraController.Instance.SetTarget(followCameraTarget);
         else
@@ -25,6 +28,9 @@ public class AnimalSelectedState : BaseMapInteractionState
 
     public override void OnExit()
     {
+        if(target != null && target.TryGetComponent<SmolbeanColonist>(out var colonist))
+            colonist.IdentitySwapped -= ColonistIdentitySwapped;
+
         FollowCameraController.Instance.SetTarget(null);
 
         if(cursor != null)
@@ -34,5 +40,10 @@ public class AnimalSelectedState : BaseMapInteractionState
         }
         
         MenuController.Instance.Close("AnimalDetailsMenu");
+    }
+
+    private void ColonistIdentitySwapped(SmolbeanColonist orignal, SmolbeanColonist replacement)
+    {
+        data.ForceSelect(replacement.transform);
     }
 }
