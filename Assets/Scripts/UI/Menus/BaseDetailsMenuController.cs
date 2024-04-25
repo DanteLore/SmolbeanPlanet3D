@@ -18,7 +18,7 @@ public abstract class BaseDetailsMenuController : SmolbeanMenu
         closeButton.clicked += CloseButtonClicked;
     }
 
-    void OnDisable()
+    protected virtual void OnDisable()
     {
         target = null;
     }

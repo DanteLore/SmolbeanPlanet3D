@@ -10,27 +10,36 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 {
     private readonly Dictionary<FieldInfo, Label> fieldLookup = new();
     private VisualElement thoughtsContainer;
+    private VisualElement inventoryRow;
+    private SmolbeanAnimal targetAnimal;
 
     protected override void OnEnable()
     {
         base.OnEnable();
-
+        
         target = MapInteractionManager.Instance.Data.SelectedTransform;
+        targetAnimal = target.GetComponent<SmolbeanAnimal>();
 
         Clear();
         DrawMenu();
 
         InvokeRepeating(nameof(UpdateValues), 1f, 1f);
-        target.GetComponent<SmolbeanAnimal>().ThoughtsChanged += ThoughtsChanged;
+
+        targetAnimal.ThoughtsChanged += ThoughtsChanged;
+        targetAnimal.Inventory.ContentsChanged += InventoryChanged;
     }
 
-    protected void OnDisable()
+    protected override void OnDisable()
     {
-        if (target != null)
-            target.GetComponent<SmolbeanAnimal>().ThoughtsChanged -= ThoughtsChanged;
+        if (targetAnimal != null)
+        {
+            targetAnimal.ThoughtsChanged -= ThoughtsChanged;
+            targetAnimal.Inventory.ContentsChanged -= InventoryChanged;
+        }
         CancelInvoke(nameof(UpdateValues));
 
         target = null;
+        targetAnimal = null;
     }
 
     protected override void Clear()
@@ -50,50 +59,59 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 
     private void ThoughtsChanged(object sender, EventArgs e)
     {
-        UpdateThoughts(target.GetComponent<SmolbeanAnimal>());
+        UpdateThoughts();
     }
 
-    private void UpdateLocation(SmolbeanAnimal animal)
+    private void InventoryChanged()
     {
-        var pos = gridManager.GetGameSquareFromWorldCoords(animal.transform.position);
+        UpdateInventory();
+    }
+
+    private void UpdateLocation()
+    {
+        var pos = gridManager.GetGameSquareFromWorldCoords(targetAnimal.transform.position);
         var positionLabel = document.rootVisualElement.Q<Label>("positionLabel");
         positionLabel.text = $"{pos.x}λ \u00d7 {pos.y}φ";
     }
 
     private void DrawMenu()
     {
-        var animal = target.GetComponent<SmolbeanAnimal>();
-
+        var scrollView = document.rootVisualElement.Q<ScrollView>("mainScrollView");
+        
         var animalImage = document.rootVisualElement.Q<VisualElement>("animalImage");
-        animalImage.style.backgroundImage = animal.species.thumbnail;
+        animalImage.style.backgroundImage = targetAnimal.species.thumbnail;
 
         var nameLabel = document.rootVisualElement.Q<Label>("nameLabel");
-        nameLabel.text = animal.Stats.name;
+        nameLabel.text = targetAnimal.Stats.name;
 
-        UpdateLocation(animal);
+        UpdateLocation();
 
-        DisplayFields(animal);
+        DisplayFields();
 
-        var colonist = animal as SmolbeanColonist;
+        var colonist = targetAnimal as SmolbeanColonist;
         if (colonist)
             DisplayColonistDetails(colonist);
 
-        if(!animal.Inventory.IsEmpty())
-            DisplayInventory(animal);
+        Title(scrollView, "𐚱", "Inventory");
+        inventoryRow = new VisualElement();
+        inventoryRow.AddToClassList("inventoryRow");
+        scrollView.Add(inventoryRow);
+
+        UpdateInventory();
 
         thoughtsContainer = new();
         thoughtsContainer.AddToClassList("thoughtsContainer");
-        document.rootVisualElement.Q<ScrollView>("mainScrollView").Add(thoughtsContainer);
+        scrollView.Add(thoughtsContainer);
 
-        UpdateThoughts(animal);
+        UpdateThoughts();
     }
 
-    private void UpdateThoughts(SmolbeanAnimal animal)
+    private void UpdateThoughts()
     {
         thoughtsContainer.Clear();
 
         int listLength = 4;
-        var thoughts = animal.Thoughts.Reverse().Take(listLength).ToArray();
+        var thoughts = targetAnimal.Thoughts.Reverse().Take(listLength).ToArray();
 
         for(int i = 0; i < thoughts.Length; i++)
         {
@@ -103,20 +121,18 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
 
             string timeStr = DayNightCycleController.Instance.DisplayTime(thoughts[i].timeOfDay);
             string dayStr = DayNightCycleController.Instance.DisplayDay(thoughts[i].day);
-            Label todLabel = new();
-            todLabel.text = $"{dayStr} {timeStr}";
+            Label todLabel = new($"{dayStr} {timeStr}");
             todLabel.AddToClassList("todLabel");
             thoughtsRow.Add(todLabel);
 
-            Label thoughtLabel = new();
-            thoughtLabel.text = thoughts[i].thought;
+            Label thoughtLabel = new(thoughts[i].thought);
             thoughtsRow.Add(thoughtLabel);
         }
     }
 
-    private void DisplayFields(SmolbeanAnimal animal)
+    private void DisplayFields()
     {
-        FieldInfo[] fields = animal.Stats.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
+        FieldInfo[] fields = targetAnimal.Stats.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance);
 
         foreach (var field in fields.Where(f => f.Name != "name").OrderBy(f => f.Name))
         {
@@ -124,14 +140,12 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
             rowContainer.AddToClassList("fieldRow");
             document.rootVisualElement.Q<ScrollView>("mainScrollView").Add(rowContainer);
 
-            Label fieldLabel = new();
+            Label fieldLabel = new(NicifyVariableName(field.Name) + ":");
             fieldLabel.AddToClassList("fieldLabel");
-            fieldLabel.text = NicifyVariableName(field.Name) + ":";
             rowContainer.Add(fieldLabel);
 
-            Label valueLabel = new();
+            Label valueLabel = new(GetDisplayValue(targetAnimal, field));
             valueLabel.AddToClassList("valueLabel");
-            valueLabel.text = GetDisplayValue(animal, field);
             rowContainer.Add(valueLabel);
 
             fieldLookup.Add(field, valueLabel);
@@ -156,22 +170,22 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
         jobButton.style.backgroundImage = colonist.Job.JobSpec.thumbnail;
         jobRow.Add(jobButton);
 
-        Label jobLabel = new();
-        jobLabel.text = colonist.Job.JobSpec.jobName;
+        Label jobLabel = new(colonist.Job.JobSpec.jobName);
         jobRow.Add(jobLabel);
     }
 
-    private void DisplayInventory(SmolbeanAnimal animal)
+    private void UpdateInventory()
     {
-        var scrollView = document.rootVisualElement.Q<ScrollView>("mainScrollView");
+        inventoryRow.Clear();
 
-        Title(scrollView, "𐚱", "Inventory");
+        if(targetAnimal.Inventory.IsEmpty())
+        {
+            Label emptyLabel = new("Nothing");
+            inventoryRow.Add(emptyLabel);
+            return;
+        }
 
-        VisualElement inventoryRow = new();
-        inventoryRow.AddToClassList("inventoryRow");
-        scrollView.Add(inventoryRow);
-
-        foreach (var item in animal.Inventory.Totals)
+        foreach (var item in targetAnimal.Inventory.Totals)
         {
             Button button = new();
             button.text = item.quantity.ToString();
@@ -190,7 +204,7 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
             label.text = GetDisplayValue(animal, field);
         }
 
-        UpdateLocation(animal);
+        UpdateLocation();
     }
 
     private string NicifyVariableName(string name)

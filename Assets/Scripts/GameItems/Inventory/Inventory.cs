@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using UnityEngine.Assertions;
 
 public class Inventory
@@ -11,6 +10,8 @@ public class Inventory
     public int Count { get { return inventory.Count; }}
 
     public IReadOnlyCollection<InventoryItem> Items { get { return inventory; }}
+
+    public Action ContentsChanged;
 
     public IReadOnlyCollection<InventoryItem> Totals
     {
@@ -50,13 +51,17 @@ public class Inventory
             inventory.Add(item);
 
         MergeStacks();
+        ContentsChanged?.Invoke();
     }
 
     public InventoryItem DropLast()
     {        
         var item = inventory.LastOrDefault();
         if(item != null)
+        {
             inventory.Remove(item);
+            ContentsChanged?.Invoke();
+        }
         return item;
     }
 
@@ -88,11 +93,13 @@ public class Inventory
         if(item.quantity == requiredQuantity)
         {
             inventory.Remove(item);
+            ContentsChanged?.Invoke();
             return item;
         }
 
         // Must be too big, so split it
         item.quantity -= requiredQuantity;
+        ContentsChanged?.Invoke();
         return new InventoryItem
         {
             dropSpec = item.dropSpec,
@@ -150,9 +157,10 @@ public class Inventory
         return q >= quantity;
     }
 
-    public void Empty()
+    public void Clear()
     {
         inventory.Clear();
+        ContentsChanged?.Invoke();
     }
 
     public override string ToString()

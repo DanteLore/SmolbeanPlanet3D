@@ -84,7 +84,7 @@ public class BuildingSite : SmolbeanBuilding
 
         buildingInProgress = true;
         buildParticleSystem.Play();
-        Inventory.Empty();
+        Inventory.Clear();
     }
 
     public void EndBuild()
