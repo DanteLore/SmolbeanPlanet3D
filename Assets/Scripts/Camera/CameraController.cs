@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 // https://www.youtube.com/watch?v=pJQndtJ2rk0
@@ -34,6 +35,7 @@ public class CameraController : MonoBehaviour, IObjectGenerator
     private InputAction rotationAction;
     private float rotationInput;
     private float zoomInput;
+    private bool isMouseOverUI;
 
     public int Priority { get { return 500; }}
 
@@ -69,11 +71,15 @@ public class CameraController : MonoBehaviour, IObjectGenerator
 
     private void CameraZoomInput(InputAction.CallbackContext context)
     {
-        zoomInput = context.ReadValue<Vector2>().y / 100f;
+        // Only zoom if the mouse is not over the UI
+        if(!isMouseOverUI && !GameStateManager.Instance.IsPaused)
+            zoomInput = context.ReadValue<Vector2>().y / 100f;
     }
 
     void Update()
     {
+        isMouseOverUI = EventSystem.current.IsPointerOverGameObject();
+
         if (GameStateManager.Instance.IsPaused)
             return;
 
