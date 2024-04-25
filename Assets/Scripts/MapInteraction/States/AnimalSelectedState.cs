@@ -17,8 +17,9 @@ public class AnimalSelectedState : BaseMapInteractionState
 
         if(target.TryGetComponent<FollowCameraTarget>(out var followCameraTarget))
             FollowCameraController.Instance.SetTarget(followCameraTarget);
-
-        cursor = Object.Instantiate(selectionCursorPrefab, target);
+        else
+            cursor = Object.Instantiate(selectionCursorPrefab, target);
+    
         MenuController.Instance.ShowMenu("AnimalDetailsMenu");
     }
 
@@ -26,8 +27,12 @@ public class AnimalSelectedState : BaseMapInteractionState
     {
         FollowCameraController.Instance.SetTarget(null);
 
-        Object.Destroy(cursor);
-        cursor = null;
+        if(cursor != null)
+        {
+            Object.Destroy(cursor);
+            cursor = null;
+        }
+        
         MenuController.Instance.Close("AnimalDetailsMenu");
     }
 }

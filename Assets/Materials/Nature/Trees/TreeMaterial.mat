@@ -65,6 +65,6 @@ Material:
     - _windSpeed: 0.02
     - _windStrength: 0.1
     m_Colors:
-    - _windDirection: {r: -0.79631084, g: 0, b: -0.6048877, a: 0}
+    - _windDirection: {r: -0.75618595, g: 0, b: 0.65435684, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
