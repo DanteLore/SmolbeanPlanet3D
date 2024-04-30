@@ -15,6 +15,7 @@ public class MapInteractionData
     public bool LeftButtonClicked { get; set; }
     public bool RightButtonClicked { get; set; }
     public bool ColonistSwappedIdentity { get; set; }
+    public float BuildingRotationY { get; internal set; }
 
     public string NatureLayerName;
     public string CreatureLayerName;
@@ -30,6 +31,7 @@ public class MapInteractionData
     public string[] BuildCollisionLayers;
 
     public GameObject SelectedGameObject { get { return SelectedTransform != null ? SelectedTransform.gameObject : null; } }
+
 
     public T Selected<T>() where T : MonoBehaviour => SelectedGameObject.GetComponent<T>();
 
