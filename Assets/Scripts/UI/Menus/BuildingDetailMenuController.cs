@@ -28,7 +28,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
         DrawMenu();
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
         target = null;
     }

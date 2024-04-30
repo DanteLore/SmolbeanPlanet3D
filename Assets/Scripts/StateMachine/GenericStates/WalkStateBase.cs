@@ -30,6 +30,8 @@ public abstract class WalkStateBase : IState
         navAgent.isStopped = false;
         destSetAt = Time.time;
 
+        navAgent.avoidancePriority = UnityEngine.Random.Range(50, 99);
+
         lastPosition = navAgent.transform.position;
         lastMoved = Time.time;
 
@@ -66,7 +68,7 @@ public abstract class WalkStateBase : IState
         var time = Time.time;
 
         // Not finished planning our route yet...
-        if (navAgent.pathPending)
+        if (navAgent.pathPending && navAgent.velocity.sqrMagnitude < 0.1f)
         {
             if (animator != null)
                 animator.SetBool("IsWalking", false);
