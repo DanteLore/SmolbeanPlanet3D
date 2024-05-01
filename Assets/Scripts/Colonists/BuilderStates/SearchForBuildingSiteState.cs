@@ -14,7 +14,12 @@ public class SearchForBuildingSiteState : IState
 
     public void OnEnter()
     {
-        builder.TargetBuilding = GetTarget(builder.transform.position);
+        var newTarget = GetTarget(builder.transform.position);
+
+        if(builder.TargetBuilding == null && newTarget != null)
+            builder.Think($"Next building project: {newTarget.name}");
+
+        builder.TargetBuilding = newTarget;
     }
 
     public void OnExit()
