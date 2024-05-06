@@ -108,7 +108,8 @@ public class SoundPlayer : MonoBehaviour
 
     public void PlayOneShot(string clipName, Vector3 position)
     {
-        if(clipLookup.TryGetValue(clipName, out var clip))
+        if(GameStateManager.Instance.IsStarted &&
+            clipLookup.TryGetValue(clipName, out var clip))
         {
             AudioSource.PlayClipAtPoint(clip.clip, position, clip.volume);
         }

@@ -31,6 +31,7 @@ public class FlockState : CompoundState
     public override void OnEnter()
     {
         base.OnEnter();
-        soundPlayer.PlayOneShot("Dodo1");        
+        if(GameStateManager.Instance.IsStarted)
+            soundPlayer.PlayOneShot("Dodo1");        
     }
 }
