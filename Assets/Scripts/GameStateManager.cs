@@ -55,6 +55,7 @@ public class GameStateManager : MonoBehaviour
     public void EndGame()  
     { 
         IsStarted = false;
+        AudioListener.pause = true;
         GameStatusChanged?.Invoke(this, IsStarted);
     }
 
@@ -62,6 +63,7 @@ public class GameStateManager : MonoBehaviour
     {
         IsStarted = true;
         SelectedGameSpeed = 1f;
+        AudioListener.pause = false;
         GameStatusChanged?.Invoke(this, IsStarted);
     }
 
