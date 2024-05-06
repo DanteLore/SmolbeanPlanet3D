@@ -18,6 +18,9 @@ public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
     {
         base.Start();
 
+        StateMachine.ShouldLog = true;
+        StateMachine.OnLogMessage += message => Think(message);
+
         var idle = new IdleState(animator);
         var giveUpJob = new SwitchColonistToFreeState(this);
         var searchForDeliveryJob = new PorterClaimDeliveryRequest(this, DeliveryManager.Instance);
@@ -44,10 +47,16 @@ public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
         Func<bool> DropFound() => () => TargetDrop != null;
         Func<bool> NoDropFound() => () => TargetDrop == null && !searchForCollectionJob.InProgress;
         Func<bool> HasBeenIdleFor(float t) => () => idle.TimeIdle >= t;
-        Func<bool> FetchDropSucceeded() => () => fetchDrop.Finished && CloseEnoughTo(Job.Building.spawnPoint, 1f);
-        Func<bool> FetchDropFailed() => () => fetchDrop.Finished && !CloseEnoughTo(Job.Building.spawnPoint, 1f);
+        Func<bool> FetchDropSucceeded() => () => fetchDrop.Finished && CloseEnoughToBuildingSpawnPoint(Job.Building);
+        Func<bool> FetchDropFailed() => () => fetchDrop.Finished && !CloseEnoughToBuildingSpawnPoint(Job.Building);
         Func<bool> NoDeliveryToDo() => () => DeliveryRequest == null;
         Func<bool> DeliveryAssigned() => () => DeliveryRequest != null;
         Func<bool> DeliveryComplete() => () => doDelivery.Finished;
+    }
+
+    private bool CloseEnoughToBuildingSpawnPoint(SmolbeanBuilding building)
+    {
+        return CloseEnoughTo(building.GetSpawnPoint(), 1f) ||
+                CloseEnoughTo(building.gameObject, 2f);
     }
 }

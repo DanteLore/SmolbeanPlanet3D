@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class StateMachine
 {
+    public bool ShouldLog = false;
+    public Action<string> OnLogMessage;
+
     private IState currentState;
-    public bool shouldLog = false;
     private readonly bool allowSelfTransitions;
     private readonly Dictionary<Type, Transition[]> transitions = new();
     private Transition[] currentTransitions = Array.Empty<Transition>();
@@ -29,7 +31,7 @@ public class StateMachine
 
     public StateMachine(bool shouldLog = false, bool allowSelfTransitions = false)
     {
-        this.shouldLog = shouldLog;
+        this.ShouldLog = shouldLog;
         this.allowSelfTransitions = allowSelfTransitions;
     }
 
@@ -105,8 +107,11 @@ public class StateMachine
 
     private void Log(string message)
     {
-        if (shouldLog)
+        if (ShouldLog)
+        {          
+            OnLogMessage?.Invoke(message);
             Debug.Log(message);
+        }
     }
 
     public void ForceStop()

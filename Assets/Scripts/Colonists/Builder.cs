@@ -16,8 +16,6 @@ public class Builder : SmolbeanColonist
     {
         base.Start();
 
-        StateMachine.shouldLog = true;
-
         var giveUpJob = new SwitchColonistToFreeState(this);
 
         var idle = new IdleState(animator);

@@ -13,6 +13,9 @@ public class PorterDoDeliveryRequestState : CompoundState
         this.porter = porter;
         this.deliveryManager = deliveryManager;
 
+        stateMachine.ShouldLog = true;
+        stateMachine.OnLogMessage += message => porter.Think(message);
+
         var walkToDestination = new PorterWalkToBuildingState(porter, navAgent, animator, soundPlayer);
         var succeeded = new PorterFinishedDeliveryRequestState(this, porter, deliveryManager);
         var failed = new PorterFailedDeliveryRequestState(this, porter, deliveryManager);
@@ -30,7 +33,7 @@ public class PorterDoDeliveryRequestState : CompoundState
 
         AT(pickupStuff, failed, DidNotGetTheStuff());
         AT(pickupStuff, failed, DeliveryRequestCancelled());
-        
+
         AT(walkToDestination, goToStorehouse, DeliveryRequestCancelled());
         AT(unloadStuff, goToStorehouse, DeliveryRequestCancelled());
 
@@ -40,15 +43,21 @@ public class PorterDoDeliveryRequestState : CompoundState
 
         stateMachine.SetStartState(goToStorehouse);
 
-        Func<bool> IsAtDestinationBuilding() => () => porter.DeliveryRequest.Building != null && porter.CloseEnoughTo(porter.DeliveryRequest.Building.GetSpawnPoint(), 1f);
-        Func<bool> IsAtStorehouseAndReadyToPickup() => () => porter.CloseEnoughTo(porter.Job.Building.spawnPoint, 1f) && porter.DeliveryRequest != null && porter.DeliveryRequest.IsComplete == false;
-        Func<bool> IsAtStorehouseAndReadyToDropOff() => () => porter.CloseEnoughTo(porter.Job.Building.spawnPoint, 1f) && (porter.DeliveryRequest == null || porter.DeliveryRequest.IsComplete);
+        Func<bool> IsAtDestinationBuilding() => () => porter.DeliveryRequest.Building != null && CloseEnoughToBuildingSpawnPoint(porter.DeliveryRequest.Building);
+        Func<bool> IsAtStorehouseAndReadyToPickup() => () => CloseEnoughToBuildingSpawnPoint(porter.Job.Building) && porter.DeliveryRequest != null && porter.DeliveryRequest.IsComplete == false;
+        Func<bool> IsAtStorehouseAndReadyToDropOff() => () => CloseEnoughToBuildingSpawnPoint(porter.Job.Building) && (porter.DeliveryRequest == null || porter.DeliveryRequest.IsComplete);
         Func<bool> HasStuffInInventory() => () => porter.Inventory.Contains(porter.DeliveryRequest.Item, porter.DeliveryRequest.Quantity);
         Func<bool> DidNotGetTheStuff() => () => !porter.Inventory.Contains(porter.DeliveryRequest.Item, porter.DeliveryRequest.Quantity);
         Func<bool> DeliveryIsFinished() => () => porter.DeliveryRequest == null || porter.DeliveryRequest.IsComplete;
         Func<bool> DeliveryRequestCancelled() => () => DeliveryIsFinished().Invoke() && HasStuffInInventory().Invoke();
         Func<bool> InventoryEmpty() => () => porter.Inventory.IsEmpty();
         Func<bool> BuildingDeleted() => () => porter.DeliveryRequest == null || porter.DeliveryRequest.Building == null;
+    }
+
+    private bool CloseEnoughToBuildingSpawnPoint(SmolbeanBuilding building)
+    {
+        return porter.CloseEnoughTo(building.GetSpawnPoint(), 2f) ||
+                porter.CloseEnoughTo(building.gameObject, 3f);
     }
 
     public override void OnExit()
