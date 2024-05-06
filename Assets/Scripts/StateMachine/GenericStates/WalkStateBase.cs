@@ -30,8 +30,6 @@ public abstract class WalkStateBase : IState
         navAgent.isStopped = false;
         destSetAt = Time.time;
 
-        navAgent.avoidancePriority = UnityEngine.Random.Range(50, 99);
-
         lastPosition = navAgent.transform.position;
         lastMoved = Time.time;
 
