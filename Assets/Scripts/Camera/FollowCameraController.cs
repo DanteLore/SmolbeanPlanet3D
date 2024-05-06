@@ -46,7 +46,7 @@ public class FollowCameraController : MonoBehaviour
         {
             var targetTransform = Target.transform;
 
-            float y = targetTransform.GetRendererBounds().max.y;
+            float y = targetTransform.GetRendererBounds().max.y - targetTransform.transform.position.y;
             composer.m_TrackedObjectOffset.y = y;
             transposer.m_FollowOffset = new Vector3(0f, y * 2f, y * -4f);
 
