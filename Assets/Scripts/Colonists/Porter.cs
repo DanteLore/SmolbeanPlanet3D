@@ -18,8 +18,8 @@ public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
     {
         base.Start();
 
-        StateMachine.ShouldLog = true;
-        StateMachine.OnLogMessage += message => Think(message);
+        //StateMachine.ShouldLog = true;
+        //StateMachine.OnLogMessage += message => Think(message);
 
         var idle = new IdleState(animator);
         var giveUpJob = new SwitchColonistToFreeState(this);

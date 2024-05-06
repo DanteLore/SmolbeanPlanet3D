@@ -13,8 +13,8 @@ public class PorterDoDeliveryRequestState : CompoundState
         this.porter = porter;
         this.deliveryManager = deliveryManager;
 
-        stateMachine.ShouldLog = true;
-        stateMachine.OnLogMessage += message => porter.Think(message);
+        //stateMachine.ShouldLog = true;
+        //stateMachine.OnLogMessage += message => porter.Think(message);
 
         var walkToDestination = new PorterWalkToBuildingState(porter, navAgent, animator, soundPlayer);
         var succeeded = new PorterFinishedDeliveryRequestState(this, porter, deliveryManager);
