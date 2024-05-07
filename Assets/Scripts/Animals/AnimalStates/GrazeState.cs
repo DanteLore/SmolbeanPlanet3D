@@ -31,6 +31,6 @@ public class GrazeState : CompoundState
     public override void OnEnter()
     {
         base.OnEnter();
-        //soundPlayer.PlayOneShot("Dodo2");
+        soundPlayer.PlayOneShot("Dodo2");
     }
 }

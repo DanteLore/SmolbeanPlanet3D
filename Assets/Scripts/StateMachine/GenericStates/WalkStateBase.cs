@@ -40,9 +40,7 @@ public abstract class WalkStateBase : IState
         }
 
         if (soundPlayer != null)
-        {
-            soundPlayer?.Play("Footsteps");
-        }
+            soundPlayer.Play("Footsteps");
     }
 
     public virtual void OnExit()
@@ -56,9 +54,7 @@ public abstract class WalkStateBase : IState
         navAgent.isStopped = true;
 
         if (soundPlayer != null)
-        {
-            soundPlayer?.Stop("Footsteps");
-        }
+            soundPlayer.Stop("Footsteps");
     }
 
     public void Tick()
@@ -83,6 +79,11 @@ public abstract class WalkStateBase : IState
             destSetAt = time;
         }
 
+        if(navAgent.hasPath && Time.deltaTime - lastMoved > 1f)
+        {
+            OnStuck();
+        }
+
         // Start walking
         if (animator != null)
             animator.SetBool("IsWalking", true);
@@ -92,10 +93,15 @@ public abstract class WalkStateBase : IState
         if(animator != null && navAgent != null)
             animator.speed = Mathf.InverseLerp(0f, navAgent.speed, navAgent.velocity.magnitude);
 
-        if (Vector3.SqrMagnitude(lastPosition - pos) > 0.0f)
+        if (Vector3.Magnitude(lastPosition - pos) > 0.5f)
         {
             lastMoved = time;
             lastPosition = pos;
         }
+    }
+
+    protected virtual void OnStuck()
+    {
+
     }
 }
