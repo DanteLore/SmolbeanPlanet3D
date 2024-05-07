@@ -43,7 +43,7 @@ public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
 
         StateMachine.SetStartState(idle);
 
-        Func<bool> JobTerminated() => () => Job.IsTerminated;
+        Func<bool> JobTerminated() => () => Job == null || Job.IsTerminated;
         Func<bool> DropFound() => () => TargetDrop != null;
         Func<bool> NoDropFound() => () => TargetDrop == null && !searchForCollectionJob.InProgress;
         Func<bool> HasBeenIdleFor(float t) => () => idle.TimeIdle >= t;
