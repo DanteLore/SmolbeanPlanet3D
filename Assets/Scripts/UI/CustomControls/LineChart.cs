@@ -33,6 +33,8 @@ public class LineChart : VisualElement
     private float startTime;
     private float endTime;
 
+    private const int MAX_READINGS_PER_LINE = 100;
+
     public DataCollectionSeries[] Series
     {
         get { return series; }
@@ -71,29 +73,41 @@ public class LineChart : VisualElement
     {
         foreach (var s in Series)
         {
-            if(!s.IsVisible)
+            if (!s.IsVisible)
                 continue;
-                
+
             painter.strokeColor = s.lineColor;
             painter.lineJoin = LineJoin.Round;
             painter.lineCap = LineCap.Round;
             painter.lineWidth = 2.0f;
 
-            painter.BeginPath();
-            var start = new Vector2(NormaliseX(s.Readings[0].startTime), NormaliseY(s.Readings[0].value));
-            var end = new Vector2(NormaliseX(s.Readings[0].endTime), NormaliseY(s.Readings[0].value));
-            painter.MoveTo(start);
-            painter.LineTo(end);
-
-            for (int i = 1; i < s.Readings.Count; i++)
+            int batchOffset = 0;
+            while(batchOffset < s.Readings.Count)
             {
-                start = new Vector2(NormaliseX(s.Readings[i].startTime), NormaliseY(s.Readings[i].value));
-                end = new Vector2(NormaliseX(s.Readings[i].endTime), NormaliseY(s.Readings[i].value));
-                painter.LineTo(start);
-                painter.LineTo(end);
+                DrawSeriesSubset(painter, s, batchOffset, MAX_READINGS_PER_LINE);
+                batchOffset += MAX_READINGS_PER_LINE - 1;
             }
-            painter.Stroke();
         }
+    }
+
+    private void DrawSeriesSubset(Painter2D painter, DataCollectionSeries series, int index, int count)
+    {
+        painter.BeginPath();
+        var start = new Vector2(NormaliseX(series.Readings[index].startTime), NormaliseY(series.Readings[index].value));
+        var end = new Vector2(NormaliseX(series.Readings[index].endTime), NormaliseY(series.Readings[index].value));
+        painter.MoveTo(start);
+        painter.LineTo(end);
+
+        int i = 1;
+        while(i < count && index + i < series.Readings.Count)
+        {
+            start = new Vector2(NormaliseX(series.Readings[index + i].startTime), NormaliseY(series.Readings[index + i].value));
+            end = new Vector2(NormaliseX(series.Readings[index + i].endTime), NormaliseY(series.Readings[index + i].value));
+            painter.LineTo(start);
+            painter.LineTo(end);
+            i++;
+        }
+        painter.Stroke();
     }
 
     private void DrawAxes(Painter2D painter)
