@@ -25,16 +25,16 @@ MonoBehaviour:
   maxHealth: 100
   healthRecoveryPerSecond: 2
   sleepingHealthDecreaseMultiplier: 0.1
-  oldAgeSeconds: 900
-  lifespanSeconds: 1200
+  oldAgeSeconds: 7200
+  lifespanSeconds: 11520
   oldAgeHealthImpactPerSecond: 4
-  maturityAgeSeconds: 300
+  maturityAgeSeconds: 720
   juvenileScale: 0.4
   gestationPeriodSeconds: 30
-  birthProbability: 0.053
+  birthProbability: 0.1
   minimumHealthToGiveBirth: 80
-  pregnancyHealthImpact: 80
-  sightRange: 32
+  pregnancyHealthImpact: 50
+  sightRange: 48
   speed: 4
   oldAgeSpeedDecrease: 2
   maxFoodLevel: 100
@@ -44,7 +44,7 @@ MonoBehaviour:
   sleepingDigestionMultiplier: 0.2
   starvationThreshold: 20
   starvationRatePerSecond: 2
-  foodEatenPerSecond: 6
+  foodEatenPerSecond: 10
   fullThreshold: 80
   hungryThreshold: 30
   grassWearPerSecondWhenEating: 3

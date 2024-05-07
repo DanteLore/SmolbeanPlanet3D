@@ -137,7 +137,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         else
         {
             // Health recover with a full stomach
-            float healthDelta = species.healthRecoveryPerSecond * ageFactor * Time.deltaTime;
+            float healthDelta = species.healthRecoveryPerSecond * Time.deltaTime;
             healthDelta *= Mathf.InverseLerp(species.starvationThreshold, species.maxFoodLevel, stats.foodLevel);
             stats.health = Mathf.Min(species.maxHealth, stats.health + healthDelta);
         }
@@ -167,7 +167,8 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         Instantiate(species.deathParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
         //soundPlayer.Play("Break");
         
-        DropController.Instance.Drop(species.dropSpec, transform.position);
+        // Disabled automatic drop to stop the map being littered with steaks.  Instead, only drop when killed, not at old age etc.
+        //DropController.Instance.Drop(species.dropSpec, transform.position);
         yield return new WaitForEndOfFrame();
 
         body.SetActive(false);
