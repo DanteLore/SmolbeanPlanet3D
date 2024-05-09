@@ -5,9 +5,12 @@ using System;
 
 public class PorterSearchForDropToCollectState : IState
 {
-    private const float maxRadius = 3200f;
+    private const float MAX_RADIUS = 3200f;
+    
+    private const int MAX_COLLIDERS = 100;
+    private static readonly Collider[] hitColliders = new Collider[MAX_COLLIDERS];
 
-    public bool InProgress { get { return radius <= maxRadius; } }
+    public bool InProgress { get { return radius <= MAX_RADIUS; } }
     private Porter porter;
     private readonly string dropLayer;
     private float radius;
@@ -35,24 +38,31 @@ public class PorterSearchForDropToCollectState : IState
 
     private void ClaimCollectionJob()
     {
-        porter.TargetDrop = GetDropTargets(porter.transform.position)
-                                            .Take(3)
-                                            .ToList()
-                                            .OrderBy(_ => Guid.NewGuid())
-                                            .FirstOrDefault();
+        porter.TargetDrop = GetDropTarget(porter.transform.position);
+                                          
         if (porter.TargetDrop)
             DeliveryManager.Instance.ClaimCollection(porter.TargetDrop.GetComponent<SmolbeanDrop>(), porter);
         else
             radius += 8f;
     }
 
-    private IEnumerable<GameObject> GetDropTargets(Vector3 pos)
+    private GameObject GetDropTarget(Vector3 pos)
     {
-        return Physics.OverlapSphere(pos, radius, LayerMask.GetMask(dropLayer))
-            .Select(c => c.gameObject.GetComponent<SmolbeanDrop>())
-            .Where(i => i != null)
-            .Where(i => !DeliveryManager.Instance.IsCollectionClaimed(i))
-            .Select(i => i.gameObject)
-            .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - porter.transform.position));
+        int count = Physics.OverlapSphereNonAlloc(pos, radius, hitColliders, LayerMask.GetMask(dropLayer));
+
+        List<GameObject> dropObjects = new();
+
+        for(int i = 0; i < count; i++)
+            if(hitColliders[i].TryGetComponent<SmolbeanDrop>(out var drop) && !DeliveryManager.Instance.IsCollectionClaimed(drop))
+                dropObjects.Add(drop.gameObject);
+
+        if(dropObjects.Count == 0)
+            return null;
+
+        dropObjects.Sort((x, y) => {
+            return (Vector3.SqrMagnitude(pos - x.transform.position) <= Vector3.SqrMagnitude(pos - y.transform.position)) ? 1 : -1;
+        });
+
+        return dropObjects[0];
     }
 }

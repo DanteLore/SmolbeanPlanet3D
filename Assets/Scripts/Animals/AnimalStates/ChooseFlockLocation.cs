@@ -1,14 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
+
+// Some VERY ugly code in here - but the beautiful and terse linq methods just needed to go, for performance
 
 public class ChooseFlockLocation
     : IState
 {
     private readonly SmolbeanAnimal animal;
+
+    private const int MAX_COLLIDERS = 100;
+    private static readonly Collider[] hitColliders = new Collider[MAX_COLLIDERS];
 
     public ChooseFlockLocation(SmolbeanAnimal animal)
     {
@@ -17,35 +19,40 @@ public class ChooseFlockLocation
 
     public void OnEnter()
     {
-        animal.Think("Following the flock");
-
         var pos = animal.transform.position;
-        var treeLocations = GetTreeLocations(pos);
-        var animalLocations = GetAnimalLocations(pos);
 
-        var allLocations = treeLocations.Concat(animalLocations).ToArray();
+        Vector3 target;
+        Vector3 randomOffset = new Vector3(Random.Range(-16f, 16f), 0f, Random.Range(-16f, 16f));
+        bool animalTargetFound = TryGetAverageAnimalsLocationAroundPoint(pos, out Vector3 animalTarget);
+        bool treeTargetFound = TryGetAverageTreeLocationAroundPoint(pos, out Vector3 treeTarget);
 
-        float x = 0f, z = 0f;
-
-        if (allLocations.Length > 0)
+        if(animalTargetFound & treeTargetFound)
         {
-            foreach (var v in treeLocations)
-            {
-                x += v.x;
-                z += v.z;
-            }
-
-            x = (x / allLocations.Length) + Random.Range(-8, 8);
-            z = (z / allLocations.Length) + Random.Range(-8, 8);
+            // Follow other animals if we see any
+            animal.Think("Following the flock in the woods");
+            target = (animalTarget + treeTarget) / 2f + randomOffset;
+        }
+        else if(animalTargetFound)
+        {
+            // Otherwise, head for the trees
+            animal.Think("Folowing the flock");
+            target = animalTarget + randomOffset;
+        }
+        else if(treeTargetFound)
+        {
+            // Otherwise, head for the trees
+            animal.Think("Heading for the woods");
+            target = treeTarget + randomOffset;
         }
         else
         {
-            x = pos.x + Random.Range(-16, 16);
-            z = pos.z + Random.Range(-16, 16);
+            // If all else fails - just go somewhere random
+            animal.Think("Searching the island");
+            target = randomOffset * 2f;
         }
 
         if (
-                Physics.Raycast(new Ray(new Vector3(x, 1000, z), Vector3.down), out var rayHit, 2000, LayerMask.GetMask("Ground"))
+                Physics.Raycast(new Ray(new Vector3(target.x, 10000, target.z), Vector3.down), out var rayHit, float.MaxValue, LayerMask.GetMask("Ground"))
                 && NavMesh.SamplePosition(rayHit.point, out var navHit, 2.0f, NavMesh.AllAreas)
                 && navHit.position.y > 0.0f //don't go into the sea!
             )
@@ -54,21 +61,70 @@ public class ChooseFlockLocation
             animal.target = pos;
     }
 
-    private IEnumerable<Vector3> GetTreeLocations(Vector3 pos)
+    private bool TryGetAverageTreeLocationAroundPoint(Vector3 pos, out Vector3 target)
     {
-        return Physics.OverlapSphere(pos, animal.species.sightRange, LayerMask.GetMask("Nature"))
-                    .Select(c => c.gameObject.GetComponent<SmolbeanTree>())
-                    .Where(_ => _ != null)
-                    .Select(tree => tree.transform.position);
+        int colliderCount = Physics.OverlapSphereNonAlloc(pos, animal.species.sightRange, hitColliders, LayerMask.GetMask("Nature"));
+
+        if(colliderCount == 0)
+        {
+            target = pos;
+            return false;
+        }
+
+        target = Vector3.zero;
+        int count = 0;
+
+        for(int i = 1; i < colliderCount; i++)
+        {
+            if(hitColliders[i].TryGetComponent<SmolbeanTree>(out var tree))
+            {
+                target += tree.transform.position;
+                count++;
+            }
+        }
+
+        if(count == 0)
+        {
+            target = pos;
+            return false;
+        }
+
+        target /= count;
+
+        return true;
     }
 
-    private IEnumerable<Vector3> GetAnimalLocations(Vector3 pos)
+    private bool TryGetAverageAnimalsLocationAroundPoint(Vector3 pos, out Vector3 target)
     {
-        return Physics.OverlapSphere(pos, animal.species.sightRange, LayerMask.GetMask("Creatures"))
-                    .Select(c => c.gameObject.GetComponent<SmolbeanAnimal>())
-                    .Where(_ => _ != null)
-                    .Where(a => a.speciesIndex == animal.speciesIndex)
-                    .Select(a => a.transform.position);
+        int colliderCount = Physics.OverlapSphereNonAlloc(pos, animal.species.sightRange, hitColliders, LayerMask.GetMask("Creatures"));
+
+        if(colliderCount == 0)
+        {
+            target = pos;
+            return false;
+        }
+
+        target = Vector3.zero;
+        int count = 0;
+
+        for(int i = 0; i < colliderCount; i++)
+        {
+            if(hitColliders[i].transform.parent.TryGetComponent<SmolbeanAnimal>(out var a) && a.speciesIndex == animal.speciesIndex)
+            {
+                target += a.transform.position;
+                count++;
+            }
+        }
+
+        if(count == 0)
+        {
+            target = pos;
+            return false;
+        }
+
+        target /= count;
+
+        return true;
     }
 
     public void OnExit()
