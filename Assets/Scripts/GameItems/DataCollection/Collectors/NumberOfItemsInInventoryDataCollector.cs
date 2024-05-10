@@ -13,9 +13,12 @@ public class NumberOfItemsInInventoryDataCollector : DataCollectionSeries
 
     protected override float GetDataValue()
     {
-        return buildingController.Buildings
-            .SelectMany(b => b.Inventory.Totals)
-            .Where(i => i.dropSpec == dropSpec)
-            .Sum(i => i.quantity);
+        int count = 0;
+        foreach(var building in buildingController.Buildings)
+            foreach(var item in building.Inventory.Totals)
+                if(item.dropSpec == dropSpec)
+                    count += item.quantity;
+                    
+        return count;
     }
 }
