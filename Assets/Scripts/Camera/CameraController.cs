@@ -11,8 +11,9 @@ using UnityEngine.InputSystem;
 public class CameraController : MonoBehaviour, IObjectGenerator
 {    
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
-    [SerializeField] private float speedMin = 30f;
-    [SerializeField] private float speedMax = 300f;
+    [SerializeField] private float speedMin = 1f;
+    [SerializeField] private float speedMax = 10f;
+    [SerializeField] private float speedAltitudeMultiplier = 30f;
     [SerializeField] private float rotateSpeedMin = 90f;
     [SerializeField] private float rotateSpeedMax = 180f;
     [SerializeField] private float zoomStep = 10f;
@@ -85,27 +86,8 @@ public class CameraController : MonoBehaviour, IObjectGenerator
 
         var trans = transform;
 
-        if(movementAction.inProgress)
-        {
-            Vector2 input = movementAction.ReadValue<Vector2>();
-            speed = input.magnitude < 1.0f ? speedMin : Mathf.Lerp(speed, speedMax, Time.unscaledDeltaTime);
-            Vector3 move = trans.forward * input.y + trans.right * input.x;
-            move *= speed * Time.unscaledDeltaTime;
-            var newPos = trans.position + move;
-            float y = gridManager.GetMaxGridHightAt(newPos.x, newPos.z);
-            y = float.IsNaN(y) ? 1f : y;
-            y = Mathf.Max(y, 1f);
-            trans.position = new Vector3(newPos.x, y, newPos.z);
-        }
-
-        if(rotationAction.activeControl != null && 
-            (!rotationAction.activeControl.path.Contains("Mouse") || Mouse.current.rightButton.isPressed))
-        {
-            rotationInput = rotationAction.ReadValue<Vector2>().x;
-            rotateSpeed = Mathf.Abs(rotationInput) < 1 ? rotateSpeedMin : Mathf.Lerp(rotateSpeed, rotateSpeedMax, Time.unscaledDeltaTime);
-            rotationInput *= rotateSpeed * Time.unscaledDeltaTime;
-            trans.eulerAngles += new Vector3(0f, rotationInput, 0f);
-        }
+        // Zoom
+        float zoomNorm = Mathf.InverseLerp(zoomDistanceMin, zoomDistanceMax, zoomDistance);
 
         if(zoomInput > 0f)
             targetZoom -= zoomStep;
@@ -114,11 +96,40 @@ public class CameraController : MonoBehaviour, IObjectGenerator
 
         targetZoom = Mathf.Clamp(targetZoom, zoomDistanceMin, zoomDistanceMax);
 
-        float zoomNorm = Mathf.InverseLerp(zoomDistanceMin, zoomDistanceMax, zoomDistance);
         Vector3 lookVector = Quaternion.Euler(0f, trans.rotation.y, 0f) * Vector3.Lerp(lookAngleMin, lookAngleMax, zoomNorm).normalized;
         
         zoomDistance = Mathf.Lerp(zoomDistance, targetZoom, Time.unscaledDeltaTime * zoomSpeed);
         transposer.m_FollowOffset = lookVector * zoomDistance;
+
+        float altMultiplier = Mathf.Lerp(1, speedAltitudeMultiplier, zoomNorm);
+
+        // Move
+        if(movementAction.inProgress)
+        {
+            Vector2 input = movementAction.ReadValue<Vector2>();
+            speed = Mathf.Lerp(speed, speedMax * altMultiplier, Time.unscaledDeltaTime);
+            Vector3 move = trans.forward * input.y + trans.right * input.x;
+            move *= speed * Time.unscaledDeltaTime;
+            var newPos = trans.position + move;
+            float y = gridManager.GetMaxGridHightAt(newPos.x, newPos.z);
+            y = float.IsNaN(y) ? 1f : y;
+            y = Mathf.Max(y, 1f);
+            trans.position = new Vector3(newPos.x, y, newPos.z);
+        }
+        else
+        {
+            speed = speedMin * altMultiplier;
+        }
+
+        // Rotate
+        if(rotationAction.activeControl != null && 
+            (!rotationAction.activeControl.path.Contains("Mouse") || Mouse.current.rightButton.isPressed))
+        {
+            rotationInput = rotationAction.ReadValue<Vector2>().x;
+            rotateSpeed = Mathf.Abs(rotationInput) < 1 ? rotateSpeedMin : Mathf.Lerp(rotateSpeed, rotateSpeedMax, Time.unscaledDeltaTime);
+            rotationInput *= rotateSpeed * Time.unscaledDeltaTime;
+            trans.eulerAngles += new Vector3(0f, rotationInput, 0f);
+        }
 
         // Reset inputs we've digested
         zoomInput = 0f;
