@@ -8,35 +8,40 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
 {
     public static DayNightCycleController Instance { get; private set; }
     public bool RunModeOnly { get { return true; } }
-    public Gradient ambientLightColor;
-    [GradientUsage(hdr:true)] public Gradient sunColor;
-    public Gradient directionalLight;
-    public Gradient fog;
-    public AnimationCurve seasonCurve;
-    public Light sunLight;
-    public Material[] sunSensitiveMaterials;
-    public float hourLengthSeconds = 12f;
-    public float lightLevel;
-
-    [Range(0f, 24f)]
-    public float gameStartTime = 7f;
-
-    [Range(0f, 24f)]
-    public float timeOfDay;
-    public int day = 1;
     public int Priority { get { return 4; } }
+
+    [SerializeField] private Gradient ambientLightColor;
+    [SerializeField] [GradientUsage(hdr:true)] private Gradient sunColor;
+    [SerializeField] private Gradient directionalLight;
+    [SerializeField] private Gradient fog;
+    [SerializeField] private AnimationCurve seasonCurve;
+    [SerializeField] private Light sunLight;
+    [SerializeField] private Material[] sunSensitiveMaterials;
+    [SerializeField] private float hourLengthSeconds = 12f;
+    [SerializeField] private float lightLevel;
+    [SerializeField] [Range(0f, 24f)] private float gameStartTime = 7f;
+    [SerializeField] [Range(0f, 24f)] private float timeOfDay;
+    [SerializeField] private int day = 1;
+    [SerializeField] [Range(-90, 90)] private float sunAngleOffset = 0f;
+    [SerializeField] private bool forceTimePause = false;
+
+    public string DisplayTimeAndDay { get => $"{DisplayDay()}   {DisplayTime()}"; }
+    public int Day { get => day; }
+    public float TimeOfDay { get => timeOfDay; }
+    public float LightLevel { get => lightLevel; }
+    public float HourLengthSeconds { get => hourLengthSeconds; }
 
     public bool TimeIsBetween(float start, float end)
     {
         if (start < end)
-            return start <= timeOfDay && timeOfDay <= end;
+            return start <= TimeOfDay && TimeOfDay <= end;
         else
-            return timeOfDay <= end || timeOfDay >= start;
+            return TimeOfDay <= end || TimeOfDay >= start;
     }
 
     public string DisplayTime(float t = -1f)
     {
-        float tod = t == -1 ? timeOfDay : t;
+        float tod = t == -1 ? TimeOfDay : t;
 
         int hour = Mathf.FloorToInt(tod);
         float d = tod % 1f;
@@ -53,28 +58,20 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
 
     public string DisplayDay(int d = -1)
     {
-        int x = d == -1 ? day : d;
+        int x = d == -1 ? Day : d;
         return $"🜳 {x}";
     }
 
     public string DurationToString(float d)
     {
-        int days = Mathf.FloorToInt(d / (24 * hourLengthSeconds));
+        int days = Mathf.FloorToInt(d / (24 * HourLengthSeconds));
         string dayStr = DisplayDay(days);
 
-        float hours = d % (24 * hourLengthSeconds);
-        hours /= hourLengthSeconds;
+        float hours = d % (24 * HourLengthSeconds);
+        hours /= HourLengthSeconds;
         string hourStr = DisplayTime(hours);
 
         return $"{dayStr} {hourStr}";
-    }
-
-    public string DisplayTimeAndDay
-    {
-        get
-        {
-            return $"{DisplayDay()}   {DisplayTime()}";
-        }
     }
 
     void Awake()
@@ -83,6 +80,12 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
             Destroy(this);
         else
             Instance = this;
+    }
+
+    void Start()
+    {
+        if(forceTimePause)
+            Debug.LogWarning("Time is paused in the DayNightCycleController");
     }
 
     public void Clear()
@@ -100,7 +103,7 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
 
     public void SaveTo(SaveFileData saveData, string filename)
     {
-        saveData.timeData = new TimeOfDaySaveData { timeOfDay = timeOfDay, day = day };
+        saveData.timeData = new TimeOfDaySaveData { timeOfDay = TimeOfDay, day = Day };
     }
 
     public IEnumerator Load(SaveFileData data, string filename)
@@ -116,19 +119,19 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
 
     void Update()
     {
-        if(Application.isPlaying)
+        if(Application.isPlaying && !forceTimePause)
         {
-            timeOfDay += Time.deltaTime / hourLengthSeconds;
+            timeOfDay += Time.deltaTime / HourLengthSeconds;
             
-            if(timeOfDay > 24f)
+            if(TimeOfDay > 24f)
             {
                 day++;
                 timeOfDay %= 24f;
             }
         }
 
-        float tod = seasonCurve.Evaluate(timeOfDay / 24f);
-        float angle = 360f * tod - 90f;
+        float tod = seasonCurve.Evaluate(TimeOfDay / 24f);
+        float angle = 360f * tod - 90f + sunAngleOffset;
 
         var ambientLight = ambientLightColor.Evaluate(tod);
         RenderSettings.ambientLight = ambientLight;

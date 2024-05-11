@@ -25,8 +25,8 @@ public class Dodo : SmolbeanAnimal
 
         Func<bool> Hungry() => IsHungry;
         Func<bool> Full() => IsFull;
-        Func<bool> IsNight() => () => DayNightCycleController.Instance.lightLevel < sleepLightLevel;
-        Func<bool> WakeupTime(float sleepMax) => () => DayNightCycleController.Instance.lightLevel > sleepLightLevel && sleep.SleepDuration >= sleepMax;
+        Func<bool> IsNight() => () => DayNightCycleController.Instance.LightLevel < sleepLightLevel;
+        Func<bool> WakeupTime(float sleepMax) => () => DayNightCycleController.Instance.LightLevel > sleepLightLevel && sleep.SleepDuration >= sleepMax;
     }
 
     public override bool IsEnoughFoodHere()

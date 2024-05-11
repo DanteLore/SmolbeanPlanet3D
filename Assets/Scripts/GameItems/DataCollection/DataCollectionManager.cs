@@ -80,7 +80,7 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
             float startTime = Time.time;
 
             // Yeah yeah yeah... this is a weird way to store the time... I know... I know
-            float gameTime = DayNightCycleController.Instance.day * 24 + DayNightCycleController.Instance.timeOfDay;
+            float gameTime = DayNightCycleController.Instance.Day * 24 + DayNightCycleController.Instance.TimeOfDay;
 
             foreach(var series in Series)
             {

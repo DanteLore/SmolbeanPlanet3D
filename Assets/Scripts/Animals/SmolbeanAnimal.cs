@@ -85,8 +85,8 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         var t = new Thought
         {
             thought = thought,
-            day = DayNightCycleController.Instance.day,
-            timeOfDay = DayNightCycleController.Instance.timeOfDay
+            day = DayNightCycleController.Instance.Day,
+            timeOfDay = DayNightCycleController.Instance.TimeOfDay
         };
 
         thoughts.Add(t);

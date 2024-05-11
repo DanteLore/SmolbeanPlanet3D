@@ -131,8 +131,8 @@ public class LineChart : VisualElement
 
         // Vertical 
         float duration = endTime - startTime;
-        float dayLength = DayNightCycleController.Instance.hourLengthSeconds * 24;
-        float horizontalStep = duration < dayLength ? DayNightCycleController.Instance.hourLengthSeconds : dayLength;
+        float dayLength = DayNightCycleController.Instance.HourLengthSeconds * 24;
+        float horizontalStep = duration < dayLength ? DayNightCycleController.Instance.HourLengthSeconds : dayLength;
         float x = Mathf.Ceil(startTime / horizontalStep) * horizontalStep;
         while (x < endTime)
         {

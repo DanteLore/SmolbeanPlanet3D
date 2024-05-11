@@ -73,11 +73,11 @@ Material:
     - _transparencyMultiplier: 0
     - _windSpeed: 0.0001
     m_Colors:
-    - _ambientLightColor: {r: 0.77445453, g: 0.7745122, b: 0.7805661, a: 1}
+    - _ambientLightColor: {r: 0.7718647, g: 0.7498841, b: 0.5426382, a: 1}
     - _cloudColor: {r: 1, g: 1, b: 1, a: 1}
-    - _directionalLightColor: {r: 0.77445453, g: 0.7745122, b: 0.7805661, a: 1}
-    - _sunColor: {r: 3.9999998, g: 3.8862364, b: 2.6613033, a: 1}
-    - _sunDirection: {r: -0.6527483, g: -0.65607905, b: 0.37878746, a: 0}
-    - _windDirection: {r: -0.82950234, g: 0, b: -0.55850327, a: 0}
+    - _directionalLightColor: {r: 0.7718647, g: 0.7498841, b: 0.5426382, a: 1}
+    - _sunColor: {r: 3.480589, g: 2.863184, b: 1.8765427, a: 1}
+    - _sunDirection: {r: -0.9239672, g: -0.33123022, b: 0.19123591, a: 0}
+    - _windDirection: {r: -0.76920265, g: 0, b: 0.63900495, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
