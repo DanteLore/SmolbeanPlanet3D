@@ -13,11 +13,13 @@ public class FreeColonistState : CompoundState
         AT(idle, findRestingPlace, IdleForUpTo(20f));
         AT(findRestingPlace, wander, HasSomewhereToGo());
         AT(wander, idle, Arrived());
+        AT(wander, findRestingPlace, Stuck());
 
         stateMachine.SetStartState(idle);
 
         Func<bool> HasSomewhereToGo() => () => !colonist.CloseEnoughTo(colonist.target, 0.5f);
         Func<bool> Arrived() => () => colonist.CloseEnoughTo(colonist.target, 2f);
         Func<bool> IdleForUpTo(float seconds) => () => idle.TimeIdle >= Random.Range(0f, seconds);
+        Func<bool> Stuck() => () => wander.IsStuck;
     }
 }
