@@ -179,8 +179,8 @@ public class GridManager : MonoBehaviour, IObjectGenerator
 
     public Rect GetSquareBounds(int gameX, int gameZ)
     {
-        float meshX = (gameX * tileSize) - ((DrawMapWidth * tileSize) / 2.0f);
-        float meshZ = (gameZ * tileSize) - ((DrawMapHeight * tileSize) / 2.0f);
+        float meshX = (gameX * tileSize) - (DrawMapWidth * tileSize / 2.0f);
+        float meshZ = (gameZ * tileSize) - (DrawMapHeight * tileSize / 2.0f);
 
         return new Rect(meshX, meshZ, tileSize, tileSize);
     }
