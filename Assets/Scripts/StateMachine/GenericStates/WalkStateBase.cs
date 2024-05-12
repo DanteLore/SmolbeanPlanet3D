@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,6 +13,7 @@ public abstract class WalkStateBase : IState
     protected float destSetAt;
       
     public float StuckTime { get { return Time.time - lastMoved; } }
+    public bool IsStuck { get; set; }
 
     public WalkStateBase(NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer)
     {
@@ -75,13 +75,10 @@ public abstract class WalkStateBase : IState
             // This might happen if the destination has moved, for example if a building was rotated
             Vector3 dest = GetDestination();
             if (navAgent.destination != dest)
+            {
                 navAgent.SetDestination(dest);
-            destSetAt = time;
-        }
-
-        if(navAgent.hasPath && Time.deltaTime - lastMoved > 1f)
-        {
-            OnStuck();
+                destSetAt = time;
+            }
         }
 
         // Start walking
@@ -93,10 +90,17 @@ public abstract class WalkStateBase : IState
         if(animator != null && navAgent != null)
             animator.speed = Mathf.InverseLerp(0f, navAgent.speed, navAgent.velocity.magnitude);
 
-        if (Vector3.Magnitude(lastPosition - pos) > 0.5f)
+        if (Vector3.SqrMagnitude(lastPosition - pos) > 1f)
         {
             lastMoved = time;
             lastPosition = pos;
+            IsStuck = false;
+        }
+
+        if(time - lastMoved > 1f && time - destSetAt > 2f && !IsStuck)
+        {
+            IsStuck = true;
+            OnStuck();
         }
     }
 
