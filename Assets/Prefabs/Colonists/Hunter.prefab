@@ -230,11 +230,16 @@ MonoBehaviour:
   groundLayer: Ground
   buildingLayer: Buildings
   dropLayer: Drops
-  speciesIndex: 0
-  species: {fileID: 11400000, guid: 9cc68d1bc4c7b41bcb45f3d19e0f784c, type: 2}
-  target: {x: 0, y: 0, z: 0}
   memoryLength: 12
-  prefabIndex: -1
+  damage: 20
+  hitCooldown: 1
+  idleTime: 1
+  sleepTime: 2
+  maxStacks: 3
+  dropSpec: {fileID: 0}
+  shotDistance: 16
+  targetSpecies: {fileID: 11400000, guid: b32f3108f56654e9e988034915a8604e, type: 2}
+  bow: {fileID: 2436070056548171731}
 --- !u!114 &-7274162803684928981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,7 +252,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c7c8ddac78b84a028ea3feb28243e3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualCameraName: FollowCamera
 --- !u!1 &7627731738399426965
 GameObject:
   m_ObjectHideFlags: 0

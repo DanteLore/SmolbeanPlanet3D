@@ -16,7 +16,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     [SerializeField] protected string groundLayer = "Ground";
     [SerializeField] protected string buildingLayer = "Buildings";
     [SerializeField] protected string dropLayer = "Drops";
-
+    
     [SerializeField] protected int memoryLength = 12;
 
     private readonly List<Thought> thoughts = new();
