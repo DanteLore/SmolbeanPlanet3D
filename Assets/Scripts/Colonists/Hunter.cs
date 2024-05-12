@@ -38,7 +38,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         AT(searchForPrey, walkToTarget, TargetFound());
         AT(searchForPrey, idle, NoTargetFound());
 
-        AT(walkToTarget, attack, ReadyToShoot());
+        AT(walkToTarget, attack, InPosition());
 
         StateMachine.SetStartState(idle);
 
@@ -46,7 +46,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         Func<bool> IdleFor(float s) => () => idle.TimeIdle > s;
         Func<bool> TargetFound() => () => !searchForPrey.InProgress && Prey != null;
         Func<bool> NoTargetFound() => () => !searchForPrey.InProgress && Prey == null;
-        Func<bool> ReadyToShoot() => () => Prey != null && CloseEnoughTo(Target, 2f);
+        Func<bool> InPosition() => () => Prey != null && CloseEnoughTo(Target, 2f);
     }
 
     public void TakeAim()
