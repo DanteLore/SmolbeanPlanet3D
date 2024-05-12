@@ -12,7 +12,7 @@ public class GoToWorkState : IState
         if (colonist.Job != null && colonist.Job.Building != null)
         {
             colonist.Think($"Heading to work at {colonist.Job.Building.name}");
-            colonist.target = colonist.Job.Building.spawnPoint.transform.position;
+            colonist.Target = colonist.Job.Building.spawnPoint.transform.position;
         }
     }
 

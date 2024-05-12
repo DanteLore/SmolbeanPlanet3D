@@ -16,7 +16,7 @@ public class DoJobState : CompoundState
         stateMachine.SetStartState(goToWork);
 
         Func<bool> IsStuck() => () => wander.StuckTime >= 5f * Time.timeScale;
-        Func<bool> HasSomewhereToGo() => () => !colonist.CloseEnoughTo(colonist.target, 1f);
-        Func<bool> Arrived() => () => colonist.CloseEnoughTo(colonist.target, 2f);
+        Func<bool> HasSomewhereToGo() => () => !colonist.CloseEnoughTo(colonist.Target, 1f);
+        Func<bool> Arrived() => () => colonist.CloseEnoughTo(colonist.Target, 2f);
     }
 }

@@ -112,13 +112,16 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
     private SmolbeanAnimal InstantiateAnimal(AnimalSaveData saveData)
     {
         var spec = animalSpecs[saveData.speciesIndex];
+
+        Debug.Assert(spec != null, $"Error creating animal with data {saveData}");
+
         var prefabIndex = saveData.prefabIndex;
         var prefab = animalPrefabs[prefabIndex];
         var pos = new Vector3(saveData.positionX, saveData.positionY, saveData.positionZ);
         var rot = Quaternion.Euler(0f, saveData.rotationY, 0f);
         var animal = Instantiate(prefab, pos, rot, transform).GetComponent<SmolbeanAnimal>();
-        animal.target = pos;
-        animal.species = spec;
+        animal.Target = pos;
+        animal.Species = spec;
         animal.LoadFrom(saveData);
 
         return animal;
@@ -136,8 +139,8 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
 
         var newAnimal = Instantiate(prefab, pos, rot, parent).GetComponent<SmolbeanAnimal>();
         newAnimal.AdoptIdentity(original);
-        newAnimal.speciesIndex = Array.IndexOf(animalSpecs, newAnimal.species);
-        newAnimal.prefabIndex = Array.IndexOf(animalPrefabs, prefab);
+        newAnimal.SpeciesIndex = Array.IndexOf(animalSpecs, newAnimal.Species);
+        newAnimal.PrefabIndex = Array.IndexOf(animalPrefabs, prefab);
 
         Destroy(original.gameObject);
     }
@@ -178,7 +181,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
 
     public int AnimalCount(AnimalSpec species)
     {
-        return GetComponentsInChildren<SmolbeanAnimal>().Count(animal => animal.species == species);
+        return GetComponentsInChildren<SmolbeanAnimal>().Count(animal => animal.Species == species);
     }
 
     public int AnimalCount()

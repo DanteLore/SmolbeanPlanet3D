@@ -22,7 +22,7 @@ public class EatGrassState : IState
     {
         var pos = animal.transform.position;
         var available = GroundWearManager.Instance.GetAvailableGrass(pos);
-        animal.Eat(animal.species.foodEatenPerSecond * available * Time.deltaTime);
-        GroundWearManager.Instance.RegisterHarvest(pos, animal.species.grassWearPerSecondWhenEating * Time.deltaTime);
+        animal.Eat(animal.Species.foodEatenPerSecond * available * Time.deltaTime);
+        GroundWearManager.Instance.RegisterHarvest(pos, animal.Species.grassWearPerSecondWhenEating * Time.deltaTime);
     }
 }

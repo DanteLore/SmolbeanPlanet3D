@@ -9,14 +9,14 @@ public class SearchForResourceState : IState
 {
     private float maxRadius;
     private Vector3 center;
-    private readonly ResourceGatherer gatherer;
+    private readonly StaticResourceGatherer gatherer;
     private readonly string natureLayer;
     private ResourceCollectionBuilding building;
     private float radius;
 
     public bool InProgress { get { return radius <= maxRadius; } }
 
-    public SearchForResourceState(ResourceGatherer gatherer, string natureLayer)
+    public SearchForResourceState(StaticResourceGatherer gatherer, string natureLayer)
     {
         this.gatherer = gatherer;
         this.natureLayer = natureLayer;
@@ -28,7 +28,7 @@ public class SearchForResourceState : IState
         radius = Math.Min(building.collectionZoneRadius, 8f);
         maxRadius = building.collectionZoneRadius;
         center = building.collectionZoneCenter;
-        gatherer.Target = null;
+        gatherer.ResourceTarget = null;
     }
 
     public void OnExit()
@@ -37,7 +37,7 @@ public class SearchForResourceState : IState
 
     public void Tick()
     {
-        if (!gatherer.Target)
+        if (!gatherer.ResourceTarget)
             FindTarget();
     }
 
@@ -51,7 +51,7 @@ public class SearchForResourceState : IState
                         .FirstOrDefault();
 
         if (target)
-            gatherer.Target = target;
+            gatherer.ResourceTarget = target;
         else
             radius += 8f;
     }

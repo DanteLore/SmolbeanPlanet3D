@@ -11,37 +11,36 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     protected void AT(IState from, IState to, Func<bool> condition) => StateMachine.AddTransition(from, to, condition);
     protected void AT(IState to, Func<bool> condition) => StateMachine.AddAnyTransition(to, condition);
 
-    public string natureLayer = "Nature";
-    public string creatureLayer = "Creatures";
-    public string groundLayer = "Ground";
-    public string buildingLayer = "Buildings";
-    public string dropLayer = "Drops";
+    [SerializeField] protected string natureLayer = "Nature";
+    [SerializeField] protected string creatureLayer = "Creatures";
+    [SerializeField] protected string groundLayer = "Ground";
+    [SerializeField] protected string buildingLayer = "Buildings";
+    [SerializeField] protected string dropLayer = "Drops";
 
-    public Inventory Inventory { get; private set; }
+    [SerializeField] protected int memoryLength = 12;
 
-    protected AnimalStats stats;
-    public AnimalStats Stats
-    {
-        get { return stats; }
-    }
+    private readonly List<Thought> thoughts = new();
+    private GameObject sleepPs;
 
     protected Animator animator;
     protected NavMeshAgent navAgent;
     protected SoundPlayer soundPlayer;
-
-    protected StateMachine StateMachine { get; private set; }
-    public int speciesIndex;
-    public AnimalSpec species;
-    public Vector3 target;
+    protected AnimalStats stats;
     protected GameObject body;
     protected bool isDead = false;
     protected bool isSleeping = false;
-    private GameObject sleepPs;
-    private readonly List<Thought> thoughts = new();
+    protected StateMachine StateMachine { get; private set; }
+
+    public int SpeciesIndex { get; set; }
+    public AnimalSpec Species { get; set; }
+    public Vector3 Target { get; set; }
+    public int PrefabIndex { get; set; }
+
+    public Inventory Inventory { get; private set; }
+    public AnimalStats Stats { get { return stats; } }
     public IEnumerable<Thought> Thoughts { get { return thoughts; } }
-    public int memoryLength = 12;
+
     public EventHandler ThoughtsChanged;
-    public int prefabIndex = -1;
 
     protected virtual void Start()
     {
@@ -72,7 +71,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     {
         // Might be more to do here?
         stats = original.stats;
-        species = original.species;
+        Species = original.Species;
         thoughts.Clear();
         thoughts.AddRange(original.Thoughts);
     }
@@ -100,46 +99,46 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     {
         stats.age += Time.deltaTime;
 
-        float ageFactor = Mathf.InverseLerp(species.oldAgeSeconds, species.lifespanSeconds, stats.age);
+        float ageFactor = Mathf.InverseLerp(Species.oldAgeSeconds, Species.lifespanSeconds, stats.age);
 
         // Juveniles are small
-        if(stats.age <= species.maturityAgeSeconds)
+        if(stats.age <= Species.maturityAgeSeconds)
         {
-            var x = Mathf.InverseLerp(0f, species.maturityAgeSeconds, stats.age);
-            var s = Mathf.Lerp(species.juvenileScale, 1f, x);
+            var x = Mathf.InverseLerp(0f, Species.maturityAgeSeconds, stats.age);
+            var s = Mathf.Lerp(Species.juvenileScale, 1f, x);
             transform.localScale = new Vector3(s, s, s);
         }
 
         // Speed decrease due to old age
-        navAgent.speed = species.speed - species.oldAgeSpeedDecrease * ageFactor;
+        navAgent.speed = Species.speed - Species.oldAgeSpeedDecrease * ageFactor;
 
         // Decreasing health due to old age
-        float oldAgeHealthDetriment = species.oldAgeHealthImpactPerSecond * ageFactor * Time.deltaTime;
+        float oldAgeHealthDetriment = Species.oldAgeHealthImpactPerSecond * ageFactor * Time.deltaTime;
         if (isSleeping) // Less if sleeping!
-            oldAgeHealthDetriment *= species.sleepingHealthDecreaseMultiplier;
+            oldAgeHealthDetriment *= Species.sleepingHealthDecreaseMultiplier;
         stats.health -= oldAgeHealthDetriment;
 
         // Digest some food
-        float foodDelta = species.foodDigestedPerSecond * Time.deltaTime;
+        float foodDelta = Species.foodDigestedPerSecond * Time.deltaTime;
         if (isSleeping) // Less if sleeping!
-            foodDelta *= species.sleepingHealthDecreaseMultiplier;
+            foodDelta *= Species.sleepingHealthDecreaseMultiplier;
         stats.foodLevel = Mathf.Max(0f, stats.foodLevel - foodDelta);
 
-        if (stats.foodLevel <= species.starvationThreshold)
+        if (stats.foodLevel <= Species.starvationThreshold)
         {
             // Health decrease due to starvation
-            float healthDelta = species.starvationRatePerSecond * Time.deltaTime;
-            healthDelta *= 1f - Mathf.InverseLerp(0f, species.starvationThreshold, stats.foodLevel);
+            float healthDelta = Species.starvationRatePerSecond * Time.deltaTime;
+            healthDelta *= 1f - Mathf.InverseLerp(0f, Species.starvationThreshold, stats.foodLevel);
             if (isSleeping) // Less if sleeping!
-                healthDelta *= species.sleepingHealthDecreaseMultiplier;
+                healthDelta *= Species.sleepingHealthDecreaseMultiplier;
             stats.health -= healthDelta; 
         }
         else
         {
             // Health recover with a full stomach
-            float healthDelta = species.healthRecoveryPerSecond * Time.deltaTime;
-            healthDelta *= Mathf.InverseLerp(species.starvationThreshold, species.maxFoodLevel, stats.foodLevel);
-            stats.health = Mathf.Min(species.maxHealth, stats.health + healthDelta);
+            float healthDelta = Species.healthRecoveryPerSecond * Time.deltaTime;
+            healthDelta *= Mathf.InverseLerp(Species.starvationThreshold, Species.maxFoodLevel, stats.foodLevel);
+            stats.health = Mathf.Min(Species.maxHealth, stats.health + healthDelta);
         }
 
         if (stats.health <= 0)
@@ -148,8 +147,8 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public virtual void LoadFrom(AnimalSaveData saveData)
     {
-        speciesIndex = saveData.speciesIndex;
-        prefabIndex = saveData.prefabIndex;
+        SpeciesIndex = saveData.speciesIndex;
+        PrefabIndex = saveData.prefabIndex;
         thoughts.Clear();
         thoughts.AddRange(saveData.thoughts);
         InitialiseStats(saveData.stats);
@@ -164,7 +163,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     private IEnumerator DoDeathActivities()
     {
         yield return new WaitForEndOfFrame();
-        Instantiate(species.deathParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
+        Instantiate(Species.deathParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
         //soundPlayer.Play("Break");
         
         // Disabled automatic drop to stop the map being littered with steaks.  Instead, only drop when killed, not at old age etc.
@@ -179,7 +178,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public virtual float Eat(float amount)
     {
-        float delta = Mathf.Min(amount, species.maxFoodLevel - stats.foodLevel);
+        float delta = Mathf.Min(amount, Species.maxFoodLevel - stats.foodLevel);
         stats.foodLevel += delta;
         return delta;
     }
@@ -192,8 +191,8 @@ public abstract class SmolbeanAnimal : MonoBehaviour
             positionY = transform.position.y,
             positionZ = transform.position.z,
             rotationY = transform.rotation.eulerAngles.y,
-            speciesIndex = speciesIndex,
-            prefabIndex = prefabIndex,
+            speciesIndex = SpeciesIndex,
+            prefabIndex = PrefabIndex,
             stats = stats,
             thoughts = Thoughts.ToArray()
         };
@@ -241,7 +240,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         float y = GetComponentInChildren<Collider>().bounds.max.y * 1.1f;
         var animalPosition = transform.position;
         var p = new Vector3(animalPosition.x, y, animalPosition.z);
-        sleepPs = Instantiate(species.sleepParticleSystem, p, Quaternion.Euler(0f, 0f, 0f), transform);
+        sleepPs = Instantiate(Species.sleepParticleSystem, p, Quaternion.Euler(0f, 0f, 0f), transform);
     }
 
     public void EndSleep()
@@ -261,12 +260,12 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public virtual bool IsFull()
     {
-        return stats.foodLevel > species.fullThreshold;
+        return stats.foodLevel > Species.fullThreshold;
     }
 
     public virtual bool IsHungry()
     {
-        return stats.foodLevel < species.hungryThreshold;
+        return stats.foodLevel < Species.hungryThreshold;
     }
 
     public void DropInventory()

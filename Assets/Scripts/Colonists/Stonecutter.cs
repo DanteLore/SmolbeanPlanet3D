@@ -1,6 +1,6 @@
 using System;
 
-public class Stonecutter : ResourceGatherer
+public class Stonecutter : StaticResourceGatherer
 {
     protected override Type GetTargetType()
     {

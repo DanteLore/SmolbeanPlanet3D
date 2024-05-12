@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 
 [Serializable]
 public class AnimalSaveData
@@ -11,4 +12,14 @@ public class AnimalSaveData
     public AnimalStats stats;
     public int prefabIndex;
     public Thought[] thoughts;
+
+    public override string ToString()
+    {
+        StringBuilder sb = new();
+        sb.Append("Animal Save Data:");
+        sb.Append($"Species Index: {speciesIndex}");
+        sb.Append($"Prefab Index: {prefabIndex}");
+
+        return sb.ToString();
+    }
 }

@@ -44,9 +44,9 @@ public class FreeColonist : SmolbeanColonist
             stats = new ColonistStats()
             {
                 name = ColonistNameGenerator.Generate(), 
-                age = Random.Range(species.maturityAgeSeconds, species.oldAgeSeconds),
-                health = species.initialHealth,
-                foodLevel = Random.Range(species.initialFoodLevelMin, species.initialFoodLevelMax)
+                age = Random.Range(Species.maturityAgeSeconds, Species.oldAgeSeconds),
+                health = Species.initialHealth,
+                foodLevel = Random.Range(Species.initialFoodLevelMin, Species.initialFoodLevelMax)
             };
         }
     }

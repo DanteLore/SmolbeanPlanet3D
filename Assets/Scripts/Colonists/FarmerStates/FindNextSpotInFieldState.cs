@@ -23,7 +23,7 @@ public class FindNextSpotInFieldState : IState
 
     public void Tick()
     {
-        float t = Vector3.Distance(farmer.target, farmer.fieldCenter / farmer.fieldRadius);
+        float t = Vector3.Distance(farmer.Target, farmer.fieldCenter / farmer.fieldRadius);
         float angle = Mathf.Lerp(360f / (2f * Mathf.PI * farmer.fieldRadius), 45f, t);
         
         Quaternion turn = Quaternion.AngleAxis(angle, Vector3.up);
@@ -32,12 +32,12 @@ public class FindNextSpotInFieldState : IState
         if(NavMesh.SamplePosition(pos, out var navHit, 1f, NavMesh.AllAreas))
         {
             LocationFound = true;
-            farmer.target = navHit.position;
+            farmer.Target = navHit.position;
         }
         else
         {
             LocationFound = false;
-            farmer.target = farmer.transform.position;
+            farmer.Target = farmer.transform.position;
         }
     }
 }

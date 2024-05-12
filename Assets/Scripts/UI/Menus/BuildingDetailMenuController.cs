@@ -114,7 +114,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
 
             Button colonistButton = new();
             colonistButton.style.backgroundColor = new Color(0, 0, 0, 0);
-            colonistButton.style.backgroundImage = colonist.species.thumbnail;
+            colonistButton.style.backgroundImage = colonist.Species.thumbnail;
             residentRow.Add(colonistButton);
 
             Label colonistLabel = new();
@@ -207,7 +207,7 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
             {
                 Button colonistButton = new();
                 colonistButton.style.backgroundColor = new Color(0, 0, 0, 0);
-                colonistButton.style.backgroundImage = job.Colonist.species.thumbnail;
+                colonistButton.style.backgroundImage = job.Colonist.Species.thumbnail;
                 jobRow.Add(colonistButton);
 
                 Label colonistLabel = new();

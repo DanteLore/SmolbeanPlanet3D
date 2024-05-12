@@ -41,6 +41,6 @@ public class FindRestingPlaceState : IState
                 && NavMesh.SamplePosition(rayHit.point, out var navHit, 1.0f, NavMesh.AllAreas)
                 && navHit.position.y > 0.0f //don't go into the sea!
             )
-            colonist.target = rayHit.point;
+            colonist.Target = rayHit.point;
     }
 }

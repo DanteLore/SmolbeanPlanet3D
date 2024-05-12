@@ -12,6 +12,9 @@ public class FarmerSelectFieldCenterState : IState
     }
 
     private readonly float fieldRadius;
+    private readonly string groundLayer;
+    private readonly string buildingLayer;
+    private readonly string natureLayer;
     private readonly Farmer farmer;
     private int searchAttemptCount;
     private readonly List<SearchResult> fieldLocations = new();
@@ -19,15 +22,18 @@ public class FarmerSelectFieldCenterState : IState
     public bool FieldFound { get; private set; }
     public bool InProgress { get; private set; }
 
-    public FarmerSelectFieldCenterState(Farmer farmer, float fieldRadius)
+    public FarmerSelectFieldCenterState(Farmer farmer, float fieldRadius, string groundLayer, string buildingLayer, string natureLayer)
     {
         this.farmer = farmer;
         this.fieldRadius = fieldRadius;
+        this.groundLayer = groundLayer;
+        this.buildingLayer = buildingLayer;
+        this.natureLayer = natureLayer;
     }
 
     public void OnEnter()
     {
-        farmer.target = farmer.transform.position;
+        farmer.Target = farmer.transform.position;
         FieldFound = false;
         searchAttemptCount = 0;
         fieldLocations.Clear();
@@ -54,13 +60,13 @@ public class FarmerSelectFieldCenterState : IState
                 .Take(5)
                 .ToArray();
 
-            farmer.target = choices[Random.Range(0, choices.Length)].pos;
-            farmer.fieldCenter = farmer.target;
+            farmer.Target = choices[Random.Range(0, choices.Length)].pos;
+            farmer.fieldCenter = farmer.Target;
         }
         else
         {
             FieldFound = false;
-            farmer.target = farmer.transform.position;
+            farmer.Target = farmer.transform.position;
         }
 
         InProgress = false;
@@ -79,8 +85,8 @@ public class FarmerSelectFieldCenterState : IState
         var pos = center + (Quaternion.AngleAxis(angle, Vector3.up) * (Vector3.forward * range));
 
         Ray ray = new(pos + (Vector3.up * 1000f), Vector3.down);
-        if (Physics.Raycast(ray, out var rayHit, float.MaxValue, LayerMask.GetMask(farmer.groundLayer)) &&
-            Physics.OverlapSphere(rayHit.point, fieldRadius, LayerMask.GetMask(farmer.buildingLayer, farmer.natureLayer)).Length == 0 &&
+        if (Physics.Raycast(ray, out var rayHit, float.MaxValue, LayerMask.GetMask(groundLayer)) &&
+            Physics.OverlapSphere(rayHit.point, fieldRadius, LayerMask.GetMask(buildingLayer, natureLayer)).Length == 0 &&
             NavMesh.SamplePosition(rayHit.point, out var navHit, 1f, NavMesh.AllAreas) &&
             navHit.position.y >= -0.5f // Not in the sea :)
             )

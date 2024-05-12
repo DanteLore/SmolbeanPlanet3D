@@ -23,8 +23,8 @@ public class GrazeState : CompoundState
 
         stateMachine.SetStartState(eat);
 
-        Func<bool> HasSomewhereToGo() => () => !animal.CloseEnoughTo(animal.target, 0.5f);
-        Func<bool> Arrived() => () => animal.CloseEnoughTo(animal.target, 1f);
+        Func<bool> HasSomewhereToGo() => () => !animal.CloseEnoughTo(animal.Target, 0.5f);
+        Func<bool> Arrived() => () => animal.CloseEnoughTo(animal.Target, 1f);
         Func<bool> NotEnoughFoodHere() => () => !animal.IsEnoughFoodHere();
         Func<bool> Stuck() => () => wander.IsStuck;
         this.soundPlayer = soundPlayer;

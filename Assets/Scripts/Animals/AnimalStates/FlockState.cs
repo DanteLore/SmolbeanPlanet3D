@@ -24,8 +24,8 @@ public class FlockState : CompoundState
         stateMachine.SetStartState(idle);
 
         Func<bool> IdleFor(float idleTime) => () => idle.TimeIdle >= idleTime;
-        Func<bool> HasSomewhereToGo() => () => !animal.CloseEnoughTo(animal.target, 1f);
-        Func<bool> Arrived() => () => animal.CloseEnoughTo(animal.target, 2f);
+        Func<bool> HasSomewhereToGo() => () => !animal.CloseEnoughTo(animal.Target, 1f);
+        Func<bool> Arrived() => () => animal.CloseEnoughTo(animal.Target, 2f);
         Func<bool> Stuck() => () => wander.IsStuck;
         this.soundPlayer = soundPlayer;
     }

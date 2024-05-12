@@ -1,6 +1,6 @@
 using System;
 
-public class Woodcutter : ResourceGatherer
+public class Woodcutter : StaticResourceGatherer
 {
     protected override Type GetTargetType()
     {

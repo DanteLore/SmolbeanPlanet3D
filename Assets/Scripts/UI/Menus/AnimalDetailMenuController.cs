@@ -79,7 +79,7 @@ public class AnimalDetailMenuController : BaseDetailsMenuController
         var scrollView = document.rootVisualElement.Q<ScrollView>("mainScrollView");
         
         var animalImage = document.rootVisualElement.Q<VisualElement>("animalImage");
-        animalImage.style.backgroundImage = targetAnimal.species.thumbnail;
+        animalImage.style.backgroundImage = targetAnimal.Species.thumbnail;
 
         var nameLabel = document.rootVisualElement.Q<Label>("nameLabel");
         nameLabel.text = targetAnimal.Stats.name;

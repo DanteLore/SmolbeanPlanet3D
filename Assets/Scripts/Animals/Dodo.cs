@@ -8,7 +8,7 @@ public class Dodo : SmolbeanAnimal
     {
         base.Start();
 
-        target = transform.position; // We start where we want to be
+        Target = transform.position; // We start where we want to be
         float sleepLightLevel = Random.Range(0.3f, 0.5f); // The light level we like to sleep at
 
         var sleep = new SleepState(this, animator, soundPlayer);
@@ -39,11 +39,11 @@ public class Dodo : SmolbeanAnimal
         base.Update();
 
         if(!isDead &&
-            stats.age >= species.maturityAgeSeconds &&
-            stats.health >= species.minimumHealthToGiveBirth &&
-            Time.time - ((DodoStats)stats).lastEggLaidTime >= species.gestationPeriodSeconds &&
-            Random.Range(0f, 1f) <= species.birthProbability * Time.deltaTime &&
-            AnimalController.Instance.AnimalCount(species) < species.populationCap)
+            stats.age >= Species.maturityAgeSeconds &&
+            stats.health >= Species.minimumHealthToGiveBirth &&
+            Time.time - ((DodoStats)stats).lastEggLaidTime >= Species.gestationPeriodSeconds &&
+            Random.Range(0f, 1f) <= Species.birthProbability * Time.deltaTime &&
+            AnimalController.Instance.AnimalCount(Species) < Species.populationCap)
         {
             LayAnEgg();
         }
@@ -51,7 +51,7 @@ public class Dodo : SmolbeanAnimal
 
     private void LayAnEgg()
     {
-        var birdSpecies = (BirdSpec)species;
+        var birdSpecies = (BirdSpec)Species;
         ((DodoStats)stats).lastEggLaidTime = Time.time;
         stats.health -= birdSpecies.pregnancyHealthImpact;
         Instantiate(birdSpecies.eggLaidParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
@@ -70,9 +70,9 @@ public class Dodo : SmolbeanAnimal
             stats = new DodoStats()
             {
                 name = DodoNameGenerator.Generate(),
-                age = Random.Range(0f, species.lifespanSeconds),
-                health = species.initialHealth,
-                foodLevel = Random.Range(species.initialFoodLevelMin, species.initialFoodLevelMax),
+                age = Random.Range(0f, Species.lifespanSeconds),
+                health = Species.initialHealth,
+                foodLevel = Random.Range(Species.initialFoodLevelMin, Species.initialFoodLevelMax),
                 lastEggLaidTime = 0f
             };
         }

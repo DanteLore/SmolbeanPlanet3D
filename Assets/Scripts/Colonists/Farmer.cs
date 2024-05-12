@@ -26,7 +26,7 @@ public class Farmer : SmolbeanColonist, IReturnDrops
 
         var idle = new IdleState(animator);
         var giveUpJob = new SwitchColonistToFreeState(this);
-        var findFieldCenter = new FarmerSelectFieldCenterState(this, fieldRadius);
+        var findFieldCenter = new FarmerSelectFieldCenterState(this, fieldRadius, groundLayer, buildingLayer, natureLayer);
         var harvest = new FarmerHarvestState(this, animator);
         var walkToField = new WalkToTargetState(this, navAgent, animator, soundPlayer);
         var walkAroundField = new WalkToTargetState(this, navAgent, animator, soundPlayer);
@@ -54,10 +54,10 @@ public class Farmer : SmolbeanColonist, IReturnDrops
 
         Func<bool> JobTerminated() => () => Job.IsTerminated;
         Func<bool> BeenIdleFor(float t) => () => idle.TimeIdle > t;
-        Func<bool> HasSomewhereToGo() => () => !CloseEnoughTo(target, 0.25f);
+        Func<bool> HasSomewhereToGo() => () => !CloseEnoughTo(Target, 0.25f);
         Func<bool> SearchFailed() => () => !findFieldCenter.FieldFound && !findFieldCenter.InProgress;
         Func<bool> NoGrassLeft() => () => harvest.NoGrassLeft;
-        Func<bool> AtTarget(float d) => () => CloseEnoughTo(target, d);
+        Func<bool> AtTarget(float d) => () => CloseEnoughTo(Target, d);
         Func<bool> FieldSpotNotFound() => () => !nextSpotInField.LocationFound;
         Func<bool> FieldIsFinished() => () => FieldFinished();
         Func<bool> AtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint, 2f);

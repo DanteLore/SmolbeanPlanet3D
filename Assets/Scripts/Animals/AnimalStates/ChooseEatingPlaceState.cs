@@ -22,7 +22,7 @@ public class ChooseEatingPlaceState : IState
 
         for (int i = 0; i <= 6; i++)
         {
-            float radius = animal.species.sightRange / 2f;
+            float radius = animal.Species.sightRange / 2f;
             float x = pos.x + Random.Range(-radius, radius);
             float z = pos.z + Random.Range(-radius, radius);
 
@@ -37,9 +37,9 @@ public class ChooseEatingPlaceState : IState
         }
 
         if (candidates.Count == 0)
-            animal.target = pos; // Give up!
+            animal.Target = pos; // Give up!
         else
-            animal.target = candidates.OrderByDescending(p => GroundWearManager.Instance.GetAvailableGrass(p)).First();
+            animal.Target = candidates.OrderByDescending(p => GroundWearManager.Instance.GetAvailableGrass(p)).First();
     }
 
     public void OnExit()

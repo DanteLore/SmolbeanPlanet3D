@@ -87,7 +87,7 @@ public class JobsMenuController : SmolbeanMenu
             var colonistIcon = new Button();
             colonistIcon.AddToClassList("icon");
             colonistIcon.style.backgroundColor = new Color(0, 0, 0, 0);
-            colonistIcon.style.backgroundImage = job.Colonist.species.thumbnail;
+            colonistIcon.style.backgroundImage = job.Colonist.Species.thumbnail;
             row.Add(colonistIcon);
 
             row.Add(new Label { text = job.Colonist.Stats.name });

@@ -16,7 +16,7 @@ public class WalkToTargetState : WalkStateBase
     
     protected override Vector3 GetDestination()
     {
-        return animal.target;
+        return animal.Target;
     }
 
     protected override void OnStuck()

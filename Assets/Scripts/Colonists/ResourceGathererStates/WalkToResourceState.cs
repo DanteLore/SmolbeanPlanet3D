@@ -13,6 +13,6 @@ public class WalkToResourceState : WalkStateBase
 
     protected override Vector3 GetDestination()
     {
-        return (gatherer != null && gatherer.Target != null) ? gatherer.Target.transform.position : gatherer.transform.position;
+        return (gatherer != null && gatherer.ResourceTarget != null) ? gatherer.ResourceTarget.transform.position : gatherer.transform.position;
     }
 }
