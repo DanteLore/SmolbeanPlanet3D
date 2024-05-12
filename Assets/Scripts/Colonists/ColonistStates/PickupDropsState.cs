@@ -22,7 +22,6 @@ public class PickupDropsState : IState
 
     public void Tick()
     {
-        ((SmolbeanColonist)gatherer).Think($"Picking up stack of {stack.quantity} {stack.dropSpec.dropName}");
         gatherer.Inventory.PickUp(dropController.Pickup(stack));
         gatherer.TargetDrop = null;
     }
