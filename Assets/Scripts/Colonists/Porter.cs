@@ -21,10 +21,12 @@ public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
         //StateMachine.ShouldLog = true;
         //StateMachine.OnLogMessage += message => Think(message);
 
+        var gridManager = FindFirstObjectByType<GridManager>();
+
         var idle = new IdleState(animator);
         var giveUpJob = new SwitchColonistToFreeState(this);
         var searchForDeliveryJob = new PorterClaimDeliveryRequest(this, DeliveryManager.Instance);
-        var searchForCollectionJob = new PorterSearchForDropToCollectState(this, dropLayer);
+        var searchForCollectionJob = new PorterSearchForDropToCollectState(this, dropLayer, gridManager);
         var doDelivery = new PorterDoDeliveryRequestState(this, animator, navAgent, soundPlayer, DeliveryManager.Instance);
         var fetchDrop = new PorterFetchDropsState(this, animator, navAgent, soundPlayer, dropLayer);
 

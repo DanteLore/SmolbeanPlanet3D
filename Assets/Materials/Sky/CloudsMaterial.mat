@@ -78,6 +78,6 @@ Material:
     - _directionalLightColor: {r: 0.7718647, g: 0.7498841, b: 0.5426382, a: 1}
     - _sunColor: {r: 3.480589, g: 2.863184, b: 1.8765427, a: 1}
     - _sunDirection: {r: -0.9239672, g: -0.33123022, b: 0.19123591, a: 0}
-    - _windDirection: {r: -0.64109313, g: 0, b: -0.7674631, a: 0}
+    - _windDirection: {r: -0.82242376, g: 0, b: 0.56887543, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using System.Text;
 
 public class PorterSearchForDropToCollectState : IState
 {
@@ -13,12 +14,14 @@ public class PorterSearchForDropToCollectState : IState
     public bool InProgress { get { return radius <= MAX_RADIUS; } }
     private Porter porter;
     private readonly string dropLayer;
+    private readonly GridManager gridManager;
     private float radius;
 
-    public PorterSearchForDropToCollectState(Porter porter, string dropLayer)
+    public PorterSearchForDropToCollectState(Porter porter, string dropLayer, GridManager gridManager)
     {
         this.porter = porter;
         this.dropLayer = dropLayer;
+        this.gridManager = gridManager;
     }
 
     public void OnEnter()
@@ -41,9 +44,34 @@ public class PorterSearchForDropToCollectState : IState
         porter.TargetDrop = GetDropTarget(porter.transform.position);
                                           
         if (porter.TargetDrop)
-            DeliveryManager.Instance.ClaimCollection(porter.TargetDrop.GetComponent<SmolbeanDrop>(), porter);
+        {
+            SmolbeanDrop itemStack = porter.TargetDrop.GetComponent<SmolbeanDrop>();
+            DeliveryManager.Instance.ClaimCollection(itemStack, porter);
+            ThinkAboutCollection(itemStack);
+        }
         else
+        {
             radius += 8f;
+        }
+    }
+
+    private void ThinkAboutCollection(SmolbeanDrop itemStack)
+    {
+        StringBuilder sb = new();
+        sb.Append("Claimed a collection job: ");
+
+        sb.Append(itemStack.quantity);
+        sb.Append(" ");
+        sb.Append(itemStack.dropSpec.dropName);
+        sb.Append(" from ");
+        
+        var pos = gridManager.GetGameSquareFromWorldCoords(itemStack.transform.position);
+        sb.Append($"{pos.x}λ \u00d7 {pos.y}φ");
+
+        sb.Append(" to ");
+        sb.Append(porter.Job.Building.name);
+
+        porter.Think(sb.ToString());
     }
 
     private GameObject GetDropTarget(Vector3 pos)

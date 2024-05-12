@@ -1,3 +1,5 @@
+using System.Text;
+
 public class PorterClaimDeliveryRequest : IState
 {
     private readonly Porter porter;
@@ -13,7 +15,24 @@ public class PorterClaimDeliveryRequest : IState
     {
         porter.DeliveryRequest = deliveryManager.ClaimNextDeliveryRequest(porter, ((Storehouse)porter.Job.Building).Inventory);
         if (porter.DeliveryRequest != null)
-            porter.Think($"Claimed a delivery job: {porter.DeliveryRequest.Quantity} {porter.DeliveryRequest.Item.dropName} to {porter.DeliveryRequest.Building.name}");
+            ThinkAboutJob();
+    }
+
+    private void ThinkAboutJob()
+    {
+        StringBuilder sb = new();
+        sb.Append("Claimed a delivery job: ");
+        int min = porter.DeliveryRequest.Minimum;
+        int max = porter.DeliveryRequest.Quantity;
+        if (min != max)
+            sb.Append($"{min}-{max} ");
+        else
+            sb.Append($"{max} ");
+        sb.Append(porter.DeliveryRequest.Item.dropName);
+        sb.Append(" to ");
+        sb.Append(porter.DeliveryRequest.Building.name);
+
+        porter.Think(sb.ToString());
     }
 
     public void OnExit()
