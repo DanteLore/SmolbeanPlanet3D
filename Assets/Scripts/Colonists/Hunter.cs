@@ -20,7 +20,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     {
         base.Start();
 
-        StateMachine.ShouldLog = true;
+        //StateMachine.ShouldLog = true;
 
         var gridManager = FindFirstObjectByType<GridManager>();
         Bounds bounds = gameObject.GetRendererBounds();

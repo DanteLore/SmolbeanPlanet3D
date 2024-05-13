@@ -64,27 +64,16 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         for (int i = start; i < end; i++)
         {
             var px = data[i];
-            float r = px.r - amount;
-            r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01?
-            data[i].r = r;
+
+            if(px.r > 0f)
+            {
+                float r = px.r - amount;
+                r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01
+                data[i].r = r;
+            }
         }
 
         grassGrowthBatchStart = end >= data.Length ? 0 : end;
-    }
-
-    private void GrowGrassRandom()
-    {
-        float amount = wearStrength * Time.deltaTime * grassGrowthWeight;
-        for(int i = 0; i < squaresToGrowBackEachFrame; i++)
-        {
-            int x = Random.Range(0, textureWidth);
-            int y = Random.Range(0, textureHeight);
-
-            var px = data[y * textureWidth + x];
-            float r = px.r - amount;
-            r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01?
-            data[y * textureWidth + x] = new Color(r, px.g, px.b);
-        }
     }
 
     public float GetAvailableGrass(Vector3 worldPosition, float searchRadius = 0.75f)
@@ -123,9 +112,9 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     {
         Vector2Int center = WorldToTexture(position);
         Vector2Int p = WorldToTexture(position + Vector3.forward * wearRadius);
-        int radius = Mathf.CeilToInt(Vector2Int.Distance(center, p));
+        int radius = (int)Vector2Int.Distance(center, p);
 
-        WearCircle(WorldToTexture(position), radius, weight);
+        WearCircle(center, radius, weight);
     }
 
     public void BuildingOn(Bounds bounds, BuildingWearPattern wearPattern, Vector2 wearScale)
@@ -140,7 +129,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     {
         var min = WorldToTexture(bounds.min);
         var center = WorldToTexture(bounds.center);
-        int radius = Mathf.RoundToInt((center.x - min.x) * wearScale.x);
+        int radius = (int)((center.x - min.x) * wearScale.x);
 
         WearCircle(center, radius, weight);
     }
@@ -158,12 +147,17 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
                 float dSquared = (x - u) * (x - u) + (y - v) * (y - v);
                 if (dSquared < rSquared)
                 {
-                    float blur = 1 - (dSquared / rSquared);
-                    float c = wearStrength * weight * blur;
-                    Color px = data[v * textureWidth + u];
-                    float r = px.r + c; // Wear is on the RED channel
-                    r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01?
-                    data[v * textureWidth + u].r = r;
+                    int index = v * textureWidth + u;
+                    Color px = data[index];
+
+                    if(px.r < 1.0f)
+                    {
+                        float blur = 1 - (dSquared / rSquared);
+                        float c = wearStrength * weight * blur;
+                        float r = px.r + c; // Wear is on the RED channel
+                        r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01?
+                        data[index].r = r;
+                    }
                 }
             }
         }
@@ -186,11 +180,16 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         {
             for (int x = startX; x < endX; x++)
             {
-                float c = wearStrength * Time.deltaTime;
-                Color px = data[y * textureWidth + x];
-                float r = px.r + c; // Wear is on the RED channel
-                r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01?
-                data[y * textureWidth + x] = new Color(r, px.g, px.b, px.a);
+                int index = y * textureWidth + x;
+                Color px = data[index];
+
+                if(px.r < 1.0f)
+                {
+                    float c = wearStrength * Time.deltaTime;
+                    float r = px.r + c; // Wear is on the RED channel
+                    r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01?
+                    data[index] = new Color(r, px.g, px.b, px.a);
+                }
             }
         }
     }
@@ -200,7 +199,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         float mapX = (world.x - mapOffsetX) / mapWidth;
         float mapZ = (world.z - mapOffsetY) / mapHeight;
 
-        return new Vector2Int(Mathf.CeilToInt(textureWidth * mapX), Mathf.CeilToInt(textureHeight * mapZ));
+        return new Vector2Int((int)(textureWidth * mapX), (int)(textureHeight * mapZ));
     }
 
     private void UpdateTexture()
@@ -217,7 +216,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
         for (int i = 0; i < data.Length; i++)
         {
-            // CLear all but the green channel
+            // Clear all but the green channel
             data[i].r = 0; 
             data[i].b = 0;
             data[i].a = 0;
