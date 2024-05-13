@@ -99,46 +99,49 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     {
         stats.age += Time.deltaTime;
 
-        float ageFactor = Mathf.InverseLerp(Species.oldAgeSeconds, Species.lifespanSeconds, stats.age);
+        AnimalSpec species = Species; // Cache for miniscule performance boost!
+
+        float ageFactor = (stats.age < species.oldAgeSeconds) ? 0.0f : Mathf.InverseLerp(species.oldAgeSeconds, species.lifespanSeconds, stats.age);
 
         // Juveniles are small
-        if(stats.age <= Species.maturityAgeSeconds)
+        if(stats.age <= species.maturityAgeSeconds)
         {
-            var x = Mathf.InverseLerp(0f, Species.maturityAgeSeconds, stats.age);
-            var s = Mathf.Lerp(Species.juvenileScale, 1f, x);
+            var x = Mathf.InverseLerp(0f, species.maturityAgeSeconds, stats.age);
+            var s = Mathf.Lerp(species.juvenileScale, 1f, x);
             transform.localScale = new Vector3(s, s, s);
         }
 
         // Speed decrease due to old age
-        navAgent.speed = Species.speed - Species.oldAgeSpeedDecrease * ageFactor;
+        if(ageFactor > 0.0f)
+            navAgent.speed = species.speed - species.oldAgeSpeedDecrease * ageFactor;
 
         // Decreasing health due to old age
-        float oldAgeHealthDetriment = Species.oldAgeHealthImpactPerSecond * ageFactor * Time.deltaTime;
+        float oldAgeHealthDetriment = species.oldAgeHealthImpactPerSecond * ageFactor * Time.deltaTime;
         if (isSleeping) // Less if sleeping!
-            oldAgeHealthDetriment *= Species.sleepingHealthDecreaseMultiplier;
+            oldAgeHealthDetriment *= species.sleepingHealthDecreaseMultiplier;
         stats.health -= oldAgeHealthDetriment;
 
         // Digest some food
-        float foodDelta = Species.foodDigestedPerSecond * Time.deltaTime;
+        float foodDelta = species.foodDigestedPerSecond * Time.deltaTime;
         if (isSleeping) // Less if sleeping!
-            foodDelta *= Species.sleepingHealthDecreaseMultiplier;
+            foodDelta *= species.sleepingHealthDecreaseMultiplier;
         stats.foodLevel = Mathf.Max(0f, stats.foodLevel - foodDelta);
 
-        if (stats.foodLevel <= Species.starvationThreshold)
+        if (stats.foodLevel <= species.starvationThreshold)
         {
             // Health decrease due to starvation
-            float healthDelta = Species.starvationRatePerSecond * Time.deltaTime;
-            healthDelta *= 1f - Mathf.InverseLerp(0f, Species.starvationThreshold, stats.foodLevel);
+            float healthDelta = species.starvationRatePerSecond * Time.deltaTime;
+            healthDelta *= 1f - Mathf.InverseLerp(0f, species.starvationThreshold, stats.foodLevel);
             if (isSleeping) // Less if sleeping!
-                healthDelta *= Species.sleepingHealthDecreaseMultiplier;
+                healthDelta *= species.sleepingHealthDecreaseMultiplier;
             stats.health -= healthDelta; 
         }
         else
         {
             // Health recover with a full stomach
-            float healthDelta = Species.healthRecoveryPerSecond * Time.deltaTime;
-            healthDelta *= Mathf.InverseLerp(Species.starvationThreshold, Species.maxFoodLevel, stats.foodLevel);
-            stats.health = Mathf.Min(Species.maxHealth, stats.health + healthDelta);
+            float healthDelta = species.healthRecoveryPerSecond * Time.deltaTime;
+            healthDelta *= Mathf.InverseLerp(species.starvationThreshold, species.maxFoodLevel, stats.foodLevel);
+            stats.health = Mathf.Min(species.maxHealth, stats.health + healthDelta);
         }
 
         if (stats.health <= 0)
@@ -223,15 +226,15 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         if (target == null)
             return false;
 
-        // If we don't have a collider, just measure the distance
-        if (target.GetComponentInChildren<Collider>() == null)
+        var collider = target.GetComponentInChildren<Collider>();
+
+        // If we don't have a collider, just measure the distance to the object position
+        if (collider == null)
             return CloseEnoughTo(target.transform.position, destinationThreshold);
 
-        // Otherwise...
-        // This DOES need to be a sphere collision, rather than a standard distance check, because the object might be big and
-        // it's potition might be a point right in it's centre.
-        var found = Physics.OverlapSphere(transform.position, destinationThreshold);
-        return found.Any(c => c.gameObject == target);
+        // If we do have a collider, measure the distance to the closest point on it!
+        var pos = transform.position;
+        return Vector3.SqrMagnitude(pos - collider.ClosestPoint(pos)) <= destinationThreshold * destinationThreshold;
     }
 
     public void StartSleep()
