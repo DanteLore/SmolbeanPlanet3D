@@ -1,11 +1,13 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Hunter : ResourceGatherer, IDeliverDrops
 {
     [SerializeField] private float shotDistance = 16f;
     [SerializeField] private AnimalSpec targetSpecies;
     [SerializeField] private GameObject bow;
+    [SerializeField] private Arrow arrowPrefab;
 
     public SmolbeanAnimal Prey { get; set; }
 
@@ -26,7 +28,8 @@ public class Hunter : ResourceGatherer, IDeliverDrops
 
         var idle = new IdleState(animator);
         var searchForPrey = new SearchForPreyState(this, gridManager, targetSpecies, halfMyHeight, creatureLayer, shotDistance);
-        var attack = new TakeAimState(this);
+        var takeAim = new TakeAimState(this);
+        var shoot = new ShootState(this);
         var walkToTarget = new WalkToTargetState(this, navAgent, animator, soundPlayer);
         var searchForDrops = new SearchForDropsState(this, dropLayer);
         var giveUpJob = new SwitchColonistToFreeState(this);
@@ -38,7 +41,10 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         AT(searchForPrey, walkToTarget, TargetFound());
         AT(searchForPrey, idle, NoTargetFound());
 
-        AT(walkToTarget, attack, InPosition());
+        AT(walkToTarget, takeAim, InPosition());
+        AT(takeAim, shoot, Ready());
+
+        AT(shoot, idle, ShotDone());
 
         StateMachine.SetStartState(idle);
 
@@ -47,6 +53,8 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         Func<bool> TargetFound() => () => !searchForPrey.InProgress && Prey != null;
         Func<bool> NoTargetFound() => () => !searchForPrey.InProgress && Prey == null;
         Func<bool> InPosition() => () => Prey != null && CloseEnoughTo(Target, 2f);
+        Func<bool> Ready() => () => takeAim.IsReady;
+        Func<bool> ShotDone() => () => true;
     }
 
     public void TakeAim()
@@ -55,5 +63,14 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         // Gonna have to do some funky stuff with animations and IK here one day :S
         // Maybe an animation...
         // Whatever
+    }
+
+    public void Shoot()
+    {
+        var bowPos = transform.position + new Vector3(0f, 1f, 1f);
+        float y = transform.rotation.eulerAngles.y;
+        var arrow = Instantiate(arrowPrefab, bowPos, Quaternion.Euler(-45f, y, 0f));
+        Rigidbody arrowBody = arrow.GetComponent<Rigidbody>();
+        arrowBody.AddRelativeForce(transform.forward * Random.Range(50f, 100f));
     }
 }

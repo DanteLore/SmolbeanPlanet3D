@@ -240,6 +240,7 @@ MonoBehaviour:
   shotDistance: 16
   targetSpecies: {fileID: 11400000, guid: b32f3108f56654e9e988034915a8604e, type: 2}
   bow: {fileID: 2436070056548171731}
+  arrowPrefab: {fileID: 865040551499871702, guid: ce7f2cd0ef3d04caa8196ecbd733ad93, type: 3}
 --- !u!114 &-7274162803684928981
 MonoBehaviour:
   m_ObjectHideFlags: 0
