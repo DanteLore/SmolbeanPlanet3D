@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class FlockState : CompoundState
 {
@@ -16,7 +17,7 @@ public class FlockState : CompoundState
         AT(wander, idle, Arrived());
         AT(wander, findDestination, Stuck());
 
-        AT(idle, findDestination, IdleFor(1f));
+        AT(idle, findDestination, IdleFor(Random.Range(2f, 4f)));
 
         // In case the search states find a very close point
         AT(findDestination, idle, Arrived());
