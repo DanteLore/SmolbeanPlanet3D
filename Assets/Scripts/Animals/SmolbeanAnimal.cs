@@ -286,4 +286,9 @@ public abstract class SmolbeanAnimal : MonoBehaviour
             DropController.Instance.Drop(item.dropSpec, pos + upPos + outPos, item.quantity);
         }
     }
+
+    public void TakeDamage(float damage)
+    {
+        Stats.health -= damage;
+    }
 }

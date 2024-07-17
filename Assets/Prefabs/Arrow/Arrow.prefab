@@ -162,6 +162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 8389498494744128317}
   hitCollider: {fileID: 1676014524020741406}
+  timeBetweenImpactAndArrowDestruction: 5
 --- !u!136 &7109366506763391531
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -172,7 +173,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 960
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -195,7 +196,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 960
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -204,7 +205,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.12
+  m_Radius: 0.25
   m_Height: 0
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0.39}

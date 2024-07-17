@@ -24,7 +24,16 @@ public class Arrow : MonoBehaviour
             Destroy(rigidBody);
             Destroy(hitCollider);
             Debug.Log($"Hit {other.name}");
-            impactTime = Time.time;
+
+            if(other.transform.parent.TryGetComponent<SmolbeanAnimal>(out var animal))
+            {
+                animal.TakeDamage(1000);
+                Destroy(gameObject);
+            }
+            else
+            {
+                impactTime = Time.time;
+            }
         }
     }
 }

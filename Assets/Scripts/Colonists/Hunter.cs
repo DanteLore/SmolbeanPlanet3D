@@ -67,10 +67,31 @@ public class Hunter : ResourceGatherer, IDeliverDrops
 
     public void Shoot()
     {
-        var bowPos = transform.position + new Vector3(0f, 1f, 1f);
-        float y = transform.rotation.eulerAngles.y;
-        var arrow = Instantiate(arrowPrefab, bowPos, Quaternion.Euler(-45f, y, 0f));
+        Vector3 targetPointOffset = Vector3.up * 0.2f;
+        var bowPos = transform.position + transform.rotation * new Vector3(0f, 1f, 1f);
+        float shotHeight = Random.Range(0.1f, 0.3f);
+        Vector3 targetPoint = Prey.transform.GetRendererBounds().center + targetPointOffset;
+        float distanceY = targetPoint.y - bowPos.y;
+        float time = CalculateTimeToTarget(shotHeight, Physics.gravity.y, distanceY);
+        Vector3 horizontalDirection = targetPoint - bowPos;
+        horizontalDirection.y = 0f;
+
+        var arrow = Instantiate(arrowPrefab, bowPos, Quaternion.identity);
         Rigidbody arrowBody = arrow.GetComponent<Rigidbody>();
-        arrowBody.AddRelativeForce(transform.forward * Random.Range(50f, 100f));
+        arrowBody.velocity = CalculateInitialVelocity(shotHeight, horizontalDirection, Physics.gravity.y, time);
+    }
+
+    float CalculateTimeToTarget(float height, float gravity, float distanceY)
+    {
+        return Mathf.Sqrt(-2 * height / gravity) + Mathf.Sqrt(2 * (distanceY - height) / gravity);
+    }
+
+    Vector3 CalculateInitialVelocity(float height, Vector3 horizontalDirection, float gravity, float time)
+    {
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * height);
+        Vector3 velocityXZ = horizontalDirection * (1 / time);
+        Vector3 velocityFinal = velocityY + velocityXZ;
+        velocityFinal *= -Mathf.Sign(gravity);
+        return velocityFinal;
     }
 }
