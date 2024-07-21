@@ -29,7 +29,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         var idle = new IdleState(animator);
         var searchForPrey = new SearchForPreyState(this, gridManager, targetSpecies, halfMyHeight, creatureLayer, shotDistance);
         var takeAim = new TakeAimState(this);
-        var shoot = new ShootState(this);
+        var shoot = new GenericState(onEnter: Shoot);
         var walkToTarget = new WalkToTargetState(this, navAgent, animator, soundPlayer);
         var searchForDrops = new SearchForDropsState(this, dropLayer);
         var giveUpJob = new SwitchColonistToFreeState(this);
@@ -68,7 +68,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     public void Shoot()
     {
         Vector3 targetPointOffset = Vector3.up * 0.2f;
-        var bowPos = transform.position + transform.rotation * new Vector3(0f, 1f, 1f);
+        Vector3 bowPos = transform.position + transform.rotation * new Vector3(0f, 1f, 1f);
         float shotHeight = Random.Range(0.1f, 0.3f);
         Vector3 targetPoint = Prey.transform.GetRendererBounds().center + targetPointOffset;
         float distanceY = targetPoint.y - bowPos.y;
@@ -81,12 +81,12 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         arrowBody.velocity = CalculateInitialVelocity(shotHeight, horizontalDirection, Physics.gravity.y, time);
     }
 
-    float CalculateTimeToTarget(float height, float gravity, float distanceY)
+    private float CalculateTimeToTarget(float height, float gravity, float distanceY)
     {
         return Mathf.Sqrt(-2 * height / gravity) + Mathf.Sqrt(2 * (distanceY - height) / gravity);
     }
 
-    Vector3 CalculateInitialVelocity(float height, Vector3 horizontalDirection, float gravity, float time)
+    private Vector3 CalculateInitialVelocity(float height, Vector3 horizontalDirection, float gravity, float time)
     {
         Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * height);
         Vector3 velocityXZ = horizontalDirection * (1 / time);

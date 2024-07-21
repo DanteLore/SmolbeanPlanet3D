@@ -8,7 +8,7 @@ public class Arrow : MonoBehaviour
     private bool flying = true;
     private float impactTime;
 
-    void Update()
+    private void Update()
     {
         if(flying && rigidBody.velocity.sqrMagnitude > 1f)
             transform.rotation = Quaternion.LookRotation(rigidBody.velocity);
@@ -16,24 +16,23 @@ public class Arrow : MonoBehaviour
             Destroy(gameObject);
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if(flying)
-        {
-            flying = false;
-            Destroy(rigidBody);
-            Destroy(hitCollider);
-            Debug.Log($"Hit {other.name}");
+        if(!flying)
+            return;
 
-            if(other.transform.parent.TryGetComponent<SmolbeanAnimal>(out var animal))
-            {
-                animal.TakeDamage(1000);
-                Destroy(gameObject);
-            }
-            else
-            {
-                impactTime = Time.time;
-            }
+        flying = false;
+        Destroy(rigidBody);
+        Destroy(hitCollider);
+
+        if(other.transform.parent.TryGetComponent<SmolbeanAnimal>(out var animal))
+        {
+            animal.TakeDamage(100);
+            Destroy(gameObject);
+        }
+        else
+        {
+            impactTime = Time.time;
         }
     }
 }

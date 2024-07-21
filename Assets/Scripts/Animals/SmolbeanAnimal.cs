@@ -16,7 +16,6 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     [SerializeField] protected string groundLayer = "Ground";
     [SerializeField] protected string buildingLayer = "Buildings";
     [SerializeField] protected string dropLayer = "Drops";
-    
     [SerializeField] protected int memoryLength = 12;
 
     private readonly List<Thought> thoughts = new();
@@ -167,10 +166,10 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         Instantiate(Species.deathParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
-        //soundPlayer.Play("Break");
         
-        // Disabled automatic drop to stop the map being littered with steaks.  Instead, only drop when killed, not at old age etc.
-        //DropController.Instance.Drop(species.dropSpec, transform.position);
+        // Only drop a steak if we didn't starve to death
+        if(stats.foodLevel > Species.starvationThreshold)
+            DropController.Instance.Drop(Species.dropSpec, transform.position);
         yield return new WaitForEndOfFrame();
 
         body.SetActive(false);
