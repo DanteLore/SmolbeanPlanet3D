@@ -32,7 +32,7 @@ public class SmolbeanTree : SmolbeanItem
         gameObject.isStatic = false;
         var rb = gameObject.AddComponent<Rigidbody>();
         rb.mass = 1000f;
-        rb.drag = .1f;
+        rb.linearDamping = .1f;
 
         yield return new WaitForEndOfFrame();
 

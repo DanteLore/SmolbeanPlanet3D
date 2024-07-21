@@ -10,8 +10,8 @@ public class Arrow : MonoBehaviour
 
     private void Update()
     {
-        if(flying && rigidBody.velocity.sqrMagnitude > 1f)
-            transform.rotation = Quaternion.LookRotation(rigidBody.velocity);
+        if(flying && rigidBody.linearVelocity.sqrMagnitude > 1f)
+            transform.rotation = Quaternion.LookRotation(rigidBody.linearVelocity);
         else if(!flying && Time.time - impactTime > timeBetweenImpactAndArrowDestruction)
             Destroy(gameObject);
     }

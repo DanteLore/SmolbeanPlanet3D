@@ -3,7 +3,6 @@ using UnityEngine;
 public class TakeAimState : IState
 {
     private readonly Hunter hunter;
-    private SmolbeanAnimal target;
     private float aimStartTime;
 
     public bool IsReady { get => Time.time - aimStartTime > 2f; }
@@ -15,7 +14,6 @@ public class TakeAimState : IState
 
     public void OnEnter()
     {
-        target = hunter.Prey;
         aimStartTime = Time.time;
     }
 
@@ -26,5 +24,6 @@ public class TakeAimState : IState
     public void Tick()
     {
         hunter.TakeAim();
+        hunter.Think("Taking aim...");
     }
 }

@@ -27,7 +27,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         float halfMyHeight = bounds.max.y - bounds.min.y;
 
         var idle = new IdleState(animator);
-        var searchForPrey = new SearchForPreyState(this, gridManager, targetSpecies, halfMyHeight, creatureLayer, shotDistance);
+        var searchForPrey = new SearchForPreyState(this, gridManager, targetSpecies, halfMyHeight, creatureLayer, natureLayer, groundLayer, shotDistance);
         var takeAim = new TakeAimState(this);
         var shoot = new GenericState(onEnter: Shoot);
         var walkToTarget = new WalkToTargetState(this, navAgent, animator, soundPlayer);
@@ -67,6 +67,8 @@ public class Hunter : ResourceGatherer, IDeliverDrops
 
     public void Shoot()
     {
+        Think("Fire!");
+        
         Vector3 targetPointOffset = Vector3.up * 0.2f;
         Vector3 bowPos = transform.position + transform.rotation * new Vector3(0f, 1f, 1f);
         float shotHeight = Random.Range(0.1f, 0.3f);
@@ -78,7 +80,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
 
         var arrow = Instantiate(arrowPrefab, bowPos, Quaternion.identity);
         Rigidbody arrowBody = arrow.GetComponent<Rigidbody>();
-        arrowBody.velocity = CalculateInitialVelocity(shotHeight, horizontalDirection, Physics.gravity.y, time);
+        arrowBody.linearVelocity = CalculateInitialVelocity(shotHeight, horizontalDirection, Physics.gravity.y, time);
     }
 
     private float CalculateTimeToTarget(float height, float gravity, float distanceY)
