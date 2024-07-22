@@ -23,6 +23,10 @@ public class Arrow : MonoBehaviour
         if(!flying)
             return;
 
+        var soundPlayer = GetComponent<SoundPlayer>();
+        if(soundPlayer != null)
+            soundPlayer.Play("ArrowHit");
+        
         flying = false;
         Destroy(rigidBody);
         Destroy(hitCollider);

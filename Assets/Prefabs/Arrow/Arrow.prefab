@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 865040551499871702}
   - component: {fileID: 7109366506763391531}
   - component: {fileID: 1676014524020741406}
+  - component: {fileID: 8579173479287963450}
   m_Layer: 0
   m_Name: Arrow
   m_TagString: Untagged
@@ -210,3 +211,22 @@ CapsuleCollider:
   m_Height: 0.2
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0.48}
+--- !u!114 &8579173479287963450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7617330465172069555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68fa791a1deb24dd6b411d5047a385b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - name: ArrowHit
+    clip: {fileID: 8300000, guid: c44dbfe06067545898ddf5064d4b1bfc, type: 3}
+    loop: 0
+    volume: 1
+    ignoreGamePause: 0
+  mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
