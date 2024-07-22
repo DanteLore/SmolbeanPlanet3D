@@ -8,6 +8,8 @@ public class Arrow : MonoBehaviour
     private bool flying = true;
     private float impactTime;
 
+    public bool Flying { get { return flying; }}
+
     private void Update()
     {
         if(flying && rigidBody.linearVelocity.sqrMagnitude > 1f)

@@ -61,6 +61,7 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -236,11 +237,14 @@ MonoBehaviour:
   idleTime: 1
   sleepTime: 2
   maxStacks: 3
-  dropSpec: {fileID: 0}
-  shotDistance: 16
+  dropSpec: {fileID: 11400000, guid: abfa08d2a5229475fb5e9e814c1cf06f, type: 2}
+  shotDistance: 28
+  minShotHeight: 1
+  maxShotHeight: 2
   targetSpecies: {fileID: 11400000, guid: b32f3108f56654e9e988034915a8604e, type: 2}
   bow: {fileID: 2436070056548171731}
   arrowPrefab: {fileID: 865040551499871702, guid: ce7f2cd0ef3d04caa8196ecbd733ad93, type: 3}
+  targetPointOffset: {x: 0, y: 0.15, z: 0}
 --- !u!114 &-7274162803684928981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,6 +318,7 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
