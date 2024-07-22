@@ -10,7 +10,7 @@ public class StateMachine
 
     private IState currentState;
     private readonly bool allowSelfTransitions;
-    private readonly Dictionary<Type, Transition[]> transitions = new();
+    private readonly Dictionary<IState, Transition[]> transitions = new();
     private Transition[] currentTransitions = Array.Empty<Transition>();
 
     private Transition[] anyTransitions = Array.Empty<Transition>();
@@ -61,12 +61,12 @@ public class StateMachine
         if(!allowSelfTransitions && state == currentState)
             return;
 
-        Log("Changed state to: " + state.GetType().Name);
+        Log("Changed state to: " + state.ToString());
 
         currentState?.OnExit();
         currentState = state;
 
-        transitions.TryGetValue(currentState.GetType(), out currentTransitions);
+        transitions.TryGetValue(currentState, out currentTransitions);
         if(currentTransitions == null)
             currentTransitions = EmptyTransitions;
 
@@ -81,10 +81,10 @@ public class StateMachine
 
     public void AddTransition(IState from, IState to, Func<bool> predicate)
     {
-        if(!transitions.TryGetValue(from.GetType(), out var trans))
+        if(!transitions.TryGetValue(from, out var trans))
             trans = Array.Empty<Transition>();
 
-        transitions[from.GetType()] = trans.Append(new Transition(to, predicate)).ToArray();
+        transitions[from] = trans.Append(new Transition(to, predicate)).ToArray();
     }
 
     public void AddAnyTransition(IState to, Func<bool> predicate)
