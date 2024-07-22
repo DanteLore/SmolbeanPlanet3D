@@ -170,6 +170,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         // Only drop a steak if we didn't starve to death
         if(stats.foodLevel > Species.starvationThreshold)
             DropController.Instance.Drop(Species.dropSpec, transform.position);
+
         yield return new WaitForEndOfFrame();
 
         body.SetActive(false);

@@ -36,7 +36,8 @@ public class FollowCameraController : MonoBehaviour
         else
         {
             SetupCamera();
-            virtualCamera.gameObject.SetActive(true);
+            if(virtualCamera != null)
+                virtualCamera.gameObject.SetActive(true);
         }
     }
 
