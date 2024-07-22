@@ -1567,6 +1567,7 @@
     "m_SGVersion": 2,
     "m_Type": "UnityEditor.Rendering.BuiltIn.ShaderGraph.BuiltInTarget",
     "m_ObjectId": "3bcb1713573a48f08a2b75c9f7e3e8f2",
+    "m_Datas": [],
     "m_ActiveSubTarget": {
         "m_Id": "bc5d548f6ed9400f9ccab7abf88ea48b"
     },
@@ -2860,10 +2861,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -1202.0001220703125,
-            "y": -871.0,
-            "width": 124.0001220703125,
-            "height": 34.0
+            "x": -1230.0,
+            "y": -861.0000610351563,
+            "width": 124.0,
+            "height": 34.00006103515625
         }
     },
     "m_Slots": [
@@ -3205,8 +3206,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": -1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -4206,7 +4207,7 @@
     },
     "m_DefaultValue": {
         "x": 0.0,
-        "y": 0.0
+        "y": 1.0
     },
     "m_Labels": []
 }

@@ -213,6 +213,16 @@ MonoBehaviour:
     loop: 1
     volume: 1
     ignoreGamePause: 0
+  - name: LooseArrow
+    clip: {fileID: 8300000, guid: 77999941a7b22432781d47101cc566c4, type: 3}
+    loop: 0
+    volume: 1
+    ignoreGamePause: 0
+  - name: BowStretch
+    clip: {fileID: 8300000, guid: 12d27305e257a4864bb94f69007229be, type: 3}
+    loop: 1
+    volume: 1
+    ignoreGamePause: 0
   mixerGroup: {fileID: -3307525172662256876, guid: 2cfa39735e8044bd89f8a0de5ceab2ff, type: 2}
 --- !u!114 &7146700768159005189
 MonoBehaviour:

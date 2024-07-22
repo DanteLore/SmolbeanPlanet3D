@@ -36,7 +36,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         var waitForTargetToDie = new IdleState(animator);
         var searchForPrey = new SearchForPreyState(this, targetSpecies, creatureLayer);
         var searchForShootingSpot = new SearchForShootingSpotState(this, gridManager, halfMyHeight, targetPointOffset, natureLayer, groundLayer, shotDistance);
-        var takeAim = new TakeAimState(this);
+        var takeAim = new TakeAimState(this, soundPlayer);
         var shoot = new GenericState("Shoot", onEnter: Shoot);
         var walkToTarget = new WalkToTargetState(this, navAgent, animator, soundPlayer);
         var searchForDrops = new GenericState("SearchForDrops", onEnter: SearchForDropStart, tick: SearchForDropTick);
@@ -148,6 +148,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     public void Shoot()
     {
         Think("Fire!");
+        soundPlayer.Play("LooseArrow");
 
         Vector3 bowPos = transform.position + transform.rotation * new Vector3(0f, 1f, 1f);
         float shotHeight = Random.Range(minShotHeight, maxShotHeight);
