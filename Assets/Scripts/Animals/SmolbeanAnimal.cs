@@ -167,8 +167,8 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         yield return new WaitForEndOfFrame();
         Instantiate(Species.deathParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
         
-        // Only drop a steak if we didn't starve to death
-        if(stats.foodLevel > Species.starvationThreshold)
+        // Only drop a steak if we didn't starve to death and aren't too old
+        if(stats.foodLevel > Species.starvationThreshold && stats.age < Species.lifespanSeconds)
             DropController.Instance.Drop(Species.dropSpec, transform.position);
 
         yield return new WaitForEndOfFrame();

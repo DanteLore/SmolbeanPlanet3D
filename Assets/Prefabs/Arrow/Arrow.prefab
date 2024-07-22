@@ -164,7 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 8389498494744128317}
   hitCollider: {fileID: 1676014524020741406}
-  timeBetweenImpactAndArrowDestruction: 5
+  timeBetweenImpactAndArrowDestruction: 30
 --- !u!136 &7109366506763391531
 CapsuleCollider:
   m_ObjectHideFlags: 0
