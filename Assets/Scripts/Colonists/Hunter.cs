@@ -63,6 +63,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         AT(takeAim, shoot, Ready());
 
         AT(shoot, waitForTargetToDie, ShotDone());
+        AT(shoot, waitForTargetToDie, ArrowLost());
 
         AT(waitForTargetToDie, searchForDrops, TargetDiedAfter(0.1f));
         AT(waitForTargetToDie, searchForShootingSpot, TargetDidNotDieAfter(0.1f));
@@ -90,7 +91,8 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         Func<bool> NoTargetFound() => () => !searchForPrey.InProgress && Prey == null;
         Func<bool> InPosition() => () => Prey != null && CloseEnoughTo(Target, 2f);
         Func<bool> Ready() => () => takeAim.IsReady && Prey != null;
-        Func<bool> ShotDone() => () => !ArrowInFlight();
+        Func<bool> ShotDone() => () => arrow != null && !arrow.Flying;
+        Func<bool> ArrowLost() => () => arrow == null;
         Func<bool> StuckGettingToShootingPosition() => () => walkToTarget.StuckTime > 10f * Time.timeScale;
         Func<bool> StuckGettingToDrop() => () => walkToDrop.StuckTime > 10f * Time.timeScale;
         Func<bool> TargetDiedAfter(float s) => () => waitForTargetToDie.TimeIdle > s && Prey == null;
@@ -102,11 +104,6 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         Func<bool> IsAtDropPoint() => () => CloseEnoughTo(Job.Building.dropPoint, 1f);
         Func<bool> InventoryEmpty() => () => Inventory.IsEmpty();
         Func<bool> InventoryNotEmpty() => () => !Inventory.IsEmpty();
-    }
-
-    private bool ArrowInFlight()
-    {
-        return arrow != null && arrow.Flying;
     }
 
     private void SearchForDropTick()
