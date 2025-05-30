@@ -48,6 +48,8 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         movementAction = actions.GodView.Movement;
         rotationAction = actions.GodView.RotateCamera;
         actions.GodView.ZoomCamera.performed += CameraZoomInput;
+
+        QualitySettings.SetQualityLevel(QualitySettings.names.Length - 1, true);
     }
 
     void Start()
