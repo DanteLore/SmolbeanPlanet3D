@@ -5,6 +5,18 @@ VisualElement{
     color: var(--color-normal);
 }
 
+/* Disable annoying focus colour */
+.unity-base-field:focus:enabled > .unity-base-field__label {
+    color: var(--color-normal);
+}
+
+/* Highlight the label on hover, even if focussed */
+.unity-base-field:hover > .unity-base-field__label,
+.unity-base-field:hover:focus:enabled > .unity-base-field__label {
+    color: var(--color-highlight);
+}
+
+
 /***************/
 /**  DROPDOWN **/
 /***************/
@@ -42,10 +54,27 @@ DropdownField:focus Label {
     color: var(--color-normal);
 }
 
+.unity-base-dropdown__container-inner {
+    border-color: var(--color-normal);
+    border-radius: 6px;
+    border-width: 1px;
+    background-color: black;
+}
+
+.unity-base-dropdown__container-outer {
+    border-width: 0px;
+}
+
+.unity-base-dropdown__item:hover,
+.unity-base-dropdown__item:hover:enabled {
+    color: var(--color-normal);
+    background-color: #202020;
+}
+
 /* https://medium.com/medialesson/how-to-style-dropdown-selectors-in-unity-ui-toolkit-229900de0330 */
 
 .unity-base-dropdown .unity-scroll-view {
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: black;
     color: var(--color-normal);
     border-color: var(--color-normal);
     border-radius: 6px;
@@ -61,11 +90,8 @@ DropdownField:focus Label {
 
 .unity-base-dropdown__checkmark {
     -unity-background-image-tint-color: var(--color-normal);
-}
-
-.unity-base-dropdown__container-outer {
-    border-color: var(--color-normal);
-    border-radius: 6px;
+    height: 24px;
+    width: 24px;
 }
 
 /*************/
@@ -110,23 +136,18 @@ Toggle:hover .unity-toggle__input {
 Toggle:hover .unity-toggle__label {
     color: var(--color-highlight);                     
 }
-
-Toggle:focus Label {
-    color: var(--color-normal);
-}
-
 /*************/
 /**  SLIDER **/
 /*************/
 
-Slider .unity-base-slider {
+.unity-base-slider .unity-base-slider {
     display: flex;             
     flex-direction: row;       
     align-items: stretch;      
     padding: 0;
 }
 
-Slider .unity-base-slider__tracker {
+.unity-base-slider .unity-base-slider__tracker {
     background-image: none;
     background-color: var(--color-normal);
     height: 2px;
@@ -136,7 +157,7 @@ Slider .unity-base-slider__tracker {
     border-width: 0px;
 }   
 
-Slider .unity-base-slider__dragger {
+.unity-base-slider .unity-base-slider__dragger {
     width: 24px;
     height: 24px;
     background-color: black;
@@ -146,19 +167,19 @@ Slider .unity-base-slider__dragger {
     border-radius: 4px;
 }
 
-Slider:hover .unity-base-slider__dragger  {
+.unity-base-slider:hover .unity-base-slider__dragger  {
     border-color: var(--color-highlight);
 }
 
-Slider:hover .unity-base-slider__tracker  {
+.unity-base-slider:hover .unity-base-slider__tracker  {
     background-color: var(--color-highlight);
 }
 
-Slider:hover Label  {
+.unity-base-slider:hover Label  {
     color: var(--color-highlight);
 }
 
-Slider:focus Label {
+.unity-base-slider:focus Label {
     color: var(--color-normal);
 }
 
@@ -265,36 +286,40 @@ MultiColumnListView .unity-multi-column-view__cell {
 /** SCROLL BAR **/
 /****************/
 
-Scroller .unity-base-slider__tracker {
+
+.unity-scroller .unity-base-slider__tracker, 
+.unity-scroller .unity-base-slider__tracker:enabled, 
+.unity-scroller .unity-base-slider__tracker:hover, 
+.unity-scroller .unity-base-slider .unity-base-slider__tracker:hover:enabled {
     background-color: transparent;
     border-width: 0;
-    margin-top: 0%;
-    margin-bottom: 100%;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
-Scroller .unity-base-slider {
+.unity-scroller--vertical > .unity-scroller__slider,
+.unity-scroller--vertical > .unity-scroller__slider:hover,
+.unity-scroller--vertical > .unity-scroller__slider:focus {
     flex-grow: 1;  
     flex-shrink: 1;  
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-Scroller ScrollerSlider {
     background-color: black;
-    border-width: 0px;
-    margin-left: 10px;        
+    border-width: 0px; 
     border-radius: 6px;
     padding-top: 3px;
     padding-bottom: 3px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
-Scroller .unity-scroller__low-button,
-Scroller .unity-scroller__high-button {
+.unity-scroller__low-button,
+.unity-scroller__high-button {
     display: none;
     height: 0px;
 }
 
-Scroller .unity-base-slider__dragger {
+.unity-scroller .unity-base-slider__dragger,
+.unity-scroller .unity-base-slider__dragger:focus,
+.unity-scroller .unity-base-slider__dragger:hover:enabled {
     background-color: #202020;
     border-color: var(--color-normal);     
     border-width: 0px;

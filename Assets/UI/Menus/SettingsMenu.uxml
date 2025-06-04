@@ -1,5 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/NewStyles/ControlStyle.uss?fileID=7433441132597879392&amp;guid=6a418fe22ac9e4c098c3f97494d724ca&amp;type=3#ControlStyle" />
     <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
     <ui:VisualElement name="MenuContainer" class="menuContainer" style="flex-grow: 1;">
         <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="Title" class="title" />
