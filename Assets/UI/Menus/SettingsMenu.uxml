@@ -1,24 +1,24 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
-    <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
-    <ui:VisualElement name="VisualElement" class="menuContainer" style="flex-grow: 1;">
-        <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" name="ScrollView" style="width: 100%; height: 90%; flex-wrap: nowrap; overflow: hidden; max-width: 100%; max-height: 90%; min-height: 90%; flex-grow: 1;">
-            <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-wrap: nowrap; max-width: 80%; align-self: center;">
-                <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" class="title" />
-                <ui:GroupBox text="Sound Settings">
-                    <ui:Slider picking-mode="Ignore" label="Music Volume" value="42" high-value="1" show-input-field="false" name="musicSlider" low-value="0.0001" />
-                    <ui:Slider picking-mode="Ignore" label="SFX Volume" value="42" high-value="1" name="sfxSlider" low-value="0.0001" />
-                    <ui:Slider picking-mode="Ignore" label="Ambient Volume" value="42" high-value="1" name="ambientSlider" low-value="0.0001" />
-                </ui:GroupBox>
-                <ui:GroupBox text="Graphics Settings">
+    <Style src="project://database/Assets/UI/NewStyles/ControlStyle.uss?fileID=7433441132597879392&amp;guid=6a418fe22ac9e4c098c3f97494d724ca&amp;type=3#ControlStyle" />
+    <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <ui:VisualElement name="MenuContainer" class="menuContainer" style="flex-grow: 1;">
+        <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="Title" class="title" />
+        <ui:TabView style="height: 100%; width: 90%;">
+            <ui:Tab label="Graphics">
+                <ui:VisualElement style="flex-grow: 1; width: 400px;">
                     <ui:Toggle label="Grass Enabled" name="grassToggle" />
                     <ui:Toggle label="Clouds Enabled" name="cloudsToggle" />
                     <ui:DropdownField label="Screen Resolution" index="-1" name="resolutionDropdown" />
                     <ui:Toggle label="Fullscreen" name="fullscreenToggle" />
-                </ui:GroupBox>
-            </ui:VisualElement>
-        </ui:ScrollView>
-        <ui:VisualElement name="dialogButtonContainer">
+                </ui:VisualElement>
+            </ui:Tab>
+            <ui:Tab label="Sound">
+                <ui:Slider picking-mode="Ignore" label="Music Volume" value="42" high-value="1" show-input-field="false" name="musicSlider" low-value="0.0001" />
+                <ui:Slider picking-mode="Ignore" label="SFX Volume" value="42" high-value="1" name="sfxSlider" low-value="0.0001" />
+                <ui:Slider picking-mode="Ignore" label="Ambient Volume" value="42" high-value="1" name="ambientSlider" low-value="0.0001" />
+            </ui:Tab>
+        </ui:TabView>
+        <ui:VisualElement name="ControlsContainer">
             <ui:Button text="Done" display-tooltip-when-elided="true" name="doneButton" style="width: 100px; height: 30px;" />
         </ui:VisualElement>
     </ui:VisualElement>

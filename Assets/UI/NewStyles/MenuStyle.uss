@@ -1,0 +1,76 @@
+@import url("StyleGlobals.uss");
+
+#Container {
+    justify-content: center;
+    align-content: center;
+}
+
+#MenuContainer {
+    align-items: center;
+    align-self: center;
+    top: 10%;
+    left: 10%;
+    right: 10%;
+    bottom: 10%;
+    position: absolute;
+    background-color: rgba(14, 14, 14, 0.96);
+    border-radius: 20px;
+    border-width: 4px;
+    border-color: rgb(234, 234, 232);
+}
+
+#SideMenuContainer {
+    align-items: center;
+    align-self: center;
+    position: absolute;
+    top: 10%;
+    right: 5%;
+    bottom: 10%;
+    width: 500px;
+    min-width: 500px;
+    max-width: 500px;
+    min-height: 200px;
+    background-color: rgba(14, 14, 14, 0.96);
+    border-radius: 20px;
+    border-width: 4px;
+    border-color: rgb(234, 234, 232);
+}
+
+#Title {
+    font-size: 64px;
+    color: rgb(206, 202, 201);
+    -unity-text-outline-width: 0;
+    -unity-text-outline-color: rgb(0, 0, 0);
+    text-shadow: 8px 8px 2px rgb(0, 0, 0);
+    margin-top: 50px;
+}
+
+#ControlsContainer {
+    height: 100px;
+    max-height: 100px;
+    min-height: 100px;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    background-color: transparent;
+    justify-content: center;
+    align-items: flex-end;  
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+#ControlsContainer Button {
+    margin: 5px;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: rgb(255, 255, 255);
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: rgb(51, 51, 51);
+    -unity-text-align: middle-center;
+    min-width: 128px;
+}
+
+#ControlsContainer Button:hover {
+    background-color: rgb(168, 168, 168);
+}

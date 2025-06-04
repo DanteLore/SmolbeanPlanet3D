@@ -1,0 +1,320 @@
+@import url("StyleGlobals.uss");
+
+VisualElement{
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/Acme-Regular.ttf?fileID=12800000&guid=181d1a44a80844316a6bf906b3287e10&type=3#Acme-Regular");
+    color: var(--color-normal);
+}
+
+/***************/
+/**  DROPDOWN **/
+/***************/
+
+.unity-base-popup-field__input {
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: var(--color-normal);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: var(--color-normal);
+    padding: 4px 8px;
+    margin: 0px;
+}
+
+DropdownField:hover .unity-base-popup-field__input,
+DropdownField:hover .unity-popup-field__label
+{  
+    border-color: var(--color-highlight);
+    color: var(--color-highlight);
+}
+
+.unity-base-popup-field__arrow {
+    -unity-background-image-tint-color: var(--color-normal);
+}
+
+DropdownField:hover .unity-base-popup-field__arrow {
+    -unity-background-image-tint-color: var(--color-highlight);
+}
+
+/* https://medium.com/medialesson/how-to-style-dropdown-selectors-in-unity-ui-toolkit-229900de0330 */
+
+.unity-base-dropdown .unity-scroll-view {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: var(--color-normal);
+    border-color: var(--color-normal);
+    border-radius: 6px;
+}
+
+.unity-base-dropdown__item {
+    flex-grow: 1;
+}
+
+.unity-base-dropdown #unity-content-container {
+    flex-direction: column;
+}
+
+.unity-base-dropdown__checkmark {
+    -unity-background-image-tint-color: var(--color-normal);
+}
+
+.unity-base-dropdown__container-outer {
+    border-color: var(--color-normal);
+    border-radius: 6px;
+}
+
+/*************/
+/**  TOGGLE **/
+/*************/
+
+Toggle .unity-toggle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;  
+}
+
+Toggle .unity-toggle__input {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-width: 1px;
+    border-color: var(--color-normal);
+    border-radius: 4px;
+    margin: 0;
+    padding: 0;
+}
+
+Toggle .unity-toggle__checkmark {
+    background-color: transparent;
+    -unity-background-image-tint-color: var(--color-normal);
+    max-width: 100%;
+    max-height: 100%;
+    border-width: 0px;
+}
+
+Toggle:hover .unity-toggle__input {
+    border-color: var(--color-highlight);            
+}
+
+Toggle:hover .unity-toggle__label {
+    color: var(--color-highlight);                     
+}
+
+Toggle:focus Label {
+    color: var(--color-normal);
+}
+
+/*************/
+/**  SLIDER **/
+/*************/
+
+Slider .unity-base-slider {
+    display: flex;             
+    flex-direction: row;       
+    align-items: stretch;      
+    padding: 0;
+}
+
+Slider .unity-base-slider__tracker {
+    background-image: none;
+    background-color: var(--color-normal);
+    height: 2px;
+    align-self: center; 
+    margin: 0;
+    padding: 0;
+    border-width: 0px;
+}   
+
+Slider .unity-base-slider__dragger {
+    width: 24px;
+    height: 24px;
+    background-color: black;
+    background-image: none;
+    border-width: 1px;
+    border-color: var(--color-normal);
+    border-radius: 4px;
+}
+
+Slider:hover .unity-base-slider__dragger  {
+    border-color: var(--color-highlight);
+}
+
+Slider:hover .unity-base-slider__tracker  {
+    background-color: var(--color-highlight);
+}
+
+Slider:hover Label  {
+    color: var(--color-highlight);
+}
+
+Slider:focus Label {
+    color: var(--color-normal);
+}
+
+/***************/
+/**  TAB VIEW **/
+/***************/
+
+.unity-tab__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: transparent;
+}
+
+.unity-tab__header:checked {
+    border-bottom-width: 1px;
+    border-bottom-color: var(--color-highlight);
+}
+
+.unity-tab__header-label {
+    color: rgb(100, 100, 100);  
+    font-size: 24px;          
+}
+
+.unity-tab__header:hover .unity-tab__header-label {
+    color: var(--color-normal);   
+}
+
+.unity-tab__header:checked .unity-tab__header-label {
+    color:  var(--color-normal);
+}
+
+.unity-tab__content-container {
+    padding-top: 32px;
+}
+
+/*****************************/
+/**  MULTI COLUMN LIST VIEW **/
+/*****************************/
+
+MultiColumnListView .unity-list-view {
+}
+
+MultiColumnListView .unity-collection-view__item,
+MultiColumnListView .unity-collection-view__item:hover,
+MultiColumnListView .unity-collection-view__item:focus  {
+    background-color: #000000; 
+}
+
+MultiColumnListView .unity-collection-view__item--alternative-background, 
+MultiColumnListView .unity-collection-view__item--alternative-background:hover, 
+MultiColumnListView .unity-collection-view__item--alternative-background:focus, {
+    background-color: #202020; 
+}
+
+MultiColumnListView .unity-multi-column-view__header-container {
+    color: transparent;
+    background-color: transparent;
+    border-width: 0px;
+}
+
+MultiColumnListView .unity-multi-column-header__column {
+    background-color: transparent;
+    border-width: 0px;  
+}
+
+MultiColumnListView .unity-multi-column-header__column {
+    flex-direction: row;       
+    align-items: center;      
+    justify-content: space-between; 
+    padding-right: 4px;       
+}
+
+MultiColumnListView .unity-collection-view__header-cell {
+    border-color: transparent;
+    border-width: 0;
+}
+
+MultiColumnListView .unity-multi-column-header__column__title {
+    font-size: 24px;
+    color: var(--color-normal);
+}
+
+MultiColumnListView .unity-collection-view__header-cell:hover,
+MultiColumnListView .unity-collection-view__header-cell:focus {
+    background-color: transparent;
+    border-bottom-color: transparent;
+    border-bottom-width: 0;
+}
+
+MultiColumnListView .unity-multi-column-header__column__sort-indicator__arrow {
+    background-color: transparent;
+    -unity-background-image-tint-color: var(--color-normal);
+    height: 24px;
+    width: 24px;
+}
+
+MultiColumnListView .unity-multi-column-view__cell {
+    flex-direction: row;
+    align-items: center;
+}
+
+/****************/
+/** SCROLL BAR **/
+/****************/
+
+Scroller .unity-base-slider__tracker {
+    background-color: transparent;
+    border-width: 0;
+    margin-top: 0%;
+    margin-bottom: 100%;
+}
+
+Scroller .unity-base-slider {
+    flex-grow: 1;  
+    flex-shrink: 1;  
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+Scroller ScrollerSlider {
+    background-color: black;
+    border-width: 0px;
+    margin-left: 10px;        
+    border-radius: 6px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+Scroller .unity-scroller__low-button,
+Scroller .unity-scroller__high-button {
+    display: none;
+    height: 0px;
+}
+
+Scroller .unity-base-slider__dragger {
+    background-color: #202020;
+    border-color: var(--color-normal);     
+    border-width: 0px;
+    border-radius: 4px;          
+    padding: 0;
+    margin: 0;
+}
+
+/******************/
+/** PROGRESS BAR **/
+/******************/
+
+ProgressBar .unity-progress-bar__background {
+    background-color: black;
+    border-color: var(--color-normal);           
+    border-width: 1px;
+    border-radius: 6px; 
+}
+
+ProgressBar .unity-progress-bar__progress {
+    background-color: #777777;       
+    border-radius: 4px;           
+}
+
+ProgressBar .unity-progress-bar__title {
+    color: var(--color-highlight);           
+}
+
+ProgressBar {
+    padding: 0;
+}
