@@ -37,12 +37,12 @@
 }
 
 #Title {
-    font-size: 64px;
+    font-size: 48px;
     color: rgb(206, 202, 201);
     -unity-text-outline-width: 0;
     -unity-text-outline-color: rgb(0, 0, 0);
     text-shadow: 8px 8px 2px rgb(0, 0, 0);
-    margin-top: 50px;
+    margin-top: 25px;
 }
 
 #ControlsContainer {

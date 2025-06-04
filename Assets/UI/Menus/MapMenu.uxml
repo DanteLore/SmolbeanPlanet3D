@@ -1,18 +1,16 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
-    <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
-    <ui:VisualElement class="menuContainer" style="max-width: 390px; min-width: 390px; max-height: 490%; min-height: 470px; height: 490px; flex-grow: 0; flex-shrink: 10; width: 390px; top: 80px;">
-        <ui:VisualElement style="flex-grow: 1; -unity-text-align: middle-left; flex-direction: row; white-space: normal; min-width: 100%; width: 100%;">
-            <ui:Label text="🗺" style="-unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/NotoEmoji-Regular%20SDF.asset?fileID=11400000&amp;guid=634373dffeec748cf8429e236e072555&amp;type=2#NotoEmoji-Regular SDF&quot;); font-size: 32px;" />
-            <ui:Label text="Island Map" display-tooltip-when-elided="true" name="title" class="title" style="white-space: nowrap;" />
-        </ui:VisualElement>
-        <ui:VisualElement name="mapContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; height: 100%; padding-left: 10px; padding-right: 10px; padding-top: 10px; padding-bottom: 10px;">
-            <AspectRatioPanel aspect-ratio-x="16" aspect-ratio-y="16" style="position: relative; left: 0; width: 350px; height: 350px; max-width: 350px; min-width: 350px; min-height: 350px; max-height: 350px;">
-                <ui:VisualElement name="mapBox" style="flex-grow: 1; background-color: rgba(255, 255, 255, 0); border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px;" />
-            </AspectRatioPanel>
-        </ui:VisualElement>
-        <ui:VisualElement name="dialogButtonContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-            <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />
+    <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <ui:VisualElement name="Container" style="flex-grow: 1;">
+        <ui:VisualElement name="SideMenuContainer" class="menuContainer">
+            <ui:Label text="Island Map" display-tooltip-when-elided="true" name="Title" class="title" style="white-space: nowrap;" />
+            <ui:VisualElement name="mapContainer" style="width: 594px; height: 100%;">
+                <AspectRatioPanel aspect-ratio-x="16" aspect-ratio-y="16" style="width: 350px; height: 350px; max-width: 350px; min-width: 350px; min-height: 350px; max-height: 350px;">
+                    <ui:VisualElement name="mapBox" style="flex-grow: 1; background-color: rgba(255, 255, 255, 0); border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px;" />
+                </AspectRatioPanel>
+            </ui:VisualElement>
+            <ui:VisualElement name="ControlsContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
