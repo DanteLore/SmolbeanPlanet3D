@@ -1,0 +1,53 @@
+.menuContainer {
+    top: 10%;
+    right: 10%;
+    position: relative;
+    align-self: flex-end;
+    align-items: flex-start;
+    width: 500px;
+    max-width: 500px;
+    min-width: 500px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    max-height: 80%;
+    min-height: 80%;
+    height: 80%;
+}
+
+.listContainer {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: 24px;
+}
+
+.jobRow {
+    flex-direction: row;
+    align-self: auto;
+    align-items: center;
+}
+
+.jobRow Button {
+    width: 40px;
+    height: 40px;
+    -unity-text-align: lower-right;
+    -unity-font-style: bold;
+    font-size: 14px;
+    border-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-radius: 0;
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+}

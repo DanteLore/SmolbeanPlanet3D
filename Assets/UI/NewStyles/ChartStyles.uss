@@ -1,0 +1,22 @@
+.chartKeyItemContainer {
+    flex-direction: row;
+    align-items: center;
+    margin-left: 12px;
+}
+
+.chartKeyColorButton {
+    width: 18px;
+    min-width: 18px;
+    max-width: 18px;
+    height: 18px;
+    min-height: 18px;
+    max-height: 18px;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: rgb(255, 255, 255);
+    color: rgb(128, 0, 0);
+}
+
+.chartKeyColorButton:hover {
+    scale: 1.2 1.2;
+}

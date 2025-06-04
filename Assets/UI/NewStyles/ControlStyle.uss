@@ -31,11 +31,14 @@ VisualElement{
     margin: 0px;
 }
 
-DropdownField:hover .unity-base-popup-field__input,
-DropdownField:hover .unity-popup-field__label
+.unity-base-popup-field:hover .unity-base-popup-field__input,
+.unity-base-popup-field:hover .unity-popup-field__label
 {  
     border-color: var(--color-highlight);
     color: var(--color-highlight);
+}
+.unity-base-popup-field:focus:enabled .unity-base-popup-field__input {
+    border-color: var(--color-normal);
 }
 
 .unity-base-popup-field__arrow {

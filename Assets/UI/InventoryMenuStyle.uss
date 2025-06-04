@@ -1,0 +1,74 @@
+.menuContainer {
+    top: 10%;
+    right: 10%;
+    position: relative;
+    height: 80%;
+    min-height: 80%;
+    max-height: 80%;
+    align-self: flex-end;
+    width: 500px;
+    max-width: 500px;
+    min-width: 500px;
+    align-items: flex-start;
+}
+
+.inventoryContainer Button {
+    width: 50px;
+    height: 50px;
+    -unity-text-align: lower-right;
+    -unity-font-style: bold;
+    font-size: 14px;
+}
+
+.inventoryContainer Button:hover {
+    border-width: 1px;
+    border-color: rgb(255, 255, 255);
+    border-radius: 5px;
+}
+
+.inventoryContainer {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px;
+    margin-left: 24px;
+}
+
+.buildingHeader {
+    flex-direction: row;
+    align-self: auto;
+    align-items: center;
+}
+
+.buildingRow {
+    white-space: nowrap;
+    align-self: stretch;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 24px;
+    width: 100%;
+}
+
+.buildingIcon {
+    width: 50px;
+    height: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+}
+
+.buildingHeader Button {
+    width: 50px;
+    height: 50px;
+    -unity-text-align: lower-right;
+    -unity-font-style: bold;
+    font-size: 14px;
+    border-width: 0;
+}
+
+.inventoryContainer Button:focus {
+    border-width: 1px;
+    border-color: rgb(255, 255, 255);
+    border-radius: 5px;
+}

@@ -1,0 +1,276 @@
+.ingredientContainer,
+.inventoryContainer,
+.recipeContainer,
+.residentContainer
+{
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px;
+    margin-left: 24px;
+    margin-bottom: 20px;
+}
+
+.jobContainer
+{
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 5px;
+    margin-left: 0px;
+    margin-bottom: 20px;
+}
+
+.residentContainer Button,
+.ingredientContainer Button,
+.inventoryContainer Button,
+.recipeContainer Button
+{
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    max-width: 30px;
+    max-height: 30px;
+    -unity-text-align: lower-right;
+    -unity-font-style: normal;
+    font-size: 14px;
+}
+
+.jobContainer Button,
+.jobRow Button,
+.inventoryRow Button
+{
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    max-width: 30px;
+    max-height: 30px;
+    -unity-text-align: lower-right;
+    -unity-font-style: normal;
+    font-size: 14px;
+    border-width: 0px;
+}
+
+.ingredientContainer Button:hover,
+.inventoryContainer Button:hover,
+.recipeContainer Button:hover,
+.residentContainer Button:hover
+{
+    border-width: 1px;
+    border-color: rgb(255, 255, 255);
+    border-radius: 5px;
+}
+
+.jobContainer Button:hover
+{
+    border-width: 0px;
+}
+
+.bigLabel
+{
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    font-size: 32px;
+    margin: 6px;
+    -unity-text-align: middle-center;
+}
+
+.titleLabel
+{
+    font-size: 16px;
+    -unity-text-align: middle-center;
+}
+
+.recipeContainerLabel
+{
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    max-width: 30px;
+    max-height: 30px;
+    font-size: 32px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    -unity-text-align: middle-center;
+}
+
+.notoEmoji
+{
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoEmoji-Regular.ttf?fileID=12800000&guid=3ec600630513644ab93a6e55cbe0392d&type=3#NotoEmoji-Regular");
+}
+
+.notoLinearA
+{
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoSansLinearA-Regular.ttf?fileID=12800000&guid=6ae3fa7357f50498b9187d566ca7995d&type=3#NotoSansLinearA-Regular");
+}
+
+.notoSansSymbols
+{
+    -unity-font-definition: url("project://database/Assets/UI/Fonts/NotoSansSymbols-Regular.ttf?fileID=12800000&guid=96e32fe508410474b8b72399fd1900db&type=3#NotoSansSymbols-Regular");
+}
+
+.jobRow,
+.inventoryRow
+{
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.fieldRow,
+.titleRow,
+.residentRow
+{
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    justify-content: flex-start;
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+}
+
+
+.residentContainer Label,
+.jobContainer Label
+{
+    font-size: 10px;
+    -unity-font-style: normal;
+}
+
+.jobLabel,
+.fieldLabel
+{
+    width: 45%;
+    -unity-text-align: middle-right;
+    white-space: nowrap;
+}
+
+.valueLabel
+{
+    width: 45%;
+    -unity-font-style: bold;
+    -unity-text-align: middle-left;
+    white-space: nowrap;
+}
+
+.thoughtsContainer
+{
+    margin-top: 10px;
+}
+
+.thoughtsRow
+{
+    margin: 4px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 3px;
+    padding-right: 1px;
+    background-color: rgba(255, 255, 255, .05);
+    color: rgb(0, 0, 0);
+    width: 90%;
+    min-width: 90%;
+    max-width: 90%;
+    border-radius: 5px;
+}
+
+.thoughtsRow Label
+{
+    white-space: normal;
+    font-size: 10px;
+    -unity-text-align: middle-left;
+    color: rgb(0, 0, 0);
+}
+
+.thoughtsRowLatest
+{
+    margin: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 6px;
+    padding-right: 2px;
+    background-color: rgba(255, 255, 255, .2);
+    color: rgb(0, 0, 0);
+    width: 95%;
+    min-width: 95%;
+    max-width: 95%;
+    border-radius: 5px;
+    flex-grow: 1;
+}
+
+.thoughtsRowLatest Label
+{
+    white-space: normal;
+    font-size: 12px;
+    -unity-text-align: middle-left;
+    color: rgb(0, 0, 0);
+}
+
+Label.todLabel
+{
+    height: 10px;
+    min-height: 10px;
+    max-height: 10px;
+    margin-top: 2px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 4px;
+    padding: 0px;
+    font-size: 10px;
+    -unity-text-align: middle-right;
+    color: rgb(0, 0, 0);
+}
+
+.controlButtonContainer
+{
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: 40px;
+    min-height: 40px;
+    max-height: 40px;
+    margin-bottom: 20px;
+}
+
+.controlButtonContainer Button
+{
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
+    margin: 4px;
+    background-color: rgb(51, 51, 51);
+}
+
+.controlButtonContainer Button:hover
+{
+    background-color: rgb(168, 168, 168);
+}
+
+Button.dangerButton
+{
+    background-color: rgb(128, 0, 0);
+}
+
+Button.dangerButton:hover
+{
+    background-color: rgb(200, 0, 0);
+}
+
+Button.dangerButton:focus
+{
+    background-color: rgb(255, 0, 0);
+}
