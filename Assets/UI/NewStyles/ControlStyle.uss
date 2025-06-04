@@ -34,6 +34,14 @@ DropdownField:hover .unity-base-popup-field__arrow {
     -unity-background-image-tint-color: var(--color-highlight);
 }
 
+DropdownField:hover Label  {
+    color: var(--color-highlight);
+}
+
+DropdownField:focus Label {
+    color: var(--color-normal);
+}
+
 /* https://medium.com/medialesson/how-to-style-dropdown-selectors-in-unity-ui-toolkit-229900de0330 */
 
 .unity-base-dropdown .unity-scroll-view {
