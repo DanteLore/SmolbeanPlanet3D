@@ -8,6 +8,7 @@
                     <ui:Toggle label="Grass Enabled" name="grassToggle" />
                     <ui:Toggle label="Clouds Enabled" name="cloudsToggle" />
                     <ui:DropdownField label="Screen Resolution" index="-1" name="resolutionDropdown" />
+                    <ui:DropdownField label="Graphics Quality" index="-1" name="qualityDropdown" />
                     <ui:Toggle label="Fullscreen" name="fullscreenToggle" />
                 </ui:VisualElement>
             </ui:Tab>
