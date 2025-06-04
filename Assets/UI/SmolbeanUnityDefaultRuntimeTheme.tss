@@ -1,4 +1,5 @@
 @import url("unity-theme://default");
 
-@import url("NewStyles/ThemeLevelStyle.uss");
+@import url("NewStyles/SmolbeanTheme.uss");
+
 VisualElement {}
