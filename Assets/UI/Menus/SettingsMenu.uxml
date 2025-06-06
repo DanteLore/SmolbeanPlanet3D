@@ -13,9 +13,11 @@
                 </ui:VisualElement>
             </ui:Tab>
             <ui:Tab label="Sound">
-                <ui:Slider picking-mode="Ignore" label="Music Volume" value="42" high-value="1" show-input-field="false" name="musicSlider" low-value="0.0001" />
-                <ui:Slider picking-mode="Ignore" label="SFX Volume" value="42" high-value="1" name="sfxSlider" low-value="0.0001" />
-                <ui:Slider picking-mode="Ignore" label="Ambient Volume" value="42" high-value="1" name="ambientSlider" low-value="0.0001" />
+                <ui:VisualElement style="flex-grow: 1; width: 400px;">
+                    <ui:Slider picking-mode="Ignore" label="Music Volume" value="42" high-value="1" show-input-field="false" name="musicSlider" low-value="0.0001" />
+                    <ui:Slider picking-mode="Ignore" label="SFX Volume" value="42" high-value="1" name="sfxSlider" low-value="0.0001" />
+                    <ui:Slider picking-mode="Ignore" label="Ambient Volume" value="42" high-value="1" name="ambientSlider" low-value="0.0001" />
+                </ui:VisualElement>
             </ui:Tab>
         </ui:TabView>
         <ui:VisualElement name="ControlsContainer">
