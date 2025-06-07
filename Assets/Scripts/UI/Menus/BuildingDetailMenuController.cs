@@ -5,22 +5,27 @@ using UnityEngine.UIElements;
 public class BuildingDetailsMenuController : SmolbeanMenu
 {
     protected UIDocument document;
+    private VisualElement root;
     protected GridManager gridManager;
     protected SoundPlayer soundPlayer;
     protected Transform target;
-
+    private SmolbeanBuilding building;
     private Button deleteButton;
     private Button rotateButton;
     private Button placeWorkingAreaButton;
 
     protected void OnEnable()
     {
-        document = GetComponent<UIDocument>();
         gridManager = FindFirstObjectByType<GridManager>();
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
 
-        var closeButton = document.rootVisualElement.Q<Button>("closeButton");
-        closeButton.clicked += CloseButtonClicked;
+        document = GetComponent<UIDocument>();
+        root = document.rootVisualElement;
+        
+        target = MapInteractionManager.Instance.Data.SelectedTransform;
+        building = target.GetComponent<SmolbeanBuilding>();
+
+        document.rootVisualElement.Q<Button>("closeButton").clicked += CloseButtonClicked;
 
         deleteButton = document.rootVisualElement.Q<Button>("deleteButton");
         rotateButton = document.rootVisualElement.Q<Button>("rotateButton");
@@ -30,16 +35,18 @@ public class BuildingDetailsMenuController : SmolbeanMenu
         rotateButton.clicked += RotateButtonClicked;
         placeWorkingAreaButton.clicked += PlaceWorkingAreaClicked;
 
-        target = MapInteractionManager.Instance.Data.SelectedTransform;
+        deleteButton.visible = target != null && building.BuildingSpec.deleteAllowed;
+        placeWorkingAreaButton.visible = building is ResourceCollectionBuilding;
 
-        Clear();
-        UpdateControls();
+        InvokeRepeating(nameof(DrawMenu), 1f, 1f);
+
         DrawMenu();
     }
 
     protected void OnDisable()
     {
         target = null;
+        CancelInvoke(nameof(DrawMenu));
     }
 
     protected void CloseButtonClicked()
@@ -48,14 +55,6 @@ public class BuildingDetailsMenuController : SmolbeanMenu
         MapInteractionManager.Instance.Data.ForceDeselect();
         MenuController.Instance.CloseAll();
     }
-
-    private void UpdateControls()
-    {
-        var sbb = target.GetComponent<SmolbeanBuilding>();
-        deleteButton.visible = target != null && sbb.BuildingSpec.deleteAllowed;
-        placeWorkingAreaButton.visible = sbb is ResourceCollectionBuilding;
-    }
-
     private void RotateButtonClicked()
     {
         if(target) 
@@ -75,40 +74,32 @@ public class BuildingDetailsMenuController : SmolbeanMenu
 
     private void DrawMenu()
     {
-        var building = target.GetComponent<SmolbeanBuilding>();
-
-        var buildingImage = document.rootVisualElement.Q<VisualElement>("buildingImage");
-        buildingImage.style.backgroundImage = building.BuildingSpec.thumbnail;
-
-        var nameLabel = document.rootVisualElement.Q<Label>("nameLabel");
-        nameLabel.text = building.BuildingSpec.buildingName;
-
+        root.Q<VisualElement>("thumbnail").style.backgroundImage = building.BuildingSpec.thumbnail;
+        root.Q<Label>("nameLabel").text = building.BuildingSpec.buildingName;
         var pos = gridManager.GetGameSquareFromWorldCoords(building.transform.position);
-        var positionLabel = document.rootVisualElement.Q<Label>("positionLabel");
-        positionLabel.text = $"{pos.x}λ \u00d7 {pos.y}φ";
-
-        var mainScrollView = document.rootVisualElement.Q<ScrollView>("mainScrollView");
+        root.Q<Label>("positionLabel").text = $"{pos.x}λ \u00d7 {pos.y}φ";
 
         if (!building.IsComplete)
-            BuildIngredients(building, mainScrollView);
+            BuildIngredients();
 
         if(!building.Inventory.IsEmpty())
-            BuildInventory(building, mainScrollView);
+            BuildInventory();
 
         if(building is FactoryBuilding factory)
-            BuildRecipe(mainScrollView, factory);
+            BuildRecipe();
 
         var jobs = JobController.Instance.GetAllJobsForBuilding(building).ToArray();
         if (jobs.Length > 0)
-            BuildJobs(mainScrollView, jobs);
+            BuildJobs(jobs);
 
         var home = building.GetComponent<SmolbeanHome>();
         if(home != null)
-            BuildResidents(mainScrollView, home);
+            BuildResidents();
     }
 
-    private void BuildResidents(ScrollView mainScrollView, SmolbeanHome home)
+    private void BuildResidents()
     {
+        /*
         Title(mainScrollView, "𐘦", "Residents");
 
         var residentContainer = new VisualElement();
@@ -130,10 +121,12 @@ public class BuildingDetailsMenuController : SmolbeanMenu
             colonistLabel.text = colonist.Stats.name;
             residentRow.Add(colonistLabel);
         }
+        */
     }
 
-    private static void BuildRecipe(ScrollView mainScrollView, FactoryBuilding factory)
+    private static void BuildRecipe()
     {
+        /*
         Title(mainScrollView, "𐜫", "Recipes");
 
         var recipeContainer = new VisualElement();
@@ -158,15 +151,13 @@ public class BuildingDetailsMenuController : SmolbeanMenu
         productButton.text = factory.recipe.quantity.ToString();
         productButton.style.backgroundImage = factory.recipe.createdItem.thumbnail;
         recipeContainer.Add(productButton);
+        */
     }
 
-    private static void BuildInventory(SmolbeanBuilding building, ScrollView mainScrollView)
+    private void BuildInventory()
     {
-        Title(mainScrollView, "𐚱", "Inventory");
-
-        var inventoryContainer = new VisualElement();
-        inventoryContainer.AddToClassList("inventoryContainer");
-        mainScrollView.Add(inventoryContainer);
+        var inventoryContainer = root.Q<VisualElement>("inventoryContainer");
+        inventoryContainer.Clear();
 
         foreach (var item in building.Inventory.Totals)
         {
@@ -178,56 +169,15 @@ public class BuildingDetailsMenuController : SmolbeanMenu
         }
     }
 
-    private void BuildJobs(ScrollView mainScrollView, Job[] jobs)
+    private void BuildJobs(Job[] jobs)
     {
-        Title(mainScrollView, "𐛌", "Jobs");
-
-        var jobContainer = new VisualElement();
-        jobContainer.AddToClassList("jobContainer");
-        mainScrollView.Add(jobContainer);
-
-        foreach (var job in jobs)
-        {
-            VisualElement jobRow = new();
-            jobRow.AddToClassList("jobRow");
-            jobContainer.Add(jobRow);
-
-            Toggle jobEnabledToggle = new();
-            jobRow.Add(jobEnabledToggle);
-            jobEnabledToggle.value = job.IsOpen;
-            jobEnabledToggle.RegisterValueChangedCallback(v =>
-            {
-                if (v.newValue)
-                    job.Open();
-                else
-                    job.Terminate();
-            });
-
-            Button jobButton = new();
-            jobButton.style.backgroundColor = new Color(0, 0, 0, 0);
-            jobButton.style.backgroundImage = job.JobSpec.thumbnail;
-            jobRow.Add(jobButton);
-
-            Label jobLabel = new();
-            jobLabel.text = job.JobSpec.jobName;
-            jobRow.Add(jobLabel);
-
-            if (job.Colonist)
-            {
-                Button colonistButton = new();
-                colonistButton.style.backgroundColor = new Color(0, 0, 0, 0);
-                colonistButton.style.backgroundImage = job.Colonist.Species.thumbnail;
-                jobRow.Add(colonistButton);
-
-                Label colonistLabel = new();
-                colonistLabel.text = job.Colonist.Stats.name;
-                jobRow.Add(colonistLabel);
-            }
-        }
+        var jobsListView = root.Q<MultiColumnListView>("jobsListView");
+        JobViewBuilder.BuildJobView(jobsListView, jobs);
     }
 
-    private static void BuildIngredients(SmolbeanBuilding building, ScrollView mainScrollView)
+    private static void BuildIngredients()
     {
+        /*
         Title(mainScrollView, "⚒", "Materials", "notoEmoji");
 
         var ingredientContainer = new VisualElement();
@@ -242,28 +192,6 @@ public class BuildingDetailsMenuController : SmolbeanMenu
             button.style.backgroundImage = ingredient.item.thumbnail;
             ingredientContainer.Add(button);
         }
-    }
-
-    protected virtual void Clear()
-    {
-        document.rootVisualElement.Q<ScrollView>("mainScrollView").Clear();
-    }
-
-    protected static void Title(VisualElement parent, string symbol, string text, string symbolClass = "notoLinearA")
-    {
-        var titleContainer = new VisualElement();
-        titleContainer.AddToClassList("titleRow");
-        parent.Add(titleContainer);
-
-        Label symbolLabel = new();
-        symbolLabel.AddToClassList(symbolClass);
-        symbolLabel.AddToClassList("bigLabel");
-        titleContainer.Add(symbolLabel);
-        symbolLabel.text = symbol;
-
-        Label textLabel = new();
-        titleContainer.Add(textLabel);
-        textLabel.AddToClassList("titleLabel");
-        textLabel.text = text;
+        */
     }
 }

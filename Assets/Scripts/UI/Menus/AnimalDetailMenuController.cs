@@ -120,7 +120,6 @@ public class AnimalDetailMenuController : SmolbeanMenu
     private void UpdateInventory()
     {
         var container = root.Q<VisualElement>("inventoryContainer");
-
         container.Clear();
 
         if(targetAnimal.Inventory.IsEmpty())

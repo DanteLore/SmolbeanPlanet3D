@@ -9,12 +9,12 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:TabView style="width: 90%; flex-grow: 1;">
-            <ui:Tab label="Activity" name="activityTab">
+            <ui:Tab label="🗩" name="activityTab">
                 <ui:ScrollView horizontal-scroller-visibility="Hidden" name="thoughtsContainer" style="height: 300px; max-height: 300px;">
                     <ui:VisualElement name="thoughtsContainer" style="flex-grow: 1;" />
                 </ui:ScrollView>
             </ui:Tab>
-            <ui:Tab label="Stats" name="statsTab">
+            <ui:Tab label="☷" name="statsTab">
                 <ui:ProgressBar value="22" title="Health" name="healthBar" />
                 <ui:ProgressBar value="22" title="Food" name="foodBar" />
                 <ui:VisualElement class="text-field-row" style="flex-grow: 1;">
@@ -31,7 +31,7 @@
                     <ui:Label text="None" name="jobLabel" class="text-field-value" />
                 </ui:VisualElement>
             </ui:Tab>
-            <ui:Tab label="Inventory" name="inventoryTab">
+            <ui:Tab label="𐚱" name="inventoryTab">
                 <ui:VisualElement name="inventoryContainer" style="flex-grow: 1;" />
             </ui:Tab>
         </ui:TabView>

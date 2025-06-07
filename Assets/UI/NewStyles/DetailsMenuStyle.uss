@@ -79,9 +79,92 @@
     font-size: 16px;
 }
 
+/***************/
 /** Inventory **/
+/***************/
+
+#inventoryContainer {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
 
 #inventoryContainer Button {
     height: 100px;
     width: 100px;
+}
+
+#inventoryContainer Button,
+#inventoryContainer Button:hover {
+    height: 100px;
+    width: 100px;
+    border-color: var(--color-normal);
+    color: var(--color-normal);
+    font-size: 32px;
+    -unity-text-outline-color: #404040; 
+    -unity-text-outline-width: 1px;
+    -unity-text-align: lower-right;
+    padding-left: 8px;
+    padding-top: 0px;
+    padding-right: 4px;
+    padding-bottom: 0px;
+}
+
+/**********/
+/** Jobs **/
+/**********/
+
+#jobsContainer {
+    flex-direction: row;
+}
+
+#jobsContainer Button {
+    height: 100px;
+    width: 100px;
+}
+
+/********************/
+/** Action buttons **/
+/********************/
+
+#actionButtonContainer {
+    flex-direction: row;
+    justify-content: center;
+    align-self: center;
+    width: 90%;
+}
+
+#actionButtonContainer .unity-button {
+    min-width: 100px;
+    height: 48px;
+    margin: 20px;
+    font-size: 32px;
+}
+
+/**********/
+/** Jobs **/
+/**********/
+
+.unity-multi-column-view__cell Label {
+    font-size: 16px;
+}
+
+.jobs-thumb-image {
+    height: 48px;
+    width: 48px;
+}
+
+.jobs-thumb-and-label-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 4px;
+}
+
+.jobs-table-label {
+    text-align: left;
+    margin-left: 6px;
+    white-space: normal;
+    flex-grow: 1;
+    flex-shrink: 1;
+    -unity-text-align: upper-left;
 }

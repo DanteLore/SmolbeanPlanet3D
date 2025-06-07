@@ -1,19 +1,33 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <Style src="project://database/Assets/UI/NewStyles/DetailsMenuStyle.uss?fileID=7433441132597879392&amp;guid=f51120ff0db3344bfaefc895b97e2798&amp;type=3#DetailsMenuStyle" />
     <ui:VisualElement name="SideMenuContainer" class="menuContainer">
         <ui:VisualElement name="VisualElement" style="flex-direction: row; position: relative; min-width: 100%; max-width: 100%; width: 288px; height: 90px; min-height: 90px; max-height: 90px;">
-            <ui:VisualElement name="buildingImage" style="flex-grow: 1; width: 80px; max-width: 80px; min-width: 80px; min-height: 80px; max-height: 80px; height: 80px;" />
+            <ui:VisualElement name="thumbnail" style="flex-grow: 1; width: 80px; max-width: 80px; min-width: 80px; min-height: 80px; max-height: 80px; height: 80px;" />
             <ui:VisualElement style="flex-grow: 1;">
-                <ui:Label text="12λ \u00d7 34φ" name="positionLabel" />
-                <ui:Label text="Buildy McBuildface" name="nameLabel" double-click-selects-word="false" style="white-space: normal; font-size: 12px;" />
+                <ui:Label text="Buildy McBuildface" name="nameLabel" double-click-selects-word="false" />
+                <ui:Label text="12λ x 34φ" name="positionLabel" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement class="controlButtonContainer" style="flex-grow: 1; width: 100%; max-width: 100%; min-width: 100%; flex-direction: row; justify-content: space-around;">
-            <ui:Button text="⭮" name="rotateButton" style="-unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/NotoSansSymbols2-Regular%20SDF.asset?fileID=11400000&amp;guid=50b82a52dd34c46a2879c92e644dc952&amp;type=2#NotoSansSymbols2-Regular SDF&quot;); -unity-text-align: middle-center; font-size: 24px; padding-top: 8px;" />
-            <ui:Button text="𐛌 𐙟" name="placeWorkingAreaButton" style="font-size: 24px; -unity-font-style: normal;" />
-            <ui:Button text="X" name="deleteButton" class="dangerButton" style="font-size: 24px;" />
+        <ui:VisualElement name="actionButtonContainer" class="controlButtonContainer">
+            <ui:Button text="⭮" name="rotateButton" />
+            <ui:Button text="𐛌 𐙟" name="placeWorkingAreaButton" />
+            <ui:Button text="X" name="deleteButton" class="dangerButton" />
         </ui:VisualElement>
-        <ui:ScrollView name="mainScrollView" horizontal-scroller-visibility="Hidden" style="min-height: auto; min-width: 100%; max-width: 100%; width: 100%; height: 100%; flex-wrap: nowrap;" />
+        <ui:TabView style="width: 90%;">
+            <ui:Tab label="𐛌">
+                <ui:MultiColumnListView name="jobsListView" sorting-mode="Default" allow-add="false" allow-remove="false" fixed-item-height="64">
+                    <ui:Columns resizable="false" reorderable="false">
+                        <ui:Column name="enabledColumn" width="64px" optional="false" resizable="false" visible="true" sortable="false" />
+                        <ui:Column name="jobTitleColumn" title="Job Title" optional="false" resizable="false" width="180px" />
+                        <ui:Column name="colonistNameColumn" title="Colonist" width="180px" optional="false" resizable="false" />
+                    </ui:Columns>
+                </ui:MultiColumnListView>
+            </ui:Tab>
+            <ui:Tab label="𐚱">
+                <ui:VisualElement name="inventoryContainer" style="flex-grow: 1;" />
+            </ui:Tab>
+        </ui:TabView>
         <ui:VisualElement name="ControlsContainer">
             <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />
         </ui:VisualElement>

@@ -217,7 +217,7 @@ DropdownField:focus Label {
 
 .unity-tab__header-label {
     color: rgb(100, 100, 100);  
-    font-size: 32px;          
+    font-size: 48px;          
 }
 
 .unity-tab__header:hover .unity-tab__header-label {
@@ -236,64 +236,66 @@ DropdownField:focus Label {
 /**  MULTI COLUMN LIST VIEW **/
 /*****************************/
 
-MultiColumnListView .unity-list-view {
+.unity-list-view .unity-list-view {
 }
 
-MultiColumnListView .unity-collection-view__item,
-MultiColumnListView .unity-collection-view__item:hover,
-MultiColumnListView .unity-collection-view__item:focus  {
+.unity-list-view .unity-collection-view__item,
+.unity-list-view .unity-collection-view__item:hover,
+.unity-list-view .unity-collection-view__item:focus  {
     background-color: #000000; 
 }
 
-MultiColumnListView .unity-collection-view__item--alternative-background, 
-MultiColumnListView .unity-collection-view__item--alternative-background:hover, 
-MultiColumnListView .unity-collection-view__item--alternative-background:focus, {
+.unity-list-view .unity-collection-view__item--alternative-background, 
+.unity-list-view .unity-collection-view__item--alternative-background:hover, 
+.unity-list-view .unity-collection-view__item--alternative-background:focus, {
     background-color: #202020; 
 }
 
-MultiColumnListView .unity-multi-column-view__header-container {
+.unity-list-view .unity-multi-column-view__header-container {
     color: transparent;
     background-color: transparent;
     border-width: 0px;
 }
 
-MultiColumnListView .unity-multi-column-header__column {
+.unity-list-view .unity-multi-column-header__column,
+.unity-list-view .unity-multi-column-header__column:hover,
+.unity-list-view .unity-multi-column-header__column:hover:enabled, {
     background-color: transparent;
     border-width: 0px;  
 }
 
-MultiColumnListView .unity-multi-column-header__column {
+.unity-list-view .unity-multi-column-header__column{
     flex-direction: row;       
     align-items: center;      
     justify-content: space-between; 
-    padding-right: 4px;       
+    padding-right: 4px;     
 }
 
-MultiColumnListView .unity-collection-view__header-cell {
+.unity-list-view .unity-collection-view__header-cell {
     border-color: transparent;
     border-width: 0;
 }
 
-MultiColumnListView .unity-multi-column-header__column__title {
+.unity-list-view .unity-multi-column-header__column__title {
     font-size: 24px;
     color: var(--color-normal);
 }
 
-MultiColumnListView .unity-collection-view__header-cell:hover,
-MultiColumnListView .unity-collection-view__header-cell:focus {
+.unity-list-view .unity-collection-view__header-cell:hover,
+.unity-list-view .unity-collection-view__header-cell:focus {
     background-color: transparent;
     border-bottom-color: transparent;
     border-bottom-width: 0;
 }
 
-MultiColumnListView .unity-multi-column-header__column__sort-indicator__arrow {
+.unity-list-view .unity-multi-column-header__column__sort-indicator__arrow {
     background-color: transparent;
     -unity-background-image-tint-color: var(--color-normal);
     height: 24px;
     width: 24px;
 }
 
-MultiColumnListView .unity-multi-column-view__cell {
+.unity-list-view .unity-multi-column-view__cell {
     flex-direction: row;
     align-items: center;
 }
@@ -372,4 +374,39 @@ MultiColumnListView .unity-multi-column-view__cell {
 .unity-progress-bar__container {
     max-height: 32px;
     min-height: 32px;
+}
+
+/************/
+/** BUTTON **/
+/************/
+
+.unity-button,
+.unity-button:focus,
+.unity-button:focus:enabled {
+    margin: 5px;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: var(--color-normal);
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: rgb(51, 51, 51);
+    -unity-text-align: middle-center;
+    color: var(--color-normal);
+}
+
+.unity-button:hover {
+    background-color: rgb(168, 168, 168);
+    color: rgb(51, 51, 51);
+}
+
+.dangerButton
+{
+    background-color: rgb(128, 0, 0);
+}
+
+.dangerButton:hover,
+.dangerButton:hover,
+.dangerButton:hover:enabled
+{
+    background-color: rgb(200, 0, 0);
 }
