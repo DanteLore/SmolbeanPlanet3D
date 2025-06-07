@@ -1,8 +1,7 @@
 @import url("StyleGlobals.uss");
 
-VisualElement{
-    -unity-font-definition: url("project://database/Assets/UI/Fonts/Acme-Regular.ttf?fileID=12800000&guid=181d1a44a80844316a6bf906b3287e10&type=3#Acme-Regular");
-    color: var(--color-normal);
+.unity-base-field {
+    margin: 5px;
 }
 
 /* Disable annoying focus colour */
@@ -14,6 +13,11 @@ VisualElement{
 .unity-base-field:hover > .unity-base-field__label,
 .unity-base-field:hover:focus:enabled > .unity-base-field__label {
     color: var(--color-highlight);
+}
+
+/* Slightly larger size for all builtin field labels */
+.unity-base-field__label {
+    min-width: 200px;
 }
 
 
@@ -101,18 +105,18 @@ DropdownField:focus Label {
 /**  TOGGLE **/
 /*************/
 
-Toggle .unity-toggle {
+.unity-toggle {
     display: flex;
     flex-direction: row;
     align-items: center;  
 }
 
-Toggle .unity-toggle__input {
+.unity-toggle .unity-toggle__input {
     flex-grow: 0;
     flex-shrink: 0;
     flex-basis: auto;
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -124,7 +128,7 @@ Toggle .unity-toggle__input {
     padding: 0;
 }
 
-Toggle .unity-toggle__checkmark {
+.unity-toggle .unity-toggle__checkmark {
     background-color: transparent;
     -unity-background-image-tint-color: var(--color-normal);
     max-width: 100%;
@@ -132,13 +136,14 @@ Toggle .unity-toggle__checkmark {
     border-width: 0px;
 }
 
-Toggle:hover .unity-toggle__input {
+.unity-toggle:hover .unity-toggle__input {
     border-color: var(--color-highlight);            
 }
 
-Toggle:hover .unity-toggle__label {
+.unity-toggle:hover .unity-toggle__label {
     color: var(--color-highlight);                     
 }
+
 /*************/
 /**  SLIDER **/
 /*************/
@@ -197,14 +202,22 @@ Toggle:hover .unity-toggle__label {
     background-color: transparent;
 }
 
-.unity-tab__header:checked {
+.unity-tab__header:checked, 
+.unity-tab__header:checked:hover {
     border-bottom-width: 1px;
     border-bottom-color: var(--color-highlight);
 }
 
+.unity-tab__header,
+.unity-tab__header:hover,
+.unity-tab__header:checked, 
+.unity-tab__header:checked:hover {
+    background-color: transparent;
+}
+
 .unity-tab__header-label {
     color: rgb(100, 100, 100);  
-    font-size: 24px;          
+    font-size: 32px;          
 }
 
 .unity-tab__header:hover .unity-tab__header-label {
@@ -335,22 +348,28 @@ MultiColumnListView .unity-multi-column-view__cell {
 /** PROGRESS BAR **/
 /******************/
 
-ProgressBar .unity-progress-bar__background {
+.unity-progress-bar .unity-progress-bar__background {
     background-color: black;
     border-color: var(--color-normal);           
     border-width: 1px;
     border-radius: 6px; 
 }
 
-ProgressBar .unity-progress-bar__progress {
+.unity-progress-bar .unity-progress-bar__progress {
     background-color: #777777;       
     border-radius: 4px;           
 }
 
-ProgressBar .unity-progress-bar__title {
+.unity-progress-bar .unity-progress-bar__title {
     color: var(--color-highlight);           
 }
 
-ProgressBar {
+.unity-progress-bar {
     padding: 0;
+    height: 32px;
+}
+
+.unity-progress-bar__container {
+    max-height: 32px;
+    min-height: 32px;
 }

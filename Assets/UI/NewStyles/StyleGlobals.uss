@@ -4,7 +4,9 @@
     --color-highlight: white;
 }
 
-VisualElement {
-    -unity-font-definition: url("project://database/Assets/UI/Fonts/Acme-Regular.ttf?fileID=12800000&guid=181d1a44a80844316a6bf906b3287e10&type=3#Acme-Regular");
+VisualElement{
+    /* -unity-font-definition: url("project://database/Assets/UI/Fonts/Acme-Regular.ttf?fileID=12800000&guid=181d1a44a80844316a6bf906b3287e10&type=3#Acme-Regular"); */
+    -unity-font-definition: url("/Assets/UI/Fonts/Acme-Regular SDF.asset");
     color: var(--color-normal);
+    font-size: 24px;
 }

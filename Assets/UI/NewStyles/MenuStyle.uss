@@ -69,6 +69,7 @@
     background-color: rgb(51, 51, 51);
     -unity-text-align: middle-center;
     min-width: 128px;
+    min-height: 48px;
 }
 
 #ControlsContainer Button:hover {

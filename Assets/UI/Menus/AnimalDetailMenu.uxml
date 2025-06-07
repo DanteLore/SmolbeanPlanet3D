@@ -1,17 +1,41 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
-    <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
-    <Style src="project://database/Assets/UI/DetailsControls.uss?fileID=7433441132597879392&amp;guid=94f4ac6f5a4554e8ea89412efec2b645&amp;type=3#DetailsControls" />
-    <ui:VisualElement class="menuContainer" style="flex-grow: 1; position: absolute; top: 60px; right: 30px; bottom: 30px; margin-bottom: 20px; width: 340px; max-width: 340px; min-width: 340px;">
-        <ui:VisualElement name="VisualElement" class="toolButtonContainer" style="flex-grow: 1; flex-direction: row; flex-wrap: nowrap; align-self: stretch; height: 80px;">
-            <ui:VisualElement name="animalImage" style="flex-grow: 1; width: 60px; max-width: 60px; min-width: 60px; min-height: 60px; max-height: 60px; height: 60px;" />
+    <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <Style src="project://database/Assets/UI/NewStyles/DetailsMenuStyle.uss?fileID=7433441132597879392&amp;guid=f51120ff0db3344bfaefc895b97e2798&amp;type=3#DetailsMenuStyle" />
+    <ui:VisualElement name="SideMenuContainer" class="menuContainer">
+        <ui:VisualElement name="headerContainer" class="toolButtonContainer">
+            <ui:VisualElement name="thumbnail" />
             <ui:VisualElement style="flex-grow: 1;">
-                <ui:Label text="12λ \u00d7 34φ" name="positionLabel" />
-                <ui:Label text="Mr A Dodo" name="nameLabel" style="white-space: normal; font-size: 12px;" />
+                <ui:Label text="Mr A Dodo" name="nameLabel" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:ScrollView name="mainScrollView" class="toolButtonContainer" style="flex-grow: 1; width: 100%; max-width: 100%; min-width: 100%; height: 100%;" />
-        <ui:VisualElement name="dialogButtonContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); height: 60px; max-height: 60px; min-height: 60px; align-items: center;">
+        <ui:TabView style="width: 90%; flex-grow: 1;">
+            <ui:Tab label="Activity" name="activityTab">
+                <ui:ScrollView horizontal-scroller-visibility="Hidden" name="thoughtsContainer" style="height: 300px; max-height: 300px;">
+                    <ui:VisualElement name="thoughtsContainer" style="flex-grow: 1;" />
+                </ui:ScrollView>
+            </ui:Tab>
+            <ui:Tab label="Stats" name="statsTab">
+                <ui:ProgressBar value="22" title="Health" name="healthBar" />
+                <ui:ProgressBar value="22" title="Food" name="foodBar" />
+                <ui:VisualElement class="text-field-row" style="flex-grow: 1;">
+                    <ui:Label text="Age:" class="text-field-label" />
+                    <ui:Label text="Label" name="ageLabel" class="text-field-value" />
+                </ui:VisualElement>
+                <ui:VisualElement class="text-field-row" style="flex-grow: 1;">
+                    <ui:Label text="Location:" class="text-field-label" />
+                    <ui:Label text="Label" name="positionLabel" class="text-field-value" />
+                </ui:VisualElement>
+                <ui:VisualElement name="jobContainer" class="text-field-row" style="flex-grow: 1;">
+                    <ui:Label text="Job:" class="text-field-label" />
+                    <ui:VisualElement name="jobThumb" style="flex-grow: 1;" />
+                    <ui:Label text="None" name="jobLabel" class="text-field-value" />
+                </ui:VisualElement>
+            </ui:Tab>
+            <ui:Tab label="Inventory" name="inventoryTab">
+                <ui:VisualElement name="inventoryContainer" style="flex-grow: 1;" />
+            </ui:Tab>
+        </ui:TabView>
+        <ui:VisualElement name="ControlsContainer">
             <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />
         </ui:VisualElement>
     </ui:VisualElement>

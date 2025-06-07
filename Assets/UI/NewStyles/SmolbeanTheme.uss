@@ -1,8 +1,2 @@
 @import url("StyleGlobals.uss");
-
-VisualElement{
-    -unity-font-definition: url("project://database/Assets/UI/Fonts/Acme-Regular.ttf?fileID=12800000&guid=181d1a44a80844316a6bf906b3287e10&type=3#Acme-Regular");
-    color: var(--color-normal);
-}
-
 @import url("ControlStyle.uss");

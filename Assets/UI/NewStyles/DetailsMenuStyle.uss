@@ -1,0 +1,87 @@
+@import url("StyleGlobals.uss");
+
+#nameLabel {
+    font-size: 32px;
+    white-space: normal;
+}
+
+#headerContainer {
+    flex-direction: row;
+    padding: 20px;
+    width: 100%;
+}
+
+#thumbnail {
+    height: 100px;
+    width: 100px;
+}
+
+.text-field-row {
+    flex-direction: row;
+}
+
+.text-field-label {
+    min-width: 100px;
+    -unity-text-align: middle-right;
+    padding-right: 8px;
+}
+
+#jobThumb {
+    height: 48px;
+    width: 48px;
+    max-height: 48px;
+    max-width: 48px;
+    min-height: 48px;
+}
+
+/**************/
+/** THOUGHTS **/
+/**************/
+
+.thoughtsRow
+{
+    margin: 8px;
+    padding: 8px;
+    background-color: #282828;
+    border-radius: 5px;
+}
+
+.thoughtsRow Label
+{
+    white-space: normal;
+    -unity-text-align: middle-left;
+    font-size: 16px;
+}
+
+.thoughtsRowLatest
+{
+    background-color: #404040;
+    border-radius: 5px;
+    margin: 8px;
+    padding: 8px;
+}
+
+.thoughtsRowLatest Label
+{
+    white-space: normal;
+    -unity-text-align: middle-left;
+}
+
+.todLabel
+{
+    margin-top: 2px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 4px;
+    padding: 0px;
+    -unity-text-align: middle-right;
+    width: 100%;
+    font-size: 16px;
+}
+
+/** Inventory **/
+
+#inventoryContainer Button {
+    height: 100px;
+    width: 100px;
+}

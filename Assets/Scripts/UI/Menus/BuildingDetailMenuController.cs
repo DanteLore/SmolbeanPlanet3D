@@ -1,18 +1,27 @@
-using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class BuildingDetailsMenuController : BaseDetailsMenuController
+public class BuildingDetailsMenuController : SmolbeanMenu
 {
+    protected UIDocument document;
+    protected GridManager gridManager;
+    protected SoundPlayer soundPlayer;
+    protected Transform target;
+
     private Button deleteButton;
     private Button rotateButton;
     private Button placeWorkingAreaButton;
 
-    protected override void OnEnable()
+    protected void OnEnable()
     {
-        base.OnEnable();
-        
+        document = GetComponent<UIDocument>();
+        gridManager = FindFirstObjectByType<GridManager>();
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
+
+        var closeButton = document.rootVisualElement.Q<Button>("closeButton");
+        closeButton.clicked += CloseButtonClicked;
+
         deleteButton = document.rootVisualElement.Q<Button>("deleteButton");
         rotateButton = document.rootVisualElement.Q<Button>("rotateButton");
         placeWorkingAreaButton = document.rootVisualElement.Q<Button>("placeWorkingAreaButton");
@@ -28,12 +37,12 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
         DrawMenu();
     }
 
-    protected override void OnDisable()
+    protected void OnDisable()
     {
         target = null;
     }
 
-    protected override void CloseButtonClicked()
+    protected void CloseButtonClicked()
     {
         soundPlayer.Play("Click");
         MapInteractionManager.Instance.Data.ForceDeselect();
@@ -233,5 +242,28 @@ public class BuildingDetailsMenuController : BaseDetailsMenuController
             button.style.backgroundImage = ingredient.item.thumbnail;
             ingredientContainer.Add(button);
         }
+    }
+
+    protected virtual void Clear()
+    {
+        document.rootVisualElement.Q<ScrollView>("mainScrollView").Clear();
+    }
+
+    protected static void Title(VisualElement parent, string symbol, string text, string symbolClass = "notoLinearA")
+    {
+        var titleContainer = new VisualElement();
+        titleContainer.AddToClassList("titleRow");
+        parent.Add(titleContainer);
+
+        Label symbolLabel = new();
+        symbolLabel.AddToClassList(symbolClass);
+        symbolLabel.AddToClassList("bigLabel");
+        titleContainer.Add(symbolLabel);
+        symbolLabel.text = symbol;
+
+        Label textLabel = new();
+        titleContainer.Add(textLabel);
+        textLabel.AddToClassList("titleLabel");
+        textLabel.text = text;
     }
 }
