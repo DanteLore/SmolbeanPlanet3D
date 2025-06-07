@@ -131,6 +131,7 @@
     justify-content: center;
     align-self: center;
     width: 90%;
+    flex-shrink: 0;
 }
 
 #actionButtonContainer .unity-button {
@@ -162,6 +163,34 @@
 
 .jobs-table-label {
     text-align: left;
+    margin-left: 6px;
+    white-space: normal;
+    flex-grow: 1;
+    flex-shrink: 1;
+    -unity-text-align: upper-left;
+}
+
+/*************************/
+/** Colonists/Residents **/
+/*************************/
+
+.unity-multi-column-view__cell Label {
+    font-size: 16px;
+}
+
+.colonists-thumb-image {
+    height: 48px;
+    width: 48px;
+}
+
+.colonists-thumb-and-label-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 4px;
+}
+
+.colonists-table-label {
     margin-left: 6px;
     white-space: normal;
     flex-grow: 1;

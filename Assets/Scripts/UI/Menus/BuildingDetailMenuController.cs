@@ -1,4 +1,5 @@
 using System.Linq;
+using Mono.Cecil;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -55,9 +56,10 @@ public class BuildingDetailsMenuController : SmolbeanMenu
         MapInteractionManager.Instance.Data.ForceDeselect();
         MenuController.Instance.CloseAll();
     }
+    
     private void RotateButtonClicked()
     {
-        if(target) 
+        if (target)
             target.Rotate(Vector3.up, 90);
     }
 
@@ -79,26 +81,26 @@ public class BuildingDetailsMenuController : SmolbeanMenu
         var pos = gridManager.GetGameSquareFromWorldCoords(building.transform.position);
         root.Q<Label>("positionLabel").text = $"{pos.x}λ \u00d7 {pos.y}φ";
 
-        if (!building.IsComplete)
-            BuildIngredients();
-
-        if(!building.Inventory.IsEmpty())
-            BuildInventory();
-
-        if(building is FactoryBuilding factory)
-            BuildRecipe();
-
-        var jobs = JobController.Instance.GetAllJobsForBuilding(building).ToArray();
-        if (jobs.Length > 0)
-            BuildJobs(jobs);
-
-        var home = building.GetComponent<SmolbeanHome>();
-        if(home != null)
-            BuildResidents();
+        BuildIngredients();
+        BuildInventory();
+        BuildRecipe();
+        BuildJobs();
+        BuildResidents();
     }
 
     private void BuildResidents()
     {
+        var home = building.GetComponent<SmolbeanHome>();
+
+        bool anythingToShow = home != null && home.Colonists.Count() > 0;
+        SetTabVisibility(root.Q<TabView>("mainTabView"), "residentsTab", anythingToShow);
+
+        if (!anythingToShow)
+            return;
+
+        var residentsListView = root.Q<MultiColumnListView>("residentsListView");
+        ColonistViewBuilder.BuildColonistsView(residentsListView, home.Colonists.ToArray());
+
         /*
         Title(mainScrollView, "𐘦", "Residents");
 
@@ -124,8 +126,10 @@ public class BuildingDetailsMenuController : SmolbeanMenu
         */
     }
 
-    private static void BuildRecipe()
+    private void BuildRecipe()
     {
+        if (building is not FactoryBuilding)
+            return;
         /*
         Title(mainScrollView, "𐜫", "Recipes");
 
@@ -156,6 +160,12 @@ public class BuildingDetailsMenuController : SmolbeanMenu
 
     private void BuildInventory()
     {
+        bool anythingToShow = !building.Inventory.IsEmpty();
+        SetTabVisibility(root.Q<TabView>("mainTabView"), "inventoryTab", anythingToShow);
+
+        if (!anythingToShow)
+            return;
+
         var inventoryContainer = root.Q<VisualElement>("inventoryContainer");
         inventoryContainer.Clear();
 
@@ -169,14 +179,25 @@ public class BuildingDetailsMenuController : SmolbeanMenu
         }
     }
 
-    private void BuildJobs(Job[] jobs)
+    private void BuildJobs()
     {
+        var jobs = JobController.Instance.GetAllJobsForBuilding(building).ToArray();
+
+        bool anythingToShow = jobs.Length > 0;
+        SetTabVisibility(root.Q<TabView>("mainTabView"), "jobsTab", anythingToShow);
+
+        if (!anythingToShow)
+            return;
+
         var jobsListView = root.Q<MultiColumnListView>("jobsListView");
         JobViewBuilder.BuildJobView(jobsListView, jobs);
     }
 
-    private static void BuildIngredients()
+    private void BuildIngredients()
     {
+        if (building.IsComplete)
+            return;
+
         /*
         Title(mainScrollView, "⚒", "Materials", "notoEmoji");
 
@@ -193,5 +214,39 @@ public class BuildingDetailsMenuController : SmolbeanMenu
             ingredientContainer.Add(button);
         }
         */
+    }
+
+    private static void SetTabVisibility(TabView tabView, string tabName, bool visible)
+    {
+        // There should be a better way!!
+
+        // Find the index of the named tab in the list
+        var tabs = tabView.Query<Tab>().ToList();
+        var theTab = tabs.First(t => t.name == tabName);
+        int tabIndex = tabs.IndexOf(theTab);
+
+        // Use that index to find the matching header, hide both header and tab
+        var headers = tabView.Query<VisualElement>("unity-tab__header").ToList();
+        var theHeader = headers[tabIndex];
+
+        if (visible && theTab.style.display == DisplayStyle.None)
+        {
+            // Tab being made visible
+            theTab.style.display = StyleKeyword.Null;
+            theHeader.style.display = DisplayStyle.Flex;
+        }
+        else if (!visible && theTab.style.display != DisplayStyle.None)
+        {
+            // Tab being hidden
+            theTab.style.display = DisplayStyle.None;
+            theHeader.style.display = DisplayStyle.None;
+
+            // If we're hiding the selected tab, select a different one!
+            if (tabIndex == tabView.selectedTabIndex)
+            {
+                var firstVisibleTab = tabs.FirstOrDefault(t => t.style.display != DisplayStyle.None);
+                tabView.selectedTabIndex = firstVisibleTab != null ? tabs.IndexOf(firstVisibleTab) : 0;
+            }
+        }
     }
 }

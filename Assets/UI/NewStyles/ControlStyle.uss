@@ -232,6 +232,10 @@ DropdownField:focus Label {
     padding-top: 32px;
 }
 
+.unity-tab-view__content-viewport {
+    flex-shrink: 0;
+}
+
 /*****************************/
 /**  MULTI COLUMN LIST VIEW **/
 /*****************************/
@@ -241,14 +245,14 @@ DropdownField:focus Label {
 
 .unity-list-view .unity-collection-view__item,
 .unity-list-view .unity-collection-view__item:hover,
-.unity-list-view .unity-collection-view__item:focus  {
-    background-color: #000000; 
+.unity-list-view .unity-collection-view__item:focus,  {
+    background-color: rgba(0, 0, 0, 0.2); 
 }
 
 .unity-list-view .unity-collection-view__item--alternative-background, 
 .unity-list-view .unity-collection-view__item--alternative-background:hover, 
 .unity-list-view .unity-collection-view__item--alternative-background:focus, {
-    background-color: #202020; 
+    background-color: rgba(40, 40, 40, 0.2); 
 }
 
 .unity-list-view .unity-multi-column-view__header-container {
@@ -394,7 +398,9 @@ DropdownField:focus Label {
     color: var(--color-normal);
 }
 
-.unity-button:hover {
+.unity-button:hover, 
+.unity-button:hover:focus, 
+.unity-button:hover:focus:enabled {
     background-color: rgb(168, 168, 168);
     color: rgb(51, 51, 51);
 }

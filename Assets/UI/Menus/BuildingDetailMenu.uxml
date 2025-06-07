@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
     <Style src="project://database/Assets/UI/NewStyles/DetailsMenuStyle.uss?fileID=7433441132597879392&amp;guid=f51120ff0db3344bfaefc895b97e2798&amp;type=3#DetailsMenuStyle" />
     <ui:VisualElement name="SideMenuContainer" class="menuContainer">
-        <ui:VisualElement name="VisualElement" style="flex-direction: row; position: relative; min-width: 100%; max-width: 100%; width: 288px; height: 90px; min-height: 90px; max-height: 90px;">
+        <ui:VisualElement style="flex-direction: row; position: relative; flex-shrink: 0; width: 90%; margin-top: 10px;">
             <ui:VisualElement name="thumbnail" style="flex-grow: 1; width: 80px; max-width: 80px; min-width: 80px; min-height: 80px; max-height: 80px; height: 80px;" />
             <ui:VisualElement style="flex-grow: 1;">
                 <ui:Label text="Buildy McBuildface" name="nameLabel" double-click-selects-word="false" />
@@ -14,9 +14,16 @@
             <ui:Button text="𐛌 𐙟" name="placeWorkingAreaButton" />
             <ui:Button text="X" name="deleteButton" class="dangerButton" />
         </ui:VisualElement>
-        <ui:TabView style="width: 90%;">
-            <ui:Tab label="𐛌">
-                <ui:MultiColumnListView name="jobsListView" sorting-mode="Default" allow-add="false" allow-remove="false" fixed-item-height="64">
+        <ui:TabView name="mainTabView" style="width: 90%; height: 100%;">
+            <ui:Tab label="𐘦" name="residentsTab" enabled="true">
+                <ui:MultiColumnListView name="residentsListView" fixed-item-height="64" allow-remove="false" allow-add="false" sorting-mode="Default" selection-type="None" show-alternating-row-backgrounds="ContentOnly" focusable="true">
+                    <ui:Columns>
+                        <ui:Column name="colonistNameColumn" width="200px" title="Resident" optional="false" resizable="false" />
+                    </ui:Columns>
+                </ui:MultiColumnListView>
+            </ui:Tab>
+            <ui:Tab label="𐛌" name="jobsTab">
+                <ui:MultiColumnListView name="jobsListView" sorting-mode="Default" allow-add="false" allow-remove="false" fixed-item-height="64" show-alternating-row-backgrounds="ContentOnly" selection-type="None">
                     <ui:Columns resizable="false" reorderable="false">
                         <ui:Column name="enabledColumn" width="64px" optional="false" resizable="false" visible="true" sortable="false" />
                         <ui:Column name="jobTitleColumn" title="Job Title" optional="false" resizable="false" width="180px" />
@@ -24,7 +31,7 @@
                     </ui:Columns>
                 </ui:MultiColumnListView>
             </ui:Tab>
-            <ui:Tab label="𐚱">
+            <ui:Tab label="𐚱" name="inventoryTab">
                 <ui:VisualElement name="inventoryContainer" style="flex-grow: 1;" />
             </ui:Tab>
         </ui:TabView>
