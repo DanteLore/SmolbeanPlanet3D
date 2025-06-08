@@ -1,0 +1,13 @@
+@import url("StyleGlobals.uss");
+
+.unity-list-view {
+    border-width: 1px;
+    border-color: var(--color-normal);
+    border-radius: 6px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.unity-collection-view__item {
+    -unity-text-align: middle-left;
+}

@@ -2,10 +2,6 @@
     margin-top: 20px;
 }
 
-.unity-multi-column-view__cell Label {
-    font-size: 24px;
-}
-
 .dr-thumb-image {
     height: 48px;
     width: 48px;

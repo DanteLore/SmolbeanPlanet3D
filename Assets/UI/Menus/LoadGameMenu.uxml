@@ -1,9 +1,10 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <Style src="project://database/Assets/UI/NewStyles/FileDialogStyles.uss?fileID=7433441132597879392&amp;guid=11fdd9fa97ca0464d92cc5b198d98b24&amp;type=3#FileDialogStyles" />
     <ui:VisualElement name="Container" style="flex-grow: 1;">
         <ui:VisualElement name="MenuContainer" class="menuContainer">
             <ui:Label tabindex="-1" text="Load Game" display-tooltip-when-elided="true" name="Title" class="title" />
-            <ui:ListView focusable="true" name="fileListView" show-border="true" show-bound-collection-size="false" reorderable="false" picking-mode="Ignore" show-alternating-row-backgrounds="ContentOnly" virtualization-method="DynamicHeight" style="flex-grow: 1; width: 80%; max-width: 80%; min-width: 80%; align-items: stretch; align-self: center;" />
+            <ui:ListView focusable="true" name="fileListView" show-border="true" show-bound-collection-size="false" reorderable="false" picking-mode="Ignore" show-alternating-row-backgrounds="ContentOnly" fixed-item-height="48" style="flex-grow: 1; width: 80%; max-width: 80%; min-width: 80%; align-items: stretch; align-self: center;" />
             <ui:VisualElement name="ControlsContainer">
                 <ui:Button text="Load" display-tooltip-when-elided="true" name="loadGameButton" style="width: 100px; height: 30px;" />
                 <ui:Button text="Cancel" display-tooltip-when-elided="true" name="cancelButton" style="width: 100px; height: 30px;" />

@@ -20,7 +20,6 @@
     min-width: 200px;
 }
 
-
 /***************/
 /**  DROPDOWN **/
 /***************/
@@ -241,10 +240,6 @@ DropdownField:focus Label {
 /**   LIST VIEWS   **/
 /********************/
 
-.unity-scroll-view__content-container Label {
-    margin-bottom: 4px;
-}
-
 .unity-collection-view__item,
 .unity-collection-view__item:hover,
 .unity-collection-view__item:focus,
@@ -262,7 +257,6 @@ DropdownField:focus Label {
 .unity-collection-view__item--selected,
 .unity-collection-view:focus:enabled .unity-collection-view__item--selected {
     background-color: rgba(80, 80, 80, 0.6);
-    font-size: 32px;
 }
 
 .unity-list-view .unity-multi-column-view__header-container {
@@ -317,7 +311,6 @@ DropdownField:focus Label {
 /****************/
 /** SCROLL BAR **/
 /****************/
-
 
 .unity-scroller .unity-base-slider__tracker, 
 .unity-scroller .unity-base-slider__tracker:enabled, 
@@ -425,4 +418,32 @@ DropdownField:focus Label {
 .dangerButton:hover:enabled
 {
     background-color: rgb(200, 0, 0);
+}
+
+/****************/
+/** TEXT FIELD **/
+/****************/
+
+TextField .unity-base-text-field__input {
+    background-color: #000000;    
+    border-width: 1px;
+    border-color: var(--color-normal);      
+    border-radius: 4px;         
+    color: var(--color-normal);       
+    --unity-selection-color: rgba(150, 150, 150, 0.1);      
+}
+
+TextField .unity-base-text-field__input:hover:enabled,
+TextField .unity-base-text-field__input:hover {
+    background-color: #000000;    
+    border-width: 1px;
+    border-color: var(--color-highlight);      
+    border-radius: 4px;         
+    color: var(--color-highlight);             
+}
+
+.unity-base-text-field:hover:enabled > .unity-base-text-field__input,
+.unity-base-text-field:focus:enabled > .unity-base-text-field__input {    
+    border-color: var(--color-highlight);          
+    color: var(--color-highlight);   
 }
