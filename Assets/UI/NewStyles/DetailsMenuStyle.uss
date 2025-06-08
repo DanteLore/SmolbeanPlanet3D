@@ -162,7 +162,6 @@
 }
 
 .jobs-table-label {
-    text-align: left;
     margin-left: 6px;
     white-space: normal;
     flex-grow: 1;
@@ -196,4 +195,35 @@
     flex-grow: 1;
     flex-shrink: 1;
     -unity-text-align: upper-left;
+}
+
+/*********************/
+/** Factory/Recipes **/
+/*********************/
+
+#recipeContainer {
+    flex-direction: row;
+    justify-content: center;
+    align-self: center;
+    align-items: center;
+    width: 90%;
+    flex-shrink: 0;
+}
+
+#recipeContainer .unity-button,
+#recipeContainer .unity-button:hover,
+#recipeContainer .unity-button:focus {
+    width: 64px;
+    height: 64px;
+    margin: 20px;
+    font-size: 32px;
+    background-color: transparent;
+    border-color: var(--color-normal);
+    color: var(--color-normal);
+}
+
+.recipeEqualsArrow {
+    font-size: 64px;
+    margin: 0px;
+    padding: 0px;
 }

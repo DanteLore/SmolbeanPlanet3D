@@ -34,6 +34,9 @@
             <ui:Tab label="𐚱" name="inventoryTab">
                 <ui:VisualElement name="inventoryContainer" style="flex-grow: 1;" />
             </ui:Tab>
+            <ui:Tab label="𐜫" name="recipeTab">
+                <ui:VisualElement name="recipeContainer" style="flex-grow: 1;" />
+            </ui:Tab>
         </ui:TabView>
         <ui:VisualElement name="ControlsContainer">
             <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />

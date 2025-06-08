@@ -1,5 +1,4 @@
 using System.Linq;
-using Mono.Cecil;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -100,42 +99,20 @@ public class BuildingDetailsMenuController : SmolbeanMenu
 
         var residentsListView = root.Q<MultiColumnListView>("residentsListView");
         ColonistViewBuilder.BuildColonistsView(residentsListView, home.Colonists.ToArray());
-
-        /*
-        Title(mainScrollView, "𐘦", "Residents");
-
-        var residentContainer = new VisualElement();
-        residentContainer.AddToClassList("residentContainer");
-        mainScrollView.Add(residentContainer);
-
-        foreach(var colonist in home.Colonists)
-        {
-            VisualElement residentRow = new();
-            residentRow.AddToClassList("residentRow");
-            residentContainer.Add(residentRow);
-
-            Button colonistButton = new();
-            colonistButton.style.backgroundColor = new Color(0, 0, 0, 0);
-            colonistButton.style.backgroundImage = colonist.Species.thumbnail;
-            residentRow.Add(colonistButton);
-
-            Label colonistLabel = new();
-            colonistLabel.text = colonist.Stats.name;
-            residentRow.Add(colonistLabel);
-        }
-        */
     }
 
     private void BuildRecipe()
     {
-        if (building is not FactoryBuilding)
-            return;
-        /*
-        Title(mainScrollView, "𐜫", "Recipes");
+        bool anythingToShow = building is FactoryBuilding;
+        SetTabVisibility(root.Q<TabView>("mainTabView"), "recipeTab", anythingToShow);
 
-        var recipeContainer = new VisualElement();
-        recipeContainer.AddToClassList("recipeContainer");
-        mainScrollView.Add(recipeContainer);
+        if (!anythingToShow)
+            return;
+
+        var recipeContainer = root.Q<VisualElement>("recipeContainer");
+        recipeContainer.Clear();
+
+        var factory = (FactoryBuilding)building;
 
         foreach (var ingredient in factory.recipe.ingredients)
         {
@@ -147,7 +124,7 @@ public class BuildingDetailsMenuController : SmolbeanMenu
         }
 
         Label equalsLabel = new();
-        equalsLabel.AddToClassList("recipeContainerLabel");
+        equalsLabel.AddToClassList("recipeEqualsArrow");
         recipeContainer.Add(equalsLabel);
         equalsLabel.text = "→";
 
@@ -155,7 +132,6 @@ public class BuildingDetailsMenuController : SmolbeanMenu
         productButton.text = factory.recipe.quantity.ToString();
         productButton.style.backgroundImage = factory.recipe.createdItem.thumbnail;
         recipeContainer.Add(productButton);
-        */
     }
 
     private void BuildInventory()
@@ -234,6 +210,9 @@ public class BuildingDetailsMenuController : SmolbeanMenu
             // Tab being made visible
             theTab.style.display = StyleKeyword.Null;
             theHeader.style.display = DisplayStyle.Flex;
+
+            if (tabIndex >= tabView.selectedTabIndex)
+                tabView.selectedTabIndex++;
         }
         else if (!visible && theTab.style.display != DisplayStyle.None)
         {
