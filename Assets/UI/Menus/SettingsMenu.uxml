@@ -3,7 +3,7 @@
     <ui:VisualElement name="MenuContainer" class="menuContainer" style="flex-grow: 1;">
         <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="Title" class="title" />
         <ui:TabView style="height: 100%; width: 90%;">
-            <ui:Tab label="Graphics">
+            <ui:Tab label="📺 Graphics" name="graphicsTab">
                 <ui:VisualElement style="flex-grow: 1; width: 400px;">
                     <ui:Toggle label="Grass Enabled" name="grassToggle" />
                     <ui:Toggle label="Clouds Enabled" name="cloudsToggle" />
@@ -12,7 +12,7 @@
                     <ui:Toggle label="Fullscreen" name="fullscreenToggle" />
                 </ui:VisualElement>
             </ui:Tab>
-            <ui:Tab label="Sound">
+            <ui:Tab label="🔊 Sound" name="soundTab">
                 <ui:VisualElement style="flex-grow: 1; width: 400px;">
                     <ui:Slider picking-mode="Ignore" label="Music Volume" value="42" high-value="1" show-input-field="false" name="musicSlider" low-value="0.0001" />
                     <ui:Slider picking-mode="Ignore" label="SFX Volume" value="42" high-value="1" name="sfxSlider" low-value="0.0001" />
