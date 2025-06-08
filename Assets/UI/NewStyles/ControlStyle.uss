@@ -236,23 +236,33 @@ DropdownField:focus Label {
     flex-shrink: 0;
 }
 
-/*****************************/
-/**  MULTI COLUMN LIST VIEW **/
-/*****************************/
 
-.unity-list-view .unity-list-view {
+/********************/
+/**   LIST VIEWS   **/
+/********************/
+
+.unity-scroll-view__content-container Label {
+    margin-bottom: 4px;
 }
 
-.unity-list-view .unity-collection-view__item,
-.unity-list-view .unity-collection-view__item:hover,
-.unity-list-view .unity-collection-view__item:focus,  {
+.unity-collection-view__item,
+.unity-collection-view__item:hover,
+.unity-collection-view__item:focus,
+.unity-collection-view__item:hover:enabled,  {
     background-color: rgba(0, 0, 0, 0.2); 
 }
 
-.unity-list-view .unity-collection-view__item--alternative-background, 
-.unity-list-view .unity-collection-view__item--alternative-background:hover, 
-.unity-list-view .unity-collection-view__item--alternative-background:focus, {
+.unity-collection-view__item--alternative-background, 
+.unity-collection-view__item--alternative-background:hover, 
+.unity-collection-view__item--alternative-background:focus,
+.unity-collection-view__item--alternative-background:hover:enabled, {
     background-color: rgba(40, 40, 40, 0.2); 
+}
+
+.unity-collection-view__item--selected,
+.unity-collection-view:focus:enabled .unity-collection-view__item--selected {
+    background-color: rgba(80, 80, 80, 0.6);
+    font-size: 32px;
 }
 
 .unity-list-view .unity-multi-column-view__header-container {
