@@ -136,7 +136,7 @@ public class BuildingDetailsMenuController : SmolbeanMenu
 
     private void BuildInventory()
     {
-        bool anythingToShow = !building.Inventory.IsEmpty();
+        bool anythingToShow = building.IsComplete;
         SetTabVisibility(root.Q<TabView>("mainTabView"), "inventoryTab", anythingToShow);
 
         if (!anythingToShow)
@@ -144,6 +144,13 @@ public class BuildingDetailsMenuController : SmolbeanMenu
 
         var inventoryContainer = root.Q<VisualElement>("inventoryContainer");
         inventoryContainer.Clear();
+
+        if (building.Inventory.IsEmpty())
+        {
+            Label emptyLabel = new("Empty");
+            inventoryContainer.Add(emptyLabel);
+            return;
+        }
 
         foreach (var item in building.Inventory.Totals)
         {
@@ -171,25 +178,25 @@ public class BuildingDetailsMenuController : SmolbeanMenu
 
     private void BuildIngredients()
     {
-        if (building.IsComplete)
+        bool anythingToShow = !building.IsComplete;
+        SetTabVisibility(root.Q<TabView>("mainTabView"), "buildTab", anythingToShow);
+
+        if (!anythingToShow)
             return;
 
-        /*
-        Title(mainScrollView, "⚒", "Materials", "notoEmoji");
-
-        var ingredientContainer = new VisualElement();
-        ingredientContainer.AddToClassList("recipeContainer");
-        mainScrollView.Add(ingredientContainer);
+        var buildContainer = root.Q<VisualElement>("buildContainer");
+        buildContainer.Clear();
 
         foreach (var ingredient in building.BuildingSpec.ingredients)
         {
+            int required = ingredient.quantity;
+            int delivered = building.Inventory.ItemCount(ingredient.item);
+
             Button button = new();
-            button.text = ingredient.quantity.ToString();
-            button.style.backgroundColor = new Color(0, 0, 0, 0);
+            button.text = $"{delivered}/{required}";
             button.style.backgroundImage = ingredient.item.thumbnail;
-            ingredientContainer.Add(button);
+            buildContainer.Add(button);
         }
-        */
     }
 
     private static void SetTabVisibility(TabView tabView, string tabName, bool visible)

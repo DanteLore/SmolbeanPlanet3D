@@ -213,17 +213,53 @@
 #recipeContainer .unity-button,
 #recipeContainer .unity-button:hover,
 #recipeContainer .unity-button:focus {
-    width: 64px;
-    height: 64px;
-    margin: 20px;
+    width: 80px;
+    height: 80px;
+    margin: 5px;
+    padding: 4px;
     font-size: 32px;
     background-color: transparent;
     border-color: var(--color-normal);
     color: var(--color-normal);
+    -unity-text-outline-color: #404040; 
+    -unity-text-outline-width: 1px;
+    -unity-text-align: lower-right;
 }
 
 .recipeEqualsArrow {
     font-size: 64px;
     margin: 0px;
     padding: 0px;
+}
+
+/******************/
+/** Build Recipe **/
+/******************/
+
+#buildContainer {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+#buildContainer .unity-button {
+    height: 100px;
+    width: 100px;
+}
+
+#buildContainer .unity-button,
+#buildContainer .unity-button:hover ,
+#buildContainer .unity-button:focus {
+    height: 100px;
+    width: 100px;
+    border-color: var(--color-normal);
+    color: var(--color-normal);
+    font-size: 32px;
+    -unity-text-outline-color: #404040; 
+    -unity-text-outline-width: 1px;
+    -unity-text-align: lower-right;
+    padding-left: 8px;
+    padding-top: 0px;
+    padding-right: 4px;
+    padding-bottom: 0px;
+    background-color: black;
 }

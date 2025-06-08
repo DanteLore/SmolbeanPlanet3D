@@ -15,6 +15,9 @@
             <ui:Button text="X" name="deleteButton" class="dangerButton" />
         </ui:VisualElement>
         <ui:TabView name="mainTabView" style="width: 90%; height: 100%;">
+            <ui:Tab label="𐜵" name="buildTab">
+                <ui:VisualElement name="buildContainer" style="flex-grow: 1;" />
+            </ui:Tab>
             <ui:Tab label="𐘦" name="residentsTab" enabled="true">
                 <ui:MultiColumnListView name="residentsListView" fixed-item-height="64" allow-remove="false" allow-add="false" sorting-mode="Default" selection-type="None" show-alternating-row-backgrounds="ContentOnly" focusable="true">
                     <ui:Columns>
