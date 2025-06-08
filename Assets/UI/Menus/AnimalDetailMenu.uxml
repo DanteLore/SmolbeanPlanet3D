@@ -8,9 +8,9 @@
                 <ui:Label text="Mr A Dodo" name="nameLabel" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:TabView style="width: 90%; flex-grow: 1;">
+        <ui:TabView style="width: 90%; flex-grow: 1; height: 100%;">
             <ui:Tab label="🗩" name="activityTab">
-                <ui:ScrollView horizontal-scroller-visibility="Hidden" name="thoughtsContainer" style="height: 300px; max-height: 300px;">
+                <ui:ScrollView horizontal-scroller-visibility="Hidden" name="thoughtsContainer">
                     <ui:VisualElement name="thoughtsContainer" style="flex-grow: 1;" />
                 </ui:ScrollView>
             </ui:Tab>

@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
     <ui:VisualElement name="SideMenuContainer" class="menuContainer">
-        <ui:Label text="Island Map" display-tooltip-when-elided="true" name="Title" class="title" style="white-space: nowrap;" />
+        <ui:Label text="🗺 Island Map" display-tooltip-when-elided="true" name="Title" class="title" style="white-space: nowrap;" />
         <ui:VisualElement name="mapContainer" style="width: 90%; height: 100%; justify-content: flex-start;">
             <AspectRatioPanel aspect-ratio-x="16" aspect-ratio-y="16" balance-x="50">
                 <ui:VisualElement name="mapBox" style="flex-grow: 1; background-color: rgba(255, 255, 255, 0); border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-top-left-radius: 5px; border-bottom-left-radius: 5px; border-top-right-radius: 5px; border-bottom-right-radius: 5px;" />
