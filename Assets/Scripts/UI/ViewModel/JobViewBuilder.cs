@@ -10,7 +10,7 @@ public static class JobViewBuilder
         var jobsVM = jobs.Select(j => new JobViewModel(j)).ToList();
 
         // BUILDING
-        var buildingColumn = jobsListView.columns.First(c => c.name == "buildingColumn");
+        var buildingColumn = jobsListView.columns.FirstOrDefault(c => c.name == "buildingColumn");
         if (buildingColumn != null)
         {
             buildingColumn.makeCell = MakeThumbAndLabelCell;
@@ -30,7 +30,7 @@ public static class JobViewBuilder
         }
 
         // JOB TITLE
-        var jobTitleColumn = jobsListView.columns.First(c => c.name == "jobTitleColumn");
+        var jobTitleColumn = jobsListView.columns.FirstOrDefault(c => c.name == "jobTitleColumn");
         if (jobTitleColumn != null)
         {
             jobTitleColumn.makeCell = MakeThumbAndLabelCell;
@@ -50,7 +50,7 @@ public static class JobViewBuilder
         }
 
         // COLONIST
-        var colonistColumn = jobsListView.columns.First(c => c.name == "colonistNameColumn");
+        var colonistColumn = jobsListView.columns.FirstOrDefault(c => c.name == "colonistNameColumn");
         if (colonistColumn != null)
         {
             colonistColumn.makeCell = MakeThumbAndLabelCell;
@@ -70,7 +70,7 @@ public static class JobViewBuilder
         }
 
         // ENABLED
-        var enabledColumn = jobsListView.columns.First(c => c.name == "enabledColumn");
+        var enabledColumn = jobsListView.columns.FirstOrDefault(c => c.name == "enabledColumn");
         if (enabledColumn != null)
         {
             enabledColumn.makeCell = () => new Toggle { userData = null };

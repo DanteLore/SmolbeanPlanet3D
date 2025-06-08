@@ -1,19 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
-    <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
-    <Style src="project://database/Assets/UI/InventoryMenu.uss?fileID=7433441132597879392&amp;guid=41743bd5a123e4239ac52a3322564b4a&amp;type=3#InventoryMenu" />
-    <ui:VisualElement name="VisualElement" class="menuContainer" style="flex-grow: 1;">
-        <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%;">
-            <ui:VisualElement style="flex-grow: 1; flex-direction: row; -unity-text-align: middle-left;">
-                <ui:Label text="𐚱" class="title" style="-unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/NotoSansLinearA-Regular%20SDF.asset?fileID=11400000&amp;guid=fbfca0ecf33e64a0885ddbfa55617ba0&amp;type=2#NotoSansLinearA-Regular SDF&quot;); font-size: 32px;" />
-                <ui:Label tabindex="-1" text="Inventory" display-tooltip-when-elided="true" class="title" />
-            </ui:VisualElement>
-            <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="height: 100%; display: flex; width: 100%;">
+    <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <Style src="project://database/Assets/UI/NewStyles/InventroryMenuStyle.uss?fileID=7433441132597879392&amp;guid=f3a17fe69a7bf4b73bc2c605ca633420&amp;type=3#InventroryMenuStyle" />
+    <ui:VisualElement name="Container" style="flex-grow: 1;">
+        <ui:VisualElement name="MenuContainer" class="menuContainer" style="flex-grow: 1;">
+            <ui:Label text="𐚱 Inventory" name="Title" class="title" />
+            <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" name="buildingScroller" style="width: 90%; height: 100%;">
                 <ui:VisualElement name="buildingListContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start; white-space: nowrap; flex-wrap: nowrap; flex-direction: column; justify-content: flex-start; align-self: stretch; flex-shrink: 0; width: 100%;" />
             </ui:ScrollView>
-        </ui:VisualElement>
-        <ui:VisualElement name="dialogButtonContainer" style="flex-direction: row-reverse; width: 100%;">
-            <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />
+            <ui:VisualElement style="flex-grow: 0; width: 90%; height: 40px; flex-shrink: 0; align-items: flex-start;">
+                <ui:DropdownField name="modeDropdown" choices="Show by Building,Show Totals" index="0" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ControlsContainer">
+                <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

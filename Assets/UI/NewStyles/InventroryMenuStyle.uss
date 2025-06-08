@@ -1,0 +1,43 @@
+.buildingRow {
+}
+
+.buildingHeader {
+    flex-direction: row;
+}
+
+.buildingHeader Button,
+.buildingHeader Button:hover {
+    height: 64px;
+    width: 64px;
+    border-width: 0px;
+}
+
+.buildingHeader Label{
+    font-size: 32px;
+}
+
+.inventoryContainer {
+    flex-direction: row;
+    padding: 20px;
+}
+
+.inventoryContainer Button,
+.inventoryContainer Button:hover {
+    height: 100px;
+    width: 100px;
+    border-color: var(--color-normal);
+    color: var(--color-normal);
+    font-size: 32px;
+    -unity-text-outline-color: #404040; 
+    -unity-text-outline-width: 1px;
+    -unity-text-align: lower-right;
+    padding-left: 8px;
+    padding-top: 0px;
+    padding-right: 4px;
+    padding-bottom: 0px;
+}
+
+#modeDropdown {
+    height: 48px;
+    width: 300px;
+}

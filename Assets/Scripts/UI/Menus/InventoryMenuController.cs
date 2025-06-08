@@ -1,16 +1,15 @@
-
 using UnityEngine;
 using UnityEngine.UIElements;
 using System.Linq;
+using System;
 
 public class InventoryMenu : SmolbeanMenu
 {
-
     private UIDocument document;
     private SoundPlayer soundPlayer;
-    private string[] files;
 
     VisualElement buildingListContainer;
+    private DropdownField modeDropdown;
 
     void OnEnable()
     {
@@ -19,10 +18,19 @@ public class InventoryMenu : SmolbeanMenu
 
         var closeButton = document.rootVisualElement.Q<Button>("closeButton");
         closeButton.clicked += CloseButtonClicked;
-        
-        buildingListContainer = document.rootVisualElement.Q<VisualElement>("buildingListContainer");
 
-        InvokeRepeating(nameof(RefreshBuildingsList), 0.1f, 2.0f);
+        modeDropdown = document.rootVisualElement.Q<DropdownField>("modeDropdown");
+        modeDropdown.RegisterValueChangedCallback(ModeChanged);
+
+        buildingListContainer = document.rootVisualElement.Q<VisualElement>("buildingScroller");
+
+        InvokeRepeating(nameof(RefreshBuildingsList), 2.0f, 2.0f);
+        RefreshBuildingsList();
+    }
+
+    private void ModeChanged(ChangeEvent<string> evt)
+    {
+        RefreshBuildingsList();
     }
 
     void OnDisable()
@@ -36,7 +44,38 @@ public class InventoryMenu : SmolbeanMenu
 
         var buildings = BuildingController.Instance.Buildings.Where(b => b.Inventory.Count > 0).OrderByDescending(b => b.Inventory.Count);
 
-        foreach(var building in buildings)
+        if (modeDropdown.index == 0)
+            ShowInventoryByBuilding(buildings);
+        else
+            ShowInventoryTotals(buildings);
+    }
+
+    private void ShowInventoryTotals(IOrderedEnumerable<SmolbeanBuilding> buildings)
+    {
+        Inventory totals = new();
+
+        foreach (var building in buildings)
+            foreach (var item in building.Inventory.Totals)
+                totals.PickUp(item);
+
+        var inventoryContainer = new VisualElement();
+        inventoryContainer.AddToClassList("inventoryContainer");
+        buildingListContainer.Add(inventoryContainer);
+
+        foreach (var item in totals.Totals.OrderBy(i => i.dropSpec.dropName))
+        {
+            Button button = new Button();
+            button.text = item.quantity.ToString();
+            button.style.backgroundColor = new Color(0, 0, 0, 0);
+            button.style.backgroundImage = item.dropSpec.thumbnail;
+            button.userData = item.dropSpec;
+            inventoryContainer.Add(button);
+        }
+    }
+
+    private void ShowInventoryByBuilding(IOrderedEnumerable<SmolbeanBuilding> buildings)
+    {
+        foreach (var building in buildings)
         {
             var buildingRow = new VisualElement();
             buildingRow.AddToClassList("buildingRow");
@@ -60,7 +99,7 @@ public class InventoryMenu : SmolbeanMenu
             inventoryContainer.AddToClassList("inventoryContainer");
             buildingRow.Add(inventoryContainer);
 
-            foreach(var item in building.Inventory.Totals.OrderBy(i => i.dropSpec.dropName))
+            foreach (var item in building.Inventory.Totals.OrderBy(i => i.dropSpec.dropName))
             {
                 Button button = new Button();
                 button.text = item.quantity.ToString();
