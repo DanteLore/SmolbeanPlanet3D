@@ -1,12 +1,12 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class DeliveryRequestsMenu : SmolbeanMenu
 {
     private UIDocument document;
-
-    VisualElement listContainer;
-    SoundPlayer soundPlayer;
+    private MultiColumnListView listView;
+    private SoundPlayer soundPlayer;
 
     void OnEnable()
     {
@@ -15,62 +15,25 @@ public class DeliveryRequestsMenu : SmolbeanMenu
 
         var closeButton = document.rootVisualElement.Q<Button>("closeButton");
         closeButton.clicked += CloseButtonClicked;
-        
-        listContainer = document.rootVisualElement.Q<VisualElement>("listContainer");
 
-        InvokeRepeating(nameof(RefreshList), 0.0f, 1.0f);
+        listView = document.rootVisualElement.Q<MultiColumnListView>("requestsListView");
+
+        InvokeRepeating(nameof(RedrawList), 1.0f, 1.0f);
+        RedrawList();
     }
 
     void OnDisable()
     {
-        CancelInvoke(nameof(RefreshList));
+        CancelInvoke(nameof(RedrawList));
     }
 
-    private void RefreshList()
+    private void RedrawList()
     {
-        listContainer.Clear();
+        listView.Clear();
 
-        foreach(var request in DeliveryManager.Instance.ClaimedDeliveryRequests)
-            AddRow(request, false);
-            
-        foreach(var request in DeliveryManager.Instance.UnclaimedDeliveryRequests)
-            AddRow(request, true);
-    }
+        var allRequests = DeliveryManager.Instance.ClaimedDeliveryRequests.ToList().Union(DeliveryManager.Instance.UnclaimedDeliveryRequests).ToList();
 
-    private void AddRow(DeliveryRequest request, bool waiting)
-    {
-        // Building deleted!
-        if(request.Building == null)
-            return;
-
-        var row = new VisualElement();
-        row.AddToClassList("deliveryRow");
-        listContainer.Add(row);
-
-        row.Add(new Label { text = $"P{request.Priority}" });
-
-        var buildingIcon = new Button();
-        buildingIcon.AddToClassList("buildingIcon");
-        buildingIcon.style.backgroundColor = new Color(0, 0, 0, 0);
-        buildingIcon.style.backgroundImage = request.Building.IsComplete ? request.Building.BuildingSpec.thumbnail : request.Building.BuildingSpec.siteThumbnail;
-        row.Add(buildingIcon);
-
-        row.Add(new Label { text = request.Building.name });
-
-        var resourceIcon = new Button();
-        resourceIcon.AddToClassList("resourceIcon");
-        resourceIcon.style.backgroundColor = new Color(0, 0, 0, 0);
-        resourceIcon.style.backgroundImage = request.Item.thumbnail;
-        row.Add(resourceIcon);
-
-        row.Add(new Label { text = request.Item.dropName });
-
-        if(request.Quantity == request.Minimum)
-            row.Add(new Label { text = $"x {request.Quantity}" });
-        else
-            row.Add(new Label { text = $"x {request.Minimum} → {request.Quantity}" });
-
-        row.Add(new Label { text = waiting ? "Pending" : "In transit" });
+        DeliveryRequestViewBuilder.BuildDeliveryRequestView(listView, allRequests);
     }
 
     private void CloseButtonClicked()

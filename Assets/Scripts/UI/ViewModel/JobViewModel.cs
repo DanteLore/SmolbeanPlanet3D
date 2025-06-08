@@ -22,7 +22,7 @@ public class JobViewModel
 
     public string BuildingName
     {
-        get { return job.Building.BuildingSpec.buildingName; }
+        get { return job.Building.name; }
     }
 
     public Texture2D JobThumbnail

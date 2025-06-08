@@ -1,19 +1,18 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
-    <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
-    <Style src="project://database/Assets/UI/DeliveryRequestsMenu.uss?fileID=7433441132597879392&amp;guid=10e3c6aba5850471c94b00ccd8b09b1f&amp;type=3#DeliveryRequestsMenu" />
-    <ui:VisualElement name="VisualElement" class="menuContainer">
-        <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; flex-shrink: 1; bottom: 0; top: 0; left: 0; right: 0;">
-            <ui:VisualElement style="flex-grow: 1; flex-direction: row; -unity-text-align: middle-left;">
-                <ui:Label text="𐛧" class="title" style="font-size: 32px;" />
-                <ui:Label tabindex="-1" text="Delivery Requests" display-tooltip-when-elided="true" class="title" />
-            </ui:VisualElement>
-            <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="height: 100%; display: flex; right: 0; left: 0; flex-grow: 1; bottom: 0; top: 0;">
-                <ui:VisualElement name="listContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start; white-space: nowrap; flex-wrap: nowrap; flex-direction: column; justify-content: flex-start; align-self: stretch; flex-shrink: 0;" />
-            </ui:ScrollView>
-        </ui:VisualElement>
-        <ui:VisualElement name="dialogButtonContainer" style="flex-direction: row-reverse; width: 100%; max-width: 100%; min-width: 100%; flex-shrink: 0;">
-            <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />
+    <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <Style src="project://database/Assets/UI/NewStyles/DeliveryRequestsMenuStyle.uss?fileID=7433441132597879392&amp;guid=4f1feae7b3bb54fad9bad02015150623&amp;type=3#DeliveryRequestsMenuStyle" />
+    <ui:VisualElement name="MenuContainer" class="menuContainer">
+        <ui:Label text="𐛧 Delivery Requests" name="Title" class="title" />
+        <ui:MultiColumnListView name="requestsListView" sorting-mode="Default" allow-add="false" allow-remove="false" fixed-item-height="80" show-alternating-row-backgrounds="ContentOnly" selection-type="None" style="height: 100%; width: 90%;">
+            <ui:Columns resizable="false" reorderable="false">
+                <ui:Column name="priorityColumn" width="100px" optional="false" resizable="false" visible="true" sortable="true" title="𐛧" />
+                <ui:Column name="buildingColumn" title="Destination" width="350px" sortable="true" optional="false" resizable="false" />
+                <ui:Column name="itemColumn" title="Item" optional="false" resizable="false" width="350px" stretchable="false" />
+                <ui:Column name="colonistColumn" title="Assigned To" width="350px" optional="false" resizable="false" />
+            </ui:Columns>
+        </ui:MultiColumnListView>
+        <ui:VisualElement name="ControlsContainer">
+            <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

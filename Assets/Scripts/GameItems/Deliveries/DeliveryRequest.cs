@@ -9,7 +9,7 @@ public class DeliveryRequest
     public SmolbeanBuilding Building { get { return building; }}
     public DropSpec Item { get { return item; }}
     public int Quantity { get { return quantity; }}
-    public int Priority { get { return priority; }}
+    public int Priority { get { return priority; } set { priority = value; }}
     public int Minimum { get { return minimum; }}
     
     public bool IsComplete { get; private set; }

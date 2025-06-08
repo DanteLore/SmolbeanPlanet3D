@@ -30,6 +30,7 @@ public class DeliveryManager : MonoBehaviour
     public DeliveryRequest CreateDeliveryRequest(SmolbeanBuilding building, DropSpec item, int quantity, int minimum = -1, int priority = 10)
     {
         Debug.Assert(quantity <= item.stackSize, "You can not order more than one stack per delivery request");
+        Debug.Assert(priority >= 1 && priority <= 9, $"Priority must be between 1 and 9 (inclusive) you specified {priority}");
 
         var request = new DeliveryRequest(building, item, quantity, priority, minimum);
         unclaimedDeliveryRequests.Add(request);
@@ -98,6 +99,11 @@ public class DeliveryManager : MonoBehaviour
     public void CompleteCollectionJob(IDeliverDrops porter)
     {
         collections.RemoveAll(c => c.porter == porter);
+    }
+
+    public IDeliverDrops GetAssignedDeliverer(DeliveryRequest request)
+    {
+        return claimedDeliveryRequests.Where(kv => kv.Value == request).Select(kv => kv.Key).FirstOrDefault();
     }
 
     public override string ToString()

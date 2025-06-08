@@ -1,0 +1,31 @@
+#requestsListView {
+    margin-top: 20px;
+}
+
+.unity-multi-column-view__cell Label {
+    font-size: 24px;
+}
+
+.dr-thumb-image {
+    height: 48px;
+    width: 48px;
+}
+
+.dr-thumb-and-label-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 4px;
+}
+
+.dr-table-label {
+    margin-left: 6px;
+    white-space: normal;
+    flex-grow: 1;
+    flex-shrink: 1;
+    -unity-text-align: upper-left;
+}
+
+.unity-multi-column-header__column__content Label {
+    font-size: 32px;
+}
