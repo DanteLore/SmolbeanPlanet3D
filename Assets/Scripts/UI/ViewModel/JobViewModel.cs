@@ -20,6 +20,11 @@ public class JobViewModel
         get { return job.Colonist ? job.Colonist.Stats.name : ""; }
     }
 
+    public string BuildingName
+    {
+        get { return job.Building.BuildingSpec.buildingName; }
+    }
+
     public Texture2D JobThumbnail
     {
         get { return job.JobSpec.thumbnail; }
@@ -28,6 +33,11 @@ public class JobViewModel
     public Texture2D ColonistThumbnail
     {
         get { return job.Colonist ? job.Colonist.Species.thumbnail : null; }
+    }
+
+    public Texture2D BuildingThumbnail
+    {
+        get { return job.Building.BuildingSpec.thumbnail; }
     }
 
     public bool Enabled

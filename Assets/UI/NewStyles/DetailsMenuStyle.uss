@@ -109,19 +109,6 @@
     padding-bottom: 0px;
 }
 
-/**********/
-/** Jobs **/
-/**********/
-
-#jobsContainer {
-    flex-direction: row;
-}
-
-#jobsContainer Button {
-    height: 100px;
-    width: 100px;
-}
-
 /********************/
 /** Action buttons **/
 /********************/

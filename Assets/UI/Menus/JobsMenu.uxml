@@ -1,23 +1,24 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
-    <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
-    <Style src="project://database/Assets/UI/JobsMenu.uss?fileID=7433441132597879392&amp;guid=2fc8ed31c39a54711a72d5a99ac0ac4f&amp;type=3#JobsMenu" />
-    <ui:VisualElement name="VisualElement" class="menuContainer">
-        <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 100%; flex-shrink: 1; bottom: 0; top: 0; left: 0; right: 0;">
-            <ui:VisualElement style="flex-grow: 1; flex-direction: row; -unity-text-align: middle-left;">
-                <ui:Label text="𐛌" class="title" style="-unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/NotoSansLinearA-Regular%20SDF.asset?fileID=11400000&amp;guid=fbfca0ecf33e64a0885ddbfa55617ba0&amp;type=2#NotoSansLinearA-Regular SDF&quot;); font-size: 32px; -unity-font-style: normal;" />
-                <ui:Label tabindex="-1" text="Jobs" display-tooltip-when-elided="true" name="Label" class="title" />
-            </ui:VisualElement>
-            <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+    <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <Style src="project://database/Assets/UI/NewStyles/JobsMenuStyle.uss?fileID=7433441132597879392&amp;guid=addb992a4a0b6492c9710176763d0ad9&amp;type=3#JobsMenuStyle" />
+    <ui:VisualElement name="Container" style="flex-grow: 1;">
+        <ui:VisualElement name="MenuContainer" class="menuContainer">
+            <ui:Label tabindex="-1" text="𐛌 Jobs" display-tooltip-when-elided="true" name="Title" class="title" />
+            <ui:MultiColumnListView name="jobsListView" sorting-mode="Default" allow-add="false" allow-remove="false" fixed-item-height="80" show-alternating-row-backgrounds="ContentOnly" selection-type="None" style="height: 100%; width: 90%;">
+                <ui:Columns resizable="false" reorderable="false">
+                    <ui:Column name="enabledColumn" width="64px" optional="false" resizable="false" visible="true" sortable="false" />
+                    <ui:Column name="buildingColumn" title="Building" width="350px" sortable="true" optional="false" resizable="false" />
+                    <ui:Column name="jobTitleColumn" title="Job Title" optional="false" resizable="false" width="350px" stretchable="false" />
+                    <ui:Column name="colonistNameColumn" title="Colonist" width="350px" optional="false" resizable="false" />
+                </ui:Columns>
+            </ui:MultiColumnListView>
+            <ui:VisualElement style="flex-direction: row; align-items: center; flex-shrink: 0; width: 90%;">
                 <ui:Label text="Colonists: 12" name="colonistCountLabel" />
                 <ui:Label text="Jobs: 0" name="jobCountLabel" emoji-fallback-support="false" />
             </ui:VisualElement>
-            <ui:ScrollView horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="AlwaysVisible" style="height: 100%; display: flex; right: 0; left: 0; flex-grow: 1; bottom: 0; top: 0;">
-                <ui:VisualElement name="listContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start; white-space: nowrap; flex-wrap: nowrap; flex-direction: column; justify-content: flex-start; align-self: stretch; flex-shrink: 0;" />
-            </ui:ScrollView>
-        </ui:VisualElement>
-        <ui:VisualElement name="dialogButtonContainer" style="flex-direction: row-reverse; width: 100%; max-width: 100%; min-width: 100%; flex-shrink: 0;">
-            <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />
+            <ui:VisualElement name="ControlsContainer">
+                <ui:Button text="Close" display-tooltip-when-elided="true" name="closeButton" style="width: 100px; height: 30px;" />
+            </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

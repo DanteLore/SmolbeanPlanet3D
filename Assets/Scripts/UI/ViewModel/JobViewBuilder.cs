@@ -9,25 +9,31 @@ public static class JobViewBuilder
     {
         var jobsVM = jobs.Select(j => new JobViewModel(j)).ToList();
 
+        // BUILDING
+        var buildingColumn = jobsListView.columns.First(c => c.name == "buildingColumn");
+        if (buildingColumn != null)
+        {
+            buildingColumn.makeCell = MakeThumbAndLabelCell;
+            buildingColumn.bindCell = (cell, i) =>
+            {
+                var jobsList = (List<JobViewModel>)jobsListView.itemsSource;
+                var m = jobsList[i];
+                cell.Q<Label>("valueLabel").text = jobsList[i].BuildingName;
+                cell.Q<Image>("jobRowThumbnail").image = jobsList[i].BuildingThumbnail;
+            };
+            buildingColumn.comparison = (rowA, rowB) =>
+                string.Compare(
+                    ((List<JobViewModel>)jobsListView.itemsSource)[rowA].BuildingName,
+                    ((List<JobViewModel>)jobsListView.itemsSource)[rowB].BuildingName,
+                    StringComparison.OrdinalIgnoreCase
+                );
+        }
+
         // JOB TITLE
         var jobTitleColumn = jobsListView.columns.First(c => c.name == "jobTitleColumn");
         if (jobTitleColumn != null)
         {
-            jobTitleColumn.makeCell = () =>
-            {
-                var container = new VisualElement();
-                container.AddToClassList("jobs-thumb-and-label-row");
-
-                var icon = new Image() { name = "jobRowThumbnail" };
-                icon.AddToClassList("jobs-thumb-image");
-                container.Add(icon);
-
-                var lbl = new Label { name = "valueLabel" };
-                lbl.AddToClassList("jobs-table-label");
-                container.Add(lbl);
-
-                return container;
-            };
+            jobTitleColumn.makeCell = MakeThumbAndLabelCell;
             jobTitleColumn.bindCell = (cell, i) =>
             {
                 var jobsList = (List<JobViewModel>)jobsListView.itemsSource;
@@ -47,21 +53,7 @@ public static class JobViewBuilder
         var colonistColumn = jobsListView.columns.First(c => c.name == "colonistNameColumn");
         if (colonistColumn != null)
         {
-            colonistColumn.makeCell = () =>
-            {
-                var container = new VisualElement();
-                container.AddToClassList("jobs-thumb-and-label-row");
-
-                var icon = new Image() { name = "jobRowThumbnail" };
-                icon.AddToClassList("jobs-thumb-image");
-                container.Add(icon);
-
-                var lbl = new Label { name = "valueLabel" };
-                lbl.AddToClassList("jobs-table-label");
-                container.Add(lbl);
-
-                return container;
-            };
+            colonistColumn.makeCell = MakeThumbAndLabelCell;
             colonistColumn.bindCell = (cell, i) =>
             {
                 var jobsList = (List<JobViewModel>)jobsListView.itemsSource;
@@ -109,5 +101,21 @@ public static class JobViewBuilder
         // FINISH UP!
         jobsListView.itemsSource = jobsVM;
         jobsListView.RefreshItems();
+    }
+
+    private static VisualElement MakeThumbAndLabelCell()
+    {
+        var container = new VisualElement();
+        container.AddToClassList("jobs-thumb-and-label-row");
+
+        var icon = new Image() { name = "jobRowThumbnail" };
+        icon.AddToClassList("jobs-thumb-image");
+        container.Add(icon);
+
+        var lbl = new Label { name = "valueLabel" };
+        lbl.AddToClassList("jobs-table-label");
+        container.Add(lbl);
+
+        return container;
     }
 }

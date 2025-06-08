@@ -24,74 +24,27 @@ public class JobsMenuController : SmolbeanMenu
         colonistCountLabel = document.rootVisualElement.Q<Label>("colonistCountLabel");
         jobCountLabel = document.rootVisualElement.Q<Label>("jobCountLabel");
 
-        InvokeRepeating(nameof(RefreshJobsList), 0f, 1.0f);
+        InvokeRepeating(nameof(UpdateJobs), 1.0f, 1.0f);
+        UpdateJobs();
     }
 
     void OnDisable()
     {
-        CancelInvoke(nameof(RefreshJobsList));
+        CancelInvoke(nameof(UpdateJobs));
     }
 
-    private void RefreshJobsList()
+    private void UpdateJobs()
     {
+        var jobs = JobController.Instance.AllJobs.ToArray();
+
+        var jobsListView = document.rootVisualElement.Q<MultiColumnListView>("jobsListView");
+        JobViewBuilder.BuildJobView(jobsListView, jobs);
+
         int colonistCount = AnimalController.Instance.GetAnimalsByType<SmolbeanColonist>().Count();
         int jobCount = JobController.Instance.AllJobs.Count();
 
         colonistCountLabel.text = $"Colonists: {colonistCount}";
         jobCountLabel.text = $"Jobs: {jobCount}";
-
-        listContainer.Clear();
-
-        if (JobController.Instance.AllJobs.Any())
-        {
-            foreach (Job job in JobController.Instance.AllJobs)
-                AddRow(job);
-        }
-    }
-    
-    private void AddRow(Job job)
-    {
-        var row = new VisualElement();
-        row.AddToClassList("jobRow");
-        listContainer.Add(row);
-
-        Toggle jobEnabledToggle = new();
-        row.Add(jobEnabledToggle);
-        jobEnabledToggle.value = job.IsOpen;
-        jobEnabledToggle.RegisterValueChangedCallback(v =>
-        {
-            if (v.newValue)
-                job.Open();
-            else
-                job.Terminate();
-        });
-
-        var jobIcon = new Button();
-        jobIcon.AddToClassList("icon");
-        jobIcon.style.backgroundColor = new Color(0, 0, 0, 0);
-        jobIcon.style.backgroundImage = job.JobSpec.thumbnail;
-        row.Add(jobIcon);
-
-        row.Add(new Label { text = job.JobSpec.jobName });
-
-        var buildingIcon = new Button();
-        buildingIcon.AddToClassList("icon");
-        buildingIcon.style.backgroundColor = new Color(0, 0, 0, 0);
-        buildingIcon.style.backgroundImage = job.Building.BuildingSpec.thumbnail;
-        row.Add(buildingIcon);
-
-        row.Add(new Label { text = job.Building.name });
-
-        if (job.Colonist != null)
-        {
-            var colonistIcon = new Button();
-            colonistIcon.AddToClassList("icon");
-            colonistIcon.style.backgroundColor = new Color(0, 0, 0, 0);
-            colonistIcon.style.backgroundImage = job.Colonist.Species.thumbnail;
-            row.Add(colonistIcon);
-
-            row.Add(new Label { text = job.Colonist.Stats.name });
-        }
     }
 
     private void CloseButtonClicked()
