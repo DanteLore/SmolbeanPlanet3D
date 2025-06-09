@@ -40,10 +40,10 @@ Material:
     m_Floats:
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _coronaSizeMultiplier: 1.5
+    - _coronaSizeMultiplier: 1.363
     - _horizonOffset: 0.08
     - _skyColorBlend: 0.2
-    - _sunHorizonFadeOffset: 0.1
+    - _sunHorizonFadeOffset: 1
     - _sunSize: 0.2
     m_Colors:
     - _horizonColorDay: {r: 1, g: 1, b: 1, a: 1}
