@@ -11,22 +11,28 @@ public class Dodo : SmolbeanAnimal
         Target = transform.position; // We start where we want to be
         float sleepLightLevel = Random.Range(0.3f, 0.5f); // The light level we like to sleep at
 
+        float idleSeconds = Random.Range(1f, 5f);
+        float startTime = Time.time + idleSeconds;
+
         var sleep = new SleepState(this, animator, soundPlayer);
         var graze = new GrazeState(this, animator, navAgent, soundPlayer);
         var flock = new FlockState(this, animator, navAgent, soundPlayer);
+        var startState = new GenericState();
 
+        AT(startState, flock, TimeToStart());
         AT(flock, sleep, IsNight());
         AT(flock, graze, Hungry());
         AT(graze, sleep, IsNight());
         AT(graze, flock, Full());
         AT(sleep, flock, WakeupTime(5f));
-        
-        StateMachine.SetStartState(flock);
+
+        StateMachine.SetStartState(startState);
 
         Func<bool> Hungry() => IsHungry;
         Func<bool> Full() => IsFull;
         Func<bool> IsNight() => () => DayNightCycleController.Instance.LightLevel < sleepLightLevel;
         Func<bool> WakeupTime(float sleepMax) => () => DayNightCycleController.Instance.LightLevel > sleepLightLevel && sleep.SleepDuration >= sleepMax;
+        Func<bool> TimeToStart() => () => Time.time > startTime;
     }
 
     public override bool IsEnoughFoodHere()
