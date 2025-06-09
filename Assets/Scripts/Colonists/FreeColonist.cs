@@ -46,7 +46,8 @@ public class FreeColonist : SmolbeanColonist
                 name = ColonistNameGenerator.Generate(), 
                 age = Random.Range(Species.maturityAgeSeconds, Species.oldAgeSeconds),
                 health = Species.initialHealth,
-                foodLevel = Random.Range(Species.initialFoodLevelMin, Species.initialFoodLevelMax)
+                foodLevel = Random.Range(Species.initialFoodLevelMin, Species.initialFoodLevelMax),
+                scale = 1.0f
             };
         }
     }

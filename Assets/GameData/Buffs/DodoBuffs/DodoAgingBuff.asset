@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f193c86e66f1543b5b98b287ff5c7db8, type: 3}
+  m_Name: DodoAgingBuff
+  m_EditorClassIdentifier: 
+  buffName: Aging
+  description: Everyone gets old
+  thumbnail: {fileID: 2800000, guid: 693fe1d4f22554065864af1642a067b0, type: 3}
+  oldAgeSeconds: 7200
+  lifespanSeconds: 11520
+  oldAgeHealthImpactPerSecond: 4
+  sleepingHealthDecreaseMultiplier: 0.1
+  maturityAgeSeconds: 720
+  juvenileScale: 0.4

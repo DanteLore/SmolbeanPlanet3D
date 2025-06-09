@@ -44,7 +44,7 @@ public class Dodo : SmolbeanAnimal
     {
         base.Update();
 
-        if(!isDead &&
+        if(!stats.isDead &&
             stats.age >= Species.maturityAgeSeconds &&
             stats.health >= Species.minimumHealthToGiveBirth &&
             Time.time - ((DodoStats)stats).lastEggLaidTime >= Species.gestationPeriodSeconds &&
@@ -79,7 +79,8 @@ public class Dodo : SmolbeanAnimal
                 age = Random.Range(0f, Species.lifespanSeconds),
                 health = Species.initialHealth,
                 foodLevel = Random.Range(Species.initialFoodLevelMin, Species.initialFoodLevelMax),
-                lastEggLaidTime = 0f
+                lastEggLaidTime = 0.0f,
+                scale = 1.0f
             };
         }
     }

@@ -8,4 +8,11 @@ public class AnimalStats
     public float age;
     public float health;
     public float foodLevel;
+    public float scale = 1.0f;
+
+    // State flags
+    [NonSerialized]
+    public bool isDead;
+    [NonSerialized]
+    public bool isSleeping;
 }

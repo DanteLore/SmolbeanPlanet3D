@@ -48,6 +48,9 @@ MonoBehaviour:
   fullThreshold: 80
   hungryThreshold: 30
   grassWearPerSecondWhenEating: 3
+  Buffs:
+  - {fileID: 11400000, guid: ee17ad2e6a4554410be1cd82426d62ed, type: 2}
+  - {fileID: 11400000, guid: 79c32c4cfac6f4e53be851ace2936c8a, type: 2}
   eggDropSpec: {fileID: 11400000, guid: 140e3843c50454231bb72463dd3851eb, type: 2}
   eggLaidParticleSystem: {fileID: 1572338817668193572, guid: b9033dd033f804d9f8ca7cd2a7cad063, type: 3}
   chickGestationSeconds: 30

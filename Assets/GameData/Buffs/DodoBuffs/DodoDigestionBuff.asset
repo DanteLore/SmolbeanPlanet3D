@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad4a0ba2f585d4295a0f59bc40419abd, type: 3}
+  m_Name: DodoDigestionBuff
+  m_EditorClassIdentifier: 
+  buffName: Digestion
+  description: Turning food into life force
+  thumbnail: {fileID: 2800000, guid: 693fe1d4f22554065864af1642a067b0, type: 3}
+  foodDigestedPerSecond: 1
+  starvationThreshold: 20
+  starvationRatePerSecond: 2
+  healthRecoveryPerSecond: 4
+  maxFoodLevel: 100
+  maxHealth: 100
+  sleepingDigestionMultiplier: 0.2
+  sleepingHealthDecreaseMultiplier: 0.1

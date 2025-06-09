@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
+using Unity.VisualScripting;
 
 public abstract class SmolbeanAnimal : MonoBehaviour
 {
@@ -21,13 +22,13 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     private readonly List<Thought> thoughts = new();
     private GameObject sleepPs;
 
+    private readonly List<BuffInstance> buffs = new();
+
     protected Animator animator;
     protected NavMeshAgent navAgent;
     protected SoundPlayer soundPlayer;
     protected AnimalStats stats;
     protected GameObject body;
-    protected bool isDead = false;
-    protected bool isSleeping = false;
     protected StateMachine StateMachine { get; private set; }
 
     public int SpeciesIndex { get; set; }
@@ -51,11 +52,19 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
         Inventory = new Inventory();
         StateMachine = new StateMachine(shouldLog: false);
+
+        // Get the buffs here.  This will always create new ones.
+        // TODO: only create new buffs at birth
+        // TODO: save and load buffs!
+        foreach (var buffSpec in Species.Buffs)
+        {
+            buffs.Add(buffSpec.GetBuff());
+        }
     }
 
     protected virtual void Update()
     {
-        if (!isDead && !GameStateManager.Instance.IsPaused)
+        if (!stats.isDead && !GameStateManager.Instance.IsPaused)
         {
             UpdateStats();
 
@@ -96,55 +105,17 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     protected virtual void UpdateStats()
     {
-        stats.age += Time.deltaTime;
+        // Apply all the buffs
+        foreach (var buff in buffs)
+            buff.ApplyTo(Stats, Time.deltaTime);
 
-        AnimalSpec species = Species; // Cache for miniscule performance boost!
+        // Did we die?
+            if (stats.health <= 0)
+                Die();
 
-        float ageFactor = (stats.age < species.oldAgeSeconds) ? 0.0f : Mathf.InverseLerp(species.oldAgeSeconds, species.lifespanSeconds, stats.age);
-
-        // Juveniles are small
-        if(stats.age <= species.maturityAgeSeconds)
-        {
-            var x = Mathf.InverseLerp(0f, species.maturityAgeSeconds, stats.age);
-            var s = Mathf.Lerp(species.juvenileScale, 1f, x);
-            transform.localScale = new Vector3(s, s, s);
-        }
-
-        // Speed decrease due to old age
-        if(ageFactor > 0.0f)
-            navAgent.speed = species.speed - species.oldAgeSpeedDecrease * ageFactor;
-
-        // Decreasing health due to old age
-        float oldAgeHealthDetriment = species.oldAgeHealthImpactPerSecond * ageFactor * Time.deltaTime;
-        if (isSleeping) // Less if sleeping!
-            oldAgeHealthDetriment *= species.sleepingHealthDecreaseMultiplier;
-        stats.health -= oldAgeHealthDetriment;
-
-        // Digest some food
-        float foodDelta = species.foodDigestedPerSecond * Time.deltaTime;
-        if (isSleeping) // Less if sleeping!
-            foodDelta *= species.sleepingHealthDecreaseMultiplier;
-        stats.foodLevel = Mathf.Max(0f, stats.foodLevel - foodDelta);
-
-        if (stats.foodLevel <= species.starvationThreshold)
-        {
-            // Health decrease due to starvation
-            float healthDelta = species.starvationRatePerSecond * Time.deltaTime;
-            healthDelta *= 1f - Mathf.InverseLerp(0f, species.starvationThreshold, stats.foodLevel);
-            if (isSleeping) // Less if sleeping!
-                healthDelta *= species.sleepingHealthDecreaseMultiplier;
-            stats.health -= healthDelta; 
-        }
-        else
-        {
-            // Health recover with a full stomach
-            float healthDelta = species.healthRecoveryPerSecond * Time.deltaTime;
-            healthDelta *= Mathf.InverseLerp(species.starvationThreshold, species.maxFoodLevel, stats.foodLevel);
-            stats.health = Mathf.Min(species.maxHealth, stats.health + healthDelta);
-        }
-
-        if (stats.health <= 0)
-            Die(); 
+        // Did we grow/shrink?
+        float s = stats.scale;
+        transform.localScale = new Vector3(s, s, s);
     }
 
     public virtual void LoadFrom(AnimalSaveData saveData)
@@ -158,7 +129,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     protected virtual void Die()
     {
-        isDead = true;
+        stats.isDead = true;
         StartCoroutine(DoDeathActivities());
     }
 
@@ -239,7 +210,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public void StartSleep()
     {
-        isSleeping = true;
+        stats.isSleeping = true;
         float y = GetComponentInChildren<Collider>().bounds.max.y * 1.1f;
         var animalPosition = transform.position;
         var p = new Vector3(animalPosition.x, y, animalPosition.z);
@@ -248,7 +219,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public void EndSleep()
     {
-        isSleeping = false;
+        stats.isSleeping = false;
         if (sleepPs != null)
         {
             Destroy(sleepPs);

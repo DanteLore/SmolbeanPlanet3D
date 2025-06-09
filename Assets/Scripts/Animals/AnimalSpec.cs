@@ -50,4 +50,7 @@ public class AnimalSpec : ScriptableObject
     public float fullThreshold;
     public float hungryThreshold;
     public float grassWearPerSecondWhenEating;
+
+    [Header("Buffs")]
+    public BuffSpec[] Buffs;
 }
