@@ -79,7 +79,7 @@ public class MenuController : MonoBehaviour
                     GameStateManager.Instance.Pause();
 
                 if (isVisible == false)
-                    soundPlayer.Play("Whoosh");
+                    soundPlayer.Play("Whoosh2");
 
                 child.gameObject.SetActive(true);
             }

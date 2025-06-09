@@ -14,11 +14,17 @@ public class GraphMenuController : SmolbeanMenu
 
     void OnEnable()
     {
+        var soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
+
         series = DataCollectionManager.Instance.Series.ToList();
         groups = series.Select(s => s.seriesGroup).Distinct().OrderBy(s => s.ToLower()).ToList();
 
         document = GetComponent<UIDocument>();
-        document.rootVisualElement.Q<Button>("closeButton").clicked += () => MenuController.Instance.CloseAll();
+        document.rootVisualElement.Q<Button>("closeButton").clicked += () =>
+        {
+            soundPlayer.Play("Click");
+            MenuController.Instance.CloseAll();
+        };
    
         var graphBox = document.rootVisualElement.Q<VisualElement>("graphBox");
 

@@ -15,6 +15,7 @@ public class MapMenuController : SmolbeanMenu
     }
 
     private GridManager gridManager;
+    private SoundPlayer soundPlayer;
     private UIDocument document;
     private VisualElement mapBox;
 
@@ -35,6 +36,7 @@ public class MapMenuController : SmolbeanMenu
     void OnEnable()
     {
         gridManager = FindFirstObjectByType<GridManager>();
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
 
         document = GetComponent<UIDocument>();
 
@@ -135,6 +137,7 @@ public class MapMenuController : SmolbeanMenu
 
     private void CloseButtonClicked()
     {
+        soundPlayer.Play("Click");
         MenuController.Instance.CloseAll();
     }
 }
