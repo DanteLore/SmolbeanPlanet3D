@@ -420,6 +420,18 @@ DropdownField:focus Label {
     background-color: rgb(200, 0, 0);
 }
 
+.positiveButton
+{
+    background-color: rgb(0, 100, 0);
+}
+
+.positiveButton:hover,
+.positiveButton:hover,
+.positiveButton:hover:enabled
+{
+    background-color: rgb(0, 150, 0);
+}
+
 /****************/
 /** TEXT FIELD **/
 /****************/
@@ -446,4 +458,12 @@ TextField .unity-base-text-field__input:hover {
 .unity-base-text-field:focus:enabled > .unity-base-text-field__input {    
     border-color: var(--color-highlight);          
     color: var(--color-highlight);   
+}
+
+/*******************/
+/**   GROUP BOX   **/
+/*******************/
+
+.unity-group-box__label {
+    font-size: 24px;
 }

@@ -1,13 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
-    <Style src="project://database/Assets/UI/Menus.uss?fileID=7433441132597879392&amp;guid=195c9949e710e48058eb88dc68c9b2d8&amp;type=3#Menus" />
-    <ui:VisualElement class="menuContainer">
-        <ui:Label text="Smolbean Planet 3D!" display-tooltip-when-elided="true" class="title" />
-        <ui:Button text="Resume" display-tooltip-when-elided="true" name="resumeButton" />
-        <ui:Button text="New Game..." display-tooltip-when-elided="true" name="newGameButton" />
-        <ui:Button text="Save Game..." display-tooltip-when-elided="true" name="saveGameButton" />
-        <ui:Button text="Load Game..." display-tooltip-when-elided="true" name="loadGameButton" />
-        <ui:Button text="Settings..." display-tooltip-when-elided="true" name="settingsButton" />
-        <ui:Button text="Quit" display-tooltip-when-elided="true" name="quitButton" />
+    <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <Style src="project://database/Assets/UI/NewStyles/MainMenuStyle.uss?fileID=7433441132597879392&amp;guid=e6a52424fcf4746468da1567687bbd2e&amp;type=3#MainMenuStyle" />
+    <ui:VisualElement name="MenuContainer" class="menuContainer">
+        <ui:Label text="Smolbean Planet 3D!" display-tooltip-when-elided="true" name="Title" class="title" />
+        <ui:VisualElement style="flex-grow: 1; height: 100%; width: 90%; align-items: center; justify-content: center;">
+            <ui:VisualElement style="flex-grow: 0; flex-shrink: 1; position: relative; align-items: stretch;">
+                <ui:Button text="Resume" display-tooltip-when-elided="true" name="resumeButton" class="positiveButton" />
+                <ui:Button text="New Game..." display-tooltip-when-elided="true" name="newGameButton" />
+                <ui:Button text="Save Game..." display-tooltip-when-elided="true" name="saveGameButton" />
+                <ui:Button text="Load Game..." display-tooltip-when-elided="true" name="loadGameButton" />
+                <ui:Button text="Settings..." display-tooltip-when-elided="true" name="settingsButton" />
+                <ui:Button text="Quit" display-tooltip-when-elided="true" name="quitButton" class="dangerButton" />
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
