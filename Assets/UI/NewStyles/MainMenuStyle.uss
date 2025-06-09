@@ -2,6 +2,7 @@ Button {
     font-size: 40px;
     width: 500px;
     margin: 10px;
+    flex-shrink: 1;
 }
 
 Button:hover {

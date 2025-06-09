@@ -4,7 +4,7 @@
     <ui:VisualElement name="MenuContainer" class="menuContainer">
         <ui:Label text="Smolbean Planet 3D!" display-tooltip-when-elided="true" name="Title" class="title" />
         <ui:VisualElement style="flex-grow: 1; height: 100%; width: 90%; align-items: center; justify-content: center;">
-            <ui:VisualElement style="flex-grow: 0; flex-shrink: 1; position: relative; align-items: stretch;">
+            <ui:VisualElement style="flex-grow: 0; flex-shrink: 1; align-items: stretch; justify-content: space-between;">
                 <ui:Button text="Resume" display-tooltip-when-elided="true" name="resumeButton" class="positiveButton" />
                 <ui:Button text="New Game..." display-tooltip-when-elided="true" name="newGameButton" />
                 <ui:Button text="Save Game..." display-tooltip-when-elided="true" name="saveGameButton" />

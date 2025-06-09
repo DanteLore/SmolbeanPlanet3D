@@ -1,51 +1,50 @@
+@import url("StyleGlobals.uss");
+
 .toolbarContainer {
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-radius: 8px;
     background-color: rgba(0, 0, 0, 0.78);
     position: absolute;
     left: 10%;
     right: 10%;
     bottom: 10px;
     flex-direction: row;
-    min-height: 70px;
-    height: 70px;
+    min-height: 120px;
+    height: 120px;
     flex-grow: 1;
     flex-shrink: 1;
     justify-content: flex-start;
 }
 
-.toolbarContainer Button {
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
-    min-width: 50px;
-    min-height: 50px;
+.toolbarContainer .unity-button {
+    border-width: 0px;
+    margin: 5px;
+    border-color: var(--color-normal);
+    background-color: transparent;
+    min-width: 100px;
+    min-height: 100px;
+    font-size: 80px;
     -unity-background-scale-mode: scale-to-fit;
 }
 
-.toolbarContainer Button:hover {
+.toolbarContainer .unity-button:hover {
+    color: var(--color-normal);
     scale: 1.2 1.2;
-    border-left-color: rgba(0, 0, 0, 0);
-    border-right-color: rgba(0, 0, 0, 0);
-    border-top-color: rgba(0, 0, 0, 0);
-    border-bottom-color: rgba(0, 0, 0, 0);
+    transition-duration: 0.2s;
+}
+
+.toolbarContainer .unity-button:active {
+    scale: 0.9 0.9;
+    transition-duration: 0.2s;
 }
 
 .ingredientTooltip {
     position: absolute;
     justify-content: flex-end;
-    bottom: 70px;
+    bottom: 140px;
     flex-direction: column-reverse;
     background-color: rgba(0, 0, 0, 0.78);
     padding-left: 5px;
