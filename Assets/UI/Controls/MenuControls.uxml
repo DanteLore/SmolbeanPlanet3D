@@ -1,9 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
-    <Style src="project://database/Assets/UI/GameControls.uss?fileID=7433441132597879392&amp;guid=334dd8ec426a145ba9561e6ccafddaa1&amp;type=3#GameControls" />
+    <Style src="project://database/Assets/UI/NewStyles/GameControlsStyle.uss?fileID=7433441132597879392&amp;guid=334dd8ec426a145ba9561e6ccafddaa1&amp;type=3#GameControlsStyle" />
     <ui:VisualElement name="VisualElement" style="flex-grow: 1; position: absolute; top: 10px; right: 60px;">
         <ui:VisualElement name="gameInfoControlsContainer" class="gameControlsContainer" style="flex-grow: 1; justify-content: flex-start; width: 50px; max-width: 50px; min-width: 50px;">
-            <ui:Button text="☰" parse-escape-sequences="true" display-tooltip-when-elided="true" name="mainMenuButton" style="-unity-font: url(&apos;project://database/Assets/UI/Fonts/NotoSansSymbols2-Regular.ttf?fileID=12800000&amp;guid=d2daced2fbadb4088b20c9a65c4e75ea&amp;type=3#NotoSansSymbols2-Regular&apos;); -unity-font-definition: url(&apos;project://database/Assets/UI/Fonts/NotoSansSymbols2-Regular%20SDF.asset?fileID=11400000&amp;guid=50b82a52dd34c46a2879c92e644dc952&amp;type=2#NotoSansSymbols2-Regular SDF&apos;); font-size: 16px; -unity-text-align: middle-center;" />
+            <ui:Button text="☰" parse-escape-sequences="true" display-tooltip-when-elided="true" name="mainMenuButton" style="-unity-font: url(&quot;project://database/Assets/UI/Fonts/NotoSansSymbols2-Regular.ttf?fileID=12800000&amp;guid=d2daced2fbadb4088b20c9a65c4e75ea&amp;type=3#NotoSansSymbols2-Regular&quot;); -unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/NotoSansSymbols2-Regular%20SDF.asset?fileID=11400000&amp;guid=50b82a52dd34c46a2879c92e644dc952&amp;type=2#NotoSansSymbols2-Regular SDF&quot;); font-size: 16px; -unity-text-align: middle-center;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

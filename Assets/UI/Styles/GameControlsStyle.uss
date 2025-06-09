@@ -1,21 +1,5 @@
-.gameControlsContainer Button {
-    width: 24px;
-    height: 24px;
-    border-ft-width: 1px;
-    border-radius: 5px;
-    border-color: rgb(255, 255, 255);
-    max-width: 24px;
-    max-height: 24px;
-    min-height: 24px;
-    min-width: 24px;
-    -unity-text-align: middle-center;
-    white-space: nowrap;
-    font-size: 12px;
-    -unity-font-style: bold;
-    padding: 0;
-    margin: 2px;
-    background-color: rgba(0, 0, 0, 0);
-}
+@import url("StyleGlobals.uss");
+
 
 .gameControlsContainer {
     padding-left: 10px;
@@ -43,12 +27,36 @@
     align-self: center;
 }
 
+.gameControlsContainer Button {
+    width: 24px;
+    height: 24px;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: var(--color-normal);
+    color: var(--color-normal);
+    max-width: 24px;
+    max-height: 24px;
+    min-height: 24px;
+    min-width: 24px;
+    -unity-text-align: middle-center;
+    white-space: nowrap;
+    font-size: 12px;
+    -unity-font-style: bold;
+    padding: 0;
+    margin: 2px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.gameControlsContainer Button:active {
+    scale: 0.9 0.9;
+    transition-duration: 0.2s;
+}
+
 .gameControlsContainer Button:hover {
     scale: 1.2 1.2;
-    border-left-color: rgb(255, 255, 255);
-    border-right-color: rgb(255, 255, 255);
-    border-top-color: rgb(255, 255, 255);
-    border-bottom-color: rgb(255, 255, 255);
+    border-color: var(--color-normal);
+    color: var(--color-normal);
+    transition-duration: 0.2s;
 }
 
 .gameControlsContainer .selectedSpeedButton {

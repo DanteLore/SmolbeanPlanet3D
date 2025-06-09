@@ -1,6 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Base.uss?fileID=7433441132597879392&amp;guid=56a4f3a9e02234ad2be134b1940a4710&amp;type=3#Base" />
-    <Style src="project://database/Assets/UI/GameControls.uss?fileID=7433441132597879392&amp;guid=334dd8ec426a145ba9561e6ccafddaa1&amp;type=3#GameControls" />
+    <Style src="project://database/Assets/UI/NewStyles/GameControlsStyle.uss?fileID=7433441132597879392&amp;guid=334dd8ec426a145ba9561e6ccafddaa1&amp;type=3#GameControlsStyle" />
     <ui:VisualElement name="VisualElement" style="flex-grow: 1; flex-direction: row; flex-wrap: nowrap; position: absolute; left: auto; top: 10px; white-space: nowrap; -unity-text-align: upper-left; right: 120px; width: 100px; max-width: 100px; min-width: 100px;">
         <ui:VisualElement name="gameInfoControlsContainer" class="gameControlsContainer" style="flex-grow: 1; justify-content: center;">
             <ui:Label tabindex="-1" text="XX fps" parse-escape-sequences="true" display-tooltip-when-elided="true" name="fpsLabel" />
