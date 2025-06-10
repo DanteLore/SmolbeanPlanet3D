@@ -10,6 +10,8 @@ public class AgingBuffSpec : BuffSpec
     public float maturityAgeSeconds;
     public float juvenileScale;
 
+    public DiseaseBuffSpec[] diseases;
+
     public override BuffInstance GetBuff()
     {
         return new AgingBuffInstance(this);

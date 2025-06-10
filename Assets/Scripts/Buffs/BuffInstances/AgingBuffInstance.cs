@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AgingBuffInstance : BuffInstance
@@ -9,7 +11,7 @@ public class AgingBuffInstance : BuffInstance
         this.agingBuffSpec = agingBuffSpec;
     }
 
-    public override void ApplyTo(AnimalStats stats, float timeDelta)
+    public override IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, float timeDelta)
     {
         stats.age += Time.deltaTime;
 
@@ -31,6 +33,20 @@ public class AgingBuffInstance : BuffInstance
         if (stats.isSleeping) // Less if sleeping!
             oldAgeHealthDetriment *= agingBuffSpec.sleepingHealthDecreaseMultiplier;
         stats.health -= oldAgeHealthDetriment;
+
+        // Catch a disease or two
+        var newBuffs = new List<BuffInstance>();
+        foreach (var ds in agingBuffSpec.diseases)
+        {
+            float p = 1 / ds.probabilitySeconds * timeDelta;
+            if (stats.age > agingBuffSpec.oldAgeSeconds)
+                p *= stats.oldAgeDiseaseChanceMultiplier;
+
+            if (Random.Range(0.0f, 1.0f) < p)
+                newBuffs.Add(ds.GetBuff());
+        }
+
+        return newBuffs;
     }
 
     protected override BuffSpec GetBuffSpec()

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb8a5b894ed1a4cd6b51cdfa91255991, type: 3}
+  m_Name: Gut Worms
+  m_EditorClassIdentifier: 
+  buffName: Gut Worms
+  description: Gut worms is a short term illness which causes food to be digested
+    more quickly
+  thumbnail: {fileID: 0}
+  symbol: "\U0001F750"
+  probabilitySeconds: 240
+  isPermanent: 0
+  minDurationSeconds: 120
+  maxDurationSeconds: 240
+  healthDecreasePerSecond: 0
+  foodDecreasePerSecond: 2

@@ -22,3 +22,5 @@ MonoBehaviour:
   sleepingHealthDecreaseMultiplier: 0.1
   maturityAgeSeconds: 720
   juvenileScale: 0.4
+  diseases:
+  - {fileID: 11400000, guid: 8e425661e41cc4d08a2eb5408633e830, type: 2}

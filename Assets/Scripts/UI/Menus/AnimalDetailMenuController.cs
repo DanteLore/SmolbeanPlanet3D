@@ -48,6 +48,9 @@ public class AnimalDetailMenuController : SmolbeanMenu
 
     private void UpdateAll()
     {
+        if (targetAnimal == null || targetAnimal.transform == null)
+            return; // Try to avoid null refs!
+
         // Basic values
         root.Q<VisualElement>("thumbnail").style.backgroundImage = targetAnimal.Species.thumbnail;
         root.Q<Label>("nameLabel").text = targetAnimal.Stats.name;

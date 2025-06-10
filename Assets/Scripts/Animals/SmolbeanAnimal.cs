@@ -23,7 +23,8 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     private GameObject sleepPs;
 
     private readonly List<BuffInstance> buffs = new();
-    public List<BuffInstance> Buffs { get { return buffs; }} 
+    private readonly HashSet<string> buffNamesHash = new();
+    public List<BuffInstance> Buffs { get { return buffs; } } 
 
     protected Animator animator;
     protected NavMeshAgent navAgent;
@@ -60,6 +61,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         foreach (var buffSpec in Species.Buffs)
         {
             buffs.Add(buffSpec.GetBuff());
+            buffNamesHash.Add(buffSpec.name);
         }
     }
 
@@ -106,17 +108,50 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     protected virtual void UpdateStats()
     {
-        // Apply all the buffs
+        BuffsCleanup();
+
+        // Apply all the buffs and append any new ones when we're done
+        var newBuffs = new List<BuffInstance>();
+
         foreach (var buff in buffs)
-            buff.ApplyTo(Stats, Time.deltaTime);
+            newBuffs.AddRange(buff.ApplyTo(Stats, Time.deltaTime));
+
+        AddBuffs(newBuffs);
 
         // Did we die?
-            if (stats.health <= 0)
-                Die();
+        if (stats.health <= 0)
+            Die();
 
         // Did we grow/shrink?
         float s = stats.scale;
         transform.localScale = new Vector3(s, s, s);
+    }
+
+    private void BuffsCleanup()
+    {
+        int i = buffs.Count - 1;
+        while (i >= 0)
+        {
+            if (buffs[i].isExpired)
+            {
+                buffNamesHash.Remove(buffs[i].Spec.buffName);
+                buffs.RemoveAt(i);
+            }
+
+            i--;
+        }
+    }
+
+    private void AddBuffs(List<BuffInstance> newBuffs)
+    {
+        foreach (var buff in newBuffs)
+        {
+            if (!buffNamesHash.Contains(buff.Spec.name))
+            {
+                buffs.Add(buff);
+                buffNamesHash.Add(buff.Spec.name);
+            }
+        }
     }
 
     public virtual void LoadFrom(AnimalSaveData saveData)

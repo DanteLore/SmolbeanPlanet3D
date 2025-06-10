@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DigestionBuffInstance : BuffInstance
@@ -9,7 +11,7 @@ public class DigestionBuffInstance : BuffInstance
         this.digestionBuffSpec = digestionBuffSpec;
     }
 
-    public override void ApplyTo(AnimalStats stats, float timeDelta)
+    public override IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, float timeDelta)
     {
         float foodDelta = digestionBuffSpec.foodDigestedPerSecond * Time.deltaTime;
 
@@ -25,7 +27,7 @@ public class DigestionBuffInstance : BuffInstance
             healthDelta *= 1f - Mathf.InverseLerp(0f, b: digestionBuffSpec.starvationThreshold, stats.foodLevel);
             if (stats.isSleeping) // Less if sleeping!
                 healthDelta *= digestionBuffSpec.sleepingHealthDecreaseMultiplier;
-            stats.health -= healthDelta; 
+            stats.health -= healthDelta;
         }
         else
         {
@@ -34,6 +36,8 @@ public class DigestionBuffInstance : BuffInstance
             healthDelta *= Mathf.InverseLerp(digestionBuffSpec.starvationThreshold, digestionBuffSpec.maxFoodLevel, stats.foodLevel);
             stats.health = Mathf.Min(digestionBuffSpec.maxHealth, stats.health + healthDelta);
         }
+
+        return Enumerable.Empty<BuffInstance>();
     }
 
     protected override BuffSpec GetBuffSpec()
