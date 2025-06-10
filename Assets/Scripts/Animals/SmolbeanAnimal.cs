@@ -23,6 +23,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     private GameObject sleepPs;
 
     private readonly List<BuffInstance> buffs = new();
+    public List<BuffInstance> Buffs { get { return buffs; }} 
 
     protected Animator animator;
     protected NavMeshAgent navAgent;

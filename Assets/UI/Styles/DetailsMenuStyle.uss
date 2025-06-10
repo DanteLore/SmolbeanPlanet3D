@@ -250,3 +250,23 @@
     padding-bottom: 0px;
     background-color: black;
 }
+
+/***********/
+/** BUFFS **/
+/***********/
+
+#buffsListView {
+    border-width: 1px;
+    border-color:  var(--color-normal);
+    border-radius: 4px;
+}
+
+#buffsListView Label {
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding-left: 20px;
+    padding-right: 20px;
+    -unity-text-align: middle-left;
+}

@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
-    <Style src="project://database/Assets/UI/NewStyles/DetailsMenuStyle.uss?fileID=7433441132597879392&amp;guid=f51120ff0db3344bfaefc895b97e2798&amp;type=3#DetailsMenuStyle" />
+    <Style src="project://database/Assets/UI/Styles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <Style src="project://database/Assets/UI/Styles/DetailsMenuStyle.uss?fileID=7433441132597879392&amp;guid=f51120ff0db3344bfaefc895b97e2798&amp;type=3#DetailsMenuStyle" />
     <ui:VisualElement name="SideMenuContainer" class="menuContainer">
         <ui:VisualElement name="headerContainer" class="toolButtonContainer">
             <ui:VisualElement name="thumbnail" />
@@ -9,11 +9,6 @@
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:TabView style="width: 90%; flex-grow: 1; height: 100%;">
-            <ui:Tab label="🗩" name="activityTab">
-                <ui:ScrollView horizontal-scroller-visibility="Hidden" name="thoughtsContainer">
-                    <ui:VisualElement name="thoughtsContainer" style="flex-grow: 1;" />
-                </ui:ScrollView>
-            </ui:Tab>
             <ui:Tab label="☷" name="statsTab">
                 <ui:ProgressBar value="22" title="Health" name="healthBar" />
                 <ui:ProgressBar value="22" title="Food" name="foodBar" />
@@ -30,6 +25,13 @@
                     <ui:VisualElement name="jobThumb" style="flex-grow: 1;" />
                     <ui:Label text="None" name="jobLabel" class="text-field-value" />
                 </ui:VisualElement>
+                <ui:Label text="Buffs:" />
+                <ui:ListView name="buffsListView" allow-add="false" allow-remove="false" fixed-item-height="48" selection-type="Single" />
+            </ui:Tab>
+            <ui:Tab label="🗩" name="activityTab">
+                <ui:ScrollView horizontal-scroller-visibility="Hidden" name="thoughtsContainer">
+                    <ui:VisualElement name="thoughtsContainer" style="flex-grow: 1;" />
+                </ui:ScrollView>
             </ui:Tab>
             <ui:Tab label="𐚱" name="inventoryTab">
                 <ui:VisualElement name="inventoryContainer" style="flex-grow: 1;" />

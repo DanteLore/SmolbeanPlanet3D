@@ -55,7 +55,19 @@ public class AnimalDetailMenuController : SmolbeanMenu
         root.Q<ProgressBar>("foodBar").value = targetAnimal.Stats.foodLevel;
         root.Q<Label>("ageLabel").text = DayNightCycleController.Instance.DurationToString(targetAnimal.Stats.age);
         var pos = gridManager.GetGameSquareFromWorldCoords(targetAnimal.transform.position);
-        root.Q<Label>("positionLabel").text = $"{pos.x}λ \u00d7 {pos.y}φ";
+        root.Q<Label>("positionLabel").text = $"{pos.x}λ x {pos.y}φ";
+
+        // Buffs
+        var buffsList = root.Q<ListView>("buffsListView");
+        buffsList.itemsSource = targetAnimal.Buffs;
+        buffsList.makeItem = () => new Label();
+        buffsList.bindItem = (element, i) =>
+        {
+            var label = (Label)element;
+            label.text = $"{targetAnimal.Buffs[i].Spec.symbol} {targetAnimal.Buffs[i].Spec.buffName}";
+            element.tooltip = targetAnimal.Buffs[i].Spec.description;
+        };
+        buffsList.RefreshItems();
 
         UpdateJob();
         UpdateInventory();

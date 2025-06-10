@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: DodoAgingBuff
   m_EditorClassIdentifier: 
   buffName: Aging
-  description: Everyone gets old
+  description: Everyone gets old.  You're born, you grow, you get old and die.
   thumbnail: {fileID: 2800000, guid: 693fe1d4f22554065864af1642a067b0, type: 3}
+  symbol: "\U0001F74E"
   oldAgeSeconds: 7200
   lifespanSeconds: 11520
   oldAgeHealthImpactPerSecond: 4

@@ -32,4 +32,9 @@ public class AgingBuffInstance : BuffInstance
             oldAgeHealthDetriment *= agingBuffSpec.sleepingHealthDecreaseMultiplier;
         stats.health -= oldAgeHealthDetriment;
     }
+
+    protected override BuffSpec GetBuffSpec()
+    {
+        return agingBuffSpec;
+    }
 }

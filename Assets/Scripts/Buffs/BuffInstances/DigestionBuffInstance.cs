@@ -35,4 +35,9 @@ public class DigestionBuffInstance : BuffInstance
             stats.health = Mathf.Min(digestionBuffSpec.maxHealth, stats.health + healthDelta);
         }
     }
+
+    protected override BuffSpec GetBuffSpec()
+    {
+        return digestionBuffSpec;
+    }
 }
