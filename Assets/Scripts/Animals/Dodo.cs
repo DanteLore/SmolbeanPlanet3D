@@ -80,7 +80,8 @@ public class Dodo : SmolbeanAnimal
                 health = Species.initialHealth,
                 foodLevel = Random.Range(Species.initialFoodLevelMin, Species.initialFoodLevelMax),
                 lastEggLaidTime = 0.0f,
-                scale = 1.0f
+                scale = 1.0f,
+                speed = Random.Range(Species.minSpeed, Species.maxSpeed)
             };
         }
     }

@@ -35,7 +35,8 @@ MonoBehaviour:
   minimumHealthToGiveBirth: 0
   pregnancyHealthImpact: 0
   sightRange: 500
-  speed: 4
+  minSpeed: 2.5
+  maxSpeed: 3.5
   oldAgeSpeedDecrease: 0.2
   maxFoodLevel: 0
   initialFoodLevelMin: 0
@@ -48,3 +49,5 @@ MonoBehaviour:
   fullThreshold: 0
   hungryThreshold: 0
   grassWearPerSecondWhenEating: 0
+  Buffs:
+  - {fileID: 11400000, guid: fab28cee09a014a34a0c524b0bf95419, type: 2}

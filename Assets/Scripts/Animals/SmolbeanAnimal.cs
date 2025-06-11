@@ -70,11 +70,12 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public virtual void AdoptIdentity(SmolbeanAnimal original)
     {
-        // Might be more to do here?
         stats = original.stats;
         Species = original.Species;
         thoughts.Clear();
         thoughts.AddRange(original.Thoughts);
+        buffs.Clear();
+        buffs.AddRange(original.buffs);
     }
 
     public void Think(string thought)
@@ -115,6 +116,10 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         // Did we grow/shrink?
         float s = stats.scale;
         transform.localScale = new Vector3(s, s, s);
+
+        // Did our speed change?
+        if(navAgent.speed!= stats.speed)
+            navAgent.speed = stats.speed;
     }
 
     private void BuffsCleanup()

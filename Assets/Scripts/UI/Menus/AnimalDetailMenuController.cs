@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine.UIElements;
 using UnityEngine;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class AnimalDetailMenuController : SmolbeanMenu
 {
@@ -59,6 +60,7 @@ public class AnimalDetailMenuController : SmolbeanMenu
         root.Q<Label>("ageLabel").text = DayNightCycleController.Instance.DurationToString(targetAnimal.Stats.age);
         var pos = gridManager.GetGameSquareFromWorldCoords(targetAnimal.transform.position);
         root.Q<Label>("positionLabel").text = $"{pos.x}λ x {pos.y}φ";
+        root.Q<Label>("speedLabel").text = $"{targetAnimal.Stats.speed:0.0}";
 
         // Buffs
         var buffsList = root.Q<ListView>("buffsListView");

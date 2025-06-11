@@ -10,6 +10,7 @@ public class AnimalStats
     public float foodLevel;
     public float scale = 1.0f;
     public float oldAgeDiseaseChanceMultiplier = 1.0f;
+    public float speed;
 
     // State flags
     [NonSerialized]

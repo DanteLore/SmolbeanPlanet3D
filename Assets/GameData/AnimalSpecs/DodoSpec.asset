@@ -35,7 +35,8 @@ MonoBehaviour:
   minimumHealthToGiveBirth: 80
   pregnancyHealthImpact: 50
   sightRange: 48
-  speed: 4
+  minSpeed: 1.5
+  maxSpeed: 2.5
   oldAgeSpeedDecrease: 2
   maxFoodLevel: 100
   initialFoodLevelMin: 20

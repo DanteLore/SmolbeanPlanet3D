@@ -9,6 +9,7 @@ public class DiseaseBuffSpec : BuffSpec
     public float maxDurationSeconds;
     public float healthDecreasePerSecond;
     public float foodDecreasePerSecond;
+    public float speedMultiplierOneOff;
 
     public override BuffInstance GetBuff()
     {

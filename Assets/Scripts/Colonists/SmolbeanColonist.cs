@@ -69,6 +69,7 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
             prefabIndex = PrefabIndex,
             stats = stats,
             thoughts = Thoughts.ToArray(),
+            buffs = Buffs.ToArray(),
             homeName = Home.BuildingName,
         };
     }

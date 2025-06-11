@@ -35,7 +35,8 @@ public class AnimalSpec : ScriptableObject
 
     [Header("Senses and Abilities")]
     public float sightRange;
-    public float speed;
+    public float minSpeed;
+    public float maxSpeed;
     public float oldAgeSpeedDecrease;
 
     [Header("Food and Eating")]

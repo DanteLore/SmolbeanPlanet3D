@@ -17,6 +17,10 @@
                     <ui:Label text="Label" name="ageLabel" class="text-field-value" />
                 </ui:VisualElement>
                 <ui:VisualElement class="text-field-row" style="flex-grow: 1;">
+                    <ui:Label text="Speed:" class="text-field-label" />
+                    <ui:Label text="Label" name="speedLabel" class="text-field-value" />
+                </ui:VisualElement>
+                <ui:VisualElement class="text-field-row" style="flex-grow: 1;">
                     <ui:Label text="Location:" class="text-field-label" />
                     <ui:Label text="Label" name="positionLabel" class="text-field-value" />
                 </ui:VisualElement>

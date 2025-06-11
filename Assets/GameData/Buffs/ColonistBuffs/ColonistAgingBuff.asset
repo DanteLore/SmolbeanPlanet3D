@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f193c86e66f1543b5b98b287ff5c7db8, type: 3}
+  m_Name: ColonistAgingBuff
+  m_EditorClassIdentifier: 
+  buffName: Aging
+  description: Everyone gets old.  You're born, you grow, you get old and die.
+  symbol: "\U0001F74E"
+  oldAgeSeconds: 7200
+  lifespanSeconds: 11520
+  oldAgeHealthImpactPerSecond: 0
+  sleepingHealthDecreaseMultiplier: 0.1
+  maturityAgeSeconds: 720
+  juvenileScale: 0.4
+  diseases:
+  - {fileID: 11400000, guid: bef92d2cb1086459f8b0eab9cecc7353, type: 2}
+  - {fileID: 11400000, guid: a880bf649fe9b434a9e6ba172731a624, type: 2}

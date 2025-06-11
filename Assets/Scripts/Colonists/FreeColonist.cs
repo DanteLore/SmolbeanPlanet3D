@@ -47,7 +47,8 @@ public class FreeColonist : SmolbeanColonist
                 age = Random.Range(Species.maturityAgeSeconds, Species.oldAgeSeconds),
                 health = Species.initialHealth,
                 foodLevel = Random.Range(Species.initialFoodLevelMin, Species.initialFoodLevelMax),
-                scale = 1.0f
+                scale = 1.0f,
+                speed = Random.Range(Species.minSpeed, Species.maxSpeed)
             };
         }
     }
