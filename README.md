@@ -11,6 +11,21 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Buffy the Dodo slayer
+
+Added a Buff system.  Rather than having a massive messy function to update animal stats each frame, each animal (including colonists) now have a list of Buffs - which control everything from aging and digestion to 
+diseases and temporary effects like speed and health bonuses.
+
+All using very standard Unity dev patterns, there are scriptable objects to define buffs in the editor and
+`BuffInstance` subclasses for applying buffs at run time.
+
+![Screenshot](./Docs/Images/screenshot75.png)
+![Screenshot](./Docs/Images/screenshot76.png)
+
+Here we can see a Dodo who has contracted "Gut Worms" (I assume from eating too much unwashed grass).  This disease buff causes increased food depletion for a given time - meaning much more food is needed to stay healthy.
+
+![Screenshot](./Docs/Images/screenshot77.png)
+
 ## The Great User Interface Refactor
 
 After almost a year of inactivity (I think it started when Factorio Space Age was released), I'm back with a bang.  Decided to move the UI over to a completely new theme.  Started from scratch, developed a new base stylesheet for controls, a standard format for menus, toolbars and so on.  I cleared all the local styles, altered scaling and generally made everything less complex and more stylesheet-driven.
