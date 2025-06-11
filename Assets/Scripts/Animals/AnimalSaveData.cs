@@ -12,6 +12,7 @@ public class AnimalSaveData
     public AnimalStats stats;
     public int prefabIndex;
     public Thought[] thoughts;
+    public BuffInstance[] buffs;
 
     public override string ToString()
     {

@@ -13,6 +13,6 @@ public class DiseaseBuffSpec : BuffSpec
     public override BuffInstance GetBuff()
     {
         float duration = Random.Range(minDurationSeconds, maxDurationSeconds);
-        return new DiseaseBuffInstance(this, duration);
+        return new DiseaseBuffInstance(duration) { Spec = this };
     }
 }

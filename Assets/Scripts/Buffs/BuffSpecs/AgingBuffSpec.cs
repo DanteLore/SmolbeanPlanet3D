@@ -14,6 +14,6 @@ public class AgingBuffSpec : BuffSpec
 
     public override BuffInstance GetBuff()
     {
-        return new AgingBuffInstance(this);
+        return new AgingBuffInstance { Spec = this }; 
     }
 }

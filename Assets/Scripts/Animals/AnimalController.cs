@@ -151,6 +151,13 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
 
         float rotationY = Random.Range(0f, 360f);
 
+        // Buffs
+        var newBuffs = new List<BuffInstance>();
+        foreach (var buffSpec in species.Buffs)
+        {
+            newBuffs.Add(buffSpec.GetBuff());
+        }
+
         return new AnimalSaveData
         {
             positionX = pos.x,
@@ -159,7 +166,8 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
             rotationY = rotationY,
             speciesIndex = speciesIndex,
             prefabIndex = species.prefabIndex,
-            thoughts = Array.Empty<Thought>()
+            thoughts = Array.Empty<Thought>(),
+            buffs = newBuffs.ToArray()
         };
     }
 

@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
-using Unity.VisualScripting;
 
 public abstract class SmolbeanAnimal : MonoBehaviour
 {
@@ -54,15 +53,6 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
         Inventory = new Inventory();
         StateMachine = new StateMachine(shouldLog: false);
-
-        // Get the buffs here.  This will always create new ones.
-        // TODO: only create new buffs at birth
-        // TODO: save and load buffs!
-        foreach (var buffSpec in Species.Buffs)
-        {
-            buffs.Add(buffSpec.GetBuff());
-            buffNamesHash.Add(buffSpec.name);
-        }
     }
 
     protected virtual void Update()
@@ -145,22 +135,16 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     private void AddBuffs(List<BuffInstance> newBuffs)
     {
         foreach (var buff in newBuffs)
-        {
-            if (!buffNamesHash.Contains(buff.Spec.name))
-            {
-                buffs.Add(buff);
-                buffNamesHash.Add(buff.Spec.name);
-            }
-        }
+            AddBuff(buff);
     }
 
-    public virtual void LoadFrom(AnimalSaveData saveData)
+    private void AddBuff(BuffInstance buff)
     {
-        SpeciesIndex = saveData.speciesIndex;
-        PrefabIndex = saveData.prefabIndex;
-        thoughts.Clear();
-        thoughts.AddRange(saveData.thoughts);
-        InitialiseStats(saveData.stats);
+        if (buffNamesHash.Contains(buff.Spec.name))
+            return;
+
+        buffs.Add(buff);
+        buffNamesHash.Add(buff.Spec.name);
     }
 
     protected virtual void Die()
@@ -193,6 +177,28 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         return delta;
     }
 
+    public virtual void LoadFrom(AnimalSaveData saveData)
+    {
+        SpeciesIndex = saveData.speciesIndex;
+        PrefabIndex = saveData.prefabIndex;
+        thoughts.Clear();
+        thoughts.AddRange(saveData.thoughts);
+        InitialiseStats(saveData.stats);
+
+        buffs.Clear();
+        buffNamesHash.Clear();
+        if (saveData.buffs != null)
+        {
+            foreach (var b in saveData.buffs)
+            {
+                // Reestablish the link to the BuffSpec
+                b.Spec = BuffController.Instance.BuffSpecs[b.buffSpecIndex];
+                // Add the buff
+                AddBuff(b);
+            }
+        }
+    }
+
     public virtual AnimalSaveData GetSaveData()
     {
         return new AnimalSaveData
@@ -204,7 +210,8 @@ public abstract class SmolbeanAnimal : MonoBehaviour
             speciesIndex = SpeciesIndex,
             prefabIndex = PrefabIndex,
             stats = stats,
-            thoughts = Thoughts.ToArray()
+            thoughts = Thoughts.ToArray(),
+            buffs = buffs.ToArray()
         };
     }
 

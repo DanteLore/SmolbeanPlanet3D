@@ -14,6 +14,6 @@ public class DigestionBuffSpec : BuffSpec
 
     public override BuffInstance GetBuff()
     {
-        return new DigestionBuffInstance(this);
+        return new DigestionBuffInstance() { Spec = this };
     }
 }
