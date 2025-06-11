@@ -105,7 +105,12 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         var newBuffs = new List<BuffInstance>();
 
         foreach (var buff in buffs)
+        {
             newBuffs.AddRange(buff.ApplyTo(Stats, Time.deltaTime));
+            
+            if (buff.GetThought(Stats, Time.deltaTime, out string thought))
+                Think(thought);
+        }
 
         AddBuffs(newBuffs);
 

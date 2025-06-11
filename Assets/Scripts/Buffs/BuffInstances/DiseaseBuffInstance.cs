@@ -9,7 +9,6 @@ public class DiseaseBuffInstance : BuffInstance
     public bool speedUpdated;
     public float originalSpeed;
 
-
     private DiseaseBuffSpec DiseaseBuffSpec { get { return (DiseaseBuffSpec)Spec; } }
 
     public DiseaseBuffInstance(float duration)
@@ -47,5 +46,21 @@ public class DiseaseBuffInstance : BuffInstance
         }
 
         return Enumerable.Empty<BuffInstance>();
+    }
+
+    public override bool GetThought(AnimalStats stats, float timeDelta, out string thought)
+    {
+        var thoughtRow = DiseaseBuffSpec.thoughts[Random.Range(0, DiseaseBuffSpec.thoughts.Length - 1)];
+        
+        // OK, OK, this means the probability is actually lower than the configured value... but YOLO
+        float p = 1 / thoughtRow.probabilitySeconds * timeDelta;
+        if (Random.Range(0.0f, 1.0f) < p)
+        {
+            thought = thoughtRow.thought;
+            return true;
+        }
+        
+        thought = "";
+        return false;
     }
 }

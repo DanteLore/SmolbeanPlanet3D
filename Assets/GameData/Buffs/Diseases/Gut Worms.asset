@@ -15,11 +15,16 @@ MonoBehaviour:
   buffName: Gut Worms
   description: Gut worms is a short term illness which causes food to be digested
     more quickly
-  thumbnail: {fileID: 0}
   symbol: "\U0001F750"
+  thoughts:
+  - probabilitySeconds: 60
+    thought: I feel a bit sick...
+  - probabilitySeconds: 60
+    thought: There's a churning in my belly that doesn't feel right!
   probabilitySeconds: 240
   isPermanent: 0
   minDurationSeconds: 120
   maxDurationSeconds: 240
   healthDecreasePerSecond: 0
   foodDecreasePerSecond: 2
+  speedMultiplierOneOff: 0

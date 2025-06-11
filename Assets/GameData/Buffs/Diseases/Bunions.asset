@@ -16,6 +16,11 @@ MonoBehaviour:
   description: A deformity of the toes which can make walking painful, decreasing
     speed
   symbol: "\U0001F750"
+  thoughts:
+  - probabilitySeconds: 60
+    thought: Oooooo my bunions!
+  - probabilitySeconds: 60
+    thought: My feet are killing me right now
   probabilitySeconds: 11520
   isPermanent: 1
   minDurationSeconds: 0

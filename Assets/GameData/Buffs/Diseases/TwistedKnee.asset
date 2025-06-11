@@ -16,6 +16,13 @@ MonoBehaviour:
   description: A short term injury to the knee which will slow you down until it
     heals
   symbol: "\U0001F750"
+  thoughts:
+  - probabilitySeconds: 60
+    thought: Ouch! My knee!
+  - probabilitySeconds: 60
+    thought: Walking is really hurting right now
+  - probabilitySeconds: 60
+    thought: I really need to watch my step in future
   probabilitySeconds: 1000
   isPermanent: 0
   minDurationSeconds: 600

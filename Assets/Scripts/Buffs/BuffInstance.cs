@@ -1,8 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Newtonsoft.Json;
+using System;
+using Debug = UnityEngine.Debug;
+using Random = UnityEngine.Random;
 
 [Serializable]
 public abstract class BuffInstance
@@ -23,5 +24,24 @@ public abstract class BuffInstance
             buffSpecIndex = Array.IndexOf(BuffController.Instance.BuffSpecs, buffSpec);
         }
     }
+
     public abstract IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, float timeDelta);
+
+    public virtual bool GetThought(AnimalStats stats, float timeDelta, out string thought)
+    {
+        if (Spec.thoughts.Length > 0)
+        {
+            var thoughtRow = Spec.thoughts[Random.Range(0, Spec.thoughts.Length - 1)];
+
+            // OK, OK, this means the probability is actually lower than the configured value... but YOLO
+            float p = 1 / thoughtRow.probabilitySeconds * timeDelta;
+            if (Random.Range(0.0f, 1.0f) < p)
+            {
+                thought = thoughtRow.thought;
+                return true;
+            }
+        }
+        thought = "";
+        return false;
+    }
 }
