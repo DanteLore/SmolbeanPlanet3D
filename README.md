@@ -13,7 +13,7 @@ Newest entries at the top :)
 
 ## The Great User Interface Refactor
 
-After almost a year of inactivity (I think it started when Factorio Space Age was released), I'm back with a bang.  Decided to move the UI over to a completely new theme.  Started from scracth, developed a new base stylesheet for controls, a standard format for menus, toolbars and so on.  I cleared all the local styles, altered scaling and generally made everything less complex and more stylesheet-driven.
+After almost a year of inactivity (I think it started when Factorio Space Age was released), I'm back with a bang.  Decided to move the UI over to a completely new theme.  Started from scratch, developed a new base stylesheet for controls, a standard format for menus, toolbars and so on.  I cleared all the local styles, altered scaling and generally made everything less complex and more stylesheet-driven.
 
 No doubt I'll need to revamp the UI more than once in future, but with a proper set of stylesheets it should be easy.
 
