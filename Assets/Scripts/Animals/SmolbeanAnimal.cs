@@ -118,7 +118,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         transform.localScale = new Vector3(s, s, s);
 
         // Did our speed change?
-        if(navAgent.speed!= stats.speed)
+        if (navAgent.speed != stats.speed)
             navAgent.speed = stats.speed;
     }
 

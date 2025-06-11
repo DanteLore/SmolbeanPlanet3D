@@ -3,6 +3,7 @@ using UnityEngine.AI;
 
 public abstract class WalkStateBase : IState
 {
+    private readonly SmolbeanAnimal animal;
     protected NavMeshAgent navAgent;
     protected Animator animator;
     protected SoundPlayer soundPlayer;
@@ -15,8 +16,9 @@ public abstract class WalkStateBase : IState
     public float StuckTime { get { return Time.time - lastMoved; } }
     public bool IsStuck { get; set; }
 
-    public WalkStateBase(NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer)
+    public WalkStateBase(SmolbeanAnimal animal, NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer)
     {
+        this.animal = animal;
         this.navAgent = navAgent;
         this.animator = animator;
         this.soundPlayer = soundPlayer;
@@ -36,6 +38,7 @@ public abstract class WalkStateBase : IState
         if (animator != null)
         {
             originalAnimatorSpeed = animator.speed;
+            animator.speed = originalAnimatorSpeed * animal.Stats.speed / 3f;
             animator.SetBool("IsWalking", true);
         }
 

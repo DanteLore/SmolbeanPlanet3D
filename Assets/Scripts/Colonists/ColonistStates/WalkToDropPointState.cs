@@ -6,7 +6,7 @@ public class WalkToDropPointState : WalkStateBase
     private IReturnDrops colonist;
     
     public WalkToDropPointState(IReturnDrops colonist, NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer) 
-        : base(navAgent, animator, soundPlayer)
+        : base((SmolbeanAnimal)colonist, navAgent, animator, soundPlayer)
     {
         this.colonist = colonist;
     }

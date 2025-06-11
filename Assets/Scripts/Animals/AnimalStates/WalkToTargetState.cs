@@ -6,7 +6,7 @@ public class WalkToTargetState : WalkStateBase
     private readonly SmolbeanAnimal animal;
 
     public WalkToTargetState(SmolbeanAnimal animal, NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer)
-        : base(navAgent, animator, soundPlayer)
+        : base(animal, navAgent, animator, soundPlayer)
     {
         this.animal = animal;
 

@@ -6,7 +6,7 @@ public class BuilderWalkToBuildingState : WalkStateBase
     private Builder builder;
 
     public BuilderWalkToBuildingState(Builder builder, NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer) 
-        : base(navAgent, animator, soundPlayer) 
+        : base(builder, navAgent, animator, soundPlayer) 
     {
         this.builder = builder;
     }

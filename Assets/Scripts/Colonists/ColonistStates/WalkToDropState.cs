@@ -6,7 +6,7 @@ public class WalkToDropState : WalkStateBase
     private readonly IGatherDrops gatherer;
 
     public WalkToDropState(IGatherDrops gatherer, NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer) 
-        : base(navAgent, animator, soundPlayer)
+        : base((SmolbeanAnimal)gatherer, navAgent, animator, soundPlayer)
     {
         this.gatherer = gatherer;   
     }
