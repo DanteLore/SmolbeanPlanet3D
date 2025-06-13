@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 [ExecuteAlways]
@@ -25,12 +26,25 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     [SerializeField] [Range(-90, 90)] private float sunAngleOffset = 0f;
     [SerializeField] private bool forceTimePause = false;
 
-    public string DisplayTimeAndDay { get => $"{DisplayDay()}   {DisplayTime()}"; }
     public int Day { get => day; }
     public float TimeOfDay { get => timeOfDay; }
     public float LightLevel { get => lightLevel; }
     public float HourLengthSeconds { get => hourLengthSeconds; }
     public float DayLengthSeconds { get => hourLengthSeconds * 24; }
+
+    private static readonly StringBuilder stringBuilder = new StringBuilder(32);
+
+    public string DisplayTimeAndDay
+    {
+        get
+        {
+            stringBuilder.Clear();
+            BuildDay();
+            stringBuilder.Append("  ");
+            BuildTime();
+            return stringBuilder.ToString();
+        }
+    }
 
     public bool TimeIsBetween(float start, float end)
     {
@@ -40,27 +54,44 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
             return TimeOfDay <= end || TimeOfDay >= start;
     }
 
-    public string DisplayTime(float t = -1f)
+    private void BuildTime(float t = -1f)
     {
         float tod = t == -1 ? TimeOfDay : t;
 
         int hour = Mathf.FloorToInt(tod);
         float d = tod % 1f;
 
-        if (d <= 0.25)
-            return $"🜚 {hour}";
-        if (d <= 0.50)
-            return $"🜚 {hour}.¼";
-        if (d <= 0.75)
-            return $"🜚 {hour}.½";
-        else
-            return $"🜚 {hour}.¾";
+        stringBuilder.Append("🜚 ");
+        stringBuilder.Append(hour);
+
+        if (d > 0.75f)
+            stringBuilder.Append(".¾");
+        else if (d > 0.5f)
+            stringBuilder.Append(".½");
+        else if (d > 0.25f)
+            stringBuilder.Append(".¼");
+    }
+
+    public string DisplayTime(float t = -1f)
+    {
+        stringBuilder.Clear();
+        BuildTime(t);
+        return stringBuilder.ToString();
+    }
+
+    private void BuildDay(int d = -1)
+    {
+        int x = d == -1 ? Day : d;
+
+        stringBuilder.Append("🜳 ");
+        stringBuilder.Append(x);
     }
 
     public string DisplayDay(int d = -1)
     {
-        int x = d == -1 ? Day : d;
-        return $"🜳 {x}";
+        stringBuilder.Clear();
+        BuildDay();
+        return stringBuilder.ToString();
     }
 
     public string DurationToString(float d)

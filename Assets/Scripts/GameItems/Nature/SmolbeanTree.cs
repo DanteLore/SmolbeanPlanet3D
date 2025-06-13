@@ -11,6 +11,7 @@ public class SmolbeanTree : SmolbeanItem
     public GameObject choppedParticleSystemPrefab;
 
     private SoundPlayer soundPlayer;
+    [HideInInspector] public Transform transformCached;
     private bool recoiling = false;
     private float recoilStart;
     private Quaternion startRotation;
@@ -18,6 +19,7 @@ public class SmolbeanTree : SmolbeanItem
     void Awake()
     {
         soundPlayer = GetComponent<SoundPlayer>();
+        transformCached = transform;
     }
 
     protected override void Dead()

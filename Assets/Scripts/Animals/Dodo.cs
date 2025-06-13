@@ -8,7 +8,7 @@ public class Dodo : SmolbeanAnimal
     {
         base.Start();
 
-        Target = transform.position; // We start where we want to be
+        Target = transformCached.position; // We start where we want to be
         float sleepLightLevel = Random.Range(0.3f, 0.5f); // The light level we like to sleep at
 
         float idleSeconds = Random.Range(1f, 5f);

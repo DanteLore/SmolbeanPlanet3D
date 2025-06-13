@@ -187,13 +187,19 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         return null;
     }
 
+    private readonly List<SmolbeanAnimal> animalBuffer = new(1024);
     public int AnimalCount(AnimalSpec species)
     {
-        return GetComponentsInChildren<SmolbeanAnimal>().Count(animal => animal.Species == species);
+        int count = 0;
+        GetComponentsInChildren(animalBuffer);
+        for (int i = 0; i < animalBuffer.Count; i++)
+            if (animalBuffer[i].Species == species)
+                count++;
+        return count;
     }
 
     public int AnimalCount()
     {
-        return GetComponentsInChildren<SmolbeanAnimal>().Count();
+        return GetComponentsInChildren<SmolbeanAnimal>().Length;
     }
 }

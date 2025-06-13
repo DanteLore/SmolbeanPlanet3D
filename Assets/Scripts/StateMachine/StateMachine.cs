@@ -61,7 +61,8 @@ public class StateMachine
         if(!allowSelfTransitions && state == currentState)
             return;
 
-        Log("Changed state to: " + state.ToString());
+        if (ShouldLog) // Check flag here to avoid needless string concat!
+            Log("Changed state to: " + state.ToString());
 
         currentState?.OnExit();
         currentState = state;

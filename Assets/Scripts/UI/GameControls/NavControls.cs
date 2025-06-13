@@ -1,4 +1,4 @@
-using System;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,6 +14,8 @@ public class NavigationControls : MonoBehaviour
     private Label directionLabel;
 
     private int groundLayerMask;
+
+    private static readonly StringBuilder stringBuilder = new StringBuilder(32);
     
     void OnEnable()
     {
@@ -30,7 +32,12 @@ public class NavigationControls : MonoBehaviour
         if (Physics.Raycast(ray, out var hit, float.PositiveInfinity, groundLayerMask))
         {
             var pos = gridManager.GetGameSquareFromWorldCoords(hit.point);
-            positionLabel.text = $"{pos.x}λ \u00d7 {pos.y}φ";
+            stringBuilder.Clear();
+            stringBuilder.Append(pos.x);
+            stringBuilder.Append("λ x ");
+            stringBuilder.Append(pos.y);
+            stringBuilder.Append("φ");
+            positionLabel.text = stringBuilder.ToString();
         }
         else
         {
@@ -38,7 +45,6 @@ public class NavigationControls : MonoBehaviour
         }
 
         var cameraDirXZ = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up);
-        Vector3.Normalize(cameraDirXZ);
         float heading = Vector3.SignedAngle(Vector3.forward, cameraDirXZ, Vector3.up);
         heading += rotationOffset;
         heading %= 360f;

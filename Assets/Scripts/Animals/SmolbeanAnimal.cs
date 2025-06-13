@@ -25,7 +25,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     private readonly HashSet<string> buffNamesHash = new();
     public List<BuffInstance> Buffs { get { return buffs; } }
 
-    private Transform transformCached;
+    public Transform transformCached;
     protected Animator animator;
     protected NavMeshAgent navAgent;
     protected SoundPlayer soundPlayer;
@@ -48,9 +48,13 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     private float currentScale;
     private readonly List<BuffInstance> newBuffs = new(capacity: 50);
 
-    protected virtual void Start()
+    private void Awake()
     {
         transformCached = transform;
+    }
+
+    protected virtual void Start()
+    {
         animator = GetComponentInChildren<Animator>();
         soundPlayer = GetComponent<SoundPlayer>();
         navAgent = GetComponent<NavMeshAgent>();

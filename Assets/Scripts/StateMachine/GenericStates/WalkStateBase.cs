@@ -32,7 +32,7 @@ public abstract class WalkStateBase : IState
         navAgent.isStopped = false;
         destSetAt = Time.time;
 
-        lastPosition = navAgent.transform.position;
+        lastPosition = animal.transformCached.position;
         lastMoved = Time.time;
 
         if (animator != null)
@@ -88,7 +88,7 @@ public abstract class WalkStateBase : IState
         if (animator != null)
             animator.SetBool("IsWalking", true);
 
-        var pos = navAgent.transform.position;
+        var pos = animal.transformCached.position;
 
         if(animator != null && navAgent != null)
             animator.speed = Mathf.InverseLerp(0f, navAgent.speed, navAgent.velocity.magnitude);

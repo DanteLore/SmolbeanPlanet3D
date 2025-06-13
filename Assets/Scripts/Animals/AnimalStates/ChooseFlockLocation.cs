@@ -8,13 +8,18 @@ public class ChooseFlockLocation
     : IState
 {
     private readonly SmolbeanAnimal animal;
-
+    private readonly int natureLayer;
+    private readonly int groundLayer;
+    private readonly int creatureLayer;
     private const int MAX_COLLIDERS = 100;
     private static readonly Collider[] hitColliders = new Collider[MAX_COLLIDERS];
 
     public ChooseFlockLocation(SmolbeanAnimal animal)
     {
         this.animal = animal;
+        natureLayer = LayerMask.GetMask("Nature");
+        groundLayer = LayerMask.GetMask("Ground");
+        creatureLayer = LayerMask.GetMask("Creatures");
     }
 
     public void OnEnter()
@@ -52,7 +57,7 @@ public class ChooseFlockLocation
         }
 
         if (
-                Physics.Raycast(new Ray(new Vector3(target.x, 10000, target.z), Vector3.down), out var rayHit, float.MaxValue, LayerMask.GetMask("Ground"))
+                Physics.Raycast(new Ray(new Vector3(target.x, 10000, target.z), Vector3.down), out var rayHit, float.MaxValue, groundLayer)
                 && NavMesh.SamplePosition(rayHit.point, out var navHit, 2.0f, NavMesh.AllAreas)
                 && navHit.position.y > 0.0f //don't go into the sea!
             )
@@ -63,7 +68,7 @@ public class ChooseFlockLocation
 
     private bool TryGetAverageTreeLocationAroundPoint(Vector3 pos, out Vector3 target)
     {
-        int colliderCount = Physics.OverlapSphereNonAlloc(pos, animal.Species.sightRange, hitColliders, LayerMask.GetMask("Nature"));
+        int colliderCount = Physics.OverlapSphereNonAlloc(pos, animal.Species.sightRange, hitColliders, natureLayer);
 
         if(colliderCount == 0)
         {
@@ -78,7 +83,7 @@ public class ChooseFlockLocation
         {
             if(hitColliders[i].TryGetComponent<SmolbeanTree>(out var tree))
             {
-                target += tree.transform.position;
+                target += tree.transformCached.position;
                 count++;
             }
         }
@@ -96,7 +101,7 @@ public class ChooseFlockLocation
 
     private bool TryGetAverageAnimalsLocationAroundPoint(Vector3 pos, out Vector3 target)
     {
-        int colliderCount = Physics.OverlapSphereNonAlloc(pos, animal.Species.sightRange, hitColliders, LayerMask.GetMask("Creatures"));
+        int colliderCount = Physics.OverlapSphereNonAlloc(pos, animal.Species.sightRange, hitColliders, creatureLayer);
 
         if(colliderCount == 0)
         {
@@ -111,7 +116,7 @@ public class ChooseFlockLocation
         {
             if(hitColliders[i].transform.parent.TryGetComponent<SmolbeanAnimal>(out var a) && a.SpeciesIndex == animal.SpeciesIndex)
             {
-                target += a.transform.position;
+                target += a.transformCached.position;
                 count++;
             }
         }
