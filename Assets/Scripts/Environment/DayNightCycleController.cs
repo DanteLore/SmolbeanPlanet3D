@@ -30,6 +30,7 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     public float TimeOfDay { get => timeOfDay; }
     public float LightLevel { get => lightLevel; }
     public float HourLengthSeconds { get => hourLengthSeconds; }
+    public float DayLengthSeconds { get => hourLengthSeconds * 24; }
 
     public bool TimeIsBetween(float start, float end)
     {

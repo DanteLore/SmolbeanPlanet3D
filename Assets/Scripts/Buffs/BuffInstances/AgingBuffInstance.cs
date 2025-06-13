@@ -6,11 +6,12 @@ public class AgingBuffInstance : BuffInstance
 {
     private AgingBuffSpec AgingBuffSpec { get { return (AgingBuffSpec)Spec; }}
 
-    public override IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, float timeDelta)
+    public override IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta)
     {
         Debug.Assert(AgingBuffSpec != null, $"Buff spec not set for {this.GetType().Name}");
 
         stats.age += Time.deltaTime;
+        stats.timeOnIsland += Time.deltaTime;
 
         float ageFactor = (stats.age < AgingBuffSpec.oldAgeSeconds) ? 0.0f : Mathf.InverseLerp(AgingBuffSpec.oldAgeSeconds, AgingBuffSpec.lifespanSeconds, stats.age);
 
@@ -35,11 +36,7 @@ public class AgingBuffInstance : BuffInstance
         var newBuffs = new List<BuffInstance>();
         foreach (var ds in AgingBuffSpec.diseases)
         {
-            float p = 1 / ds.probabilitySeconds * timeDelta;
-            if (stats.age > AgingBuffSpec.oldAgeSeconds)
-                p *= stats.oldAgeDiseaseChanceMultiplier;
-
-            if (Random.Range(0.0f, 1.0f) < p)
+            if(ds.CheckStart(stats, species, timeDelta))
                 newBuffs.Add(ds.GetBuff());
         }
 

@@ -7,7 +7,7 @@ public class DigestionBuffInstance : BuffInstance
 {
     private DigestionBuffSpec DigestionBuffSpec { get { return (DigestionBuffSpec)Spec; }}
 
-    public override IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, float timeDelta)
+    public override IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta)
     {
         Debug.Assert(DigestionBuffSpec != null, $"Buff spec not set for {this.GetType().Name}");
 

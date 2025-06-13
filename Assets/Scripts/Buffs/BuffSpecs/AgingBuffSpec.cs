@@ -8,7 +8,7 @@ public class AgingBuffSpec : BuffSpec
     public float oldAgeHealthImpactPerSecond;
     public float sleepingHealthDecreaseMultiplier;
     public float maturityAgeSeconds;
-    public float juvenileScale;
+    [Range(0f, 1f)] public float juvenileScale;
 
     public DiseaseBuffSpec[] diseases;
 

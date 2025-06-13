@@ -22,9 +22,14 @@ MonoBehaviour:
   - probabilitySeconds: 60
     thought: My feet are killing me right now
   probabilitySeconds: 11520
+  minAgeSeconds: 1000
+  maxAgeSeconds: 0
   isPermanent: 1
   minDurationSeconds: 0
   maxDurationSeconds: 0
   healthDecreasePerSecond: 0
   foodDecreasePerSecond: 0
   speedMultiplierOneOff: 0.5
+  oldAgeDiseaseChanceMultiplier: 2
+  minDistanceTravelledPerDay: 200
+  maxDistanceTravelledPerDay: 0

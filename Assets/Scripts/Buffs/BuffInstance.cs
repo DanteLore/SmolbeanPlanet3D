@@ -25,7 +25,7 @@ public abstract class BuffInstance
         }
     }
 
-    public abstract IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, float timeDelta);
+    public abstract IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta);
 
     public virtual bool GetThought(AnimalStats stats, float timeDelta, out string thought)
     {

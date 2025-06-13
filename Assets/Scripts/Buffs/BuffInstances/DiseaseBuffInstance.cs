@@ -16,7 +16,7 @@ public class DiseaseBuffInstance : BuffInstance
         timeRemaining = duration;
     }
 
-    public override IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, float timeDelta)
+    public override IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta)
     {
         Debug.Assert(DiseaseBuffSpec != null, $"Buff spec not set for {this.GetType().Name}");
 

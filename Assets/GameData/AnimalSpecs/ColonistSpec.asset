@@ -23,13 +23,9 @@ MonoBehaviour:
   populationCap: 1000
   initialHealth: 100
   maxHealth: 100
-  healthRecoveryPerSecond: 2
-  sleepingHealthDecreaseMultiplier: 0.01
   oldAgeSeconds: 660000
   lifespanSeconds: 1000000
-  oldAgeHealthImpactPerSecond: 0
   maturityAgeSeconds: 1200
-  juvenileScale: 1
   gestationPeriodSeconds: 0
   birthProbability: 0
   minimumHealthToGiveBirth: 0
@@ -37,14 +33,10 @@ MonoBehaviour:
   sightRange: 500
   minSpeed: 2.5
   maxSpeed: 3.5
-  oldAgeSpeedDecrease: 0.2
-  maxFoodLevel: 0
-  initialFoodLevelMin: 0
-  initialFoodLevelMax: 0
-  foodDigestedPerSecond: 0
-  sleepingDigestionMultiplier: 0
+  maxFoodLevel: 1000
+  initialFoodLevelMin: 500
+  initialFoodLevelMax: 1000
   starvationThreshold: 0
-  starvationRatePerSecond: 0
   foodEatenPerSecond: 0
   fullThreshold: 0
   hungryThreshold: 0
