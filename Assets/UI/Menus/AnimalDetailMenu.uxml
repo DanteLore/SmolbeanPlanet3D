@@ -11,11 +11,8 @@
         <ui:TabView style="width: 90%; flex-grow: 1; height: 100%;">
             <ui:Tab label="☷" name="statsTab">
                 <ui:ProgressBar value="22" title="Health" name="healthBar" />
+                <ui:ProgressBar value="22" title="Age" name="ageBar" class="age-bar-juvenile" />
                 <ui:ProgressBar value="22" title="Food" name="foodBar" />
-                <ui:VisualElement class="text-field-row" style="flex-grow: 1;">
-                    <ui:Label text="Age:" class="text-field-label" />
-                    <ui:Label text="Label" name="ageLabel" class="text-field-value" />
-                </ui:VisualElement>
                 <ui:VisualElement class="text-field-row" style="flex-grow: 1;">
                     <ui:Label text="Speed:" class="text-field-label" />
                     <ui:Label text="Label" name="speedLabel" class="text-field-value" />

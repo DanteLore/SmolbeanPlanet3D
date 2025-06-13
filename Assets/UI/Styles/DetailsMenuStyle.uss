@@ -270,3 +270,31 @@
     padding-right: 20px;
     -unity-text-align: middle-left;
 }
+
+/****************/
+/** STATS BARS **/
+/****************/
+
+.age-bar-juvenile .unity-progress-bar__progress {
+    background-color:rgb(32, 164, 32);      
+}
+
+.age-bar-adult .unity-progress-bar__progress {
+    background-color:rgb(32, 100, 32);   
+}
+
+.age-bar-old .unity-progress-bar__progress {
+    background-color:rgb(100, 32, 32);      
+}
+
+.stats-bar-danger .unity-progress-bar__progress {
+    background-color:rgb(100, 32, 32);      
+}
+
+.stats-bar-good .unity-progress-bar__progress {
+    background-color:rgb(32, 100, 32);   
+}
+
+.stats-bar-warning .unity-progress-bar__progress {
+    background-color:rgb(132, 100, 32);   
+}

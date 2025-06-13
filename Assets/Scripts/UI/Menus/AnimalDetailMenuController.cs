@@ -54,16 +54,87 @@ public class AnimalDetailMenuController : SmolbeanMenu
         // Basic values
         root.Q<VisualElement>("thumbnail").style.backgroundImage = targetAnimal.Species.thumbnail;
         root.Q<Label>("nameLabel").text = targetAnimal.Stats.name;
-        root.Q<ProgressBar>("healthBar").value = targetAnimal.Stats.health;
-        root.Q<ProgressBar>("foodBar").value = targetAnimal.Stats.foodLevel;
-        root.Q<Label>("ageLabel").text = DayNightCycleController.Instance.DurationToString(targetAnimal.Stats.age);
         var pos = gridManager.GetGameSquareFromWorldCoords(targetAnimal.transform.position);
         root.Q<Label>("positionLabel").text = $"{pos.x}λ x {pos.y}φ";
         root.Q<Label>("speedLabel").text = $"{targetAnimal.Stats.speed:0.0}";
         root.Q<Label>("distanceLabel").text = $"{targetAnimal.Stats.distanceTravelled:0.0}m";
 
+        var foodBar = root.Q<ProgressBar>("foodBar");
+        float foodPercent = targetAnimal.Stats.foodLevel * 100 / targetAnimal.Species.maxFoodLevel;
+        foodBar.value = foodPercent;
+        foodBar.title = $"Food: {foodPercent:0}%";
+        if (foodPercent < 20)
+        {
+            foodBar.AddToClassList("stats-bar-danger");
+            foodBar.RemoveFromClassList("stats-bar-warning");
+            foodBar.RemoveFromClassList("stats-bar-good");
+        }
+        else if (foodPercent < 40)
+        {
+            foodBar.AddToClassList("stats-bar-warning");
+            foodBar.RemoveFromClassList("stats-bar-good");
+            foodBar.RemoveFromClassList("stats-bar-danger");
+        }
+        else
+        {
+            foodBar.AddToClassList("stats-bar-good");
+            foodBar.RemoveFromClassList("stats-bar-danger");
+            foodBar.RemoveFromClassList("stats-bar-warning");
+        }
+
+        var healthBar = root.Q<ProgressBar>("healthBar");
+        float healthPercent = targetAnimal.Stats.health * 100 / targetAnimal.Species.maxHealth;
+        healthBar.value = healthPercent;
+        healthBar.title = $"Health: {healthPercent:0}%";
+        if (healthPercent < 25)
+        {
+            healthBar.AddToClassList("stats-bar-danger");
+            healthBar.RemoveFromClassList("stats-bar-warning");
+            healthBar.RemoveFromClassList("stats-bar-good");
+        }
+        else if(healthPercent < 60)
+        {
+            healthBar.AddToClassList("stats-bar-warning");
+            healthBar.RemoveFromClassList("stats-bar-good");
+            healthBar.RemoveFromClassList("stats-bar-danger");
+        }
+        else
+        {
+            healthBar.AddToClassList("stats-bar-good");
+            healthBar.RemoveFromClassList("stats-bar-danger");
+            healthBar.RemoveFromClassList("stats-bar-warning");
+        }
+        
+        // Age bar
+            var ageBar = root.Q<ProgressBar>("ageBar");
+        string ageText = DayNightCycleController.Instance.DurationToString(targetAnimal.Stats.age);
+        ageBar.lowValue = 0;
+        ageBar.highValue = targetAnimal.Species.lifespanSeconds;
+        ageBar.value = Mathf.Min(targetAnimal.Stats.age, targetAnimal.Species.lifespanSeconds);
+        ageBar.title = $"Age: {ageText}";
+
+        if (targetAnimal.Stats.age <= targetAnimal.Species.maturityAgeSeconds)
+        {
+            ageBar.AddToClassList("age-bar-juvenile");
+            ageBar.RemoveFromClassList("age-bar-old");
+            ageBar.RemoveFromClassList("age-bar-adult");
+        }
+        else if (targetAnimal.Stats.age >= targetAnimal.Species.oldAgeSeconds)
+        {
+            ageBar.AddToClassList("age-bar-old");
+            ageBar.RemoveFromClassList("age-bar-adult");
+            ageBar.RemoveFromClassList("age-bar-juvenile");
+        }
+        else
+        {
+            ageBar.AddToClassList("age-bar-adult");
+            ageBar.RemoveFromClassList("age-bar-old");
+            ageBar.RemoveFromClassList("age-bar-juvenile");
+        }
+        
+
         // Buffs
-        var buffsList = root.Q<ListView>("buffsListView");
+            var buffsList = root.Q<ListView>("buffsListView");
         buffsList.itemsSource = targetAnimal.Buffs;
         buffsList.makeItem = () => new Label();
         buffsList.bindItem = (element, i) =>
