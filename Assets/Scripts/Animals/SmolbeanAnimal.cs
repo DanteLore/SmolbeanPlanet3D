@@ -23,8 +23,9 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     private readonly List<BuffInstance> buffs = new();
     private readonly HashSet<string> buffNamesHash = new();
-    public List<BuffInstance> Buffs { get { return buffs; } } 
+    public List<BuffInstance> Buffs { get { return buffs; } }
 
+    private Transform transformCached;
     protected Animator animator;
     protected NavMeshAgent navAgent;
     protected SoundPlayer soundPlayer;
@@ -43,18 +44,25 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public EventHandler ThoughtsChanged;
     private Vector3 lastPosition;
+    private float currentSpeed;
+    private float currentScale;
+    private readonly List<BuffInstance> newBuffs = new(capacity: 50);
 
     protected virtual void Start()
     {
+        transformCached = transform;
         animator = GetComponentInChildren<Animator>();
         soundPlayer = GetComponent<SoundPlayer>();
         navAgent = GetComponent<NavMeshAgent>();
         navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
-        body = transform.Find("Body").gameObject;
+        body = transformCached.Find("Body").gameObject;
 
         Inventory = new Inventory();
         StateMachine = new StateMachine(shouldLog: false);
-        lastPosition = transform.position;
+        lastPosition = transformCached.position;
+
+        currentSpeed = navAgent.speed;
+        currentScale = 1.0f;
     }
 
     protected virtual void Update()
@@ -102,11 +110,12 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     protected virtual void UpdateStats()
     {
         // Update tracker style stats
-        float dd = (lastPosition - transform.position).sqrMagnitude;
+        var pos = transformCached.position;
+        float dd = (lastPosition - pos).sqrMagnitude;
         if (dd > 1)
         {
             stats.distanceTravelled += Mathf.Sqrt(dd);
-            lastPosition = transform.position;
+            lastPosition = pos;
         }
 
         // Apply the buffs
@@ -117,12 +126,18 @@ public abstract class SmolbeanAnimal : MonoBehaviour
             Die();
 
         // Did we grow/shrink?
-        float s = stats.scale;
-        transform.localScale = new Vector3(s, s, s);
+        if (stats.scale != currentScale)
+        {
+            transformCached.localScale = new Vector3(currentScale, currentScale, currentScale);
+            currentScale = stats.scale;
+        }
 
         // Did our speed change?
-        if (navAgent.speed != stats.speed)
+        if (currentSpeed != stats.speed)
+        {
             navAgent.speed = stats.speed;
+            currentSpeed = stats.speed;
+        }
     }
 
     private void ApplyBuffs()
@@ -130,17 +145,22 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         BuffsCleanup();
 
         // Apply all the buffs and append any new ones when we're done
-        var newBuffs = new List<BuffInstance>();
+        newBuffs.Clear();
+
+        float dt = Time.deltaTime;
 
         foreach (var buff in buffs)
         {
-            newBuffs.AddRange(buff.ApplyTo(Stats, Species, Time.deltaTime));
+            buff.ApplyTo(Stats, Species, dt, newBuffs);
 
-            if (buff.GetThought(Stats, Time.deltaTime, out string thought))
+            if (buff.GetThought(Stats, dt, out string thought))
                 Think(thought);
         }
 
-        AddBuffs(newBuffs);
+        // Add the buffs
+        if(newBuffs.Count > 0)
+            foreach (var buff in newBuffs)
+                AddBuff(buff);
     }
 
     private void BuffsCleanup()
@@ -156,12 +176,6 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
             i--;
         }
-    }
-
-    private void AddBuffs(List<BuffInstance> newBuffs)
-    {
-        foreach (var buff in newBuffs)
-            AddBuff(buff);
     }
 
     private void AddBuff(BuffInstance buff)
@@ -182,11 +196,11 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     private IEnumerator DoDeathActivities()
     {
         yield return new WaitForEndOfFrame();
-        Instantiate(Species.deathParticleSystem, transform.position, Quaternion.Euler(0f, 0f, 0f));
+        Instantiate(Species.deathParticleSystem, transformCached.position, Quaternion.Euler(0f, 0f, 0f));
         
         // Only drop a steak if we didn't starve to death and aren't too old
         if(stats.foodLevel > Species.starvationThreshold && stats.age < Species.lifespanSeconds)
-            DropController.Instance.Drop(Species.dropSpec, transform.position);
+            DropController.Instance.Drop(Species.dropSpec, transformCached.position);
 
         yield return new WaitForEndOfFrame();
 
@@ -229,10 +243,10 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     {
         return new AnimalSaveData
         {
-            positionX = transform.position.x,
-            positionY = transform.position.y,
-            positionZ = transform.position.z,
-            rotationY = transform.rotation.eulerAngles.y,
+            positionX = transformCached.position.x,
+            positionY = transformCached.position.y,
+            positionZ = transformCached.position.z,
+            rotationY = transformCached.rotation.eulerAngles.y,
             speciesIndex = SpeciesIndex,
             prefabIndex = PrefabIndex,
             stats = stats,
@@ -253,7 +267,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public bool CloseEnoughTo(Vector3 dest, float destinationThreshold)
     {
-        var pos = transform.position;
+        var pos = transformCached.position;
 
         Vector2 v1 = new(pos.x,  pos.z);
         Vector2 v2 = new(dest.x, dest.z);
@@ -273,7 +287,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
             return CloseEnoughTo(target.transform.position, destinationThreshold);
 
         // If we do have a collider, measure the distance to the closest point on it!
-        var pos = transform.position;
+        var pos = transformCached.position;
         return Vector3.SqrMagnitude(pos - collider.ClosestPoint(pos)) <= destinationThreshold * destinationThreshold;
     }
 
@@ -281,7 +295,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     {
         stats.isSleeping = true;
         float y = GetComponentInChildren<Collider>().bounds.max.y * 1.1f;
-        var animalPosition = transform.position;
+        var animalPosition = transformCached.position;
         var p = new Vector3(animalPosition.x, y, animalPosition.z);
         sleepPs = Instantiate(Species.sleepParticleSystem, p, Quaternion.Euler(0f, 0f, 0f), transform);
     }
@@ -313,7 +327,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public void DropInventory()
     {
-        var pos = transform.position;
+        var pos = transformCached.position;
 
         while (!Inventory.IsEmpty())
         {

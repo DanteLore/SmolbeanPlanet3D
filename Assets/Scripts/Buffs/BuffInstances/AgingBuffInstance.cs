@@ -4,22 +4,20 @@ using UnityEngine;
 [System.Serializable]
 public class AgingBuffInstance : BuffInstance
 {
-    private AgingBuffSpec AgingBuffSpec { get { return (AgingBuffSpec)Spec; }}
-
-    public override IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta)
+    public override void ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta, List<BuffInstance> newBuffs)
     {
-        Debug.Assert(AgingBuffSpec != null, $"Buff spec not set for {this.GetType().Name}");
+        var agingBuffSpec = (AgingBuffSpec)Spec; // Cache for speed
 
-        stats.age += Time.deltaTime;
-        stats.timeOnIsland += Time.deltaTime;
+        stats.age += timeDelta;
+        stats.timeOnIsland += timeDelta;
 
-        float ageFactor = (stats.age < AgingBuffSpec.oldAgeSeconds) ? 0.0f : Mathf.InverseLerp(AgingBuffSpec.oldAgeSeconds, AgingBuffSpec.lifespanSeconds, stats.age);
+        float ageFactor = (stats.age < agingBuffSpec.oldAgeSeconds) ? 0.0f : Mathf.InverseLerp(agingBuffSpec.oldAgeSeconds, agingBuffSpec.lifespanSeconds, stats.age);
 
         // Juveniles are small
-        if (stats.age <= AgingBuffSpec.maturityAgeSeconds)
+        if (stats.age <= agingBuffSpec.maturityAgeSeconds)
         {
-            var x = Mathf.InverseLerp(0f, AgingBuffSpec.maturityAgeSeconds, stats.age);
-            stats.scale = Mathf.Lerp(AgingBuffSpec.juvenileScale, 1f, x);
+            var x = Mathf.InverseLerp(0f, agingBuffSpec.maturityAgeSeconds, stats.age);
+            stats.scale = Mathf.Lerp(agingBuffSpec.juvenileScale, 1f, x);
         }
         else
         {
@@ -27,19 +25,16 @@ public class AgingBuffInstance : BuffInstance
         }
 
         // Decreasing health due to old age
-        float oldAgeHealthDetriment = AgingBuffSpec.oldAgeHealthImpactPerSecond * ageFactor * Time.deltaTime;
+        float oldAgeHealthDetriment = agingBuffSpec.oldAgeHealthImpactPerSecond * ageFactor * timeDelta;
         if (stats.isSleeping) // Less if sleeping!
-            oldAgeHealthDetriment *= AgingBuffSpec.sleepingHealthDecreaseMultiplier;
+            oldAgeHealthDetriment *= agingBuffSpec.sleepingHealthDecreaseMultiplier;
         stats.health -= oldAgeHealthDetriment;
 
         // Catch a disease or two
-        var newBuffs = new List<BuffInstance>();
-        foreach (var ds in AgingBuffSpec.diseases)
+        foreach (var ds in agingBuffSpec.diseases)
         {
-            if(ds.CheckStart(stats, species, timeDelta))
+            if (ds.CheckStart(stats, species, timeDelta))
                 newBuffs.Add(ds.GetBuff());
         }
-
-        return newBuffs;
     }
 }

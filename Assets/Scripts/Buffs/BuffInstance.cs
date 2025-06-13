@@ -25,13 +25,17 @@ public abstract class BuffInstance
         }
     }
 
-    public abstract IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta);
+    public abstract void ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta, List<BuffInstance> newBuffs);
 
     public virtual bool GetThought(AnimalStats stats, float timeDelta, out string thought)
     {
-        if (Spec.thoughts.Length > 0)
+        var thoughts = Spec.thoughts;
+        int count = thoughts.Length;
+
+        if (count != 0)
         {
-            var thoughtRow = Spec.thoughts[Random.Range(0, Spec.thoughts.Length - 1)];
+            int idx = Random.Range(0, count);
+            var thoughtRow = thoughts[idx];
 
             // OK, OK, this means the probability is actually lower than the configured value... but YOLO
             float p = 1 / thoughtRow.probabilitySeconds * timeDelta;

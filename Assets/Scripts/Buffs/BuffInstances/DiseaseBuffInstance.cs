@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -8,18 +7,16 @@ public class DiseaseBuffInstance : BuffInstance
     public float timeRemaining;
     public bool speedUpdated;
 
-    private DiseaseBuffSpec DiseaseBuffSpec { get { return (DiseaseBuffSpec)Spec; } }
-
     public DiseaseBuffInstance(float duration)
     {
         timeRemaining = duration;
     }
 
-    public override IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta)
+    public override void ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta, List<BuffInstance> newBuffs)
     {
-        Debug.Assert(DiseaseBuffSpec != null, $"Buff spec not set for {this.GetType().Name}");
+        var diseaseBuffSpec = (DiseaseBuffSpec)Spec;
 
-        if (!DiseaseBuffSpec.isPermanent)
+        if (!diseaseBuffSpec.isPermanent)
         {
             // Since we might get serialised and rehydrated, we can't store the start time 
             // Need to keep track of time remaining independently
@@ -27,22 +24,20 @@ public class DiseaseBuffInstance : BuffInstance
             if (timeRemaining <= 0)
             {
                 // Disease expired.  Reset altered stats
-                stats.speed /= DiseaseBuffSpec.speedMultiplierOneOff;
+                stats.speed /= diseaseBuffSpec.speedMultiplierOneOff;
 
                 isExpired = true;
-                return Enumerable.Empty<BuffInstance>();
+                return;
             }
         }
 
-        stats.health = Mathf.Max(0f, stats.health - DiseaseBuffSpec.healthDecreasePerSecond * timeDelta);
-        stats.foodLevel = Mathf.Max(0f, stats.foodLevel - DiseaseBuffSpec.foodDecreasePerSecond * timeDelta);
+        stats.health = Mathf.Max(0f, stats.health - diseaseBuffSpec.healthDecreasePerSecond * timeDelta);
+        stats.foodLevel = Mathf.Max(0f, stats.foodLevel - diseaseBuffSpec.foodDecreasePerSecond * timeDelta);
 
         if (!speedUpdated)
         {
-            stats.speed *= DiseaseBuffSpec.speedMultiplierOneOff;
+            stats.speed *= diseaseBuffSpec.speedMultiplierOneOff;
             speedUpdated = true;
         }
-
-        return Enumerable.Empty<BuffInstance>();
     }
 }

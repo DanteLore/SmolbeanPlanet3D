@@ -15,6 +15,5 @@ public abstract class BuffSpec : ScriptableObject
     public string symbol;
     public BuffThoughtConfigRow[] thoughts;
 
-
     public abstract BuffInstance GetBuff();
 }

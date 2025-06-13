@@ -5,36 +5,32 @@ using UnityEngine;
 [System.Serializable]
 public class DigestionBuffInstance : BuffInstance
 {
-    private DigestionBuffSpec DigestionBuffSpec { get { return (DigestionBuffSpec)Spec; }}
-
-    public override IEnumerable<BuffInstance> ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta)
+    public override void ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta, List<BuffInstance> newBuffs)
     {
-        Debug.Assert(DigestionBuffSpec != null, $"Buff spec not set for {this.GetType().Name}");
+        var digestionBuffSpec = (DigestionBuffSpec)Spec; // Cache for speed
 
-        float foodDelta = DigestionBuffSpec.foodDigestedPerSecond * Time.deltaTime;
+        float foodDelta = digestionBuffSpec.foodDigestedPerSecond * timeDelta;
 
         if (stats.isSleeping) // Less if sleeping!
-            foodDelta *= DigestionBuffSpec.sleepingDigestionMultiplier;
+            foodDelta *= digestionBuffSpec.sleepingDigestionMultiplier;
 
         stats.foodLevel = Mathf.Max(0f, stats.foodLevel - foodDelta);
 
-        if (stats.foodLevel <= DigestionBuffSpec.starvationThreshold)
+        if (stats.foodLevel <= digestionBuffSpec.starvationThreshold)
         {
             // Health decrease due to starvation
-            float healthDelta = DigestionBuffSpec.starvationRatePerSecond * Time.deltaTime;
-            healthDelta *= 1f - Mathf.InverseLerp(0f, b: DigestionBuffSpec.starvationThreshold, stats.foodLevel);
+            float healthDelta = digestionBuffSpec.starvationRatePerSecond * timeDelta;
+            healthDelta *= 1f - Mathf.InverseLerp(0f, b: digestionBuffSpec.starvationThreshold, stats.foodLevel);
             if (stats.isSleeping) // Less if sleeping!
-                healthDelta *= DigestionBuffSpec.sleepingHealthDecreaseMultiplier;
+                healthDelta *= digestionBuffSpec.sleepingHealthDecreaseMultiplier;
             stats.health -= healthDelta;
         }
         else
         {
             // Health recover with a full stomach
-            float healthDelta = DigestionBuffSpec.healthRecoveryPerSecond * Time.deltaTime;
-            healthDelta *= Mathf.InverseLerp(DigestionBuffSpec.starvationThreshold, DigestionBuffSpec.maxFoodLevel, stats.foodLevel);
-            stats.health = Mathf.Min(DigestionBuffSpec.maxHealth, stats.health + healthDelta);
+            float healthDelta = digestionBuffSpec.healthRecoveryPerSecond * timeDelta;
+            healthDelta *= Mathf.InverseLerp(digestionBuffSpec.starvationThreshold, digestionBuffSpec.maxFoodLevel, stats.foodLevel);
+            stats.health = Mathf.Min(digestionBuffSpec.maxHealth, stats.health + healthDelta);
         }
-
-        return Enumerable.Empty<BuffInstance>();
     }
 }
