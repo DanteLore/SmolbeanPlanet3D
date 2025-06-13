@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buffName: Digestion
   description: Turning food into life force!  Food is digested to increase health.
-  thumbnail: {fileID: 2800000, guid: 693fe1d4f22554065864af1642a067b0, type: 3}
   symbol: "\U0001F764"
-  foodDigestedPerSecond: 1
+  thoughts: []
+  foodDigestedPerSecond: 0.5
   starvationThreshold: 20
-  starvationRatePerSecond: 2
+  starvationRatePerSecond: 1
   healthRecoveryPerSecond: 4
   maxFoodLevel: 100
   maxHealth: 100

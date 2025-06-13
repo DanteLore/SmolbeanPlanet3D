@@ -151,7 +151,7 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
         building.transform.position = pos; // Need to do this to allow access to position on same frame
         building.PrefabIndex = saveData.prefabIndex;
         building.BuildingSpec = buildings[saveData.prefabIndex];
-        building.name = $"{buildings[saveData.prefabIndex].buildingName} ({worldPos.y}λ {worldPos.x}φ)";
+        building.name = $"{buildings[saveData.prefabIndex].buildingName} ({worldPos.x}λ {worldPos.y}φ)";
 
         building.LoadFrom(saveData);
 

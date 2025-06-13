@@ -23,9 +23,10 @@ MonoBehaviour:
     thought: Just not used to walking around like this
   - probabilitySeconds: 60
     thought: My legs are tired
-  probabilitySeconds: 1
+  probabilitySeconds: 120
   minAgeSeconds: 0
   maxAgeSeconds: 0
+  minTimeOnIslandSeconds: 720
   isPermanent: 0
   minDurationSeconds: 30
   maxDurationSeconds: 120

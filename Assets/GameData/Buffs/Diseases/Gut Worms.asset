@@ -21,14 +21,15 @@ MonoBehaviour:
     thought: I feel a bit sick...
   - probabilitySeconds: 60
     thought: There's a churning in my belly that doesn't feel right!
-  probabilitySeconds: 240
+  probabilitySeconds: 2400
   minAgeSeconds: 0
   maxAgeSeconds: 0
+  minTimeOnIslandSeconds: 0
   isPermanent: 0
   minDurationSeconds: 120
   maxDurationSeconds: 240
   healthDecreasePerSecond: 0
-  foodDecreasePerSecond: 2
+  foodDecreasePerSecond: 1.5
   speedMultiplierOneOff: 1
   oldAgeDiseaseChanceMultiplier: 1
   minDistanceTravelledPerDay: 0

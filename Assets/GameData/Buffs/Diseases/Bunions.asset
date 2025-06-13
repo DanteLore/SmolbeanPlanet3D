@@ -24,12 +24,13 @@ MonoBehaviour:
   probabilitySeconds: 11520
   minAgeSeconds: 1000
   maxAgeSeconds: 0
+  minTimeOnIslandSeconds: 0
   isPermanent: 1
   minDurationSeconds: 0
   maxDurationSeconds: 0
   healthDecreasePerSecond: 0
   foodDecreasePerSecond: 0
-  speedMultiplierOneOff: 0.5
-  oldAgeDiseaseChanceMultiplier: 2
+  speedMultiplierOneOff: 0.75
+  oldAgeDiseaseChanceMultiplier: 4
   minDistanceTravelledPerDay: 500
   maxDistanceTravelledPerDay: 0
