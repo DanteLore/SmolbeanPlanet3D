@@ -24,6 +24,10 @@
                     <ui:Label text="Location:" class="text-field-label" />
                     <ui:Label text="Label" name="positionLabel" class="text-field-value" />
                 </ui:VisualElement>
+                <ui:VisualElement class="text-field-row" style="flex-grow: 1;">
+                    <ui:Label text="Travelled:" class="text-field-label" />
+                    <ui:Label text="Label" name="distanceLabel" class="text-field-value" />
+                </ui:VisualElement>
                 <ui:VisualElement name="jobContainer" class="text-field-row" style="flex-grow: 1;">
                     <ui:Label text="Job:" class="text-field-label" />
                     <ui:VisualElement name="jobThumb" style="flex-grow: 1;" />

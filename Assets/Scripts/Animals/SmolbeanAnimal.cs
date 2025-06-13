@@ -42,6 +42,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public IEnumerable<Thought> Thoughts { get { return thoughts; } }
 
     public EventHandler ThoughtsChanged;
+    private Vector3 lastPosition;
 
     protected virtual void Start()
     {
@@ -53,6 +54,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
         Inventory = new Inventory();
         StateMachine = new StateMachine(shouldLog: false);
+        lastPosition = transform.position;
     }
 
     protected virtual void Update()
@@ -99,20 +101,16 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     protected virtual void UpdateStats()
     {
-        BuffsCleanup();
-
-        // Apply all the buffs and append any new ones when we're done
-        var newBuffs = new List<BuffInstance>();
-
-        foreach (var buff in buffs)
+        // Update tracker style stats
+        float dd = (lastPosition - transform.position).sqrMagnitude;
+        if (dd > 1)
         {
-            newBuffs.AddRange(buff.ApplyTo(Stats, Time.deltaTime));
-            
-            if (buff.GetThought(Stats, Time.deltaTime, out string thought))
-                Think(thought);
+            stats.distanceTravelled += Mathf.Sqrt(dd);
+            lastPosition = transform.position;
         }
 
-        AddBuffs(newBuffs);
+        // Apply the buffs
+        ApplyBuffs();
 
         // Did we die?
         if (stats.health <= 0)
@@ -125,6 +123,24 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         // Did our speed change?
         if (navAgent.speed != stats.speed)
             navAgent.speed = stats.speed;
+    }
+
+    private void ApplyBuffs()
+    {
+        BuffsCleanup();
+
+        // Apply all the buffs and append any new ones when we're done
+        var newBuffs = new List<BuffInstance>();
+
+        foreach (var buff in buffs)
+        {
+            newBuffs.AddRange(buff.ApplyTo(Stats, Time.deltaTime));
+
+            if (buff.GetThought(Stats, Time.deltaTime, out string thought))
+                Think(thought);
+        }
+
+        AddBuffs(newBuffs);
     }
 
     private void BuffsCleanup()

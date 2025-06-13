@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using UnityEngine.UIElements;
 using UnityEngine;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 
 public class AnimalDetailMenuController : SmolbeanMenu
 {
@@ -61,6 +60,7 @@ public class AnimalDetailMenuController : SmolbeanMenu
         var pos = gridManager.GetGameSquareFromWorldCoords(targetAnimal.transform.position);
         root.Q<Label>("positionLabel").text = $"{pos.x}λ x {pos.y}φ";
         root.Q<Label>("speedLabel").text = $"{targetAnimal.Stats.speed:0.0}";
+        root.Q<Label>("distanceLabel").text = $"{targetAnimal.Stats.distanceTravelled:0.0}m";
 
         // Buffs
         var buffsList = root.Q<ListView>("buffsListView");
