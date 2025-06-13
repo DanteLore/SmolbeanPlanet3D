@@ -31,5 +31,5 @@ MonoBehaviour:
   foodDecreasePerSecond: 0
   speedMultiplierOneOff: 0.5
   oldAgeDiseaseChanceMultiplier: 2
-  minDistanceTravelledPerDay: 200
+  minDistanceTravelledPerDay: 500
   maxDistanceTravelledPerDay: 0

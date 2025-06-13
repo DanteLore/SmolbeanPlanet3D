@@ -6,14 +6,15 @@ public class DiseaseBuffSpec : BuffSpec
     public float probabilitySeconds;
     public float minAgeSeconds;
     public float maxAgeSeconds;
+    public float minTimeOnIslandSeconds;
 
     public bool isPermanent;
     public float minDurationSeconds;
     public float maxDurationSeconds;
     public float healthDecreasePerSecond;
     public float foodDecreasePerSecond;
-    public float speedMultiplierOneOff;
-    public float oldAgeDiseaseChanceMultiplier;
+    public float speedMultiplierOneOff = 1.0f;
+    public float oldAgeDiseaseChanceMultiplier = 1.0f;
     public float minDistanceTravelledPerDay;
     public float maxDistanceTravelledPerDay;
 
@@ -26,6 +27,9 @@ public class DiseaseBuffSpec : BuffSpec
     public bool CheckStart(AnimalStats stats, AnimalSpec species, float timeDelta)
     {
         if (stats.age < minAgeSeconds || (stats.age > maxAgeSeconds && maxAgeSeconds != 0.0f))
+            return false;
+
+        if (stats.timeOnIsland < minTimeOnIslandSeconds)
             return false;
 
         float ageInDays = stats.timeOnIsland / DayNightCycleController.Instance.DayLengthSeconds;

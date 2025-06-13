@@ -15,6 +15,7 @@ MonoBehaviour:
   buffName: Aging
   description: Everyone gets old.  You're born, you grow, you get old and die.
   symbol: "\U0001F74E"
+  thoughts: []
   oldAgeSeconds: 7200
   lifespanSeconds: 11520
   oldAgeHealthImpactPerSecond: 0
@@ -24,3 +25,4 @@ MonoBehaviour:
   diseases:
   - {fileID: 11400000, guid: bef92d2cb1086459f8b0eab9cecc7353, type: 2}
   - {fileID: 11400000, guid: a880bf649fe9b434a9e6ba172731a624, type: 2}
+  - {fileID: 11400000, guid: 4dcd2345d78a745579bc515afbaca14a, type: 2}

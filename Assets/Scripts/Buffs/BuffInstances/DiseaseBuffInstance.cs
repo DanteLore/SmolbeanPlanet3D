@@ -7,7 +7,6 @@ public class DiseaseBuffInstance : BuffInstance
 {
     public float timeRemaining;
     public bool speedUpdated;
-    public float originalSpeed;
 
     private DiseaseBuffSpec DiseaseBuffSpec { get { return (DiseaseBuffSpec)Spec; } }
 
@@ -28,7 +27,7 @@ public class DiseaseBuffInstance : BuffInstance
             if (timeRemaining <= 0)
             {
                 // Disease expired.  Reset altered stats
-                stats.speed = originalSpeed;
+                stats.speed /= DiseaseBuffSpec.speedMultiplierOneOff;
 
                 isExpired = true;
                 return Enumerable.Empty<BuffInstance>();
@@ -40,7 +39,6 @@ public class DiseaseBuffInstance : BuffInstance
 
         if (!speedUpdated)
         {
-            originalSpeed = stats.speed; // Remember the original value
             stats.speed *= DiseaseBuffSpec.speedMultiplierOneOff;
             speedUpdated = true;
         }

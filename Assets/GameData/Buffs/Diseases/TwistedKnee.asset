@@ -24,9 +24,14 @@ MonoBehaviour:
   - probabilitySeconds: 60
     thought: I really need to watch my step in future
   probabilitySeconds: 1000
+  minAgeSeconds: 0
+  maxAgeSeconds: 0
   isPermanent: 0
   minDurationSeconds: 600
   maxDurationSeconds: 800
   healthDecreasePerSecond: 0
   foodDecreasePerSecond: 0
   speedMultiplierOneOff: 0.25
+  oldAgeDiseaseChanceMultiplier: 0
+  minDistanceTravelledPerDay: 500
+  maxDistanceTravelledPerDay: 0

@@ -22,9 +22,14 @@ MonoBehaviour:
   - probabilitySeconds: 60
     thought: There's a churning in my belly that doesn't feel right!
   probabilitySeconds: 240
+  minAgeSeconds: 0
+  maxAgeSeconds: 0
   isPermanent: 0
   minDurationSeconds: 120
   maxDurationSeconds: 240
   healthDecreasePerSecond: 0
   foodDecreasePerSecond: 2
-  speedMultiplierOneOff: 0
+  speedMultiplierOneOff: 1
+  oldAgeDiseaseChanceMultiplier: 1
+  minDistanceTravelledPerDay: 0
+  maxDistanceTravelledPerDay: 0
