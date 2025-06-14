@@ -32,7 +32,7 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     public float HourLengthSeconds { get => hourLengthSeconds; }
     public float DayLengthSeconds { get => hourLengthSeconds * 24; }
 
-    private static readonly StringBuilder stringBuilder = new StringBuilder(32);
+    private readonly StringBuilder stringBuilder = new(32);
 
     public string DisplayTimeAndDay
     {
