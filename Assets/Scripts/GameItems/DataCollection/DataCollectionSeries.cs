@@ -11,7 +11,7 @@ public abstract class DataCollectionSeries : MonoBehaviour
     public Color lineColor;
     public int maxSamples = 100000;
     
-    private readonly List<DataCollectionReading> readings = new();
+    private readonly List<DataCollectionReading> readings = new(1000);
     
     public IReadOnlyList<DataCollectionReading> Readings { get { return readings; } }
     public float MinValue { get; private set; } = float.MaxValue;
@@ -31,13 +31,16 @@ public abstract class DataCollectionSeries : MonoBehaviour
         if(value < MinValue)
             MinValue = value;
 
-        if(readings.Count == 0 || readings[^1].value != value)
+        if (readings.Count == 0 || readings[^1].value != value)
             readings.Add(new DataCollectionReading { startTime = time, endTime = time, value = value });
         else
             readings[^1].endTime = time;
 
         while(readings.Count > maxSamples)
             readings.RemoveAt(0);
+
+        if (readings.Capacity <= readings.Count) // Bump the capacity in big chunks
+            readings.Capacity = readings.Count + 1000;
 
         OnValuesChanged?.Invoke();
     }

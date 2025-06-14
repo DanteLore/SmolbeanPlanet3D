@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,7 +9,6 @@ public class GameSpeedControls : MonoBehaviour
     private Button speed3Button;
     private Button speed4Button;
     private Label timeLabel;
-    private Label dayLabel;
 
     void OnEnable()
     {

@@ -25,7 +25,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     public float mapOffsetX = -200f;
     public float mapOffsetY = -200f;
 
-    private Color[] data;
+    private Color32[] data;
     private int textureWidth;
     private int textureHeight;
 
@@ -63,13 +63,13 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
         for (int i = start; i < end; i++)
         {
-            var px = data[i];
+            Color px = data[i];
 
             if(px.r > 0f)
             {
                 float r = px.r - amount;
                 r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01
-                data[i].r = r;
+                data[i].r = (byte)(r * 255);
             }
         }
 
@@ -156,7 +156,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
                         float c = wearStrength * weight * blur;
                         float r = px.r + c; // Wear is on the RED channel
                         r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01?
-                        data[index].r = r;
+                        data[index].r = (byte)(r * 255);
                     }
                 }
             }
@@ -204,7 +204,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
     private void UpdateTexture()
     {
-        wearTexture.SetPixels(data);
+        wearTexture.SetPixels32(data);
         wearTexture.Apply();
     }
 
@@ -212,7 +212,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     {
         CancelInvoke(nameof(UpdateTexture));
 
-        data = wearTexture.GetPixels();
+        data = wearTexture.GetPixels32();
 
         for (int i = 0; i < data.Length; i++)
         {
@@ -236,7 +236,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
             }
         }
 
-        data = wearTexture.GetPixels();
+        data = wearTexture.GetPixels32();
 
         InvokeRepeating(nameof(UpdateTexture), 1.0f, textureUpdateDelay);
         yield return null;

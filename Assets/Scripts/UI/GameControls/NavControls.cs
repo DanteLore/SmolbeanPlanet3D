@@ -9,13 +9,14 @@ public class NavigationControls : MonoBehaviour
     public string groundLayer = "Ground";
     public string seaLayer = "Sea";
     public float rotationOffset = -48f;
+    public Camera mainCamera;
 
     private Label positionLabel;
     private Label directionLabel;
 
     private int groundLayerMask;
 
-    private static readonly StringBuilder stringBuilder = new StringBuilder(32);
+    private static readonly StringBuilder stringBuilder = new (32);
     
     void OnEnable()
     {
@@ -28,7 +29,7 @@ public class NavigationControls : MonoBehaviour
 
     void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out var hit, float.PositiveInfinity, groundLayerMask))
         {
             var pos = gridManager.GetGameSquareFromWorldCoords(hit.point);
@@ -44,7 +45,7 @@ public class NavigationControls : MonoBehaviour
             positionLabel.text = "";
         }
 
-        var cameraDirXZ = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up);
+        var cameraDirXZ = Vector3.ProjectOnPlane(mainCamera.transform.forward, Vector3.up);
         float heading = Vector3.SignedAngle(Vector3.forward, cameraDirXZ, Vector3.up);
         heading += rotationOffset;
         heading %= 360f;

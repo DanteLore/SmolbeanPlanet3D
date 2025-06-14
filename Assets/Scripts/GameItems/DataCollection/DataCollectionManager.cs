@@ -6,15 +6,15 @@ using UnityEngine;
 public class DataCollectionManager : MonoBehaviour, IObjectGenerator
 {
     public static DataCollectionManager Instance;
-    
+
     public int Priority { get { return 500; } }
     public bool RunModeOnly { get { return true; } }
 
-    public List<DataCollectionSeries> Series {get; private set; }
+    public List<DataCollectionSeries> Series { get; private set; }
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
             Destroy(this);
         else
             Instance = this;
@@ -22,7 +22,7 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
 
     public void Clear()
     {
-        StopCoroutine(nameof(FetchDataLoop));
+        CancelInvoke(nameof(FetchDataLoop));
 
         InitialiseSeries();
     }
@@ -31,7 +31,7 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
     {
         InitialiseSeries();
 
-        StartCoroutine(nameof(FetchDataLoop));
+        InvokeRepeating(nameof(FetchDataLoop), 1f, 1f);
 
         yield return null;
     }
@@ -47,12 +47,12 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
     {
         InitialiseSeries();
 
-        if(data.dataCollectionSeries != null)
+        if (data.dataCollectionSeries != null)
         {
-            foreach(var seriesData in data.dataCollectionSeries)
+            foreach (var seriesData in data.dataCollectionSeries)
             {
                 var series = Series.FirstOrDefault(s => s.seriesName == seriesData.seriesName);
-                if(series != null)
+                if (series != null)
                 {
                     series.LoadFrom(seriesData);
                 }
@@ -60,7 +60,7 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
             }
         }
 
-        StartCoroutine(nameof(FetchDataLoop));
+        InvokeRepeating(nameof(FetchDataLoop), 1f, 1f);
 
         yield return null;
     }
@@ -70,26 +70,12 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
         saveData.dataCollectionSeries = Series.Select(s => s.GetSaveData()).ToList();
     }
 
-    private IEnumerator FetchDataLoop()
+    private void FetchDataLoop()
     {
-        yield return new WaitForSeconds(1f);
-        Debug.Assert(Series.Count < 30, "Getting enough data collection series to need a new algo here!");
+        // Yeah yeah yeah... this is a weird way to store the time... I know... I know
+        float gameTime = DayNightCycleController.Instance.Day * 24 + DayNightCycleController.Instance.TimeOfDay;
 
-        while(true)
-        {
-            float startTime = Time.time;
-
-            // Yeah yeah yeah... this is a weird way to store the time... I know... I know
-            float gameTime = DayNightCycleController.Instance.Day * 24 + DayNightCycleController.Instance.TimeOfDay;
-
-            foreach(var series in Series)
-            {
-                series.AddValue(gameTime);
-                yield return null;
-            }
-            float timeElapsed =  Time.time - startTime;
-
-            yield return new WaitForSeconds(1f - timeElapsed);
-        }
+        for (int i = 0; i < Series.Count; i++)
+            Series[i].AddValue(gameTime);
     }
 }
