@@ -32,6 +32,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     protected AnimalStats stats;
     protected GameObject body;
     protected StateMachine StateMachine { get; private set; }
+    public string CurrentStateName { get => StateMachine.CurrentStateName; }
 
     public int SpeciesIndex { get; set; }
     public AnimalSpec Species { get; set; }

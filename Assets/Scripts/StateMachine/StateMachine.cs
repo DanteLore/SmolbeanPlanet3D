@@ -17,6 +17,8 @@ public class StateMachine
     private static readonly Transition[] EmptyTransitions = Array.Empty<Transition>();
     private IState startState;
 
+    public string CurrentStateName { get => currentState.GetType().Name; }
+
     private class Transition
     {
         public IState To { get; private set; }

@@ -131,10 +131,13 @@ public class AnimalDetailMenuController : SmolbeanMenu
             ageBar.RemoveFromClassList("age-bar-old");
             ageBar.RemoveFromClassList("age-bar-juvenile");
         }
-        
+
+        // TODO:  This should only be visible when the debugger is attached or whatever
+        var stateLabel = root.Q<Label>("stateLabel");
+        stateLabel.text = targetAnimal.CurrentStateName;
 
         // Buffs
-            var buffsList = root.Q<ListView>("buffsListView");
+        var buffsList = root.Q<ListView>("buffsListView");
         buffsList.itemsSource = targetAnimal.Buffs;
         buffsList.makeItem = () => new Label();
         buffsList.bindItem = (element, i) =>
