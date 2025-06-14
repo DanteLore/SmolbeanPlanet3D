@@ -56,6 +56,7 @@ public abstract class StaticResourceGatherer : ResourceGatherer
         AT(searchForResources,  idle,               NoTargetFound());
         AT(walkToResource,      harvestResource,    IsCloseEnoughToTarget());
         AT(harvestResource,     waitForTargetToDie, TargetIsDying());
+        AT(harvestResource,     waitForTargetToDie, TargetIsDead());
         AT(waitForTargetToDie,  searchForDrops,     TargetIsDead());
 
         AT(searchForDrops,  walkToDrop,      DropFound());

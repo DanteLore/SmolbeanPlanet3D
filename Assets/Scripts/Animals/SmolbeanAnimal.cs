@@ -48,9 +48,15 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     private float currentScale;
     private readonly List<BuffInstance> newBuffs = new(capacity: 50);
 
+    // Frame skipping stuff
+    private int updateEvery = 10;
+    private int updateFrameOffset;
+    private float dt = 0;
+
     private void Awake()
     {
         transformCached = transform;
+        updateFrameOffset = Random.Range(0, updateEvery);
     }
 
     protected virtual void Start()
@@ -71,14 +77,21 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     protected virtual void Update()
     {
-        if (!stats.isDead && !GameStateManager.Instance.IsPaused)
+        if (stats.isDead || GameStateManager.Instance.IsPaused)
+            return;
+
+        dt += Time.deltaTime;
+
+        if ((Time.frameCount + updateFrameOffset) % 10 == 0)
         {
-            UpdateStats();
+            UpdateStats(dt);
 
             if (stats.health <= 0f)
                 return;
 
             StateMachine.Tick();
+
+            dt = 0.0f;
         }
     }
 
@@ -111,7 +124,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public abstract void InitialiseStats(AnimalStats newStats = null);
 
-    protected virtual void UpdateStats()
+    protected virtual void UpdateStats(float dt)
     {
         // Update tracker style stats
         var pos = transformCached.position;
@@ -123,7 +136,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         }
 
         // Apply the buffs
-        ApplyBuffs();
+        ApplyBuffs(dt);
 
         // Did we die?
         if (stats.health <= 0)
@@ -144,14 +157,12 @@ public abstract class SmolbeanAnimal : MonoBehaviour
         }
     }
 
-    private void ApplyBuffs()
+    private void ApplyBuffs(float dt)
     {
         BuffsCleanup();
 
         // Apply all the buffs and append any new ones when we're done
         newBuffs.Clear();
-
-        float dt = Time.deltaTime;
 
         foreach (var buff in buffs)
         {

@@ -6,6 +6,7 @@ public class BuildBuildingState : IState
 {
     private Builder builder;
     private SoundPlayer soundPlayer;
+    private float lastUpdateTime;
 
     public BuildBuildingState(Builder builder, SoundPlayer soundPlayer)
     {
@@ -18,6 +19,7 @@ public class BuildBuildingState : IState
         builder.Hide();
         soundPlayer.Play("Working");
         builder.TargetBuilding.StartBuild();
+        lastUpdateTime = Time.time;
     }
 
     public void OnExit()
@@ -30,10 +32,15 @@ public class BuildBuildingState : IState
             soundPlayer.Play("Thud");
             builder.TargetBuilding.EndBuild();
         }
-    }
+    }  
 
     public void Tick()
     {
-        builder.TargetBuilding.DoBuild(Time.deltaTime);
+        // Can't use Time.deltaTime as we might not be called every frame
+        float t = Time.time;
+        float dt = t - lastUpdateTime;
+        lastUpdateTime = t;
+
+        builder.TargetBuilding.DoBuild(dt);
     }
 }

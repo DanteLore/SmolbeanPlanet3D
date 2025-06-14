@@ -4,6 +4,7 @@ public class FarmerHarvestState : IState
 {
     private Farmer farmer;
     private Animator animator;
+    private float lastUpdateTime;
 
     public bool NoGrassLeft { get; private set; }
 
@@ -16,6 +17,7 @@ public class FarmerHarvestState : IState
     public void OnEnter()
     {
         NoGrassLeft = false;
+        lastUpdateTime = Time.time;
     }
 
     public void OnExit()
@@ -31,10 +33,15 @@ public class FarmerHarvestState : IState
         if (available <= 1f)
         {
             NoGrassLeft = true;
-        }
+        }  
         else
         {
-            float harvestAmount = Mathf.Min(20f * Time.deltaTime, available);
+            // Can't use Time.deltaTime as we might not be called every frame
+            float t = Time.time;
+            float dt = t - lastUpdateTime;
+            lastUpdateTime = t;
+
+            float harvestAmount = Mathf.Min(20f * dt, available);
             farmer.grassHarvested += harvestAmount;
             GroundWearManager.Instance.RegisterHarvest(pos, harvestAmount, wearRadius: 2f);
         }
