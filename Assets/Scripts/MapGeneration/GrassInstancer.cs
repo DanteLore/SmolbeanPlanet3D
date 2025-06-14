@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using UnityEngine.Profiling;
 using System.Collections;
 
 public class GrassInstancer : MonoBehaviour, IObjectGenerator
@@ -48,18 +47,25 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     private GridManager gridManager;
     private float renderThresholdSqr;
 
+    private Plane[] planes = new Plane[6];
+    private Vector3 lastCamPos;
+    private Quaternion lastCamRot;
+    private Transform cameraTransform;
+
     void Update()
     {
-        var planes = GeometryUtility.CalculateFrustumPlanes(mainCamera);
-        var cameraPos = mainCamera.transform.position;
-
-        foreach(var batch in batches)
+        if (cameraTransform.position != lastCamPos || cameraTransform.rotation != lastCamRot)
         {
-            Vector3 p = batch.bounds.ClosestPoint(cameraPos);
-
-            if(Vector3.SqrMagnitude(p - cameraPos) < renderThresholdSqr && GeometryUtility.TestPlanesAABB(planes, batch.bounds))
+            GeometryUtility.CalculateFrustumPlanes(mainCamera, planes);
+            lastCamPos = cameraTransform.position;
+            lastCamRot = cameraTransform.rotation;
+        }
+        
+        foreach (var batch in batches)
+        {
+            if (batch.bounds.SqrDistance(lastCamPos) < renderThresholdSqr && GeometryUtility.TestPlanesAABB(planes, batch.bounds))
             {
-                for(int i = 0; i < mesh.subMeshCount; i++)
+                for (int i = 0; i < mesh.subMeshCount; i++)
                 {
                     Graphics.DrawMeshInstanced(mesh, i, material, batch.batchData, null, UnityEngine.Rendering.ShadowCastingMode.Off, true);
                 }
@@ -71,6 +77,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     {
         gridManager = FindFirstObjectByType<GridManager>();
         renderThresholdSqr = renderThreshold * renderThreshold;
+        cameraTransform = mainCamera.transform;
         StartCoroutine(GenerateGrass());
     }
 
