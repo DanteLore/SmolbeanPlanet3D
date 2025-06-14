@@ -25,6 +25,8 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     private readonly HashSet<string> buffNamesHash = new();
     public List<BuffInstance> Buffs { get { return buffs; } }
 
+    public event Action<SmolbeanAnimal> OnDeath;
+
     public Transform transformCached;
     protected Animator animator;
     protected NavMeshAgent navAgent;
@@ -206,6 +208,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     protected virtual void Die()
     {
         stats.isDead = true;
+        OnDeath?.Invoke(this);
         StartCoroutine(DoDeathActivities());
     }
 

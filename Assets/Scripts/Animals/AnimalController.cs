@@ -22,12 +22,20 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
     public string natureLayer = "Nature";
     public int animalsToAddPerFrame = 10;
 
-    void Awake()
+    private readonly Dictionary<AnimalSpec, int> animalCounts = new();
+
+    private void Awake()
     {
         if (Instance != null && Instance != this)
             Destroy(gameObject);
         else
             Instance = this;
+    }
+
+    private void Start()
+    {
+        foreach (var species in animalSpecs)
+            animalCounts.Add(species, 0);
     }
 
     public void Clear()
@@ -103,7 +111,7 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
 
     public SmolbeanAnimal CreateAnimal(AnimalSpec species, Vector3 pos)
     {
-        var animalData = GenerateAnimalData(pos, species);
+        var animalData = GenerateAnimalData(pos, species); 
         if(species.birthParticleSystem)
             Instantiate(species.birthParticleSystem, pos, Quaternion.identity);
         return InstantiateAnimal(animalData);
@@ -123,6 +131,10 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         animal.Target = pos;
         animal.Species = spec;
         animal.LoadFrom(saveData);
+
+        // Track animal counts
+        animalCounts[animal.Species]++;
+        animal.OnDeath += a => animalCounts[a.Species]--;
 
         return animal;
     }
@@ -187,15 +199,18 @@ public class AnimalController : MonoBehaviour, IObjectGenerator
         return null;
     }
 
-    private readonly List<SmolbeanAnimal> animalBuffer = new(1024);
+    //private readonly List<SmolbeanAnimal> animalBuffer = new(1024);
     public int AnimalCount(AnimalSpec species)
     {
+        /*
         int count = 0;
         GetComponentsInChildren(animalBuffer);
         for (int i = 0; i < animalBuffer.Count; i++)
             if (animalBuffer[i].Species == species)
                 count++;
         return count;
+        */
+        return animalCounts[species];
     }
 
     public int AnimalCount()
