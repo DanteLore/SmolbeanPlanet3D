@@ -121,7 +121,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 6200793219370659342}
   dropPoint: {fileID: 994635214203006297}
   wearPattern: 0
-  wearScale: {x: 0, y: 0}
+  wearScale: {x: 0.95, y: 0.95}
   building: {fileID: 1763273691322613492}
   itemDropRadius: 2
   itemDropHeight: 1
