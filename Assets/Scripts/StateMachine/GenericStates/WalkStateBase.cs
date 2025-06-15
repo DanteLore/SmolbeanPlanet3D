@@ -11,7 +11,7 @@ public abstract class WalkStateBase : IState
     private float lastMoved;
     private float originalAnimatorSpeed;
     protected bool navAgentResetEnabled = true;
-    protected float destSetAt;
+    protected float destConfirmedAt;
       
     public float StuckTime { get { return Time.time - lastMoved; } }
     public bool IsStuck { get; set; }
@@ -30,7 +30,7 @@ public abstract class WalkStateBase : IState
     {
         navAgent.SetDestination(GetDestination());
         navAgent.isStopped = false;
-        destSetAt = Time.time;
+        destConfirmedAt = Time.time;
 
         lastPosition = animal.transformCached.position;
         lastMoved = Time.time;
@@ -73,25 +73,25 @@ public abstract class WalkStateBase : IState
             return;
         }
 
-        if(time - destSetAt > 1f)
+        // Confirm our destination is still valid every second
+        if (time - destConfirmedAt > 1f)
         {
             // This might happen if the destination has moved, for example if a building was rotated
+            // Note:  Ignore Y coord, as it doesn't make a difference for navigation
             Vector3 dest = GetDestination();
-            if (navAgent.destination != dest)
-            {
+            if (navAgent.destination.x != dest.x || navAgent.destination.z != dest.z)
                 navAgent.SetDestination(dest);
-                destSetAt = time;
-            }
+            destConfirmedAt = time;
         }
 
         // Start walking
         if (animator != null)
+        {
             animator.SetBool("IsWalking", true);
+            animator.speed = Mathf.InverseLerp(0f, navAgent.speed, navAgent.velocity.magnitude);
+        }
 
         var pos = animal.transformCached.position;
-
-        if(animator != null && navAgent != null)
-            animator.speed = Mathf.InverseLerp(0f, navAgent.speed, navAgent.velocity.magnitude);
 
         if (Vector3.SqrMagnitude(lastPosition - pos) > 1f)
         {
@@ -100,7 +100,7 @@ public abstract class WalkStateBase : IState
             IsStuck = false;
         }
 
-        if(time - lastMoved > 1f && time - destSetAt > 2f && !IsStuck)
+        if(time - lastMoved > 1f && time - destConfirmedAt > 2f && !IsStuck)
         {
             IsStuck = true;
             OnStuck();
