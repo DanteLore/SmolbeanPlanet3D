@@ -11,7 +11,7 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
-## The Stone Cirle
+## The Stone Circle
 
 As part of the next big update, I've added the stone circle.  This is intended to be a place where 
 the player can transform resources into Mana - a new game concept I haven't created yet!
