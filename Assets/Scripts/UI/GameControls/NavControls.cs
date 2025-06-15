@@ -4,7 +4,6 @@ using UnityEngine.UIElements;
 
 public class NavigationControls : MonoBehaviour
 {
-    public GameObject cameraPositionObject;
     public GridManager gridManager;
     public string groundLayer = "Ground";
     public string seaLayer = "Sea";

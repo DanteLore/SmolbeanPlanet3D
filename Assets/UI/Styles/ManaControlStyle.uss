@@ -1,0 +1,20 @@
+Label {
+    transition: all 2s ease;
+}
+
+.glow Label {
+    color:rgb(255, 225, 0);
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+    scale: 1.25;
+}
+Label {
+    transition: all 2s ease;
+}
+
+#gameInfoControlsContainer {
+    transition: all 1s ease;
+}
+
+#gameInfoControlsContainer.glow {
+    background-color: rgba(0, 0, 0, 0.9);
+}

@@ -1,5 +1,3 @@
-using UnityEngine;
-
-public class StoneCircle : FactoryBuilding
+public class StoneCircle : SmolbeanBuilding
 {
 }
