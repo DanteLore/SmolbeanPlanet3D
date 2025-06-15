@@ -11,6 +11,18 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## The Stone Cirle
+
+As part of the next big update, I've added the stone circle.  This is intended to be a place where 
+the player can transform resources into Mana - a new game concept I haven't created yet!
+
+![Screenshot](./Docs/Images/screenshot78.png)
+
+The stone circle is a very large building, capped at one per island.  It will have some kind of \
+priest working in it eventually.
+
+![Screenshot](./Docs/Images/screenshot79.png)
+
 ## Buffy the Dodo slayer
 
 Added a Buff system.  Rather than having a massive messy function to update animal stats each frame, each animal (including colonists) now have a list of Buffs - which control everything from aging and digestion to 
