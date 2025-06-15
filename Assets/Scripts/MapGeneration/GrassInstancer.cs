@@ -7,7 +7,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 {
     private class Batch
     {
-        public List<Matrix4x4> batchData = new ();
+        public List<Matrix4x4> batchData = new();
         public Bounds bounds;
     }
 
@@ -60,7 +60,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
             lastCamPos = cameraTransform.position;
             lastCamRot = cameraTransform.rotation;
         }
-        
+
         foreach (var batch in batches)
         {
             if (batch.bounds.SqrDistance(lastCamPos) < renderThresholdSqr && GeometryUtility.TestPlanesAABB(planes, batch.bounds))
@@ -159,11 +159,11 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         var result = new List<Batch>();
         int grassCount = grassBlades.Count;
 
-        if(grassCount <= BATCH_SIZE && grassCount >= minBatchSize)
+        if (grassCount <= BATCH_SIZE && grassCount >= minBatchSize)
         {
             result.Add(CreateBatch(bounds, grassBlades));
         }
-        else if(grassCount <= minInstancesForSplit)
+        else if (grassCount <= minInstancesForSplit)
         {
             // Splitting would cause unacceptably small child batches - better to just dump the extra grass
             result.Add(CreateBatch(bounds, grassBlades.Take(BATCH_SIZE)));
@@ -172,10 +172,10 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         {
             var splitBatches = splitHorizontal ? SplitBounds(bounds, 2, 1) : SplitBounds(bounds, 1, 2);
 
-            foreach(var splitBatch in splitBatches)
+            foreach (var splitBatch in splitBatches)
             {
                 var quadGrass = grassBlades.Where(g => splitBatch.Contains(g)).ToList();
-                if(quadGrass.Count >= minBatchSize)
+                if (quadGrass.Count >= minBatchSize)
                 {
                     var childBatches = CreateBatchesBinarySplit(splitBatch, quadGrass, !splitHorizontal);
                     result.AddRange(childBatches);
@@ -221,11 +221,11 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
         float noise = groundTextureData[texY * wearTexture.width + texX].g;
         noise = grassWeightCurve.Evaluate(noise);
-        
-        if (Random.Range(0.0f, 1.0f) > noise) 
-            return false; 
 
-        Ray ray = new (new Vector3(posX, 10000f, posZ), Vector3.down);
+        if (Random.Range(0.0f, 1.0f) > noise)
+            return false;
+
+        Ray ray = new(new Vector3(posX, 10000f, posZ), Vector3.down);
         if (!Physics.Raycast(ray, out var groundHit, float.PositiveInfinity, groundLayerMask))
             return false;
 
@@ -272,7 +272,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
                     subMin + 0.5f * (subMax - subMin),
                     subMax - subMin
                 );
-                
+
                 yield return subBounds;
             }
         }

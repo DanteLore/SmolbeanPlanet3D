@@ -24,6 +24,9 @@ public abstract class FactoryBuilding : SmolbeanBuilding
         deliveryRequests = new List<DeliveryRequest>();
 
         InvokeRepeating(nameof(UpdateDeliveryRequests), 1.0f, 0.5f);
+        
+        if (recipe == null)
+            Debug.Log("No recipe set for factopry building");
     }
 
     private void UpdateDeliveryRequests()
@@ -34,10 +37,13 @@ public abstract class FactoryBuilding : SmolbeanBuilding
 
     private void RequestIngedients()
     {
+        if (recipe == null)
+            return;
+
         foreach (var ingredient in recipe.ingredients)
         {
             // If we don't have enough of the resource in the inventory
-            if(!Inventory.Contains(ingredient.item, ingredient.quantity))
+            if (!Inventory.Contains(ingredient.item, ingredient.quantity))
             {
                 OrderMaterials(ingredient);
             }

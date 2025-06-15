@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 828b6cfd66e994add93c56b51850a787, type: 3}
+  m_Name: StoneCircleSpec
+  m_EditorClassIdentifier: 
+  buildingName: Stone Circle
+  prefab: {fileID: 1282558216980634576, guid: 4e61e3e9a4e8045d7b2370a19f56c6d1, type: 3}
+  sitePrefab: {fileID: 6115743314038843104, guid: 0af61dd21b9e34a08814ff8289a34213, type: 3}
+  thumbnail: {fileID: 2800000, guid: fdf09b0a23b644018925d0d0ee1e1072, type: 3}
+  siteThumbnail: {fileID: 2800000, guid: 5b19e04c048e44240b58658e5885a7e8, type: 3}
+  instantBuild: 0
+  ingredients:
+  - item: {fileID: 11400000, guid: 0f9b0f898ed5a495aab57be747c4a3ac, type: 2}
+    quantity: 10
+  buildTime: 60
+  showInToolbar: 1
+  deleteAllowed: 1
+  jobSpecs: []
