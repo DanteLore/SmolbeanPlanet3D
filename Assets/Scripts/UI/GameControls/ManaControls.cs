@@ -50,7 +50,7 @@ public class ManaControls : MonoBehaviour
         }
         else
         {
-            stringBuilder.AppendFormat("{0:F1}", mana / 1000 * 1000);
+            stringBuilder.AppendFormat("{0:F1}", mana / 1000000);
             stringBuilder.Append("M");
         }
 
