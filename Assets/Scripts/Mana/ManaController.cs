@@ -14,14 +14,19 @@ public class ManaController : MonoBehaviour, IObjectGenerator
     public Action<float> OnManaChanged;
     public float startingMana = 1000f;
     private float mana;
+    private SoundPlayer soundPlayer;
 
     public float Mana
     {
         get => mana;
         private set
         {
-            mana = value;
-            OnManaChanged?.Invoke(mana);
+            if (mana != value)
+            {
+                mana = value;
+                soundPlayer.PlayOneShot("Magic1");
+                OnManaChanged?.Invoke(mana);
+            }
         }
     }
 
@@ -53,6 +58,11 @@ public class ManaController : MonoBehaviour, IObjectGenerator
             Destroy(this);
         else
             Instance = this;
+    }
+
+    private void Start()
+    {
+        soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
     }
 
     void Update()
