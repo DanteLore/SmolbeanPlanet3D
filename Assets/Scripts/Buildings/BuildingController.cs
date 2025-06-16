@@ -13,6 +13,7 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
     public static BuildingController Instance;
     private GridManager gridManager;
     public string groundLayer = "Ground";
+    public Action<SmolbeanBuilding> OnBuildingAdded;
 
     public ParticleSystem buildingDeletedParticleSystem;
 
@@ -26,9 +27,31 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
         }
     }
 
+    public IEnumerable<BuildingSpec> BuildableBuildings
+    {
+        get
+        {
+            return buildings.Where(b => b.showInToolbar && !MaxBuildingsReached(b));
+        }
+    }
+
+    private bool MaxBuildingsReached(BuildingSpec spec)
+    {
+        if (spec.maxCount == 0)
+            return false;
+
+        var bs = GetBuildingsWithSpec(spec).ToArray();
+        return bs.Length >= spec.maxCount;
+    }
+
     public IEnumerable<T> GetBuildingsOfType<T>() where T : SmolbeanBuilding
     {
         return GetComponentsInChildren<T>();
+    }
+
+    public IEnumerable<SmolbeanBuilding> GetBuildingsWithSpec(BuildingSpec spec)
+    {
+        return GetComponentsInChildren<SmolbeanBuilding>().Where(b => b.BuildingSpec == spec);
     }
 
     public IEnumerable<SmolbeanHome> GetAllHomes()
@@ -82,7 +105,9 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
 
     public SmolbeanBuilding PlaceBuilding(Vector3 pos, float rotationY, BuildingSpec spec)
     {
-        return PlaceBuilding(pos, rotationY, Array.IndexOf(buildings, spec));
+        var nb = PlaceBuilding(pos, rotationY, Array.IndexOf(buildings, spec));
+        OnBuildingAdded?.Invoke(nb);
+        return nb;
     }
 
     public SmolbeanBuilding PlaceBuilding(Vector3 pos, float rotationY, int selectedBuildingIndex)

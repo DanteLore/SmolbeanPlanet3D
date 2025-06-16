@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.Linq;
 
 public class BuildToolbarController : MonoBehaviour
 {
@@ -12,17 +11,33 @@ public class BuildToolbarController : MonoBehaviour
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
         document = GetComponent<UIDocument>();
-        
+
         var mainMenuButton = document.rootVisualElement.Q<Button>("mainToolbarButton");
         mainMenuButton.clicked += MainMenuButtonClicked;
-        
+        BuildingController.Instance.OnBuildingAdded += BuildingAdded;
+
+        RefreshButtons();
+    }
+
+    private void OnDisable()
+    {
+        BuildingController.Instance.OnBuildingAdded -= BuildingAdded;
+    }
+
+    private void BuildingAdded(SmolbeanBuilding building)
+    {
+        RefreshButtons();
+    }
+
+    private void RefreshButtons()
+    {
         var buttonContainer = document.rootVisualElement.Q<VisualElement>("buildingButtonContainer");
         buttonContainer.Clear();
 
-        foreach(var spec in BuildingController.Instance.buildings.Where(b => b.showInToolbar))
+        foreach (var spec in BuildingController.Instance.BuildableBuildings)
         {
             Button button = new Button();
             button.clickable.clickedWithEventInfo += BuildButtonClicked;
@@ -35,7 +50,7 @@ public class BuildToolbarController : MonoBehaviour
             recipePopup.AddToClassList("ingredientTooltip");
             recipePopup.visible = false;
 
-            foreach(var ingredient in spec.ingredients)
+            foreach (var ingredient in spec.ingredients)
             {
                 var listItem = new VisualElement();
                 listItem.AddToClassList("ingredientListItem");
@@ -54,10 +69,10 @@ public class BuildToolbarController : MonoBehaviour
             var title = new Label();
             title.text = spec.buildingName;
             recipePopup.Add(title);
-            
+
             button.Add(recipePopup);
             button.style.overflow = Overflow.Visible;
-            button.RegisterCallback<MouseEnterEvent>((e) => { recipePopup.visible = true; } );
+            button.RegisterCallback<MouseEnterEvent>((e) => { recipePopup.visible = true; });
             button.RegisterCallback<MouseLeaveEvent>((e) => { recipePopup.visible = false; });
         }
     }
