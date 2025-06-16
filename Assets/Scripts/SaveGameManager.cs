@@ -4,7 +4,6 @@ using UnityEngine;
 using System.Linq;
 using Newtonsoft.Json;
 using System.Collections;
-using System;
 
 public class SaveGameManager : MonoBehaviour
 {
@@ -12,6 +11,7 @@ public class SaveGameManager : MonoBehaviour
 
     public static readonly string EXTENSION = ".sbp";
     public Texture2D groundTexture;
+
     private MapGeneratorManager mapGenerator;
 
     void Awake()
