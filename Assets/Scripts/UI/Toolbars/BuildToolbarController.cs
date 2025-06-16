@@ -1,10 +1,15 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public class BuildToolbarController : MonoBehaviour
 {
-    private UIDocument document;
     private SoundPlayer soundPlayer;
+    private VisualElement root;
+    private ScrollView buttonScroller;
+    private Button scrollLeftButton;
+    private Button scrollRightButton;
+    private const float scrollStep = 110f;
 
     private void Start()
     {
@@ -13,13 +18,42 @@ public class BuildToolbarController : MonoBehaviour
 
     private void OnEnable()
     {
-        document = GetComponent<UIDocument>();
+        root = GetComponent<UIDocument>().rootVisualElement;
 
-        var mainMenuButton = document.rootVisualElement.Q<Button>("mainToolbarButton");
+        var mainMenuButton = root.Q<Button>("mainToolbarButton");
         mainMenuButton.clicked += MainMenuButtonClicked;
         BuildingController.Instance.OnBuildingAdded += BuildingAdded;
 
+        buttonScroller = root.Q<ScrollView>("buildingButtonContainer");
+        buttonScroller.RegisterCallback<GeometryChangedEvent>(_ => UpdateButtons());
+        buttonScroller.RegisterCallback<WheelEvent>(_ => UpdateButtons());
+
+        scrollLeftButton = root.Q<Button>("scrollLeftButton");
+        scrollLeftButton.clicked += () => Scroll(-1);
+        scrollRightButton = root.Q<Button>("scrollRightButton");
+        scrollRightButton.clicked += () => Scroll(1);
+
         RefreshButtons();
+    }
+
+    private void UpdateButtons()
+    {
+        float scrollX = buttonScroller.scrollOffset.x;
+        float contentWidth = buttonScroller.contentContainer.resolvedStyle.width;
+        float visibleWidth = buttonScroller.resolvedStyle.width;
+
+        bool canScrollLeft = scrollX > 1f;
+        bool canScrollRight = scrollX + visibleWidth + scrollStep < contentWidth;
+
+        scrollLeftButton.SetEnabled(canScrollLeft);
+        scrollRightButton.SetEnabled(canScrollRight);
+    }
+
+    void Scroll(int direction)
+    {
+        float scrollAmount = direction * scrollStep;
+        buttonScroller.scrollOffset += new Vector2(scrollAmount, 0f);
+        UpdateButtons();
     }
 
     private void OnDisable()
@@ -34,8 +68,7 @@ public class BuildToolbarController : MonoBehaviour
 
     private void RefreshButtons()
     {
-        var buttonContainer = document.rootVisualElement.Q<VisualElement>("buildingButtonContainer");
-        buttonContainer.Clear();
+        buttonScroller.Clear();
 
         foreach (var spec in BuildingController.Instance.BuildableBuildings)
         {
@@ -44,7 +77,7 @@ public class BuildToolbarController : MonoBehaviour
             button.style.backgroundColor = new Color(0, 0, 0, 0);
             button.style.backgroundImage = spec.thumbnail;
             button.userData = spec;
-            buttonContainer.Add(button);
+            buttonScroller.Add(button);
 
             var recipePopup = new VisualElement();
             recipePopup.AddToClassList("ingredientTooltip");

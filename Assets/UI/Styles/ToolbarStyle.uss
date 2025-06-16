@@ -72,3 +72,14 @@
     min-width: 32px;
     min-height: 32px;
 }
+
+/***********************/
+/** TOOLBAR SCROLLING **/
+/***********************/
+
+.toolbarContainer .scrollButton {
+    transition: color 0.5s ease;
+}
+.toolbarContainer .scrollButton:disabled {
+    color: #555;
+}
