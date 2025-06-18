@@ -7,6 +7,7 @@ public class BuildToolbarController : MonoBehaviour
     private SoundPlayer soundPlayer;
     private VisualElement root;
     private ScrollView buttonScroller;
+    private VisualElement tooltipContainer;
     private Button scrollLeftButton;
     private Button scrollRightButton;
     private const float scrollStep = 110f;
@@ -28,6 +29,8 @@ public class BuildToolbarController : MonoBehaviour
         buttonScroller.RegisterCallback<GeometryChangedEvent>(_ => UpdateButtons());
         buttonScroller.RegisterCallback<WheelEvent>(_ => UpdateButtons());
 
+        tooltipContainer = root.Q<VisualElement>("tooltipContainer");
+
         scrollLeftButton = root.Q<Button>("scrollLeftButton");
         scrollLeftButton.clicked += () => Scroll(-1);
         scrollRightButton = root.Q<Button>("scrollRightButton");
@@ -43,7 +46,7 @@ public class BuildToolbarController : MonoBehaviour
         float visibleWidth = buttonScroller.resolvedStyle.width;
 
         bool canScrollLeft = scrollX > 1f;
-        bool canScrollRight = scrollX + visibleWidth + scrollStep < contentWidth;
+        bool canScrollRight = scrollX + visibleWidth + 1 < contentWidth;
 
         scrollLeftButton.SetEnabled(canScrollLeft);
         scrollRightButton.SetEnabled(canScrollRight);
@@ -74,39 +77,48 @@ public class BuildToolbarController : MonoBehaviour
         {
             Button button = new Button();
             button.clickable.clickedWithEventInfo += BuildButtonClicked;
-            button.style.backgroundColor = new Color(0, 0, 0, 0);
             button.style.backgroundImage = spec.thumbnail;
             button.userData = spec;
             buttonScroller.Add(button);
 
-            var recipePopup = new VisualElement();
-            recipePopup.AddToClassList("ingredientTooltip");
-            recipePopup.visible = false;
-
-            foreach (var ingredient in spec.ingredients)
+            button.RegisterCallback<MouseEnterEvent>((e) =>
             {
-                var listItem = new VisualElement();
-                listItem.AddToClassList("ingredientListItem");
-                recipePopup.Add(listItem);
+                var recipePopup = new VisualElement();
+                recipePopup.AddToClassList("ingredientTooltip");
+                tooltipContainer.Add(recipePopup);
+                recipePopup.style.position = Position.Absolute;
 
-                var btn = new Button();
-                btn.style.backgroundColor = new Color(0, 0, 0, 0);
-                btn.style.backgroundImage = ingredient.item.thumbnail;
-                listItem.Add(btn);
+                foreach (var ingredient in spec.ingredients)
+                {
+                    var listItem = new VisualElement();
+                    listItem.AddToClassList("ingredientListItem");
+                    recipePopup.Add(listItem);
 
-                var label = new Label();
-                label.text = "x " + ingredient.quantity;
-                listItem.Add(label);
-            }
+                    var btn = new Button();
+                    btn.style.backgroundImage = ingredient.item.thumbnail;
+                    listItem.Add(btn);
 
-            var title = new Label();
-            title.text = spec.buildingName;
-            recipePopup.Add(title);
+                    var label = new Label();
+                    label.text = "x " + ingredient.quantity;
+                    listItem.Add(label);
+                }
 
-            button.Add(recipePopup);
-            button.style.overflow = Overflow.Visible;
-            button.RegisterCallback<MouseEnterEvent>((e) => { recipePopup.visible = true; });
-            button.RegisterCallback<MouseLeaveEvent>((e) => { recipePopup.visible = false; });
+                var title = new Label();
+                title.text = spec.buildingName;
+                recipePopup.Add(title);
+
+                recipePopup.RegisterCallback<GeometryChangedEvent>(_ =>
+                {
+                    Vector2 global = button.worldBound.position;
+                    recipePopup.style.left = global.x;
+                    recipePopup.style.top = global.y - recipePopup.resolvedStyle.height - 50;
+                });
+
+            });
+            button.RegisterCallback<MouseLeaveEvent>((e) =>
+            {
+                tooltipContainer.Clear();
+            });
         }
     }
 

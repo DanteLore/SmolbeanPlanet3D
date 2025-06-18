@@ -23,6 +23,6 @@ MonoBehaviour:
     quantity: 10
   buildTime: 60
   showInToolbar: 1
-  deleteAllowed: 1
+  deleteAllowed: 0
   maxCount: 1
   jobSpecs: []

@@ -1,11 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Styles/ToolbarStyle.uss?fileID=7433441132597879392&amp;guid=65a1a306a702e4542bac292d1268c585&amp;type=3#ToolbarStyle" />
+    <ui:VisualElement name="tooltipContainer" picking-mode="Ignore" style="flex-grow: 1; position: absolute;" />
     <ui:VisualElement name="toolbarContainer" class="toolbarContainer">
         <ui:VisualElement name="functionButtonContainer" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); align-items: flex-start; justify-content: flex-start; flex-direction: row; margin-right: 50px;">
             <ui:Button display-tooltip-when-elided="true" name="mainToolbarButton" text="⚒︎" parse-escape-sequences="true" class="toolButton" style="-unity-font: url(&quot;project://database/Assets/UI/Fonts/NotoEmoji-Regular.ttf?fileID=12800000&amp;guid=3ec600630513644ab93a6e55cbe0392d&amp;type=3#NotoEmoji-Regular&quot;); -unity-font-definition: url(&quot;project://database/Assets/UI/Fonts/NotoEmoji-Regular%20SDF.asset?fileID=11400000&amp;guid=634373dffeec748cf8429e236e072555&amp;type=2#NotoEmoji-Regular SDF&quot;);" />
         </ui:VisualElement>
         <ui:Button text="&lt;" name="scrollLeftButton" class="scrollButton" />
-        <ui:ScrollView name="buildingButtonContainer" mode="Horizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" style="flex-direction: row; flex-grow: 1; align-items: flex-start; width: 1100px; min-width: 1100px; max-width: 1100px;" />
+        <ui:ScrollView name="buildingButtonContainer" mode="Horizontal" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden" horizontal-page-size="100" style="flex-direction: row; flex-grow: 1; align-items: flex-start; width: 1100px; min-width: 1100px; max-width: 1100px;" />
         <ui:Button text="&gt;" name="scrollRightButton" class="scrollButton" />
     </ui:VisualElement>
 </ui:UXML>

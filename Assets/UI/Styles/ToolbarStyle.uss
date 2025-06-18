@@ -44,7 +44,6 @@
 .ingredientTooltip {
     position: absolute;
     justify-content: flex-end;
-    bottom: 140px;
     flex-direction: column-reverse;
     background-color: rgba(0, 0, 0, 0.78);
     padding-left: 5px;
