@@ -20,5 +20,7 @@ public class MainToolbarController : MonoBehaviour
         doc.rootVisualElement.Q<Button>("deliveryRequestsButton").clicked += () => MenuController.Instance.ShowMenu("DeliveryRequestsMenu");
         
         doc.rootVisualElement.Q<Button>("graphButton").clicked += () => MenuController.Instance.ShowMenu("GraphMenu");
+
+        doc.rootVisualElement.Q<Button>("offeringsButton").clicked += () => MenuController.Instance.ShowMenu("OfferingsMenu");
     }
 }
