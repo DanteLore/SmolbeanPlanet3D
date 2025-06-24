@@ -12,6 +12,8 @@ public class Offering
 
     public bool IsExpired { get { return DayNightCycleController.Instance.PlayedTime >= expiryTime; } }
 
+    public bool IsStarted { get; private set; }
+
     public Offering(float availableDuration, float completionDuration, float reward, OfferingPart[] parts)
     {
         this.availableDuration = availableDuration;
@@ -19,11 +21,13 @@ public class Offering
         this.reward = reward;
         this.parts = parts;
         expiryTime = DayNightCycleController.Instance.PlayedTime + availableDuration;
+        IsStarted = false;
     }
 
-    public void Start()
+    public void StartOffering()
     {
         expiryTime = DayNightCycleController.Instance.PlayedTime + completionDuration;
+        IsStarted = true;
     }
 
     public bool IsCompletedBy(Inventory inventory)

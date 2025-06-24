@@ -1,12 +1,13 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/Styles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
-    <Style src="project://database/Assets/UI/Styles/DeliveryRequestsMenuStyle.uss?fileID=7433441132597879392&amp;guid=4f1feae7b3bb54fad9bad02015150623&amp;type=3#DeliveryRequestsMenuStyle" />
+    <Style src="project://database/Assets/UI/Styles/OfferingsMenuStyle.uss?fileID=7433441132597879392&amp;guid=b5703b044091346d688a3d4d00993cce&amp;type=3#OfferingsMenuStyle" />
     <ui:VisualElement name="MenuContainer" class="menuContainer">
         <ui:Label text="𐛺 Offerings" name="Title" class="title" />
-        <ui:MultiColumnListView name="offeringsListView" sorting-mode="Default" allow-add="false" allow-remove="false" fixed-item-height="80" show-alternating-row-backgrounds="ContentOnly" selection-type="None" style="height: 100%; width: 90%;">
+        <ui:MultiColumnListView name="offeringsListView" sorting-mode="Default" allow-add="false" allow-remove="false" fixed-item-height="80" show-alternating-row-backgrounds="ContentOnly" selection-type="None" virtualization-method="DynamicHeight" style="height: 100%; width: 90%;">
             <ui:Columns resizable="false" reorderable="false">
-                <ui:Column name="statusColumn" width="100px" optional="false" resizable="false" visible="true" sortable="true" title="𐛺" />
-                <ui:Column name="itemsColumn" title="Offering Items" width="350px" sortable="true" optional="false" resizable="false" />
+                <ui:Column name="statusColumn" width="150px" optional="false" resizable="false" visible="true" sortable="true" title="𐛺" />
+                <ui:Column name="itemsColumn" title="Offering Items" width="500px" optional="false" resizable="false" sortable="false" />
+                <ui:Column name="rewardColumn" title="🜪" width="100px" optional="false" resizable="false" visible="true" />
                 <ui:Column name="durationColumn" title="Time" optional="false" resizable="false" width="350px" stretchable="false" />
             </ui:Columns>
         </ui:MultiColumnListView>

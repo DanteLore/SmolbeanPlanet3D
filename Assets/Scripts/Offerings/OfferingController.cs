@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class OfferingController : MonoBehaviour, IObjectGenerator
 {
+    public int maxConcurrentOfferings = 10;
+
     public static OfferingController Instance { get; private set; }
     public int Priority { get { return 100; } }
     public bool RunModeOnly { get { return true; } }
@@ -17,6 +20,8 @@ public class OfferingController : MonoBehaviour, IObjectGenerator
     public Action<Offering> OnOfferingExpired;
     public Action<Offering> OnOfferingCompleted;
 
+    private float lastUpdate;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -27,10 +32,18 @@ public class OfferingController : MonoBehaviour, IObjectGenerator
 
     void Update()
     {
+        if (GameStateManager.Instance.IsPaused)
+            return;
+
+        if(Time.time - lastUpdate < 1f) // Once a second is enough here!
+            return;
+
+        lastUpdate = Time.time;
+
         CheckForExpired();
 
-        if (Offerings.Count == 0 &&
-                Random.Range(0.0f, 1.0f) < 1.0f / 1000.0f &&
+        if (Offerings.Count < maxConcurrentOfferings &&
+                Random.Range(0.0f, 1.0f) < 1.0f / 20.0f &&
                 !GameStateManager.Instance.IsPaused)
         {
             CreateRandomOffering();
@@ -52,15 +65,16 @@ public class OfferingController : MonoBehaviour, IObjectGenerator
 
     private void CreateRandomOffering()
     {
-        float availableDuration = Random.Range(30f, 60f);
-        float completionDuration = Random.Range(30f, 60f);
+        float x = DayNightCycleController.Instance.DayLengthSeconds;
+        float availableDuration = x * Random.Range(0.5f, 1.5f); // Half to one and a half days
+        float completionDuration = x * Random.Range(1.0f, 3.0f); // One to three days
         float reward = Random.Range(100f, 200f);
-        int count = Random.Range(1, 3);
+        int count = Random.Range(1, itemSpecs.Length);
         var items = new List<OfferingPart>(count);
 
-        for (int i = 0; i < count; i++)
+        var chosenDrops = itemSpecs.OrderBy(_ => Random.Range(1.0f, 2.0f)).Take(count).ToList();
+        foreach(var item in chosenDrops)
         {
-            var item = itemSpecs[Random.Range(0, itemSpecs.Length)];
             var quantity = Random.Range(5, 20);
             items.Add(new OfferingPart(item.dropName, quantity));
         }
@@ -92,5 +106,10 @@ public class OfferingController : MonoBehaviour, IObjectGenerator
     {
         // Nothing to do here!
         yield return null;
+    }
+
+    public DropSpec GetItemSpecFor(string itemName)
+    {
+        return itemSpecs.FirstOrDefault(i => i.dropName == itemName);
     }
 }

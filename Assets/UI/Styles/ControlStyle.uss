@@ -408,6 +408,10 @@ DropdownField:focus Label {
     color: rgb(51, 51, 51);
 }
 
+.unity-button:disabled {
+    color: rgb(51, 51, 51);
+}
+
 .dangerButton
 {
     background-color: rgb(128, 0, 0);

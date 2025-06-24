@@ -1,0 +1,63 @@
+#offeringsListView {
+    margin-top: 20px;
+}
+
+.offering-thumb-image {
+    height: 32px;
+    width: 32px;
+}
+
+.offering-thumb-and-label-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 4px;
+}
+
+.offering-table-label {
+    margin-left: 6px;
+    white-space: normal;
+    flex-grow: 1;
+    flex-shrink: 1;
+    -unity-text-align: upper-left;
+}
+
+.unity-multi-column-header__column__content Label {
+    font-size: 32px;
+}
+
+.time-bar-danger .unity-progress-bar__progress {
+    background-color:rgb(100, 32, 32);      
+}
+
+.time-bar-good .unity-progress-bar__progress {
+    background-color:rgb(32, 100, 32);   
+}
+
+.time-bar-warning .unity-progress-bar__progress {
+    background-color:rgb(132, 100, 32);   
+}
+
+ProgressBar {
+    width: 200px;
+    height: 32px;
+    margin: 8px;
+}
+
+.mana-label {
+    font-size: 24px;
+}
+
+.items-list {
+    margin-top:10px;
+    margin-bottom: 10px;
+    flex-direction: row;
+    display: flex;
+    flex-wrap: wrap;    
+}
+
+.accept-button {
+    width: 100px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}

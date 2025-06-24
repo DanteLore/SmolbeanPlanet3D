@@ -93,16 +93,16 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     public string DisplayDay(int d = -1)
     {
         stringBuilder.Clear();
-        BuildDay();
+        BuildDay(d);
         return stringBuilder.ToString();
     }
 
     public string DurationToString(float d)
     {
-        int days = Mathf.FloorToInt(d / (24 * HourLengthSeconds));
+        int days = Mathf.FloorToInt(d / DayLengthSeconds);
         string dayStr = DisplayDay(days);
 
-        float hours = d % (24 * HourLengthSeconds);
+        float hours = d % DayLengthSeconds;
         hours /= HourLengthSeconds;
         string hourStr = DisplayTime(hours);
 

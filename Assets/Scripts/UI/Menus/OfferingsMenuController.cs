@@ -23,7 +23,11 @@ public class OfferingsMenuController : SmolbeanMenu
 
     private void RedrawList()
     {
-        // soon
+        listView.Clear();
+
+        var offerings = OfferingController.Instance.Offerings;
+
+        OfferingViewBuilder.BuildOfferingsView(listView, offerings, soundPlayer);
     }
 
     private void CloseButtonClicked()
