@@ -5,4 +5,5 @@ public class TimeOfDaySaveData
 {
     public float timeOfDay;
     public int day;
+    public float playedTime;
 }

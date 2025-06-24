@@ -157,6 +157,13 @@ public class Inventory
         return q >= quantity;
     }
 
+    public bool Contains(string itemName, int quantity)
+    {
+        var q = inventory.Where(i => i.dropSpec.dropName == itemName).Sum(i => i.quantity);
+
+        return q >= quantity;
+    }
+
     public void Clear()
     {
         inventory.Clear();

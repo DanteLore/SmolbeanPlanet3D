@@ -67,7 +67,7 @@ public class ManaController : MonoBehaviour, IObjectGenerator
 
     void Update()
     {
-        if (Random.Range(0.0f, 1.0f) < 1.0f / 1000.0f)
+        if (Random.Range(0.0f, 1.0f) < 1.0f / 1000.0f && !GameStateManager.Instance.IsPaused)
         {
             // For now, just randomly add mana!
             Mana += Random.Range(1000f, 10000f);

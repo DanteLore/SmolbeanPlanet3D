@@ -16,4 +16,5 @@ public class SaveFileData
     public List<JobSaveData> jobData;
     public WindSaveData windData;
     public List<DataCollectionSeriesSaveData> dataCollectionSeries;
+    public List<Offering> offerings;
 }

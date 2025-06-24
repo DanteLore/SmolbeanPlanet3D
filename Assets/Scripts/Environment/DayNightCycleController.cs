@@ -26,9 +26,12 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     [SerializeField] [Range(-90, 90)] private float sunAngleOffset = 0f;
     [SerializeField] private bool forceTimePause = false;
 
+    private float playedTime;
+
     public int Day { get => day; }
     public float TimeOfDay { get => timeOfDay; }
     public float LightLevel { get => lightLevel; }
+    public float PlayedTime { get => playedTime; }
     public float HourLengthSeconds { get => hourLengthSeconds; }
     public float DayLengthSeconds { get => hourLengthSeconds * 24; }
 
@@ -124,18 +127,20 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     {
         timeOfDay = gameStartTime;
         day = 1;
+        playedTime = 0f;
     }
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
         timeOfDay = gameStartTime;
         day = 1;
+        playedTime = 0f;
         yield return null;
     }
 
     public void SaveTo(SaveFileData saveData, string filename)
     {
-        saveData.timeData = new TimeOfDaySaveData { timeOfDay = TimeOfDay, day = Day };
+        saveData.timeData = new TimeOfDaySaveData { timeOfDay = TimeOfDay, day = Day, playedTime = playedTime };
     }
 
     public IEnumerator Load(SaveFileData data, string filename)
@@ -144,6 +149,7 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
         {
             timeOfDay = data.timeData.timeOfDay;
             day = data.timeData.day;
+            playedTime = data.timeData.playedTime;
         }
 
         return null;
@@ -153,9 +159,10 @@ public class DayNightCycleController : MonoBehaviour, IObjectGenerator
     {
         if(Application.isPlaying && !forceTimePause)
         {
+            playedTime += Time.deltaTime;
             timeOfDay += Time.deltaTime / HourLengthSeconds;
             
-            if(TimeOfDay > 24f)
+            if (TimeOfDay > 24f)
             {
                 day++;
                 timeOfDay %= 24f;
