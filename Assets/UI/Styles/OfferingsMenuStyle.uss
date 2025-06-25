@@ -44,6 +44,11 @@ ProgressBar {
     margin: 8px;
 }
 
+ProgressBar Label {
+    width: 100px;
+    -unity-text-align: middle-left;
+}
+
 .mana-label {
     font-size: 24px;
 }
