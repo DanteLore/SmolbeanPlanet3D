@@ -25,4 +25,5 @@ MonoBehaviour:
   showInToolbar: 1
   deleteAllowed: 0
   maxCount: 1
-  jobSpecs: []
+  jobSpecs:
+  - {fileID: 11400000, guid: eb556a89ea615437c82379fe45c5191d, type: 2}

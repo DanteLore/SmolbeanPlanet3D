@@ -27,6 +27,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
     public event Action<SmolbeanAnimal> OnDeath;
 
+    [HideInInspector]
     public Transform transformCached;
     protected Animator animator;
     protected NavMeshAgent navAgent;
