@@ -82,3 +82,17 @@
 .toolbarContainer .scrollButton:disabled {
     color: #555;
 }
+
+/**********/
+/** GLOW **/
+/**********/
+
+.unity-button.glow {
+    color:rgb(255, 225, 0);
+    text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+    scale: 1.25;
+    transition: all 1s ease;
+}
+.unity-button.glow-out {
+    transition: all 2s ease;
+}
