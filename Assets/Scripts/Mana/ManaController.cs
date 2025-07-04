@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class ManaController : MonoBehaviour, IObjectGenerator
 {
@@ -65,13 +64,13 @@ public class ManaController : MonoBehaviour, IObjectGenerator
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
     }
 
-    void Update()
+    private void Update()
     {
-        if (Random.Range(0.0f, 1.0f) < 1.0f / 1000.0f && !GameStateManager.Instance.IsPaused)
-        {
-            // For now, just randomly add mana!
-            Mana += Random.Range(1000f, 10000f);
-        }
+        
     }
 
+    public void AddMana(float amount)
+    {
+        Mana += amount;
+    }
 }

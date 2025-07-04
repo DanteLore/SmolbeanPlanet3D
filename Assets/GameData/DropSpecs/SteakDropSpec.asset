@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropName: Steak
   dropRate: 1
-  stackSize: 1
+  stackSize: 9
   thumbnail: {fileID: 2800000, guid: 48937662f380d4c2f981c9cb1c0f81a4, type: 3}
   singlePrefab: {fileID: 9089081350327664049, guid: 969f4b62f67d44d6e8e30b090108f5fa, type: 3}
   somePrefab: {fileID: 9089081350327664049, guid: 969f4b62f67d44d6e8e30b090108f5fa, type: 3}

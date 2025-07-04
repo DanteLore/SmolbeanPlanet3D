@@ -112,4 +112,12 @@ public class OfferingController : MonoBehaviour, IObjectGenerator
     {
         return itemSpecs.FirstOrDefault(i => i.dropName == itemName);
     }
+
+    public void Complete(Offering offering)
+    {
+        offering.CompleteOffering();
+        Offerings.Remove(offering);
+
+        OnOfferingCompleted?.Invoke(offering);
+    }
 }

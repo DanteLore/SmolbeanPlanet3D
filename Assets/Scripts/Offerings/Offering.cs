@@ -30,6 +30,11 @@ public class Offering
         IsStarted = true;
     }
 
+    public void CompleteOffering()
+    {
+        IsStarted = false;
+    }
+
     public bool IsCompletedBy(Inventory inventory)
     {
         for (int i = 0; i < parts.Length; i++)

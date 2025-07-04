@@ -13,7 +13,7 @@ public abstract class FactoryBuilding : SmolbeanBuilding
     public int orderMultiplier = 3;
     public int ingredientDeliveryPriority = 8;
 
-    private List<DeliveryRequest> deliveryRequests;
+    private readonly List<DeliveryRequest> deliveryRequests = new();
     private float startTime;
 
     protected override void Start()
@@ -21,12 +21,10 @@ public abstract class FactoryBuilding : SmolbeanBuilding
         base.Start();
         IsOperating = false;
 
-        deliveryRequests = new List<DeliveryRequest>();
-
         InvokeRepeating(nameof(UpdateDeliveryRequests), 1.0f, 0.5f);
         
         if (recipe == null)
-            Debug.Log("No recipe set for factopry building");
+            Debug.Log("No recipe set for factory building");
     }
 
     private void UpdateDeliveryRequests()

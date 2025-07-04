@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropName: Egg
   dropRate: 1
-  stackSize: 1
+  stackSize: 9
   thumbnail: {fileID: 2800000, guid: c73dd3003775841c6958a6101412fb27, type: 3}
   singlePrefab: {fileID: 8428882218757068595, guid: 27ba4bbc0b29c49568a5bd3fbfe25ca0, type: 3}
   somePrefab: {fileID: 8428882218757068595, guid: 27ba4bbc0b29c49568a5bd3fbfe25ca0, type: 3}

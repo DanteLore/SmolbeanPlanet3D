@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using NUnit.Framework.Constraints;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 public class Inventory
@@ -76,8 +79,25 @@ public class Inventory
         return inventory.Where(i => i.dropSpec == drop).Sum(i => i.quantity);
     }
 
+    public IEnumerable<InventoryItem> TakeMany(DropSpec itemSpec, int requiredQuantity)
+    {
+        var result = new List<InventoryItem>();
+        int taken = requiredQuantity;
+
+        while (taken > 0)
+        {
+            int t = Mathf.Min(requiredQuantity, itemSpec.stackSize);
+            var takenItem = Take(itemSpec, t);
+            result.Add(takenItem);
+            taken -= t;
+        }
+
+        return result;
+    }
+
     public InventoryItem Take(DropSpec itemSpec, int requiredQuantity)
     {
+        // Allow taking more than one...
         Assert.IsTrue(requiredQuantity <= itemSpec.stackSize, "You can't take more than one stack at a time!");
 
         MergeStacks();
@@ -86,11 +106,11 @@ public class Inventory
         var item = inventory.Where(i => i.dropSpec == itemSpec).OrderByDescending(i => i.quantity).FirstOrDefault();
 
         // If it's too small, return null
-        if(item == null || item.quantity < requiredQuantity)
+        if (item == null || item.quantity < requiredQuantity)
             return null;
 
         // If it's the right size, return it
-        if(item.quantity == requiredQuantity)
+        if (item.quantity == requiredQuantity)
         {
             inventory.Remove(item);
             ContentsChanged?.Invoke();
