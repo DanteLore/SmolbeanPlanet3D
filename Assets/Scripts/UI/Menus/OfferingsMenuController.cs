@@ -21,6 +21,11 @@ public class OfferingsMenuController : SmolbeanMenu
         RedrawList();
     }
 
+    void OnDisable()
+    {
+        CancelInvoke(nameof(RedrawList));
+    }
+
     private void RedrawList()
     {
         listView.Clear();
