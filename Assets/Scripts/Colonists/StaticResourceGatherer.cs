@@ -77,7 +77,7 @@ public abstract class StaticResourceGatherer : ResourceGatherer
         Func<bool> JobTerminated() => () => Job.IsTerminated;
         Func<bool> HasTarget() => () => ResourceTarget != null;
         Func<bool> NoTargetFound() => () => ResourceTarget == null && !searchForResources.InProgress;
-        Func<bool> IsCloseEnoughToTarget() => () => CloseEnoughTo(ResourceTarget, 2f * ResourceTarget.transform.localScale.x);
+        Func<bool> IsCloseEnoughToTarget() => () => CloseEnoughTo(ResourceTarget, 2f * (ResourceTarget != null ? ResourceTarget.transform.localScale.x : 1));
         Func<bool> IsCloseEnoughToDrop() => () => CloseEnoughTo(TargetDrop, 1f);
         Func<bool> CanNotReachTarget() => () => walkToResource.IsStuck && !CloseEnoughTo(ResourceTarget, 1f);
         Func<bool> TargetIsDying() => () => ResourceTarget != null && ResourceTarget.GetComponent<IDamagable>().IsDead;

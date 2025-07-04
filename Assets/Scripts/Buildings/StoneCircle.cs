@@ -13,12 +13,12 @@ public class StoneCircle : SmolbeanBuilding
 
     public bool IsReadyToStart
     {
-        get => !IsStarted && OfferingController.Instance.Offerings.Where(o => o.IsStarted).Any(o => o.IsCompletedBy(Inventory));
+        get => !IsStarted && OfferingController.Instance.Offerings.Where(o => o.IsAccepted).Any(o => o.IsCompletedBy(Inventory));
     }
 
     public bool IsFinished
     {
-        get => true; // True if we were in progress and the time has expired
+        get => startedOffering.IsStarted && startedOffering.IsExpired;
     }
 
     protected override void Start()
@@ -40,7 +40,7 @@ public class StoneCircle : SmolbeanBuilding
 
     private void RequestIngedients()
     {
-        var startedOfferings = OfferingController.Instance.Offerings.Where(o => o.IsStarted);
+        var startedOfferings = OfferingController.Instance.Offerings.Where(o => o.IsAccepted);
 
         var itemsToOrder = startedOfferings.SelectMany(o => o.parts)
                                     .GroupBy(p => p.itemName)
@@ -112,9 +112,10 @@ public class StoneCircle : SmolbeanBuilding
 
     public void StartOffering()
     {
+        Debug.Log($"STONE CIRCLE: The ritual has begun ✨");
         // Start the first offering in the list that we have materials to start
         IsStarted = true;
-        startedOffering = OfferingController.Instance.Offerings.Where(o => o.IsStarted).First(o => o.IsCompletedBy(Inventory));
+        startedOffering = OfferingController.Instance.Offerings.Where(o => o.IsAccepted).First(o => o.IsCompletedBy(Inventory));
 
         // Burn the ingredients
         foreach (var part in startedOffering.parts)
@@ -123,11 +124,12 @@ public class StoneCircle : SmolbeanBuilding
             Inventory.TakeMany(item, part.quantity);
         }
 
-        // TODO: Mark the offering as "in progress" for the UI
+        startedOffering.BeginRitual();
     }
 
     public void StopOffering()
     {
+        Debug.Log($"STONE CIRCLE: The ritual has ended ␄");
         // Reward the mana
         ManaController.Instance.AddMana(startedOffering.reward);
 

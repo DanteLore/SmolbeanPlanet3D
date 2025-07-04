@@ -65,9 +65,10 @@ public class OfferingController : MonoBehaviour, IObjectGenerator
 
     private void CreateRandomOffering()
     {
-        float x = DayNightCycleController.Instance.DayLengthSeconds;
-        float availableDuration = x * Random.Range(0.5f, 1.5f); // Half to one and a half days
-        float completionDuration = x * Random.Range(1.0f, 3.0f); // One to three days
+        float lengthOfADay = DayNightCycleController.Instance.DayLengthSeconds;
+        float availableDuration = lengthOfADay * Random.Range(0.5f, 1.5f); // Half to one and a half days
+        float completionDuration = lengthOfADay * Random.Range(1.0f, 3.0f); // One to three days
+        float ritualDuration = Random.Range(30.0f, 60.0f); // 30-60s
         float reward = Random.Range(100f, 200f);
         int count = Random.Range(1, itemSpecs.Length);
         var items = new List<OfferingPart>(count);
@@ -79,7 +80,7 @@ public class OfferingController : MonoBehaviour, IObjectGenerator
             items.Add(new OfferingPart(item.dropName, quantity));
         }
 
-        var o = new Offering(availableDuration, completionDuration, reward, items.ToArray());
+        var o = new Offering(availableDuration, completionDuration, ritualDuration, reward, items.ToArray());
         Offerings.Add(o);
         OnOfferingCreated?.Invoke(o);
     }
@@ -115,9 +116,7 @@ public class OfferingController : MonoBehaviour, IObjectGenerator
 
     public void Complete(Offering offering)
     {
-        offering.CompleteOffering();
         Offerings.Remove(offering);
-
         OnOfferingCompleted?.Invoke(offering);
     }
 }

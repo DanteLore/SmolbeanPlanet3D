@@ -7,32 +7,37 @@ public class Offering
     public OfferingPart[] parts;
     public float availableDuration;
     public float completionDuration;
+    public float ritualDuration;
     public float reward;
     public float expiryTime;
 
-    public bool IsExpired { get { return DayNightCycleController.Instance.PlayedTime >= expiryTime; } }
+    public bool IsExpired { get => DayNightCycleController.Instance.PlayedTime >= expiryTime; }
 
+    public bool IsAccepted { get; private set; }
     public bool IsStarted { get; private set; }
 
-    public Offering(float availableDuration, float completionDuration, float reward, OfferingPart[] parts)
+    public Offering(float availableDuration, float completionDuration, float ritualDuration, float reward, OfferingPart[] parts)
     {
         this.availableDuration = availableDuration;
         this.completionDuration = completionDuration;
+        this.ritualDuration = ritualDuration;
         this.reward = reward;
         this.parts = parts;
         expiryTime = DayNightCycleController.Instance.PlayedTime + availableDuration;
+        IsAccepted = false;
         IsStarted = false;
     }
 
-    public void StartOffering()
+    public void AcceptOffering()
     {
         expiryTime = DayNightCycleController.Instance.PlayedTime + completionDuration;
-        IsStarted = true;
+        IsAccepted = true;
     }
 
-    public void CompleteOffering()
+    public void BeginRitual()
     {
-        IsStarted = false;
+        expiryTime = DayNightCycleController.Instance.PlayedTime + ritualDuration;
+        IsStarted = true;
     }
 
     public bool IsCompletedBy(Inventory inventory)
