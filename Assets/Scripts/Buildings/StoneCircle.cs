@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class StoneCircle : SmolbeanBuilding
 {
+    public ParticleSystem ritualParticleSystem;
+
     public int ingredientDeliveryPriority = 4;
 
     public bool IsStarted { get; private set; }
 
-    private Offering startedOffering;
+    private Offering selectedOffering;
     private readonly List<DeliveryRequest> deliveryRequests = new();
 
     public bool IsReadyToStart
@@ -18,12 +20,14 @@ public class StoneCircle : SmolbeanBuilding
 
     public bool IsFinished
     {
-        get => startedOffering.IsStarted && startedOffering.IsExpired;
+        get => selectedOffering.IsStarted && selectedOffering.IsExpired;
     }
 
     protected override void Start()
     {
         base.Start();
+        
+        ritualParticleSystem.Stop();
 
         OfferingController.Instance.OnOfferingCreated += OfferingCreated;
         OfferingController.Instance.OnOfferingCompleted += OfferingCompleted;
@@ -115,27 +119,32 @@ public class StoneCircle : SmolbeanBuilding
         Debug.Log($"STONE CIRCLE: The ritual has begun ✨");
         // Start the first offering in the list that we have materials to start
         IsStarted = true;
-        startedOffering = OfferingController.Instance.Offerings.Where(o => o.IsAccepted).First(o => o.IsCompletedBy(Inventory));
+        selectedOffering = OfferingController.Instance.Offerings.Where(o => o.IsAccepted).First(o => o.IsCompletedBy(Inventory));
 
         // Burn the ingredients
-        foreach (var part in startedOffering.parts)
+        foreach (var part in selectedOffering.parts)
         {
             var item = DropController.Instance.DropSpecByName(part.itemName);
             Inventory.TakeMany(item, part.quantity);
         }
 
-        startedOffering.BeginRitual();
+        selectedOffering.BeginRitual();
+
+        ritualParticleSystem.Play();
     }
 
     public void StopOffering()
     {
         Debug.Log($"STONE CIRCLE: The ritual has ended ␄");
         // Reward the mana
-        ManaController.Instance.AddMana(startedOffering.reward);
+        ManaController.Instance.AddMana(selectedOffering.reward);
+
+        if(ritualParticleSystem != null)
+            ritualParticleSystem.Stop();
 
         // Mark the offering as complete/remove it
-        OfferingController.Instance.Complete(startedOffering);
+        OfferingController.Instance.Complete(selectedOffering);
         IsStarted = false;
-        startedOffering = null;
+        selectedOffering = null;
     }
 }
