@@ -126,6 +126,7 @@ MonoBehaviour:
   itemDropRadius: 2
   itemDropHeight: 1
   ritualParticleSystem: {fileID: 6706618578945517274}
+  magicFloorMaterial: {fileID: 2100000, guid: 0605657999dba47b694af10adf320446, type: 2}
   ingredientDeliveryPriority: 8
 --- !u!1 &1763273691322613492
 GameObject:

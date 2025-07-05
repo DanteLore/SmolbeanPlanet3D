@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,6 +6,12 @@ using UnityEngine;
 public class StoneCircle : SmolbeanBuilding
 {
     public ParticleSystem ritualParticleSystem;
+    public Material magicFloorMaterial;
+    public float edgePositionMax = 0.25f;
+    public float edgePositionMin = 0.0f;
+    public float fadeInDurationSeconds = 4.0f;
+    public float fadeOutDurationSeconds = 2.0f;
+    public float fadeUpdatesPerSecond = 30f;
 
     public int ingredientDeliveryPriority = 4;
 
@@ -28,6 +35,7 @@ public class StoneCircle : SmolbeanBuilding
         base.Start();
         
         ritualParticleSystem.Stop();
+        magicFloorMaterial.SetFloat("_EdgePosition", edgePositionMin);
 
         OfferingController.Instance.OnOfferingCreated += OfferingCreated;
         OfferingController.Instance.OnOfferingCompleted += OfferingCompleted;
@@ -116,6 +124,16 @@ public class StoneCircle : SmolbeanBuilding
 
     public void StartOffering()
     {
+        StartCoroutine(nameof(DoStartRitual));
+    }
+    
+    public void StopOffering()
+    {
+        StartCoroutine(nameof(DoEndRitual));
+    }
+
+    private IEnumerator DoStartRitual()
+    {
         Debug.Log($"STONE CIRCLE: The ritual has begun ✨");
         // Start the first offering in the list that we have materials to start
         IsStarted = true;
@@ -130,21 +148,36 @@ public class StoneCircle : SmolbeanBuilding
 
         selectedOffering.BeginRitual();
 
+        float waitTime = 1.0f / fadeUpdatesPerSecond;
+        float step = (edgePositionMax - edgePositionMin) / (fadeInDurationSeconds * fadeUpdatesPerSecond);
+        for (float r = edgePositionMin; r < edgePositionMax; r += step)
+        {
+            magicFloorMaterial.SetFloat("_EdgePosition", r);
+            yield return new WaitForSeconds(waitTime);
+        }
         ritualParticleSystem.Play();
     }
 
-    public void StopOffering()
+    private IEnumerator DoEndRitual()
     {
-        Debug.Log($"STONE CIRCLE: The ritual has ended ␄");
+        if (ritualParticleSystem != null)
+            ritualParticleSystem.Stop();
+
+        float waitTime = 1.0f / fadeUpdatesPerSecond;
+        float step = (edgePositionMax - edgePositionMin) / (fadeOutDurationSeconds * fadeUpdatesPerSecond);
+        for (float r = edgePositionMax; r > edgePositionMin; r -= step)
+        {
+            magicFloorMaterial.SetFloat("_EdgePosition", r);
+            yield return new WaitForSeconds(waitTime);
+        }
+        
         // Reward the mana
         ManaController.Instance.AddMana(selectedOffering.reward);
-
-        if(ritualParticleSystem != null)
-            ritualParticleSystem.Stop();
 
         // Mark the offering as complete/remove it
         OfferingController.Instance.Complete(selectedOffering);
         IsStarted = false;
         selectedOffering = null;
     }
+
 }

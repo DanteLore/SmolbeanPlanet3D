@@ -42,12 +42,16 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _EdgeInnerOffset: -0.02
     - _EdgeNoiseScale: 75
-    - _EdgeNoiseSpeed: 0.07
+    - _EdgeNoiseSpeed: 0.1
     - _EdgeNoiseWeight: 0.2
-    - _EdgePosition: 0.248
+    - _EdgePosition: 0.25
+    - _EdgePosition2: 0.23
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _SwirlScale: 2
+    - _SwirlSpeed: 1
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
