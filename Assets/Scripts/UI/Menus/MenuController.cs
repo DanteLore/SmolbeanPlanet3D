@@ -81,9 +81,10 @@ public class MenuController : MonoBehaviour
                 if (isVisible == false)
                     soundPlayer.Play("Whoosh2");
 
-                child.gameObject.SetActive(true);
+                if(child.gameObject != null)
+                    child.gameObject.SetActive(true);
             }
-            else
+            else if(child.gameObject != null)
             {
                 child.gameObject.SetActive(false);
             }

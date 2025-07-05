@@ -80,7 +80,8 @@ public abstract class SmolbeanBuilding : MonoBehaviour
 
     private void RegisterWear()
     {
-        GroundWearManager.Instance.BuildingOn(building.GetComponent<Renderer>().bounds, wearPattern, wearScale);
+        var bounds = building.GetComponent<Renderer>().bounds;
+        GroundWearManager.Instance.BuildingOn(bounds, wearPattern, wearScale);
     }
 
     public List<SmolbeanDrop> DropPointContents(float radius = 2.0f)
