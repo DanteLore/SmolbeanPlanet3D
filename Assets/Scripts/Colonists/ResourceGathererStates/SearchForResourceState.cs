@@ -66,9 +66,28 @@ public class SearchForResourceState : IState
             .OrderBy(go => Vector3.SqrMagnitude(go.transform.position - center))
             .ToList();
     }
-
+    
     private bool IsOnNavMesh(GameObject obj)
     {
-        return NavMesh.SamplePosition(obj.transform.position, out var _, 2f, NavMesh.AllAreas);
+        var pos = obj.transform.position;
+
+        // Try to find a nearby point on the NavMesh
+        if (NavMesh.SamplePosition(pos, out var hit, 10f, NavMesh.AllAreas))
+        {
+            // Get the bounds of the object's renderer
+             if (obj.TryGetComponent<Renderer>(out var renderer))
+            {
+                var bounds = renderer.bounds;
+
+                // Find the closest point on the bounds to the navmesh hit
+                var closestPointOnBounds = bounds.ClosestPoint(hit.position);
+                
+                float distance = Vector3.Distance(hit.position, closestPointOnBounds);
+
+                return distance <= 1f;
+            }
+        }
+
+        return false;
     }
 }
