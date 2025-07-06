@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class StoneCircle : SmolbeanBuilding
@@ -50,7 +51,7 @@ public class StoneCircle : SmolbeanBuilding
 
     private void RequestIngedients()
     {
-        var startedOfferings = OfferingController.Instance.Offerings.Where(o => o.IsAccepted);
+        var startedOfferings = OfferingController.Instance.Offerings.Where(o => o.IsAccepted && !o.IsStarted);
 
         var itemsToOrder = startedOfferings.SelectMany(o => o.parts)
                                     .GroupBy(p => p.itemName)
