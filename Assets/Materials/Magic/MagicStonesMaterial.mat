@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MagicFloorVortexMaterial
-  m_Shader: {fileID: -6465566751694194690, guid: 98ad437ade2e14dca862739c8564283e, type: 3}
+  m_Name: MagicStonesMaterial
+  m_Shader: {fileID: -6465566751694194690, guid: 8feac7e9befd94df185d13b90a3b2d5c, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -42,23 +42,21 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _EdgeInnerOffset: -0.02
-    - _EdgeNoiseScale: 75
-    - _EdgeNoiseSpeed: 0.1
-    - _EdgeNoiseWeight: 0.1
-    - _EdgePosition: 0.35
-    - _EdgePosition2: 0.23
+    - _EdgeNoiseScale: 10
+    - _EdgeOffset: 0.2
+    - _Frequency: 1.5
     - _MagicLevel: 0
-    - _MaxEdgePosition: 0.35
-    - _MinEdgePosition: 0.04
+    - _MagicMax: -0.2
+    - _MagicMin: -0.9
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _SwirlScale: 2
-    - _SwirlSpeed: 1
-    m_Colors: []
+    m_Colors:
+    - _MagicColor: {r: 0.2715721, g: 0, b: 2, a: 1}
+    - _MagicColor1: {r: 0.27157208, g: 0, b: 1.9999999, a: 1}
+    - _MagicColor2: {r: 1.9999998, g: 1.1181238, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &5605652545837677792
+--- !u!114 &4643903919691838601
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

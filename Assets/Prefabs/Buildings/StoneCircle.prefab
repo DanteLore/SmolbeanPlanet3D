@@ -126,7 +126,12 @@ MonoBehaviour:
   itemDropRadius: 2
   itemDropHeight: 1
   ritualParticleSystem: {fileID: 6706618578945517274}
-  magicFloorMaterial: {fileID: 2100000, guid: 0605657999dba47b694af10adf320446, type: 2}
+  magicMaterials:
+  - {fileID: 2100000, guid: 0605657999dba47b694af10adf320446, type: 2}
+  - {fileID: 2100000, guid: 817f2de04e8e54d2385de7e3774ea5b7, type: 2}
+  fadeInDurationSeconds: 4
+  fadeOutDurationSeconds: 2
+  fadeUpdatesPerSecond: 30
   ingredientDeliveryPriority: 8
 --- !u!1 &1763273691322613492
 GameObject:
@@ -337,7 +342,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 69b817f126e7e4c23a5ace3237c8e81f, type: 2}
+  - {fileID: 2100000, guid: 817f2de04e8e54d2385de7e3774ea5b7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

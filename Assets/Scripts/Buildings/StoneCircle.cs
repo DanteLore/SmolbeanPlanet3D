@@ -6,9 +6,7 @@ using UnityEngine;
 public class StoneCircle : SmolbeanBuilding
 {
     public ParticleSystem ritualParticleSystem;
-    public Material magicFloorMaterial;
-    public float edgePositionMax = 0.25f;
-    public float edgePositionMin = 0.0f;
+    public Material[] magicMaterials;
     public float fadeInDurationSeconds = 4.0f;
     public float fadeOutDurationSeconds = 2.0f;
     public float fadeUpdatesPerSecond = 30f;
@@ -33,9 +31,9 @@ public class StoneCircle : SmolbeanBuilding
     protected override void Start()
     {
         base.Start();
-        
+
         ritualParticleSystem.Stop();
-        magicFloorMaterial.SetFloat("_EdgePosition", edgePositionMin);
+        SetMagicLevel(0.0f);
 
         OfferingController.Instance.OnOfferingCreated += OfferingCreated;
         OfferingController.Instance.OnOfferingCompleted += OfferingCompleted;
@@ -149,10 +147,10 @@ public class StoneCircle : SmolbeanBuilding
         selectedOffering.BeginRitual();
 
         float waitTime = 1.0f / fadeUpdatesPerSecond;
-        float step = (edgePositionMax - edgePositionMin) / (fadeInDurationSeconds * fadeUpdatesPerSecond);
-        for (float r = edgePositionMin; r < edgePositionMax; r += step)
+        float step = 1.0f / (fadeInDurationSeconds * fadeUpdatesPerSecond);
+        for (float r = 0.0f; r < 1.0f; r += step)
         {
-            magicFloorMaterial.SetFloat("_EdgePosition", r);
+            SetMagicLevel(r);
             yield return new WaitForSeconds(waitTime);
         }
         ritualParticleSystem.Play();
@@ -164,10 +162,10 @@ public class StoneCircle : SmolbeanBuilding
             ritualParticleSystem.Stop();
 
         float waitTime = 1.0f / fadeUpdatesPerSecond;
-        float step = (edgePositionMax - edgePositionMin) / (fadeOutDurationSeconds * fadeUpdatesPerSecond);
-        for (float r = edgePositionMax; r > edgePositionMin; r -= step)
+        float step = 1.0f / (fadeOutDurationSeconds * fadeUpdatesPerSecond);
+        for (float r = 1.0f; r > 0.0f; r -= step)
         {
-            magicFloorMaterial.SetFloat("_EdgePosition", r);
+            SetMagicLevel(r);
             yield return new WaitForSeconds(waitTime);
         }
         
@@ -180,4 +178,9 @@ public class StoneCircle : SmolbeanBuilding
         selectedOffering = null;
     }
 
+    private void SetMagicLevel(float magicLevel)
+    {
+        for (int i = 0; i < magicMaterials.Length; i++)
+            magicMaterials[i].SetFloat("_MagicLevel", magicLevel);
+    }
 }
