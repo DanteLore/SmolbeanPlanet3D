@@ -11,6 +11,12 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## An offering to the Gods
+
+The basic workflow for the stone circle is complete!  It's pretty buggy at the moment, and there is a bunch of work to do to generate more sensible and challenging offerings to make life interesting for the player.  However, I am particularly proud of the magical effects when the materials are delivered and the offering ritual kicks off...
+
+https://www.youtube.com/watch?v=MD_kw20yBCg
+
 ## The Stone Circle
 
 As part of the next big update, I've added the stone circle.  This is intended to be a place where 
