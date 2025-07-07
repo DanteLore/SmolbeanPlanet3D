@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Mono.Cecil.Cil;
 using UnityEditor.Callbacks;
 using UnityEngine;
 
@@ -51,7 +53,7 @@ public class StoneCircle : SmolbeanBuilding
 
     private void RequestIngedients()
     {
-        var startedOfferings = OfferingController.Instance.Offerings.Where(o => o.IsAccepted && !o.IsStarted);
+        var startedOfferings = OfferingController.Instance.Offerings.Where(o => o.IsAccepted && !o.IsStarted && !o.IsExpired);
 
         var itemsToOrder = startedOfferings.SelectMany(o => o.parts)
                                     .GroupBy(p => p.itemName)
@@ -66,21 +68,59 @@ public class StoneCircle : SmolbeanBuilding
                                     .Select(x => (name: x.dropSpec.dropName, qtty: x.quantity))
                                     .ToDictionary(kv => kv.name, kv => kv.qtty);
 
-        var itemNames = itemsToOrder.Keys;
+        // Need to loop through all items, even if they are not currently active, so we update/remove orders for expired offerings
+        var allItemNames = OfferingController.Instance.itemSpecs.Select(ds => ds.dropName);
 
-        foreach (string itemName in itemNames)
+        foreach (string itemName in allItemNames)
         {
-            int required = itemsToOrder[itemName];
+            int required = itemsToOrder.GetValueOrDefault(itemName, 0);
             int delivered = itemsInInventory.GetValueOrDefault(itemName, 0);
             int ordered = itemsOrdered.GetValueOrDefault(itemName, 0);
 
             int numberToOrder = required - delivered - ordered;
 
+            DropSpec item = DropController.Instance.DropSpecByName(itemName);
             if (numberToOrder > 0)
             {
-                DropSpec item = DropController.Instance.DropSpecByName(itemName);
                 RaiseDeliveryRequests(item, numberToOrder);
             }
+            else if (numberToOrder < 0)
+            {
+                CloseDeliveryRequests(item, numberToOrder * -1);
+            }
+        }
+    }
+
+    private void CloseDeliveryRequests(DropSpec item, int toRemove)
+    {
+        var orders = deliveryRequests.Where(d => d.Item == item).OrderByDescending(d => d.Quantity).ToArray();
+
+        for (int i = orders.Length - 1; i >= 0; i--)
+        {
+            var dr = orders[i];
+
+            if (dr.Quantity <= toRemove)
+            {
+                // If this request is for <= the number we need to remove, remove it, adjust the running total and loop
+                toRemove -= dr.Quantity;
+                deliveryRequests.Remove(dr);
+                DeliveryManager.Instance.CancelDelivery(dr);
+            }
+            else if (dr.Quantity > toRemove)
+            {
+                // If this request is for more than we need to remove
+                var diff = dr.Quantity - toRemove;
+                // Close this request and raise a new one for the difference
+                deliveryRequests.Remove(dr);
+                DeliveryManager.Instance.CancelDelivery(dr);
+                RaiseDeliveryRequests(item, diff);
+                // Nothing left to remove
+                toRemove = 0;
+            }
+
+            // Nothing left to remove?  Done!
+            if (toRemove <= 0)
+                break;
         }
     }
 

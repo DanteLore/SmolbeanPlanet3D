@@ -82,14 +82,14 @@ public class Inventory
     public IEnumerable<InventoryItem> TakeMany(DropSpec itemSpec, int requiredQuantity)
     {
         var result = new List<InventoryItem>();
-        int taken = requiredQuantity;
+        int remainingToTake = requiredQuantity;
 
-        while (taken > 0)
+        while (remainingToTake > 0)
         {
-            int t = Mathf.Min(requiredQuantity, itemSpec.stackSize);
+            int t = Mathf.Min(remainingToTake, itemSpec.stackSize);
             var takenItem = Take(itemSpec, t);
             result.Add(takenItem);
-            taken -= t;
+            remainingToTake -= t;
         }
 
         return result;

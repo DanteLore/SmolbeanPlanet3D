@@ -55,6 +55,18 @@ public class DeliveryManager : MonoBehaviour
         return request;
     }
 
+    public void CancelDelivery(DeliveryRequest request)
+    {
+        request.SetComplete(true);
+        unclaimedDeliveryRequests.Remove(request);
+
+        var owner = claimedDeliveryRequests.Where(kv => kv.Value == request).Select(kv => kv.Key).FirstOrDefault();
+        if (owner != null)
+        {
+            claimedDeliveryRequests.Remove(owner);
+        }
+    }
+
     public void CompleteDelivery(IDeliverDrops owner, DeliveryRequest request)
     {
         request.SetComplete(true);
