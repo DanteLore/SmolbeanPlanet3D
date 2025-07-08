@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class ManaController : MonoBehaviour, IObjectGenerator
 {
@@ -12,8 +13,16 @@ public class ManaController : MonoBehaviour, IObjectGenerator
 
     public Action<float> OnManaChanged;
     public float startingMana = 1000f;
+    public GameObject manaFlyerPrefab;
+    public Camera mainCamera;
+    public UIDocument uiTarget;
+    public string manaElementName = "manaSymbolLabel";
+    public float targetZDistance = 2.0f;
+    public float flyDurationSeconds = 1.0f;
+
     private float mana;
     private SoundPlayer soundPlayer;
+    private readonly Queue<float> manaQueue = new();
 
     public float Mana
     {
@@ -64,13 +73,24 @@ public class ManaController : MonoBehaviour, IObjectGenerator
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
     }
 
-    private void Update()
+    public void AddMana(GameObject source, float amount)
     {
-        
+        manaQueue.Enqueue(amount);
+        StartCoroutine(AwardMana());
+
+        var startPos = source.transform.position;
+        var flyer = Instantiate(manaFlyerPrefab, startPos, Quaternion.identity, mainCamera.transform).GetComponent<ManaFlyer>();
+
+        flyer.startPoint = startPos;
+        flyer.mainCamera = mainCamera;
+        flyer.durationSeconds = flyDurationSeconds;
+        flyer.uiElement = uiTarget.rootVisualElement.Q<VisualElement>(manaElementName);
+        flyer.targetZDistance = targetZDistance;
     }
 
-    public void AddMana(float amount)
+    private IEnumerator AwardMana()
     {
-        Mana += amount;
+        yield return new WaitForSeconds(flyDurationSeconds);
+        Mana += manaQueue.Dequeue();
     }
 }

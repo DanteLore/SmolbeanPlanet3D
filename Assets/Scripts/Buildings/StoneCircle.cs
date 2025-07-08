@@ -211,7 +211,7 @@ public class StoneCircle : SmolbeanBuilding
         }
         
         // Reward the mana
-        ManaController.Instance.AddMana(selectedOffering.reward);
+        ManaController.Instance.AddMana(gameObject, selectedOffering.reward);
 
         // Mark the offering as complete/remove it
         OfferingController.Instance.Complete(selectedOffering);
