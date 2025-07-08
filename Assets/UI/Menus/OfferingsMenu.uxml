@@ -3,7 +3,7 @@
     <Style src="project://database/Assets/UI/Styles/OfferingsMenuStyle.uss?fileID=7433441132597879392&amp;guid=b5703b044091346d688a3d4d00993cce&amp;type=3#OfferingsMenuStyle" />
     <ui:VisualElement name="MenuContainer" class="menuContainer">
         <ui:Label text="𐛺 Offerings" name="Title" class="title" />
-        <ui:MultiColumnListView name="offeringsListView" sorting-mode="Default" allow-add="false" allow-remove="false" fixed-item-height="80" show-alternating-row-backgrounds="ContentOnly" selection-type="None" virtualization-method="DynamicHeight" style="height: 100%; width: 90%;">
+        <ui:MultiColumnListView name="offeringsListView" sorting-mode="Default" allow-add="false" allow-remove="false" fixed-item-height="80" show-alternating-row-backgrounds="ContentOnly" selection-type="Single" virtualization-method="DynamicHeight" style="height: 100%; width: 90%;">
             <ui:Columns resizable="false" reorderable="false">
                 <ui:Column name="statusColumn" width="150px" optional="false" resizable="false" visible="true" sortable="true" title="𐛺" />
                 <ui:Column name="itemsColumn" title="Offering Items" width="500px" optional="false" resizable="false" sortable="false" />

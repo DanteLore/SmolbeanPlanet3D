@@ -66,3 +66,15 @@ ProgressBar Label {
     margin-top: 8px;
     margin-bottom: 8px;
 }
+
+.accept-button-accepted,
+.accept-button-accepted:disabled {
+    border-width: 0px;
+    background-color: transparent;
+    color: var(--color-highlight);
+}
+
+.accept-button-started,
+.accept-button-started:disabled {
+    color: rgb(228, 214, 17);
+}

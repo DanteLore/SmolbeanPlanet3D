@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 using System.Linq;
-using UnityEngine.Scripting;
 using System;
 
 public class OfferingViewBuilder
@@ -22,9 +21,18 @@ public class OfferingViewBuilder
             {
                 var items = (List<OfferingViewModel>)listView.itemsSource;
                 var button = cell.Q<Button>();
-                button.SetEnabled(items[i].ShowStartButton);
-                button.text = items[i].ShowStartButton ? "Accept" : "Accepted";
+                button.SetEnabled(items[i].StartButtonEnabled);
+                button.text = items[i].ActionButtonText;
 
+                button.RemoveFromClassList("accept-button-started");
+                button.RemoveFromClassList("accept-button-accepted");
+
+                if (items[i].IsStarted)
+                    button.AddToClassList("accept-button-started");
+
+                if (items[i].IsAccepted)
+                    button.AddToClassList("accept-button-accepted");
+                
                 if (button.userData is Action oldCb)
                     button.clicked -= oldCb;
 
@@ -34,12 +42,13 @@ public class OfferingViewBuilder
                     items[i].StartOffering();
                     listView.RefreshItems();
                 };
+
                 button.clicked += callback;
                 button.userData = callback;
             };
             statusColumn.comparison = (rowA, rowB) =>
-                    ((List<OfferingViewModel>)listView.itemsSource)[rowA].ShowStartButton.CompareTo(
-                        ((List<OfferingViewModel>)listView.itemsSource)[rowB].ShowStartButton);
+                    ((List<OfferingViewModel>)listView.itemsSource)[rowA].StartButtonEnabled.CompareTo(
+                        ((List<OfferingViewModel>)listView.itemsSource)[rowB].StartButtonEnabled);
         }
 
         // DURATION

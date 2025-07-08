@@ -13,7 +13,10 @@ public class OfferingViewModel
     public string RewardString => $"{offering.reward:0.0}";
     public float RemainingTime => offering.expiryTime - DayNightCycleController.Instance.PlayedTime;
     public string RemainingTimeString => DayNightCycleController.Instance.DurationToString(Math.Max(RemainingTime, 0.0f));
-    public bool ShowStartButton => !offering.IsAccepted;
+    public bool StartButtonEnabled => !offering.IsAccepted;
+    public bool IsAccepted { get => offering.IsAccepted; }
+    public bool IsStarted { get => offering.IsStarted; }
+
     public float InitialDuration
     {
         get
@@ -26,6 +29,20 @@ public class OfferingViewModel
                 return offering.availableDuration;
         }
     }
+
+    public string ActionButtonText
+    {
+        get
+        {
+            if (offering.IsStarted)
+                return "Started!";
+            else if (offering.IsAccepted)
+                return "Accepted";
+            else
+                return "Accept";
+        }
+    }
+
 
     public OfferingViewModel(Offering offering)
     {
