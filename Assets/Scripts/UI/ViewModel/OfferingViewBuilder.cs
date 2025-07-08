@@ -32,6 +32,7 @@ public class OfferingViewBuilder
                 {
                     soundPlayer.Play("Magic2");
                     items[i].StartOffering();
+                    listView.RefreshItems();
                 };
                 button.clicked += callback;
                 button.userData = callback;
