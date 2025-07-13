@@ -142,20 +142,17 @@ public class StoneCircle : SmolbeanBuilding
 
     private void OfferingExpired(Offering offering)
     {
-        // Do some funky animation/effect here in future!
-        Debug.Log($"STONE CIRCLE: Offering Expired ☠️ {offering}");
+        //
     }
 
     private void OfferingCompleted(Offering offering)
     {
-        // Do some funky animation/effect here in future!
-        Debug.Log($"STONE CIRCLE: Offering Completed ✅ {offering}");
+        //
     }
 
     private void OfferingCreated(Offering offering)
     {
-        // Do some funky animation/effect here in future!
-        Debug.Log($"STONE CIRCLE: Offering Created 🌟 {offering}");
+        //
     }
 
     public void StartOffering()
@@ -170,7 +167,6 @@ public class StoneCircle : SmolbeanBuilding
 
     private IEnumerator DoStartRitual()
     {
-        Debug.Log($"STONE CIRCLE: The ritual has begun ✨");
         // Start the first offering in the list that we have materials to start
         IsStarted = true;
         selectedOffering = OfferingController.Instance.Offerings.Where(o => o.IsAccepted).First(o => o.IsCompletedBy(Inventory));
