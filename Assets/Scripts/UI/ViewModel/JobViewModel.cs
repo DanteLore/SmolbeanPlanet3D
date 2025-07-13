@@ -20,6 +20,9 @@ public class JobViewModel
         get { return job.Colonist ? job.Colonist.Stats.name : ""; }
     }
 
+    public bool HasColonist { get => job.Colonist != null; }
+    public SmolbeanColonist Colonist { get => job.Colonist; }
+
     public string BuildingName
     {
         get { return job.Building.name; }

@@ -38,6 +38,10 @@ public class DeliveryRequestViewModel
         }
     }
 
+    public bool HasColonist { get => DeliveryManager.Instance.GetAssignedDeliverer(request) != null; }
+
+    public SmolbeanColonist Colonist { get => DeliveryManager.Instance.GetAssignedDeliverer(request) as SmolbeanColonist; }
+
     public string ItemText
     {
         get { return $"{request.Quantity} x {request.Item.dropName}"; }
@@ -63,4 +67,6 @@ public class DeliveryRequestViewModel
         get { return request.Priority; }
         set { request.Priority = value; }
     }
+
+    public MonoBehaviour Building { get => request.Building; }
 }

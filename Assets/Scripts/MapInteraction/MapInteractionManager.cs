@@ -108,4 +108,9 @@ public class MapInteractionManager : MonoBehaviour
         Data.DropLayer = LayerMask.NameToLayer(dropLayerName);
         Data.BuildCollisionLayers = new string[] { natureLayerName, buildingLayerName };
     }
+
+    public void ForceSelectFromUI(MonoBehaviour item)
+    {
+        Data.ForceSelect(item.transform);
+    }
 }

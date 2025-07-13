@@ -160,6 +160,18 @@
     -unity-text-align: upper-left;
 }
 
+.jobs-thumb-and-label-button, 
+.jobs-thumb-and-label-button:hover {
+    width: 100%;
+    border-width: 0px;
+    background-color: transparent;
+}
+
+.jobs-thumb-and-label-button:hover .jobs-table-label {
+    color: white;
+    -unity-font-style: bold;
+}
+
 /*************************/
 /** Colonists/Residents **/
 /*************************/
@@ -186,6 +198,18 @@
     flex-grow: 1;
     flex-shrink: 1;
     -unity-text-align: upper-left;
+}
+
+.colonists-thumb-and-label-button, 
+.colonists-thumb-and-label-button:hover {
+    width: 100%;
+    border-width: 0px;
+    background-color: transparent;
+}
+
+.colonists-thumb-and-label-button:hover .colonists-table-label {
+    color: white;
+    -unity-font-style: bold;
 }
 
 /*********************/

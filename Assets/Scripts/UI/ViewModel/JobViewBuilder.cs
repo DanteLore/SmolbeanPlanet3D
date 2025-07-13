@@ -53,13 +53,28 @@ public static class JobViewBuilder
         var colonistColumn = jobsListView.columns.FirstOrDefault(c => c.name == "colonistNameColumn");
         if (colonistColumn != null)
         {
-            colonistColumn.makeCell = MakeThumbAndLabelCell;
+            colonistColumn.makeCell = MakeThumbAndLabelButton;
             colonistColumn.bindCell = (cell, i) =>
             {
                 var jobsList = (List<JobViewModel>)jobsListView.itemsSource;
                 var m = jobsList[i];
                 cell.Q<Label>("valueLabel").text = jobsList[i].ColonistName;
                 cell.Q<Image>("jobRowThumbnail").image = jobsList[i].ColonistThumbnail;
+
+                var button = cell.Q<Button>();
+                button.SetEnabled(jobsList[i].HasColonist);
+
+                if (button.userData is Action oldCb)
+                    button.clicked -= oldCb;
+
+                var colonist = jobsList[i].Colonist;
+                Action newCb = () =>
+                {
+                    MapInteractionManager.Instance.ForceSelectFromUI(colonist);
+                };
+
+                button.clicked += newCb;
+                button.userData = newCb;
             };
             colonistColumn.comparison = (rowA, rowB) =>
                 string.Compare(
@@ -117,5 +132,16 @@ public static class JobViewBuilder
         container.Add(lbl);
 
         return container;
+    }
+
+    private static Button MakeThumbAndLabelButton()
+    {
+        var button = new Button();
+        button.AddToClassList("jobs-thumb-and-label-button");
+
+        var contents = MakeThumbAndLabelCell();
+        button.Add(contents);
+
+        return button;
     }
 }

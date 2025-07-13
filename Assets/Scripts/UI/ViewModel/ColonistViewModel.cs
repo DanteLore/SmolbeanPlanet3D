@@ -20,4 +20,6 @@ public class ColonistViewModel
     {
         get { return colonist.Species.thumbnail; }
     }
+
+    public MonoBehaviour Colonist { get => colonist; }
 }

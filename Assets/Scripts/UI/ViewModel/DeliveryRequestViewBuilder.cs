@@ -69,13 +69,28 @@ public static class DeliveryRequestViewBuilder
         var colonistColumn = listView.columns.FirstOrDefault(c => c.name == "colonistColumn");
         if (colonistColumn != null)
         {
-            colonistColumn.makeCell = MakeThumbAndLabelCell;
+            colonistColumn.makeCell = MakeThumbAndLabelButton;
             colonistColumn.bindCell = (cell, i) =>
             {
                 var items = (List<DeliveryRequestViewModel>)listView.itemsSource;
                 var m = items[i];
                 cell.Q<Label>("valueLabel").text = items[i].ColonistName;
                 cell.Q<Image>("drThumbnail").image = items[i].ColonistThumbnail;
+
+                var button = cell.Q<Button>();
+                button.SetEnabled(items[i].HasColonist);
+
+                if (button.userData is Action oldCb)
+                    button.clicked -= oldCb;
+
+                var colonist = items[i].Colonist;
+                Action newCb = () =>
+                {
+                    MapInteractionManager.Instance.ForceSelectFromUI(colonist);
+                };
+
+                button.clicked += newCb;
+                button.userData = newCb;
             };
             colonistColumn.comparison = (rowA, rowB) =>
                 string.Compare(
@@ -89,13 +104,27 @@ public static class DeliveryRequestViewBuilder
         var buildingColumn = listView.columns.FirstOrDefault(c => c.name == "buildingColumn");
         if (buildingColumn != null)
         {
-            buildingColumn.makeCell = MakeThumbAndLabelCell;
+            buildingColumn.makeCell = MakeThumbAndLabelButton;
             buildingColumn.bindCell = (cell, i) =>
             {
                 var items = (List<DeliveryRequestViewModel>)listView.itemsSource;
                 var m = items[i];
                 cell.Q<Label>("valueLabel").text = items[i].BuildingName;
                 cell.Q<Image>("drThumbnail").image = items[i].BuildingThumbnail;
+
+                var button = cell.Q<Button>();
+
+                if (button.userData is Action oldCb)
+                    button.clicked -= oldCb;
+
+                var building = items[i].Building;
+                Action newCb = () =>
+                {
+                    MapInteractionManager.Instance.ForceSelectFromUI(building);
+                };
+
+                button.clicked += newCb;
+                button.userData = newCb;
             };
             buildingColumn.comparison = (rowA, rowB) =>
                 string.Compare(
@@ -124,5 +153,16 @@ public static class DeliveryRequestViewBuilder
         container.Add(lbl);
 
         return container;
+    }
+
+    private static Button MakeThumbAndLabelButton()
+    {
+        var button = new Button();
+        button.AddToClassList("dr-thumb-and-label-button");
+
+        var contents = MakeThumbAndLabelCell();
+        button.Add(contents);
+
+        return button;
     }
 }

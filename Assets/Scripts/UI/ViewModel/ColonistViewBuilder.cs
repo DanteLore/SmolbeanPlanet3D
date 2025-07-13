@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 public static class ColonistViewBuilder
@@ -16,6 +15,9 @@ public static class ColonistViewBuilder
         {
             colonistColumn.makeCell = () =>
             {
+                var button = new Button();
+                button.AddToClassList("colonists-thumb-and-label-button");
+
                 var container = new VisualElement();
                 container.AddToClassList("colonists-thumb-and-label-row");
 
@@ -27,7 +29,9 @@ public static class ColonistViewBuilder
                 lbl.AddToClassList("colonists-table-label");
                 container.Add(lbl);
 
-                return container;
+                button.Add(container);
+
+                return button;
             };
             colonistColumn.bindCell = (cell, i) =>
             {
@@ -35,6 +39,20 @@ public static class ColonistViewBuilder
                 var m = jobsList[i];
                 cell.Q<Label>("valueLabel").text = jobsList[i].ColonistName;
                 cell.Q<Image>("jobRowThumbnail").image = jobsList[i].ColonistThumbnail;
+
+                var button = cell.Q<Button>();
+
+                if (button.userData is Action oldCb)
+                    button.clicked -= oldCb;
+
+                var colonist = jobsList[i].Colonist;
+                Action newCb = () =>
+                {
+                    MapInteractionManager.Instance.ForceSelectFromUI(colonist);
+                };
+
+                button.clicked += newCb;
+                button.userData = newCb;
             };
             colonistColumn.comparison = (rowA, rowB) =>
                 string.Compare(
