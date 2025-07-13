@@ -45,7 +45,7 @@ Material:
     - _EdgeNoiseScale: 10
     - _EdgeOffset: 0.2
     - _Frequency: 1.5
-    - _MagicLevel: 0.00000027939677
+    - _MagicLevel: 0
     - _MagicMax: -0.2
     - _MagicMin: -0.9
     - _QueueControl: 0

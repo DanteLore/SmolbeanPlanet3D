@@ -11,6 +11,15 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Textures for the flat cliffs
+
+I added ground textures.  These really help with the unlit side of cliffs etc, and add some more detail on the ground.
+
+Not sure how I feel.  Might delete later.  There's a slider on the material to turn them off!
+
+![Screenshot](./Docs/Images/screenshot80.png)
+![Screenshot](./Docs/Images/screenshot81.png)
+
 ## An offering to the Gods
 
 The basic workflow for the stone circle is complete!  It's pretty buggy at the moment, and there is a bunch of work to do to generate more sensible and challenging offerings to make life interesting for the player.  However, I am particularly proud of the magical effects when the materials are delivered and the offering ritual kicks off...
