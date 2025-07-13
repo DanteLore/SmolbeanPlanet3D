@@ -6,6 +6,7 @@ public class SleepState : IState
     private readonly SmolbeanAnimal animal;
     private readonly Animator animator;
     private readonly SoundPlayer soundPlayer;
+    public string Name { get => GetType().Name; }
 
     public SleepState(SmolbeanAnimal animal, Animator animator, SoundPlayer soundPlayer)
     {

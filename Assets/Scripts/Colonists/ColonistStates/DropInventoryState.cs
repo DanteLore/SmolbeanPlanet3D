@@ -1,11 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class DropInventoryAtDropPointState : IState
 {
     private IReturnDrops colonist;
     private DropController dropController;
+    public string Name { get => GetType().Name; }
 
     public DropInventoryAtDropPointState(IReturnDrops colonist, DropController dropController)
     {

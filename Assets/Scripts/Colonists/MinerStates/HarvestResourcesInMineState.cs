@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HarvestResourcesInMineState : IState
@@ -8,6 +6,7 @@ public class HarvestResourcesInMineState : IState
     private Mine mine;
     private SoundPlayer soundPlayer;
     private float lastHit;
+    public string Name { get => GetType().Name; }
 
     public HarvestResourcesInMineState(Miner miner, SoundPlayer soundPlayer)
     {

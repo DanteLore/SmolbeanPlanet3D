@@ -6,6 +6,7 @@ public class GenericState : IState
     private readonly Action onEnter;
     private readonly Action onExit;
     private readonly Action tick;
+    public string Name { get => GetType().Name; }
 
     public GenericState(string displayName = "GenericState", Action onEnter = null, Action onExit = null, Action tick = null)
     {

@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class ChooseEatingPlaceState : IState
 {
     private readonly SmolbeanAnimal animal;
+    public string Name { get => GetType().Name; }
 
     public ChooseEatingPlaceState(SmolbeanAnimal animal)
     {

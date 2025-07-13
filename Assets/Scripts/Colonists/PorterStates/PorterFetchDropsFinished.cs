@@ -2,6 +2,7 @@ public class PorterFetchDropsFinished : IState
 {
     private PorterFetchDropsState parent;
     private IDeliverDrops porter;
+    public string Name { get => GetType().Name; }
 
     public PorterFetchDropsFinished(PorterFetchDropsState parent, IDeliverDrops porter)
     {

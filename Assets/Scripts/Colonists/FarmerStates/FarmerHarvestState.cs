@@ -8,6 +8,8 @@ public class FarmerHarvestState : IState
 
     public bool NoGrassLeft { get; private set; }
 
+    public string Name { get => GetType().Name; }
+
     public FarmerHarvestState(Farmer farmer, Animator animator)
     {
         this.farmer = farmer;

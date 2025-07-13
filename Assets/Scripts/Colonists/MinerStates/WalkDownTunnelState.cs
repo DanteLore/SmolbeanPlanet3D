@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WalkDownTunnelState : IState
@@ -8,6 +6,7 @@ public class WalkDownTunnelState : IState
     private Mine mine;
     private SoundPlayer soundPlayer;
     private float startTime;
+    public string Name { get => GetType().Name; }
 
     public float WalkingTime
     {

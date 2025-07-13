@@ -15,6 +15,7 @@ public class SearchForPreyState : IState
     private float maxRadius;
     private Vector3 center;
 
+    public string Name { get => GetType().Name; }
     public bool InProgress { get { return radius <= maxRadius && hunter.Prey == null; } }
 
     public SearchForPreyState(Hunter hunter, AnimalSpec targetSpecies, string creatureLayer)

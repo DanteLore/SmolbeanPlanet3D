@@ -1,6 +1,7 @@
 public class MinerBlinkInTheSunlightState : IState
 {
     private readonly Miner miner;
+    public string Name { get => GetType().Name; }
 
     public MinerBlinkInTheSunlightState(Miner miner)
     {

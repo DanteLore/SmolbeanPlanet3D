@@ -15,6 +15,7 @@ public abstract class WalkStateBase : IState
       
     public float StuckTime { get { return Time.time - lastMoved; } }
     public bool IsStuck { get; set; }
+    public string Name { get => GetType().Name; }
 
     public WalkStateBase(SmolbeanAnimal animal, NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer)
     {

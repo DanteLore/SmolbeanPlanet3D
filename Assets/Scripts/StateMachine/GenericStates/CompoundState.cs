@@ -4,6 +4,9 @@ public abstract class CompoundState : IState
 {
     protected readonly StateMachine stateMachine;
     public bool Finished { get; private set; }
+    public string CurrentStateName { get; internal set; }
+
+    public string Name { get => GetType().Name + "." + stateMachine.CurrentStateName; }
 
     public CompoundState()
     {

@@ -4,6 +4,7 @@ using UnityEngine.AI;
 public class FindNextSpotInFieldState : IState
 {
     private readonly Farmer farmer;
+    public string Name { get => GetType().Name; }
 
     public FindNextSpotInFieldState(Farmer farmer)
     {

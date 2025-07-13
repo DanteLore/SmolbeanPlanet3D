@@ -4,6 +4,7 @@ public class DruidDoOfferingState : IState
 {
     private readonly Druid druid;
     private readonly SoundPlayer soundPlayer;
+    public string Name { get => GetType().Name; }
 
     protected StoneCircle StoneCircle
     {

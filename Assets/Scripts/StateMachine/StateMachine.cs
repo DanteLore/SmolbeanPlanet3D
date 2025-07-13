@@ -17,7 +17,17 @@ public class StateMachine
     private static readonly Transition[] EmptyTransitions = Array.Empty<Transition>();
     private IState startState;
 
-    public string CurrentStateName { get => currentState.GetType().Name; }
+    public string CurrentStateName
+    {
+        get
+        {
+            if (currentState == null)
+                return "None";
+
+            return currentState.Name;
+        }
+        
+    }
 
     private class Transition
     {

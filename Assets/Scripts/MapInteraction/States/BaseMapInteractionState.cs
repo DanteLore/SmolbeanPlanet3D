@@ -10,6 +10,7 @@ public abstract class BaseMapInteractionState : IState
     {
         this.data = data;
     }
+    public string Name { get => GetType().Name; }
 
     public abstract void OnEnter();
 

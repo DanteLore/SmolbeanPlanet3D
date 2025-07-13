@@ -4,6 +4,7 @@ public class EatGrassState : IState
 {
     private readonly SmolbeanAnimal animal;
     private float lastUpdateTime;
+    public string Name { get => GetType().Name; }
 
     public EatGrassState(SmolbeanAnimal animal)
     {

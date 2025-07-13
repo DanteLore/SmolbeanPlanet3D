@@ -7,6 +7,7 @@ public class PorterFailedDeliveryRequestState : IState
     private PorterDoDeliveryRequestState parent;
     private Porter porter;
     private readonly DeliveryManager deliveryManager;
+    public string Name { get => GetType().Name; }
 
     public PorterFailedDeliveryRequestState(PorterDoDeliveryRequestState parent, Porter porter, DeliveryManager deliveryManager)
     {

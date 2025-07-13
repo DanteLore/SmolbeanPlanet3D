@@ -3,6 +3,7 @@ public class PickupDropsState : IState
     private IGatherDrops gatherer;
     private DropController dropController;
     private SmolbeanDrop stack;
+    public string Name { get => GetType().Name; }
 
     public PickupDropsState(IGatherDrops gatherer, DropController dropController)
     {

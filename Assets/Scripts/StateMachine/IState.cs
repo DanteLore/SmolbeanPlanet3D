@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public interface IState 
 {
+    string Name { get; }
+
     public void Tick();
 
     public void OnEnter();

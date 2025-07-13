@@ -5,6 +5,7 @@ public class SearchForBuildingSiteState : IState
 {
     private readonly Builder builder;
     private readonly string buildingLayer;
+    public string Name { get => GetType().Name; }
 
     public SearchForBuildingSiteState(Builder builder, string buildingLayer)
     {

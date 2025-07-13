@@ -16,6 +16,7 @@ public class PorterSearchForDropToCollectState : IState
     private readonly string dropLayer;
     private readonly GridManager gridManager;
     private float radius;
+    public string Name { get => GetType().Name; }
 
     public PorterSearchForDropToCollectState(Porter porter, string dropLayer, GridManager gridManager)
     {

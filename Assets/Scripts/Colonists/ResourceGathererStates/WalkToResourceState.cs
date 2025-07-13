@@ -6,7 +6,7 @@ public class WalkToResourceState : WalkStateBase
     private ResourceGatherer gatherer;
 
     public WalkToResourceState(ResourceGatherer gatherer, NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer) 
-        : base((SmolbeanAnimal)gatherer, navAgent, animator, soundPlayer)
+        : base(gatherer, navAgent, animator, soundPlayer)
     {
         this.gatherer = gatherer;
     }

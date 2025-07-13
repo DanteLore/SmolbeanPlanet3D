@@ -10,6 +10,7 @@ public class FarmerSelectFieldCenterState : IState
         internal Vector3 pos;
         internal float grassQtty;
     }
+    public string Name { get => GetType().Name; }
 
     private readonly float fieldRadius;
     private readonly string groundLayer;

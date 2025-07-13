@@ -1,6 +1,7 @@
 public class GoToWorkState : IState
 {
     private readonly SmolbeanColonist colonist;
+    public string Name { get => GetType().Name; }
 
     public GoToWorkState(SmolbeanColonist colonist)
     {

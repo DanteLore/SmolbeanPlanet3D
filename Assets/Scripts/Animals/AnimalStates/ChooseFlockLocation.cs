@@ -4,8 +4,7 @@ using Random = UnityEngine.Random;
 
 // Some VERY ugly code in here - but the beautiful and terse linq methods just needed to go, for performance
 
-public class ChooseFlockLocation
-    : IState
+public class ChooseFlockLocation : IState
 {
     private readonly SmolbeanAnimal animal;
     private readonly int natureLayer;
@@ -13,6 +12,7 @@ public class ChooseFlockLocation
     private readonly int creatureLayer;
     private const int MAX_COLLIDERS = 100;
     private static readonly Collider[] hitColliders = new Collider[MAX_COLLIDERS];
+    public string Name { get => GetType().Name; }
 
     public ChooseFlockLocation(SmolbeanAnimal animal)
     {

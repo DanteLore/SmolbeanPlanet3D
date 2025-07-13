@@ -5,6 +5,7 @@ public class FactoryWorkerDoJobState : IState
     private readonly DropController dropController;
     private readonly FactoryWorker worker;
     private readonly SoundPlayer soundPlayer;
+    public string Name { get => GetType().Name; }
 
     protected FactoryBuilding Factory
     {

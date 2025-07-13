@@ -7,6 +7,7 @@ public class PorterStoreDropsState : IState
     
     private Porter porter;
     private DropController dropController;
+    public string Name { get => GetType().Name; }
 
     public PorterStoreDropsState(Porter porter, DropController dropController)
     {

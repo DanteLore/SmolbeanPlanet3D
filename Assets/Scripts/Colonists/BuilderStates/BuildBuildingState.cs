@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BuildBuildingState : IState
@@ -7,6 +5,7 @@ public class BuildBuildingState : IState
     private Builder builder;
     private SoundPlayer soundPlayer;
     private float lastUpdateTime;
+    public string Name { get => GetType().Name; }
 
     public BuildBuildingState(Builder builder, SoundPlayer soundPlayer)
     {

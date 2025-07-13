@@ -13,6 +13,7 @@ public class SearchForResourceState : IState
     private readonly string natureLayer;
     private ResourceCollectionBuilding building;
     private float radius;
+    public string Name { get => GetType().Name; }
 
     public bool InProgress { get { return radius <= maxRadius; } }
 

@@ -4,6 +4,7 @@ public class PorterClaimDeliveryRequest : IState
 {
     private readonly Porter porter;
     private readonly DeliveryManager deliveryManager;
+    public string Name { get => GetType().Name; }
 
     public PorterClaimDeliveryRequest(Porter porter, DeliveryManager deliveryManager)
     {

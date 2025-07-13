@@ -22,6 +22,7 @@ public class SearchForShootingSpotState : IState
 
     public bool InProgress { get; private set; }
     public bool Found { get; private set; }
+    public string Name { get => GetType().Name; }
 
     public SearchForShootingSpotState(Hunter hunter, GridManager gridManager, float shootHeight, Vector3 targetPointOffset, string natureLayer, string groundLayer, float shotDistance)
     {

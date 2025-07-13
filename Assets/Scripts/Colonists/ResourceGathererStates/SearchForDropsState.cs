@@ -5,6 +5,7 @@ public class SearchForDropsState : IState
 {
     private readonly ResourceGatherer gatherer;
     private readonly string dropLayer;
+    public string Name { get => GetType().Name; }
 
     public SearchForDropsState(ResourceGatherer gatherer, string dropLayer)
     {

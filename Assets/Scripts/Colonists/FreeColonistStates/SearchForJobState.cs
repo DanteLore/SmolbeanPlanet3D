@@ -2,6 +2,7 @@ public class SearchForJobState : IState
 {
     private readonly SmolbeanColonist colonist;
     private readonly JobController jobController;
+    public string Name { get => GetType().Name; }
 
     public SearchForJobState(SmolbeanColonist colonist, JobController jobController)
     {

@@ -9,6 +9,7 @@ public class HarvestResource : IState
     private IDamagable target;
     private SoundPlayer soundPlayer;
     private float lastHit = 0;
+    public string Name { get => GetType().Name; }
 
     public HarvestResource(StaticResourceGatherer gatherer, NavMeshAgent navAgent, Animator animator, SoundPlayer soundPlayer)
     {

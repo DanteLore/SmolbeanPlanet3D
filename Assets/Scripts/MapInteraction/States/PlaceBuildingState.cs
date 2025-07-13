@@ -5,6 +5,7 @@ public class PlaceBuildingState : IState
     private readonly MapInteractionData data;
     private readonly SoundPlayer soundPlayer;
     private readonly GameObject buildingPlacedParticleSystem;
+    public string Name { get => GetType().Name; }
 
     public bool IsComplete { get { return true; } } // Seems daft, but in future it might take more than a frame!
 

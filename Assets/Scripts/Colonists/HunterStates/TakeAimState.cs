@@ -5,6 +5,7 @@ public class TakeAimState : IState
     private readonly Hunter hunter;
     private readonly SoundPlayer soundPlayer;
     private float aimStartTime;
+    public string Name { get => GetType().Name; }
 
     public bool IsReady { get => Time.time - aimStartTime > 1f; }
 

@@ -1,6 +1,7 @@
 public class PorterUnloadDeliveryItemsState : IState
 {
     private Porter porter;
+    public string Name { get => GetType().Name; }
 
     public PorterUnloadDeliveryItemsState(Porter porter)
     {

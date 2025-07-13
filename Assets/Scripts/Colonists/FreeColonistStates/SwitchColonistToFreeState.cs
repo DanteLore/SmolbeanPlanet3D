@@ -3,6 +3,7 @@ using UnityEngine;
 public class SwitchColonistToFreeState : IState
 {
     private readonly SmolbeanColonist colonist;
+    public string Name { get => GetType().Name; }
 
     public SwitchColonistToFreeState(SmolbeanColonist colonist)
     {

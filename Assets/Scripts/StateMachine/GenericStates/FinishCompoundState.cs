@@ -1,6 +1,7 @@
 ﻿public class FinishCompoundState : IState
 {
     protected CompoundState parent;
+    public string Name { get => GetType().Name; }
 
     public FinishCompoundState(CompoundState parent)
     {

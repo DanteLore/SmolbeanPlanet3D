@@ -5,6 +5,7 @@ using UnityEngine;
 public class PorterLoadDeliveryItemsState : IState
 {
     private Porter porter;
+    public string Name { get => GetType().Name; }
 
     public PorterLoadDeliveryItemsState(Porter porter)
     {

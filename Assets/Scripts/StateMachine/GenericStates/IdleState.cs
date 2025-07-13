@@ -4,6 +4,7 @@ public class IdleState : IState
 {
     private Animator animator;
     private float startedIdleTime;
+    public string Name { get => GetType().Name; }
 
     public float TimeIdle
     {

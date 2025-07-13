@@ -5,6 +5,7 @@ using Random = UnityEngine.Random;
 public class FindRestingPlaceState : IState
 {
     private readonly SmolbeanColonist colonist;
+    public string Name { get => GetType().Name; }
 
     public FindRestingPlaceState(SmolbeanColonist colonist)
     {
