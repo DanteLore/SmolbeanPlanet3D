@@ -1,6 +1,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using System;
+using Random = UnityEngine.Random;
+
+// Batch collapse performance
+// No batch collapse:       ~5.3ms      (Fixed batch grid based on BATCH_SIZE and number of blades per m2)
+// CollapseAdjacentBatches: ~4.0ms      (The old way - create a grid of batches then collapse them together RLE style)
+// CreateBatchesQuad:       ~5.0ms      (Getting some very small batches this way...)
+//     Binary tree:         ~4.3ms      (Binary split, alternating horizontal and vertical as you recurse)
+//     Plus min size:       ~3.5ms      (As above but impose a minimum batch size - dropping extra grass if splitting would cause small batches)
+
+// New grass system using fewer grass blades and improved billboard shader
+// Also using Profile Analyzer in unity to get average times
+// Note that deep profiler is attached but not recording, so numbers are high!
+//                          Gen:        Frame Mean:     Frame Max:
+// First run:               14.1s       2.7ms           4.26ms
+// Removed Linq:            13.5s       2.47ms          2.96ms
+// foreach to for:          10.9s       2.4ms           2.57ms
+// Visible batch list:      ~10s        2.0ms           2.16ms
+// Culling Group:           10.9s       2.18ms          2.47ms   (Note: had to move the camera to hit the culling code!)
+// Camera deadzone:         11s         2.15ms          2.64ms   (Note: movement makes this inaccurate probs)
+// Without deep profile:    4.2s        1.74ms          2.16ms   (Just for info)
+
+// ChatGPT recommended using a Morton function and a sorted list of grass to get 100% batches.  It makes setup MUCH slower
+// And delivers only small gains in performance
+// Could be because small batches are not being thrown away, so more grass. Plus batch overlaps
+//                          Gen:        Frame Mean:     Frame Max:
+// Morton:                              2.11ms          2.82ms   (With movement)
+// Morton:                  46.3s (!)   1.97ms          2.18ms   (No movement, just to make it fair!)
+// No profiler:             16.4s       1.62ms          1.80ms
+// Prefetch submech count:  16.4s       1.63ms          1.87ms   (Too close to call!)
+// Batches to array         16.5s       1.63ms          1.89ms   (Hmmm)
 
 public class GrassInstancer : MonoBehaviour, IObjectGenerator
 {
@@ -38,7 +69,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     public float positionThreshold = 0.5f;
     public float rotationThreshold = 2.0f;
 
-    private List<Batch> batches;
+    private Batch[] batches;
     private int occlusionLayerMask;
     private int groundLayerMask;
     private float xNoiseOffset;
@@ -53,6 +84,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     private Vector3 lastCamPos;
     private Quaternion lastCamRot;
     private Transform cameraTransform;
+    private int subMeshCount;
     private CullingGroup cullingGroup;
     private readonly List<Batch> visibleBatches = new();
 
@@ -71,7 +103,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
             // Calculate visible batches
             visibleBatches.Clear();
-            for (int batchIndex = 0; batchIndex < batches.Count; batchIndex++)
+            for (int batchIndex = 0; batchIndex < batches.Length; batchIndex++)
             {
                 Batch batch = batches[batchIndex];
                 //if (batch.bounds.SqrDistance(lastCamPos) < renderThresholdSqr && GeometryUtility.TestPlanesAABB(planes, batch.bounds))
@@ -79,7 +111,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
                 {
                     visibleBatches.Add(batch);
                 }
-            } 
+            }
         }
 
         // Render the visible batches
@@ -87,7 +119,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         {
             Batch batch = visibleBatches[batchIndex];
 
-            for (int subMeshIndex = 0; subMeshIndex < mesh.subMeshCount; subMeshIndex++)
+            for (int subMeshIndex = 0; subMeshIndex < subMeshCount; subMeshIndex++)
             {
                 Graphics.DrawMeshInstanced(mesh, subMeshIndex, material, batch.batchData, null, UnityEngine.Rendering.ShadowCastingMode.Off, true);
             }
@@ -100,12 +132,30 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         renderThresholdSqr = renderThreshold * renderThreshold;
         positionThresholdSqr = positionThreshold * positionThreshold;
         cameraTransform = mainCamera.transform;
+        subMeshCount = mesh.subMeshCount;
+        batches = Array.Empty<Batch>();
+
         StartCoroutine(GenerateGrass());
     }
 
     public void Clear()
     {
-        batches = new List<Batch>();
+        batches = Array.Empty<Batch>();
+
+        if (cullingGroup != null)
+        {
+            cullingGroup.Dispose();
+            cullingGroup = null;
+        }
+    }
+
+    public void OnDestroy()
+    {
+        if (cullingGroup != null)
+        {
+            cullingGroup.Dispose();
+            cullingGroup = null;
+        }
     }
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
@@ -121,9 +171,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     private IEnumerator GenerateGrass()
     {
         mapBounds = gridManager.GetIslandBounds();
-        batches = new List<Batch>();
 
-        //System.DateTime start = System.DateTime.Now;
         Random.InitState(randomSeed);
         xNoiseOffset = Random.Range(0f, 1000f);
         yNoiseOffset = Random.Range(0f, 1000f);
@@ -134,36 +182,15 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         List<Vector3> grassBlades = new();
         yield return GenerateGrassBlades(grassBlades);
 
-        //Debug.Log($"Created {grassBlades.Count} grass blades");
+        yield return null;
+
+        batches = CreateBatchesMorton(mapBounds, grassBlades).ToArray();
+
+        //Debug.Log("Batches created: " + batches.Count);
+        //Debug.Log("Batches less than 100% full: " + batches.Count(b => b.batchData.Count < BATCH_SIZE));
 
         yield return null;
 
-        // Batch collapse performance
-        // No batch collapse:       ~5.3ms      (Fixed batch grid based on BATCH_SIZE and number of blades per m2)
-        // CollapseAdjacentBatches: ~4.0ms      (The old way - create a grid of batches then collapse them together RLE style)
-        // CreateBatchesQuad:       ~5.0ms      (Getting some very small batches this way...)
-        //     Binary tree:         ~4.3ms      (Binary split, alternating horizontal and vertical as you recurse)
-        //     Plus min size:       ~3.5ms      (As above but impose a minimum batch size - dropping extra grass if splitting would cause small batches)
-
-        // New grass system using fewer grass blades and improved billboard shader
-        // Also using Profile Analyzer in unity to get average times
-        // Note that deep profiler is attached but not recording, so numbers are high!
-        //                          Gen:        Frame Mean:     Frame Max:
-        // First run:               14.1s       2.7ms           4.26ms
-        // Removed Linq:            13.5s       2.47ms          2.96ms
-        // foreach to for:          10.9s       2.4ms           2.57ms
-        // Visible batch list:      ~10s        2.0ms           2.16ms
-        // Culling Group:           10.9s       2.18ms          2.47ms   (Note: had to move the camera to hit the culling code!)
-        // Camera deadzone:         11s         2.15ms          2.64ms   (Note: movement makes this inaccurate probs)
-        // Without deep profile:    4.2s        1.74ms          2.16ms   (Just for info)
-
-        batches = CreateBatchesBinarySplit(mapBounds, grassBlades);
-
-        //Debug.Log("Batches created by quad tree: " + batches.Count);
-        //Debug.Log("Batches less than 50% full: " + batches.Count(b => b.batchData.Count < (BATCH_SIZE / 2)));
-
-        yield return null;
-        
         SetupCullingGroup();
 
         yield return null;
@@ -171,8 +198,14 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
     private void SetupCullingGroup()
     {
-        var allSpheres = new BoundingSphere[batches.Count];
-        for (int i = 0; i < batches.Count; i++)
+        if (cullingGroup != null)
+        {
+            cullingGroup.Dispose();
+            cullingGroup = null;
+        }
+
+        var allSpheres = new BoundingSphere[batches.Length];
+        for (int i = 0; i < batches.Length; i++)
         {
             var bounds = batches[i].bounds;
             allSpheres[i] = new BoundingSphere(bounds.center, bounds.extents.magnitude);
@@ -206,46 +239,59 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         return null;
     }
 
-    private List<Batch> CreateBatchesBinarySplit(Bounds bounds, List<Vector3> grassBlades, bool splitHorizontal = true)
+    private List<Batch> CreateBatchesMorton(Bounds mapBounds, List<Vector3> grassBlades)
     {
-        var result = new List<Batch>();
-        int grassCount = grassBlades.Count;
+        var batches = new List<Batch>();
 
-        if (grassCount <= BATCH_SIZE && grassCount >= minBatchSize)
+        grassBlades.Sort((a, b) => Morton(a, mapBounds).CompareTo(Morton(b, mapBounds)));
+        for (int i = 0; i < grassBlades.Count; i += BATCH_SIZE)
         {
-            result.Add(CreateBatch(bounds, grassBlades));
-        }
-        else if (grassCount <= minInstancesForSplit)
-        {
-            // Splitting would cause unacceptably small child batches - better to just dump the extra grass
-            grassBlades.RemoveRange(BATCH_SIZE, grassBlades.Count - BATCH_SIZE);
-            result.Add(CreateBatch(bounds, grassBlades));
-        }
-        else // Split this batch into two and recurse!
-        {
-            var splitBatchBoundsList = splitHorizontal ? SplitBounds(bounds, 2, 1) : SplitBounds(bounds, 1, 2);
-
-            foreach (var batchBounds in splitBatchBoundsList)
-            {
-                List<Vector3> quadGrass = new();
-
-                for (int i = 0; i < grassBlades.Count; i++)
-                {
-                    if (batchBounds.Contains(grassBlades[i]))
-                    {
-                        quadGrass.Add(grassBlades[i]);
-                    }
-                }
-
-                if (quadGrass.Count >= minBatchSize)
-                {
-                    var childBatches = CreateBatchesBinarySplit(batchBounds, quadGrass, !splitHorizontal);
-                    result.AddRange(childBatches);
-                }
-            }
+            var chunk = grassBlades.GetRange(i, Mathf.Min(BATCH_SIZE, grassBlades.Count - i));
+            var bounds = ComputeBounds(chunk);
+            batches.Add(CreateBatch(bounds, chunk));
         }
 
-        return result;
+        return batches;
+    }
+
+    public static Bounds ComputeBounds(List<Vector3> points)
+    {
+        if (points == null || points.Count == 0)
+            return new Bounds(Vector3.zero, Vector3.zero);
+
+        Bounds b = new Bounds(points[0], Vector3.zero);
+
+        for (int i = 1; i < points.Count; i++)
+            b.Encapsulate(points[i]);
+
+        return b;
+    }
+
+    // Computes a 32-bit Morton code (Z-order) from a world-space position.
+    // OK, my AI friend helped me with this!  I did not know what a Morton hash was!
+    public static uint Morton(Vector3 pos, Bounds bounds)
+    {
+        float nx = Mathf.InverseLerp(bounds.min.x, bounds.max.x, pos.x);
+        float nz = Mathf.InverseLerp(bounds.min.z, bounds.max.z, pos.z);
+
+        // Quantize to 16 bits
+        uint ix = (uint)(Mathf.Clamp01(nx) * 65535f);
+        uint iz = (uint)(Mathf.Clamp01(nz) * 65535f);
+
+        // Interleave and return
+        return (InterleaveBits(iz) << 1) | InterleaveBits(ix);
+    }
+
+    // Spreads out the lower 16 bits of x so that there are zeroes between each bit:
+    // e.g. fed:  abcdefghijklmnop  ->  a0b0c0d0e0f0g0h0i0j0k0l0m0n0o0p0
+    private static uint InterleaveBits(uint x)
+    {
+        x &= 0x0000FFFF;  // keep only lower 16 bits
+        x = (x | (x << 8)) & 0x00FF00FF;
+        x = (x | (x << 4)) & 0x0F0F0F0F;
+        x = (x | (x << 2)) & 0x33333333;
+        x = (x | (x << 1)) & 0x55555555;
+        return x;
     }
 
     private Batch CreateBatch(Bounds bounds, List<Vector3> grassBlades)
