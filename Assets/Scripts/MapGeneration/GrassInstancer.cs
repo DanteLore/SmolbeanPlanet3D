@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
-using System.Linq;
 
 public class GrassInstancer : MonoBehaviour, IObjectGenerator
 {
@@ -36,6 +35,8 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     public float noiseScale = 0.1f;
     public float renderThreshold = 100f;
     public AnimationCurve grassWeightCurve;
+    public float positionThreshold = 0.5f;
+    public float rotationThreshold = 2.0f;
 
     private List<Batch> batches;
     private int occlusionLayerMask;
@@ -46,37 +47,58 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     public Camera mainCamera;
     private GridManager gridManager;
     private float renderThresholdSqr;
+    private float positionThresholdSqr;
 
-    private Plane[] planes = new Plane[6];
+    private readonly Plane[] planes = new Plane[6];
     private Vector3 lastCamPos;
     private Quaternion lastCamRot;
     private Transform cameraTransform;
+    private CullingGroup cullingGroup;
+    private readonly List<Batch> visibleBatches = new();
 
-    void Update()
+    private void Update()
     {
-        if (cameraTransform.position != lastCamPos || cameraTransform.rotation != lastCamRot)
+        cameraTransform.GetPositionAndRotation(out Vector3 camPos, out Quaternion camRot);
+
+        float movedSqr = (camPos - lastCamPos).sqrMagnitude;
+        float angleDiff = Quaternion.Angle(camRot, lastCamRot);
+
+        if (movedSqr > positionThresholdSqr || angleDiff > rotationThreshold)
         {
             GeometryUtility.CalculateFrustumPlanes(mainCamera, planes);
             lastCamPos = cameraTransform.position;
             lastCamRot = cameraTransform.rotation;
+
+            // Calculate visible batches
+            visibleBatches.Clear();
+            for (int batchIndex = 0; batchIndex < batches.Count; batchIndex++)
+            {
+                Batch batch = batches[batchIndex];
+                //if (batch.bounds.SqrDistance(lastCamPos) < renderThresholdSqr && GeometryUtility.TestPlanesAABB(planes, batch.bounds))
+                if (batch.bounds.SqrDistance(lastCamPos) < renderThresholdSqr && cullingGroup.IsVisible(batchIndex))
+                {
+                    visibleBatches.Add(batch);
+                }
+            } 
         }
 
-        foreach (var batch in batches)
+        // Render the visible batches
+        for (int batchIndex = 0; batchIndex < visibleBatches.Count; batchIndex++)
         {
-            if (batch.bounds.SqrDistance(lastCamPos) < renderThresholdSqr && GeometryUtility.TestPlanesAABB(planes, batch.bounds))
+            Batch batch = visibleBatches[batchIndex];
+
+            for (int subMeshIndex = 0; subMeshIndex < mesh.subMeshCount; subMeshIndex++)
             {
-                for (int i = 0; i < mesh.subMeshCount; i++)
-                {
-                    Graphics.DrawMeshInstanced(mesh, i, material, batch.batchData, null, UnityEngine.Rendering.ShadowCastingMode.Off, true);
-                }
+                Graphics.DrawMeshInstanced(mesh, subMeshIndex, material, batch.batchData, null, UnityEngine.Rendering.ShadowCastingMode.Off, true);
             }
         }
     }
 
-    void Start()
+    private void Start()
     {
         gridManager = FindFirstObjectByType<GridManager>();
         renderThresholdSqr = renderThreshold * renderThreshold;
+        positionThresholdSqr = positionThreshold * positionThreshold;
         cameraTransform = mainCamera.transform;
         StartCoroutine(GenerateGrass());
     }
@@ -126,17 +148,40 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         // New grass system using fewer grass blades and improved billboard shader
         // Also using Profile Analyzer in unity to get average times
         // Note that deep profiler is attached but not recording, so numbers are high!
-        //                          Generation: Frame Mean:     Frame Max:
+        //                          Gen:        Frame Mean:     Frame Max:
         // First run:               14.1s       2.7ms           4.26ms
         // Removed Linq:            13.5s       2.47ms          2.96ms
+        // foreach to for:          10.9s       2.4ms           2.57ms
+        // Visible batch list:      ~10s        2.0ms           2.16ms
+        // Culling Group:           10.9s       2.18ms          2.47ms   (Note: had to move the camera to hit the culling code!)
+        // Camera deadzone:         11s         2.15ms          2.64ms   (Note: movement makes this inaccurate probs)
+        // Without deep profile:    4.2s        1.74ms          2.16ms   (Just for info)
 
         batches = CreateBatchesBinarySplit(mapBounds, grassBlades);
 
-        //Debug.Log("Batches created by quad tree: " + batches.Count());
-        //Debug.Log(string.Join(",", batches.Select(b => b.batchData.Count)));
-        //Debug.Log($"Setup grass instance data in {(System.DateTime.Now - start).Seconds}s");
+        //Debug.Log("Batches created by quad tree: " + batches.Count);
+        //Debug.Log("Batches less than 50% full: " + batches.Count(b => b.batchData.Count < (BATCH_SIZE / 2)));
 
         yield return null;
+        
+        SetupCullingGroup();
+
+        yield return null;
+    }
+
+    private void SetupCullingGroup()
+    {
+        var allSpheres = new BoundingSphere[batches.Count];
+        for (int i = 0; i < batches.Count; i++)
+        {
+            var bounds = batches[i].bounds;
+            allSpheres[i] = new BoundingSphere(bounds.center, bounds.extents.magnitude);
+        }
+
+        cullingGroup = new CullingGroup();
+        cullingGroup.targetCamera = mainCamera;
+        cullingGroup.SetBoundingSpheres(allSpheres);
+        cullingGroup.SetBoundingSphereCount(allSpheres.Length);
     }
 
     private IEnumerator GenerateGrassBlades(List<Vector3> grassBlades)
