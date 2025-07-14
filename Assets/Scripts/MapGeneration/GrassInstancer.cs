@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using System.Collections;
+using System.Linq;
 
 public class GrassInstancer : MonoBehaviour, IObjectGenerator
 {
@@ -106,7 +106,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         xNoiseOffset = Random.Range(0f, 1000f);
         yNoiseOffset = Random.Range(0f, 1000f);
 
-        occlusionLayerMask = LayerMask.GetMask(occlusionLayers.ToArray());
+        occlusionLayerMask = LayerMask.GetMask(occlusionLayers);
         groundLayerMask = LayerMask.GetMask(groundLayer);
 
         List<Vector3> grassBlades = new();
@@ -122,6 +122,13 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         // CreateBatchesQuad:       ~5.0ms      (Getting some very small batches this way...)
         //     Binary tree:         ~4.3ms      (Binary split, alternating horizontal and vertical as you recurse)
         //     Plus min size:       ~3.5ms      (As above but impose a minimum batch size - dropping extra grass if splitting would cause small batches)
+
+        // New grass system using fewer grass blades and improved billboard shader
+        // Also using Profile Analyzer in unity to get average times
+        // Note that deep profiler is attached but not recording, so numbers are high!
+        //                          Generation: Frame Mean:     Frame Max:
+        // First run:               14.1s       2.7ms           4.26ms
+        // Removed Linq:            13.5s       2.47ms          2.96ms
 
         batches = CreateBatchesBinarySplit(mapBounds, grassBlades);
 
@@ -166,18 +173,28 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         else if (grassCount <= minInstancesForSplit)
         {
             // Splitting would cause unacceptably small child batches - better to just dump the extra grass
-            result.Add(CreateBatch(bounds, grassBlades.Take(BATCH_SIZE)));
+            grassBlades.RemoveRange(BATCH_SIZE, grassBlades.Count - BATCH_SIZE);
+            result.Add(CreateBatch(bounds, grassBlades));
         }
         else // Split this batch into two and recurse!
         {
-            var splitBatches = splitHorizontal ? SplitBounds(bounds, 2, 1) : SplitBounds(bounds, 1, 2);
+            var splitBatchBoundsList = splitHorizontal ? SplitBounds(bounds, 2, 1) : SplitBounds(bounds, 1, 2);
 
-            foreach (var splitBatch in splitBatches)
+            foreach (var batchBounds in splitBatchBoundsList)
             {
-                var quadGrass = grassBlades.Where(g => splitBatch.Contains(g)).ToList();
+                List<Vector3> quadGrass = new();
+
+                for (int i = 0; i < grassBlades.Count; i++)
+                {
+                    if (batchBounds.Contains(grassBlades[i]))
+                    {
+                        quadGrass.Add(grassBlades[i]);
+                    }
+                }
+
                 if (quadGrass.Count >= minBatchSize)
                 {
-                    var childBatches = CreateBatchesBinarySplit(splitBatch, quadGrass, !splitHorizontal);
+                    var childBatches = CreateBatchesBinarySplit(batchBounds, quadGrass, !splitHorizontal);
                     result.AddRange(childBatches);
                 }
             }
@@ -186,13 +203,16 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         return result;
     }
 
-    private Batch CreateBatch(Bounds bounds, IEnumerable<Vector3> grassBlades)
+    private Batch CreateBatch(Bounds bounds, List<Vector3> grassBlades)
     {
-        return new Batch
-        {
-            batchData = grassBlades.Select(GenerateGrassData).ToList(),
-            bounds = bounds
-        };
+        Batch batch = new();
+
+        for (int i = 0; i < grassBlades.Count; i++)
+            batch.batchData.Add(GenerateGrassData(grassBlades[i]));
+
+        batch.bounds = bounds;
+
+        return batch;
     }
 
     private Matrix4x4 GenerateGrassData(Vector3 pos)

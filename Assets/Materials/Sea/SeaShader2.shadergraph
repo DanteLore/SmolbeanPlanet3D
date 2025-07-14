@@ -2119,7 +2119,7 @@
         "preventRotation": false
     },
     "m_Path": "Shader Graphs",
-    "m_GraphPrecision": 1,
+    "m_GraphPrecision": 2,
     "m_PreviewMode": 2,
     "m_OutputNode": {
         "m_Id": ""
@@ -2336,7 +2336,7 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     },
-    "m_HashType": 1
+    "m_HashType": 0
 }
 
 {
@@ -4637,8 +4637,8 @@
     "m_ObjectId": "2ef376125a6d4c53a21b8f79798b101e",
     "m_Title": "Intersection Foam Texture",
     "m_Position": {
-        "x": -1635.0001220703125,
-        "y": -1169.0001220703125
+        "x": -1635.0,
+        "y": -1169.0
     }
 }
 
@@ -6809,8 +6809,8 @@
     "m_ObjectId": "5814f97c535847d9ba3a3218de46e942",
     "m_Title": "Ambient Light",
     "m_Position": {
-        "x": 978.999755859375,
-        "y": -1375.0001220703125
+        "x": 979.0,
+        "y": -1375.0
     }
 }
 
@@ -7214,7 +7214,7 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     },
-    "m_HashType": 1
+    "m_HashType": 0
 }
 
 {
@@ -11202,7 +11202,7 @@
     "m_Title": "World Depth",
     "m_Position": {
         "x": -2606.0,
-        "y": -338.0001220703125
+        "y": -338.0
     }
 }
 
@@ -11615,8 +11615,8 @@
     "m_ObjectId": "bff9613269fc41169fcf486491d45832",
     "m_Title": "Waves",
     "m_Position": {
-        "x": -10.999999046325684,
-        "y": -3417.000244140625
+        "x": -11.0,
+        "y": -3417.0
     }
 }
 
@@ -13175,7 +13175,7 @@
     "m_ObjectId": "e28e102f345d404e9ee62c12c561124f",
     "m_Title": "Shimmer",
     "m_Position": {
-        "x": 562.0001220703125,
+        "x": 562.0,
         "y": -573.0
     }
 }
@@ -13210,7 +13210,7 @@
     "m_ObjectId": "e321d4d0078d49bdb710d63920e06eb6",
     "m_Title": "Underwater Colors",
     "m_Position": {
-        "x": -985.0000610351563,
+        "x": -985.0,
         "y": -121.0
     }
 }
@@ -13413,7 +13413,7 @@
     "m_ObjectId": "e9c744794064448bb96bcf60f1c1193e",
     "m_Title": "IntersectionFoam Mask",
     "m_Position": {
-        "x": -925.0000610351563,
+        "x": -925.0,
         "y": -1622.0
     }
 }

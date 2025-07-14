@@ -441,6 +441,7 @@
     "m_OutputNode": {
         "m_Id": "378f822bc7b946f8a651b799cdd331b1"
     },
+    "m_SubDatas": [],
     "m_ActiveTargets": []
 }
 
@@ -584,7 +585,7 @@
     },
     "m_DefaultValue": {
         "x": 0.0,
-        "y": 0.0
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -628,7 +629,7 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     },
-    "m_HashType": 1
+    "m_HashType": 0
 }
 
 {
@@ -2270,8 +2271,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": -1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
@@ -2466,8 +2467,8 @@
         "y": 1.0
     },
     "m_DefaultValue": {
-        "x": 0.0,
-        "y": 0.0
+        "x": 1.0,
+        "y": 1.0
     },
     "m_Labels": []
 }
