@@ -48,7 +48,7 @@ Material:
     - _EdgeNoiseWeight: 0.1
     - _EdgePosition: 0.35
     - _EdgePosition2: 0.23
-    - _MagicLevel: 0.9999994
+    - _MagicLevel: 0
     - _MaxEdgePosition: 0.25
     - _MinEdgePosition: 0.04
     - _QueueControl: 0

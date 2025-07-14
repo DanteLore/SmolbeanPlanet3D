@@ -11,6 +11,19 @@ The Smolbean TODO list has been moved to Trello:  https://trello.com/b/0HaP2snl/
 
 Newest entries at the top :)
 
+## Better grass!
+
+Following a bunch of great tutorials on YouTube I managed to create much thicker, better lit grass - and without a huge performance hit.  I'm not sure I'm getting the better looking grass for free, but it's not the biggest hit on FPS right now either.
+
+![Screenshot](./Docs/Images/screenshot83.png)
+![Screenshot](./Docs/Images/screenshot84.png)
+![Screenshot](./Docs/Images/screenshot85.png)
+
+Links to the useful videos:
+* [Setting up the grass alpha texture etc](https://www.youtube.com/watch?v=H8pNYFbqfJo)
+* [Accessing additional lights](https://www.youtube.com/watch?v=F8bAI6dIrto)
+* [Toon shading in 10mins](https://www.youtube.com/watch?v=Xk--R5vTnAg&t=306s)
+
 ## Textures for the flat cliffs
 
 I added ground textures.  These really help with the unlit side of cliffs etc, and add some more detail on the ground.
