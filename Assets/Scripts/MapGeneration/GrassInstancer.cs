@@ -4,6 +4,11 @@ using System.Collections;
 using System;
 using Random = UnityEngine.Random;
 
+#if UNITY_EDITOR
+using UnityEditor;
+using System.Linq;
+#endif
+
 // Batch collapse performance
 // No batch collapse:       ~5.3ms      (Fixed batch grid based on BATCH_SIZE and number of blades per m2)
 // CollapseAdjacentBatches: ~4.0ms      (The old way - create a grid of batches then collapse them together RLE style)
@@ -41,10 +46,12 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         public Bounds bounds;
     }
 
+    public enum BatchGenerationAlgorithm { Morton, BTree }
+
     public int Priority { get { return 100; } }
     public bool RunModeOnly { get { return true; } }
 
-    private const int BATCH_SIZE = 1024;
+    private const int BATCH_SIZE = 1023;
     public int instanceAttemptsPerSquareMeter = 1000;
     public int minInstancesForSplit = 1536;
     public int minBatchSize = 256;
@@ -68,6 +75,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     public AnimationCurve grassWeightCurve;
     public float positionThreshold = 0.5f;
     public float rotationThreshold = 2.0f;
+    public BatchGenerationAlgorithm generationAlgorithm = BatchGenerationAlgorithm.BTree;
 
     private Batch[] batches;
     private int occlusionLayerMask;
@@ -86,6 +94,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     private Transform cameraTransform;
     private int subMeshCount;
     private CullingGroup cullingGroup;
+    private int grassBladeCount;
     private readonly List<Batch> visibleBatches = new();
 
     private void Update()
@@ -181,10 +190,14 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
         List<Vector3> grassBlades = new();
         yield return GenerateGrassBlades(grassBlades);
+        grassBladeCount = grassBlades.Count;
 
         yield return null;
 
-        batches = CreateBatchesMorton(mapBounds, grassBlades).ToArray();
+        if (generationAlgorithm == BatchGenerationAlgorithm.Morton)
+            batches = CreateBatchesMorton(mapBounds, grassBlades).ToArray();
+        else
+            batches = CreateBatchesBinarySplit(mapBounds, grassBlades).ToArray();
 
         //Debug.Log("Batches created: " + batches.Count);
         //Debug.Log("Batches less than 100% full: " + batches.Count(b => b.batchData.Count < BATCH_SIZE));
@@ -254,6 +267,48 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         return batches;
     }
 
+    private List<Batch> CreateBatchesBinarySplit(Bounds bounds, List<Vector3> grassBlades, bool splitHorizontal = true)
+    {
+        var result = new List<Batch>();
+        int grassCount = grassBlades.Count;
+
+        if (grassCount <= BATCH_SIZE && grassCount >= minBatchSize)
+        {
+            result.Add(CreateBatch(bounds, grassBlades));
+        }
+        else if (grassCount <= minInstancesForSplit)
+        {
+            // Splitting would cause unacceptably small child batches - better to just dump the extra grass
+            grassBlades.RemoveRange(BATCH_SIZE, grassBlades.Count - BATCH_SIZE);
+            result.Add(CreateBatch(bounds, grassBlades));
+        }
+        else // Split this batch into two and recurse!
+        {
+            var splitBatchBoundsList = splitHorizontal ? SplitBounds(bounds, 2, 1) : SplitBounds(bounds, 1, 2);
+
+            foreach (var batchBounds in splitBatchBoundsList)
+            {
+                List<Vector3> quadGrass = new();
+
+                for (int i = 0; i < grassBlades.Count; i++)
+                {
+                    if (batchBounds.Contains(grassBlades[i]))
+                    {
+                        quadGrass.Add(grassBlades[i]);
+                    }
+                }
+
+                if (quadGrass.Count >= minBatchSize)
+                {
+                    var childBatches = CreateBatchesBinarySplit(batchBounds, quadGrass, !splitHorizontal);
+                    result.AddRange(childBatches);
+                }
+            }
+        }
+
+        return result;
+    }
+
     public static Bounds ComputeBounds(List<Vector3> points)
     {
         if (points == null || points.Count == 0)
@@ -279,12 +334,12 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
         uint iz = (uint)(Mathf.Clamp01(nz) * 65535f);
 
         // Interleave and return
-        return (InterleaveBits(iz) << 1) | InterleaveBits(ix);
+        return (SpreadBits(iz) << 1) | SpreadBits(ix);
     }
 
     // Spreads out the lower 16 bits of x so that there are zeroes between each bit:
     // e.g. fed:  abcdefghijklmnop  ->  a0b0c0d0e0f0g0h0i0j0k0l0m0n0o0p0
-    private static uint InterleaveBits(uint x)
+    private static uint SpreadBits(uint x)
     {
         x &= 0x0000FFFF;  // keep only lower 16 bits
         x = (x | (x << 8)) & 0x00FF00FF;
@@ -393,4 +448,64 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
     {
         // Nothing to save here - easier to regenerate grass - and nobody's counting :D
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (!Handles.ShouldRenderGizmos())
+            return;
+
+        if (batches == null)
+            return;
+
+        foreach (var batch in batches)
+        {
+            Gizmos.color = visibleBatches.Contains(batch) ? Color.yellow : Color.red;
+            Gizmos.DrawWireCube(batch.bounds.center, batch.bounds.size);
+        }
+
+        DisplayBatchData();
+    }
+
+    private void DisplayBatchData()
+    {
+        if (batches == null || batches.Length == 0)
+            return;
+
+        int totalBatches = batches.Length;
+        int totalVisible = visibleBatches.Count;
+
+        var sizes = batches
+            .Select(b => b.batchData.Count)
+            .OrderBy(x => x)
+            .ToArray();
+
+        int min = sizes.First();
+        int max = sizes.Last();
+        float mean = (float)sizes.Average();
+        int median = sizes[sizes.Length / 2];
+
+        var style = new GUIStyle(GUI.skin.label)
+        {
+            fontSize = 18,
+            normal = { textColor = Color.white }
+        };
+
+        string stats =
+            $"Blades of grass: {grassBladeCount}\n" +
+            $"Grass Batches: {totalBatches}\n" +
+            $"Visible:       {totalVisible}\n\n" +
+            $"Size  Min: {min}\n" +
+            $"      Max: {max}\n" +
+            $"      Mean: {mean:F1}\n" +
+            $"      Median: {median}";
+
+        var rect = new Rect(10, 110, 200, 300);
+        Handles.BeginGUI();
+        GUI.Box(rect, GUIContent.none);
+        GUI.Label(rect, stats, style);
+        Handles.EndGUI();
+    }
+#endif
+
 }
