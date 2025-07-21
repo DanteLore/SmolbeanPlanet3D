@@ -14,7 +14,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
     public Texture2D wearTexture;
     public Material grassMaterial;
-    public float textureUpdateFrequencySeconds = 0.25f;
+    public float textureUpdateDelay = 0.25f;
     public float wearStrength = 1 / 255;
     public float updateThreshold = 0.5f;
     public int squaresToGrowBackEachFrame = 1024;
@@ -237,13 +237,13 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
         data = wearTexture.GetPixels32();
 
-        InvokeRepeating(nameof(UpdateTexture), textureUpdateFrequencySeconds, textureUpdateFrequencySeconds);
+        InvokeRepeating(nameof(UpdateTexture), textureUpdateDelay, textureUpdateDelay);
         yield return null;
     }
 
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        InvokeRepeating(nameof(UpdateTexture), textureUpdateFrequencySeconds, textureUpdateFrequencySeconds);
+        InvokeRepeating(nameof(UpdateTexture), textureUpdateDelay, textureUpdateDelay);
         yield return null;
     }
 

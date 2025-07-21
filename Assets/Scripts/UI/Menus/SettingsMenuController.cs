@@ -58,34 +58,31 @@ public class SettingsMenuController : SmolbeanMenu
         fullscreenToggle.value = Screen.fullScreen;
         cloudsToggle.RegisterValueChangedCallback(v =>
         {
-            Resolution res = v.newValue ? Screen.resolutions.Last() : Screen.resolutions.First(r => r.width == 1024);
-            Screen.SetResolution(res.width, res.height, v.newValue ? FullScreenMode.FullScreenWindow : FullScreenMode.Windowed);
+            PrefsManager.Instance.FullScreen = v.newValue;
         });
 
         var resolutionDropdown = root.Q<DropdownField>("resolutionDropdown");
-        var resolutions = Screen.resolutions.Select(r => $"{r.width}x{r.height}").ToList();
-        var currentResolutionIndex = Screen.resolutions.ToList().IndexOf(Screen.currentResolution);
+        var resolutions = PrefsManager.Instance.ScreenResolutionOptions.Select(r => $"{r.width}x{r.height}").ToList();
+        var res = PrefsManager.Instance.ScreenResolution;
+        string currentResolutionString = $"{res.width}x{res.height}";
         resolutionDropdown.choices = resolutions;
-        resolutionDropdown.index = currentResolutionIndex;
+        resolutionDropdown.index = resolutions.IndexOf(currentResolutionString);
         resolutionDropdown.RegisterValueChangedCallback(v =>
         {
-            var newRes = Screen.resolutions[resolutionDropdown.choices.IndexOf(v.newValue)];
-            Screen.SetResolution(newRes.width, newRes.height, Screen.fullScreenMode);
-
-            fullscreenToggle.value = Screen.fullScreen;
+            var index = resolutionDropdown.choices.IndexOf(v.newValue);
+            PrefsManager.Instance.ScreenResolution = PrefsManager.Instance.ScreenResolutionOptions[index];
         });
 
         var qualityDropdown = root.Q<DropdownField>("qualityDropdown");
-        var qualityLevels = new List<string>(QualitySettings.names);
+        var qualityLevels = PrefsManager.Instance.QualityLevelChoices;
         qualityDropdown.choices = qualityLevels;
-        var currentQuality = QualitySettings.GetQualityLevel();
-        qualityDropdown.value = qualityLevels[currentQuality];
+        qualityDropdown.value = qualityLevels[PrefsManager.Instance.QualityLevel];
         qualityDropdown.RegisterValueChangedCallback(v =>
         {
             int newLevel = qualityLevels.IndexOf(v.newValue);
             if (newLevel >= 0)
             {
-                QualitySettings.SetQualityLevel(newLevel);
+                PrefsManager.Instance.QualityLevel = newLevel;
             }
         });
 

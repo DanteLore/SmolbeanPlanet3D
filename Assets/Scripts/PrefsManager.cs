@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -5,18 +8,17 @@ public class PrefsManager : MonoBehaviour
 {
     public AudioMixer mixer;
     public GameObject clouds;
+    public GrassInstancer grassInstancer;
 
     public static PrefsManager Instance { get; private set; }
 
-    private GrassInstancer grassInstancer; 
-
     public float MusicVolume
     {
-        get 
-        { 
+        get
+        {
             return PlayerPrefs.GetFloat("MusicVolume", 1.0f);
         }
-        set 
+        set
         {
             PlayerPrefs.SetFloat("MusicVolume", value);
             mixer.SetFloat("MusicVolume", Mathf.Log10(value) * 20);
@@ -87,6 +89,60 @@ public class PrefsManager : MonoBehaviour
         }
     }
 
+    public List<Resolution> ScreenResolutionOptions
+    {
+        get => Screen.resolutions.ToList();
+    }
+
+    public bool FullScreen
+    {
+        get => PlayerPrefs.GetInt("FullScreen", Screen.fullScreen ? 1 : 0) == 1;
+
+        set
+        {
+            PlayerPrefs.SetInt("FullScreen", value ? 1 : 0);
+            SetScreenProperties();
+        }
+    }
+
+    public Resolution ScreenResolution
+    {
+        get => new Resolution
+        {
+            width = PlayerPrefs.GetInt("ScreenResolutionWidth", Screen.currentResolution.width),
+            height = PlayerPrefs.GetInt("ScreenResolutionHeight", Screen.currentResolution.height)
+        };
+
+        set
+        {
+            PlayerPrefs.SetInt("ScreenResolutionWidth", Screen.currentResolution.width);
+            PlayerPrefs.SetInt("ScreenResolutionHeight", Screen.currentResolution.height);
+            SetScreenProperties();
+        }
+    }
+
+    public List<string> QualityLevelChoices
+    {
+        get => QualitySettings.names.ToList();
+    }
+
+    public int QualityLevel
+    {
+        get => PlayerPrefs.GetInt("QualityLevel", QualitySettings.GetQualityLevel());
+
+        set
+        {
+            PlayerPrefs.SetInt("QualityLevel", value);
+            QualitySettings.SetQualityLevel(value);
+        }
+    }
+
+    private void SetScreenProperties()
+    {
+        Screen.SetResolution(ScreenResolution.width, ScreenResolution.height, FullScreen);
+        Screen.fullScreen = FullScreen;
+    }
+
     void Awake()
     {
         if(Instance != null && Instance != this)
@@ -97,12 +153,18 @@ public class PrefsManager : MonoBehaviour
 
     void Start()
     {
-        grassInstancer = GameObject.FindFirstObjectByType<GrassInstancer>();
-        grassInstancer = GameObject.FindFirstObjectByType<GrassInstancer>();
+        grassInstancer = FindFirstObjectByType<GrassInstancer>();
 
         MusicVolume = MusicVolume; // Not sure how I feel about this... 😵‍💫
-        SfxVolume = SfxVolume;
-        AmbientVolume = AmbientVolume;
-        GrassRenderingEnabled = GrassRenderingEnabled;
+        SfxVolume = SfxVolume;     // BUT
+        AmbientVolume = AmbientVolume; // It's the easiest way to apply the settings
+        GrassRenderingEnabled = GrassRenderingEnabled; // Sorry!
+        FullScreen = FullScreen;
+        ScreenResolution = ScreenResolution;
+    }
+
+    public void SavePrefs()
+    {
+        PlayerPrefs.Save();
     }
 }
