@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -43,8 +44,6 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         textureHeight = wearTexture.height;
 
         Clear();
-
-        InvokeRepeating(nameof(UpdateTexture), 1.0f, textureUpdateDelay);
     }
 
     void Update()
@@ -56,20 +55,20 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     private void GrowGrass()
     {
         // Amount to grow back each frame, scaled by frame time and by number of frames to update a batch
-        float amount = Time.deltaTime * grassGrowthWeight * (data.Length / squaresToGrowBackEachFrame);
+        int amount = (byte)(Time.deltaTime * grassGrowthWeight * (data.Length / squaresToGrowBackEachFrame) * 255);
 
         int start = grassGrowthBatchStart;
         int end = Mathf.Min(grassGrowthBatchStart + squaresToGrowBackEachFrame, data.Length);
 
         for (int i = start; i < end; i++)
         {
-            Color px = data[i];
+            Color32 px = data[i];
 
             if(px.r > 0f)
             {
-                float r = px.r - amount;
-                r = r < 0.0f ? 0.0f : r > 1.0f ? 1.0f : r; // faster than clamp01
-                data[i].r = (byte)(r * 255);
+                int r = px.r - amount;
+                r = r < 0 ? 0 : r > 255 ? 255 : r; // faster than clamp!
+                data[i].r = (byte)r;
             }
         }
 
@@ -205,7 +204,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     private void UpdateTexture()
     {
         wearTexture.SetPixels32(data);
-        wearTexture.Apply();
+        wearTexture.Apply(updateMipmaps: false);
     }
 
     public void Clear()
