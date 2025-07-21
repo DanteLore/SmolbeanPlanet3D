@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.unity.ai.navigation": {
-      "version": "2.0.7",
+      "version": "2.0.8",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -19,7 +19,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.8.21",
+      "version": "1.8.23",
       "depth": 2,
       "source": "registry",
       "dependencies": {
@@ -29,7 +29,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.cinemachine": {
-      "version": "2.10.3",
+      "version": "2.10.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -146,7 +146,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.postprocessing": {
-      "version": "3.4.0",
+      "version": "3.5.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
