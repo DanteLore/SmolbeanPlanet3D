@@ -12,7 +12,8 @@ public abstract class WalkStateBase : IState
     private float originalAnimatorSpeed;
     protected bool navAgentResetEnabled = true;
     protected float destConfirmedAt;
-      
+    private Vector3 walkDestination;
+
     public float StuckTime { get { return Time.time - lastMoved; } }
     public bool IsStuck { get; set; }
     public string Name { get => GetType().Name; }
@@ -29,9 +30,7 @@ public abstract class WalkStateBase : IState
 
     public virtual void OnEnter()
     {
-        navAgent.SetDestination(GetDestination());
-        navAgent.isStopped = false;
-        destConfirmedAt = Time.time;
+        StartNavigation();
 
         lastPosition = animal.transformCached.position;
         lastMoved = Time.time;
@@ -45,6 +44,14 @@ public abstract class WalkStateBase : IState
 
         if (soundPlayer != null)
             soundPlayer.Play("Footsteps");
+    }
+
+    private void StartNavigation()
+    {
+        walkDestination = GetDestination();
+        navAgent.SetDestination(walkDestination);
+        navAgent.isStopped = false;
+        destConfirmedAt = Time.time;
     }
 
     public virtual void OnExit()
@@ -80,8 +87,11 @@ public abstract class WalkStateBase : IState
             // This might happen if the destination has moved, for example if a building was rotated
             // Note:  Ignore Y coord, as it doesn't make a difference for navigation
             Vector3 dest = GetDestination();
-            if (navAgent.destination.x != dest.x || navAgent.destination.z != dest.z)
-                navAgent.SetDestination(dest);
+            if (dest != walkDestination && Vector3.SqrMagnitude(dest - walkDestination) > 0.1f)
+            {
+                animal.Think("Destination has changed, recalculating path.");
+                StartNavigation();
+            }
             destConfirmedAt = time;
         }
 
@@ -104,12 +114,8 @@ public abstract class WalkStateBase : IState
         if(time - lastMoved > 1f && time - destConfirmedAt > 2f && !IsStuck)
         {
             IsStuck = true;
-            OnStuck();
+
+            animal.Think("I think I'm stuck!");
         }
-    }
-
-    protected virtual void OnStuck()
-    {
-
     }
 }

@@ -18,9 +18,4 @@ public class WalkToTargetState : WalkStateBase
     {
         return animal.Target;
     }
-
-    protected override void OnStuck()
-    {
-        animal.Think("I think I'm stuck!");
-    }
 }
