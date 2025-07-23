@@ -38,7 +38,7 @@ public class MapGeneratorManager : MonoBehaviour
         MaxLevelNumber = gameMap.Max();
         GameMap = gameMap;
 
-        GameStateManager.Instance.EndGame();  
+        GameStateManager.Instance?.EndGame();  
 
         Clear();
 

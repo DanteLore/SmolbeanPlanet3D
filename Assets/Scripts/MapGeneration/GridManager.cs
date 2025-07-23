@@ -118,8 +118,6 @@ public class GridManager : MonoBehaviour, IObjectGenerator
             yield return null;
         }
 
-        // Seabed can be merged to a single mesh
-        MergeMeshes(Seabed);
         var seaNmm = Seabed.AddComponent<NavMeshModifier>();
         seaNmm.overrideArea = true;
         seaNmm.area = NavMesh.GetAreaFromName("Not Walkable");
