@@ -143,38 +143,6 @@ public class GridManager : MonoBehaviour, IObjectGenerator
         DestroyImmediate(Seabed.GetComponent<DebugMesh>());
     }
 
-    private void MergeMeshes(GameObject parent)
-    {
-        MeshFilter[] meshFilters = parent.GetComponentsInChildren<MeshFilter>();
-        CombineInstance[] combine = new CombineInstance[meshFilters.Length];
-
-        int i = 0;
-        while (i < meshFilters.Length)
-        {
-            combine[i].mesh = meshFilters[i].sharedMesh;
-            combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
-            DestroyImmediate(meshFilters[i].gameObject);
-
-            i++;
-        }
-
-        var renderer = parent.AddComponent<MeshRenderer>();
-        renderer.sharedMaterial = meshMaterial;
-        var meshFilter = parent.AddComponent<MeshFilter>();
-
-        Mesh mesh = new ()
-        {
-            indexFormat = UnityEngine.Rendering.IndexFormat.UInt32
-        };
-        mesh.CombineMeshes(combine);
-        meshFilter.sharedMesh = mesh;
-
-        parent.AddComponent<MeshCollider>();
-
-        if(addMeshDebugGizmos)
-            parent.AddComponent<DebugMesh>();
-    }
-
     public Rect GetSquareBounds(int gameX, int gameZ)
     {
         float meshX = (gameX * tileSize) - (DrawMapWidth * tileSize / 2.0f);
