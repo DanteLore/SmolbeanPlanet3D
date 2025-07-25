@@ -51,6 +51,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     private float currentSpeed;
     private float currentScale;
     private readonly List<BuffInstance> newBuffs = new(capacity: 50);
+    private Vector3 lastReportedPosition;
 
     // Frame skipping stuff
     private int updateEvery = 10;
@@ -97,6 +98,9 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
             dt = 0.0f;
         }
+
+        if(Species.causesGroundWear)
+            UpdateGroundWear();
     }
 
     public virtual void AdoptIdentity(SmolbeanAnimal original)
@@ -364,5 +368,18 @@ public abstract class SmolbeanAnimal : MonoBehaviour
     public void TakeDamage(float damage)
     {
         Stats.health -= damage;
+    }
+
+    private void UpdateGroundWear()
+    {
+        if (!body.activeInHierarchy)
+            return;
+
+        float threshold = GroundWearManager.Instance.updateThreshold;
+        if (Vector3.SqrMagnitude(transform.position - lastReportedPosition) > threshold * threshold)
+        {
+            lastReportedPosition = transform.position;
+            GroundWearManager.Instance.WalkedOn(transform.position);
+        }
     }
 }

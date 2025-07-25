@@ -31,8 +31,8 @@ MonoBehaviour:
   minimumHealthToGiveBirth: 0
   pregnancyHealthImpact: 0
   sightRange: 500
-  minSpeed: 2.5
-  maxSpeed: 3.5
+  minSpeed: 3
+  maxSpeed: 5
   maxFoodLevel: 1000
   initialFoodLevelMin: 500
   initialFoodLevelMax: 1000
@@ -43,3 +43,4 @@ MonoBehaviour:
   grassWearPerSecondWhenEating: 0
   Buffs:
   - {fileID: 11400000, guid: fab28cee09a014a34a0c524b0bf95419, type: 2}
+  causesGroundWear: 1

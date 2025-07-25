@@ -1,11 +1,8 @@
 using System.Linq;
-using UnityEngine;
 using UnityEngine.AI;
 
 public abstract class SmolbeanColonist : SmolbeanAnimal
 {
-    private Vector3 lastReportedPosition;
-
     public Job Job { get; set; }
     public SmolbeanHome Home { get; set; }
 
@@ -36,26 +33,6 @@ public abstract class SmolbeanColonist : SmolbeanAnimal
 
         navAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
     }    
-
-    protected override void Update()
-    {
-        base.Update();
-
-        UpdateGroundWear();
-    }
-
-    private void UpdateGroundWear()
-    {
-        if (!body.activeInHierarchy)
-            return;
-
-        float threshold = GroundWearManager.Instance.updateThreshold;
-        if (Vector3.SqrMagnitude(transform.position - lastReportedPosition) > threshold * threshold)
-        {
-            lastReportedPosition = transform.position;
-            GroundWearManager.Instance.WalkedOn(transform.position);
-        }
-    }
 
     public override AnimalSaveData GetSaveData()
     {

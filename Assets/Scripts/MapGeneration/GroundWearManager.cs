@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 public class GroundWearManager : MonoBehaviour, IObjectGenerator
@@ -18,7 +18,7 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     public float wearStrength = 1 / 255;
     public float updateThreshold = 0.5f;
     public int squaresToGrowBackEachFrame = 1024;
-    public float grassGrowthWeight = 0.5f;
+    public float grassRegrowthRateSeconds = 30f;
     public int wearRadius = 3;
 
     public float mapWidth = 400f;
@@ -27,8 +27,10 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
     public float mapOffsetY = -200f;
 
     private Color32[] data;
+    private int[] indices;
     private int textureWidth;
     private int textureHeight;
+    private int grassGrowthBatchStart = 0;
 
     void Awake()
     {
@@ -51,24 +53,25 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         GrowGrass();
     }
 
-    private int grassGrowthBatchStart = 0;
     private void GrowGrass()
     {
         // Amount to grow back each frame, scaled by frame time and by number of frames to update a batch
-        int amount = (byte)(Time.deltaTime * grassGrowthWeight * (data.Length / squaresToGrowBackEachFrame) * 255);
+        float grassGrowthWeight = 1f / grassRegrowthRateSeconds;
+        grassGrowthWeight *= data.Length / squaresToGrowBackEachFrame;
+        byte amount = (byte)(Time.deltaTime * grassGrowthWeight * 255);
 
         int start = grassGrowthBatchStart;
         int end = Mathf.Min(grassGrowthBatchStart + squaresToGrowBackEachFrame, data.Length);
 
         for (int i = start; i < end; i++)
         {
-            Color32 px = data[i];
+            Color32 px = data[indices[i]];
 
             if(px.r > 0f)
             {
                 int r = px.r - amount;
                 r = r < 0 ? 0 : r > 255 ? 255 : r; // faster than clamp!
-                data[i].r = (byte)r;
+                data[indices[i]].r = (byte)r;
             }
         }
 
@@ -213,10 +216,18 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
         data = wearTexture.GetPixels32();
 
+        // Create and shuffle indices for random wear
+        indices = Enumerable.Range(0, data.Length).ToArray();
+        for (int i = indices.Length - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (indices[i], indices[j]) = (indices[j], indices[i]);
+        }
+
         for (int i = 0; i < data.Length; i++)
         {
             // Clear all but the green channel
-            data[i].r = 0; 
+            data[i].r = 0;
             data[i].b = 0;
             data[i].a = 0;
         }

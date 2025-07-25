@@ -46,4 +46,7 @@ public class AnimalSpec : ScriptableObject
 
     [Header("Buffs")]
     public BuffSpec[] Buffs;
+
+    [Header("Ground Wear")]
+    public bool causesGroundWear;
 }
