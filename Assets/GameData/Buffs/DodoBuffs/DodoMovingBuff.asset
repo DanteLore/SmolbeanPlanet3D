@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d6f55855714949b0b3b1f3b0b7bd169, type: 3}
+  m_Name: DodoMovingBuff
+  m_EditorClassIdentifier: 
+  buffName: Moving
+  description: How the environment affects the way I move around, the speed I walk
+    and so on
+  symbol: "\U0001060E"
+  thoughts: []

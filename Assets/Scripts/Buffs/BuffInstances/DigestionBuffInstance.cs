@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class DigestionBuffInstance : BuffInstance
 {
-    public override void ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta, List<BuffInstance> newBuffs)
+    public override void ApplyTo(AnimalStats stats, AnimalSpec species, SmolbeanAnimal animal, float timeDelta, List<BuffInstance> newBuffs)
     {
         var digestionBuffSpec = (DigestionBuffSpec)Spec; // Cache for speed
 

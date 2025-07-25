@@ -25,7 +25,7 @@ public abstract class BuffInstance
         }
     }
 
-    public abstract void ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta, List<BuffInstance> newBuffs);
+    public abstract void ApplyTo(AnimalStats stats, AnimalSpec species, SmolbeanAnimal animal, float timeDelta, List<BuffInstance> newBuffs);
 
     public virtual bool GetThought(AnimalStats stats, float timeDelta, out string thought)
     {

@@ -174,7 +174,7 @@ public abstract class SmolbeanAnimal : MonoBehaviour
 
         foreach (var buff in buffs)
         {
-            buff.ApplyTo(Stats, Species, dt, newBuffs);
+            buff.ApplyTo(Stats, Species, this, dt, newBuffs);
 
             if (buff.GetThought(Stats, dt, out string thought))
                 Think(thought);

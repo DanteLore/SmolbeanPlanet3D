@@ -43,4 +43,5 @@ MonoBehaviour:
   grassWearPerSecondWhenEating: 0
   Buffs:
   - {fileID: 11400000, guid: fab28cee09a014a34a0c524b0bf95419, type: 2}
+  - {fileID: 11400000, guid: e991b4f62c12f49a38d64c61601c99eb, type: 2}
   causesGroundWear: 1

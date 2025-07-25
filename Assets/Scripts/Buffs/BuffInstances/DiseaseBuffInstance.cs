@@ -12,7 +12,7 @@ public class DiseaseBuffInstance : BuffInstance
         timeRemaining = duration;
     }
 
-    public override void ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta, List<BuffInstance> newBuffs)
+    public override void ApplyTo(AnimalStats stats, AnimalSpec species, SmolbeanAnimal animal, float timeDelta, List<BuffInstance> newBuffs)
     {
         var diseaseBuffSpec = (DiseaseBuffSpec)Spec;
 

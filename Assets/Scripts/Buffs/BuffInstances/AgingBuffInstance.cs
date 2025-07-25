@@ -4,7 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public class AgingBuffInstance : BuffInstance
 {
-    public override void ApplyTo(AnimalStats stats, AnimalSpec species, float timeDelta, List<BuffInstance> newBuffs)
+    public override void ApplyTo(AnimalStats stats, AnimalSpec species, SmolbeanAnimal animal, float timeDelta, List<BuffInstance> newBuffs)
     {
         var agingBuffSpec = (AgingBuffSpec)Spec; // Cache for speed
 

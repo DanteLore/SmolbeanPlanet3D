@@ -78,7 +78,26 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
         grassGrowthBatchStart = end >= data.Length ? 0 : end;
     }
 
-    public float GetAvailableGrass(Vector3 worldPosition, float searchRadius = 0.75f)
+    public float GetMaxGrass(float searchRadius = 1.0f)
+    {
+        Vector2Int center = WorldToTexture(Vector3.zero);
+        Vector2Int p      = WorldToTexture(Vector3.zero + Vector3.forward * searchRadius);
+        int radius        = Mathf.CeilToInt(Vector2Int.Distance(center, p));
+        int r2            = radius * radius;
+
+        int count = 0;
+        for (int u = -radius; u <= radius; u++)
+        {
+            // for a small speed‑up, compute the max v for this u
+            int maxV = (int)Mathf.Floor(Mathf.Sqrt(r2 - u * u));
+            // then all v in [−maxV..+maxV] satisfy u²+v² < r²
+            count += 2 * maxV + 1;
+        }
+
+        return count;
+    }
+
+    public float GetAvailableGrass(Vector3 worldPosition, float searchRadius = 1.0f)
     {
         Vector2Int center = WorldToTexture(worldPosition);
         Vector2Int p = WorldToTexture(worldPosition + Vector3.forward * searchRadius);
@@ -86,18 +105,22 @@ public class GroundWearManager : MonoBehaviour, IObjectGenerator
 
         int x = center.x;
         int y = center.y;
-        float rSquared = radius * radius;
-        float grassAvailable = 0f;
+        int rSquared = radius * radius;
+        float grassAvailable = 0;
 
-        for (int u = x - radius; u < x + radius + 1; u++)
-        {  
-            for (int v = y - radius; v < y + radius + 1; v++)
+        for (int u = x - radius; u <= x + radius + 1; u++)
+        {
+            for (int v = y - radius; v <= y + radius + 1; v++)
             {
-                float dSquared = (x - u) * (x - u) + (y - v) * (y - v);
+                int dx = x - u;
+                int dy = y - v;
+                int dSquared = dx * dx + dy * dy;
                 if (dSquared < rSquared)
                 {
-                    Color c = data[v * textureWidth + u];
-                    grassAvailable += c.g * (1 - c.r); // Green is the grass density, red is the wear level
+                    Color32 c = data[v * textureWidth + u];
+                    float density = c.g / 255f; 
+                    float wear = c.r / 255f; 
+                    grassAvailable += density * (1.0f - wear); // Green is the grass density, red is the wear level
                 }
             }
         }
