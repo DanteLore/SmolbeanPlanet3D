@@ -17,3 +17,8 @@ MonoBehaviour:
     and so on
   symbol: "\U0001060E"
   thoughts: []
+  grassSlowdownMultiplier: 0.5
+  groundLayerName: Ground
+  minimumSlopeForPenaltyPercent: 0.1
+  slopeLookaheadDistance: 1
+  slopeSmoothingSpeed: 1
