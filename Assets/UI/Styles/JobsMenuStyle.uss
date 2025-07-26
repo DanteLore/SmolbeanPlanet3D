@@ -29,3 +29,17 @@
 .unity-multi-column-header__column__content Label {
     font-size: 32px;
 }
+
+
+
+.jobs-thumb-and-label-button, 
+.jobs-thumb-and-label-button:hover {
+    width: 100%;
+    border-width: 0px;
+    background-color: transparent;
+}
+
+.jobs-thumb-and-label-button:hover .jobs-table-label {
+    color: white;
+    -unity-font-style: bold;
+}
