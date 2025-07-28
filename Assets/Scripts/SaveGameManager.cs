@@ -59,13 +59,13 @@ public class SaveGameManager : MonoBehaviour
         return filename;
     }
 
-    public IEnumerable<string> ListSaveFiles()
+    public IEnumerable<SaveFileViewModel> ListSaveFiles()
     {
         DirectoryInfo info = new(Application.persistentDataPath);
         var files = info.GetFiles()
             .Where(f => f.Extension == EXTENSION)
             .OrderByDescending(f => f.CreationTime)
-            .Select(f => Path.GetFileNameWithoutExtension(f.Name));
+            .Select(f => new SaveFileViewModel(f));
         return files;
     }
 

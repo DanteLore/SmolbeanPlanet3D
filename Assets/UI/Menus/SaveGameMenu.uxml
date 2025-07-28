@@ -1,12 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
-    <Style src="project://database/Assets/UI/NewStyles/FileDialogStyles.uss?fileID=7433441132597879392&amp;guid=11fdd9fa97ca0464d92cc5b198d98b24&amp;type=3#FileDialogStyles" />
+    <Style src="project://database/Assets/UI/Styles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <Style src="project://database/Assets/UI/Styles/FileDialogStyles.uss?fileID=7433441132597879392&amp;guid=11fdd9fa97ca0464d92cc5b198d98b24&amp;type=3#FileDialogStyles" />
     <ui:VisualElement name="Container" style="flex-grow: 1;">
         <ui:VisualElement name="MenuContainer" class="menuContainer" style="flex-grow: 1;">
             <ui:Label tabindex="-1" text="Save Game" display-tooltip-when-elided="true" name="Title" class="title" />
             <ui:VisualElement style="width: 90%; height: 100%;">
                 <ui:TextField picking-mode="Ignore" label="Save File Name:" name="filenameTextField" />
-                <ui:ListView focusable="true" name="fileListView" show-border="true" show-bound-collection-size="false" reorderable="false" fixed-item-height="48" style="flex-grow: 1; height: 100%;" />
+                <ui:MultiColumnListView name="fileListView" fixed-item-height="48" show-alternating-row-backgrounds="ContentOnly" allow-add="false" allow-remove="false" sorting-mode="Default" style="width: 100%; height: 100%;">
+                    <ui:Columns reorderable="false">
+                        <ui:Column width="400px" name="nameColumn" title="Name" optional="false" />
+                        <ui:Column name="timeColumn" title="Modified" width="200px" optional="false" resizable="true" />
+                    </ui:Columns>
+                </ui:MultiColumnListView>
             </ui:VisualElement>
             <ui:VisualElement name="ControlsContainer">
                 <ui:Button text="Save" display-tooltip-when-elided="true" name="saveGameButton" style="-unity-text-align: middle-center; width: 100px; height: 30px;" />

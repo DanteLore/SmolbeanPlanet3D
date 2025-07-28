@@ -9,8 +9,8 @@ public class SaveGameMenuController : SmolbeanMenu
     UIDocument document;
     private SoundPlayer soundPlayer;
     private TextField filenameTextField;
-    private ListView fileListView;
-    private string[] files;
+    private MultiColumnListView fileListView;
+    private SaveFileViewModel[] files;
 
     void OnEnable()
     {
@@ -29,19 +29,16 @@ public class SaveGameMenuController : SmolbeanMenu
         filenameTextField.value = SaveGameNameGenerator.Generate();
         filenameTextField.RegisterValueChangedCallback(FilenameValueChanged);
 
-        fileListView = document.rootVisualElement.Q<ListView>("fileListView");
-        fileListView.itemsSource = files;
-        fileListView.makeItem = () => new Label();
-        fileListView.bindItem = (e, i) => (e as Label).text = files[i];
-        fileListView.selectionType = SelectionType.Single;
-        fileListView.focusable = true;
+        fileListView = document.rootVisualElement.Q<MultiColumnListView>("fileListView");
+        SaveFileListViewModelBuilder.BuildFileView(fileListView, files.ToList());
+
         fileListView.selectionChanged += FileSelectedFromList;
         fileListView.itemsChosen += FileChosenFromList;  // Both methods need to be hooked up, or neither works :facepalm:
     }
 
     private void FilenameValueChanged(ChangeEvent<string> evt)
     {
-        if (files.Contains(evt.newValue))
+        if (files.Any(f => f.Name == evt.newValue))
             fileListView.SetSelection(Array.IndexOf(files, evt.newValue));
         else
             fileListView.ClearSelection();

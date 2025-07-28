@@ -8,8 +8,8 @@ public class LoadGameMenuController : SmolbeanMenu
 {
     UIDocument document;
     private SoundPlayer soundPlayer;
-    private ListView fileListView;
-    private string[] files;
+    private MultiColumnListView fileListView;
+    private SaveFileViewModel[] files;
     private Button loadGameButton;
 
     void OnEnable()
@@ -26,11 +26,9 @@ public class LoadGameMenuController : SmolbeanMenu
         loadGameButton.clicked += LoadButtonClicked;
         loadGameButton.SetEnabled(false); 
 
-        fileListView = document.rootVisualElement.Q<ListView>("fileListView");
-        fileListView.itemsSource = files;
-        fileListView.makeItem = () => new Label();
-        fileListView.bindItem = (e, i) => (e as Label).text = files[i];
-        fileListView.selectionType = SelectionType.Single;
+        fileListView = document.rootVisualElement.Q<MultiColumnListView>("fileListView");
+        SaveFileListViewModelBuilder.BuildFileView(fileListView, files.ToList());
+
         fileListView.selectionChanged += FileSelectedFromList;
         fileListView.itemsChosen += FileChosenFromList; // Both methods need to be hooked up, or neither works :facepalm:
     }
@@ -43,7 +41,7 @@ public class LoadGameMenuController : SmolbeanMenu
     private IEnumerator LoadGame()
     {
         document.rootVisualElement.style.display = DisplayStyle.None;
-        yield return SaveGameManager.Instance.LoadGame((string)fileListView.selectedItem);
+        yield return SaveGameManager.Instance.LoadGame(fileListView.selectedItem.ToString());
         yield return null;
         GameStateManager.Instance.StartGame();
         MenuController.Instance.CloseAll();

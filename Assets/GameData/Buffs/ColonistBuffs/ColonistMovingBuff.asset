@@ -21,4 +21,6 @@ MonoBehaviour:
   groundLayerName: Ground
   minimumSlopeForPenaltyPercent: 0.1
   slopeLookaheadDistance: 1
-  slopeSmoothingSpeed: 1
+  slopeSmoothingSpeed: 5
+  downhillMultiplier: 2
+  uphillMultiplier: 0.25
