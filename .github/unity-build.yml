@@ -2,7 +2,7 @@ name: Unity 6 — Linux Build (smoke test)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ release ]
   workflow_dispatch:
 
 env:
