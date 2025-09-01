@@ -3,7 +3,6 @@ name: Unity 6 — Linux Build + S3 Upload
 on:
   push:
     branches: [ release ]      # build when you push to 'release'
-    tags:     [ 'v*' ]         # and on tags like v0.3.0
   workflow_dispatch:
 
 concurrency:
@@ -76,7 +75,7 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::<YOUR_ACCOUNT_ID>:role/GitHubActions-Smolbeanplanet-Upload
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActions-Smolbeanplanet-Upload
           aws-region: eu-west-1
 
       - name: Upload to S3
