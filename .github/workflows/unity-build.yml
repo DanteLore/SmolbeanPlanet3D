@@ -1,33 +1,71 @@
-name: Unity Linux Build and Upload
+name: Unity 6 — Linux Build + S3 + CloudFront
 
 on:
   push:
-    branches: [ release ]
-  workflow_dispatch:
+    branches: [ release ]     # build when you push to 'release'
+  workflow_dispatch:          # allow manual runs
 
 permissions:
-  id-token: write   # needed for OIDC
-  contents: read    # checkout repo
+  id-token: write             # required for OIDC -> AWS
+  contents: read
+
+env:
+  PROJECT_PATH: "."
 
 jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Cache Unity Library
+      # Keep your Library cache for faster builds
+      - name: Read Unity version
+        id: unityver
+        run: |
+          ver=$(awk -F': ' '/m_EditorVersion:/{print $2}' ProjectSettings/ProjectVersion.txt)
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+          echo "Using Unity $ver"
+
+      - name: Cache Library
         uses: actions/cache@v4
         with:
           path: Library
-          key: Library-${{ runner.os }}-${{ hashFiles('**/Packages/manifest.json') }}
+          key: Library-${{ steps.unityver.outputs.version }}-${{ hashFiles('ProjectSettings/**','**/*.cs','**/*.asset','**/*.meta') }}
           restore-keys: |
-            Library-${{ runner.os }}-
+            Library-${{ steps.unityver.outputs.version }}-
+            Library-
 
       - name: Unity Build (Linux)
         uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE:  ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
+          unityVersion:   ${{ steps.unityver.outputs.version }}
+          projectPath:    ${{ env.PROJECT_PATH }}
           targetPlatform: StandaloneLinux64
+          buildMethod:    CIBuildEntryCLI.BuildCI
+          customParameters: >
+            -buildTarget StandaloneLinux64
+            -outputPath Builds/Linux/SmolbeanPlanet.x86_64
+            -development false
+
+      - name: Package artifact
+        run: |
+          cd Builds/Linux
+          zip -r ../../linux.zip .
+
+      - name: Upload artifact (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Smolbean-StandaloneLinux64
+          path: linux.zip
+          compression-level: 0
+          retention-days: 7
+
+      # ---- AWS: OIDC assume role -> upload -> invalidate ----
 
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
@@ -35,10 +73,10 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActions-Smolbeanplanet-Upload
           aws-region: eu-west-1
 
-      - name: Upload build to S3
+      - name: Upload to S3
         run: |
-          aws s3 cp build/StandaloneLinux64/linux.zip \
-            s3://dantelore.com/smolbeanplanet/linux/linux.zip \
+          aws s3 cp linux.zip \
+            "s3://dantelore.com/smolbeanplanet/linux/linux.zip" \
             --cache-control "public,max-age=60"
 
       - name: Get CloudFront distribution ID by domain
@@ -47,7 +85,12 @@ jobs:
           DIST_ID=$(aws cloudfront list-distributions \
             --query "DistributionList.Items[?Aliases.Items[?@=='dantelore.com']].Id | [0]" \
             --output text)
-          echo "dist_id=$DIST_ID" >> $GITHUB_OUTPUT
+          if [ -z "$DIST_ID" ] || [ "$DIST_ID" = "None" ]; then
+            echo "Could not resolve CloudFront distribution for dantelore.com" >&2
+            exit 1
+          fi
+          echo "dist_id=$DIST_ID" >> "$GITHUB_OUTPUT"
+          echo "CloudFront dist: $DIST_ID"
 
       - name: Invalidate CloudFront cache
         run: |
