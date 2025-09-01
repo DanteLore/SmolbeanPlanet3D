@@ -1,12 +1,12 @@
-name: Unity 6 — Linux Build + S3 + CloudFront
+name: Unity 6 — Multi-platform Build + S3 + CloudFront
 
 on:
   push:
-    branches: [ release ]     # build when you push to 'release'
-  workflow_dispatch:          # allow manual runs
+    branches: [ release ]
+  workflow_dispatch:
 
 permissions:
-  id-token: write             # required for OIDC -> AWS
+  id-token: write
   contents: read
 
 env:
@@ -16,25 +16,7 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      # Keep your Library cache for faster builds
-      - name: Read Unity version
-        id: unityver
-        run: |
-          ver=$(awk -F': ' '/m_EditorVersion:/{print $2}' ProjectSettings/ProjectVersion.txt)
-          echo "version=$ver" >> "$GITHUB_OUTPUT"
-          echo "Using Unity $ver"
-
-      - name: Cache Library
-        uses: actions/cache@v4
-        with:
-          path: Library
-          key: Library-${{ steps.unityver.outputs.version }}-${{ hashFiles('ProjectSettings/**','**/*.cs','**/*.asset','**/*.meta') }}
-          restore-keys: |
-            Library-${{ steps.unityver.outputs.version }}-
-            Library-
+      - uses: actions/checkout@v4
 
       - name: Unity Build (Linux)
         uses: game-ci/unity-builder@v4
@@ -43,57 +25,109 @@ jobs:
           UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          unityVersion:   ${{ steps.unityver.outputs.version }}
-          projectPath:    ${{ env.PROJECT_PATH }}
+          unityVersion: 6000.1.12f1
+          projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: StandaloneLinux64
-          buildMethod:    CIBuildEntryCLI.BuildCI
-          customParameters: >
-            -buildTarget StandaloneLinux64
-            -outputPath Builds/Linux/SmolbeanPlanet.x86_64
-            -development false
+          buildMethod: CIBuildEntryCLI.BuildCI
 
-      - name: Package artifact
+      - name: Package Linux zip
         run: |
           cd Builds/Linux
           zip -r ../../linux.zip .
 
-      - name: Upload artifact (optional)
-        uses: actions/upload-artifact@v4
-        with:
-          name: Smolbean-StandaloneLinux64
-          path: linux.zip
-          compression-level: 0
-          retention-days: 7
-
-      # ---- AWS: OIDC assume role -> upload -> invalidate ----
-
-      - name: Configure AWS credentials (OIDC)
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActions-Smolbeanplanet-Upload
           aws-region: eu-west-1
 
-      - name: Upload to S3
-        run: |
-          aws s3 cp linux.zip \
-            "s3://dantelore.com/smolbeanplanet/linux/linux.zip" \
-            --cache-control "public,max-age=60"
+      - name: Upload to S3 (Linux)
+        run: aws s3 cp linux.zip s3://dantelore.com/smolbeanplanet/linux/linux.zip --cache-control "public,max-age=60"
 
-      - name: Get CloudFront distribution ID by domain
-        id: cf
+      - name: Invalidate CloudFront
         run: |
           DIST_ID=$(aws cloudfront list-distributions \
             --query "DistributionList.Items[?Aliases.Items[?@=='dantelore.com']].Id | [0]" \
             --output text)
-          if [ -z "$DIST_ID" ] || [ "$DIST_ID" = "None" ]; then
-            echo "Could not resolve CloudFront distribution for dantelore.com" >&2
-            exit 1
-          fi
-          echo "dist_id=$DIST_ID" >> "$GITHUB_OUTPUT"
-          echo "CloudFront dist: $DIST_ID"
+          aws cloudfront create-invalidation --distribution-id $DIST_ID --paths "/smolbeanplanet/*"
 
-      - name: Invalidate CloudFront cache
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Inno Setup
+        run: choco install innosetup -y
+
+      - name: Unity Build (Windows)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE:  ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 6000.1.12f1
+          projectPath: ${{ env.PROJECT_PATH }}
+          targetPlatform: StandaloneWindows64
+          buildMethod: CIBuildEntryCLI.BuildCI
+
+      - name: Run Inno Setup to create installer
         run: |
-          aws cloudfront create-invalidation \
-            --distribution-id ${{ steps.cf.outputs.dist_id }} \
-            --paths "/smolbeanplanet/*"
+          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
+
+      - name: Move installer into Builds/Windows
+        run: |
+          mkdir -p Builds\Windows
+          move Output\SmolbeanPlanetSetup.exe Builds\Windows\SmolbeanPlanetSetup.exe
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActions-Smolbeanplanet-Upload
+          aws-region: eu-west-1
+
+      - name: Upload to S3 (Windows)
+        run: aws s3 cp Builds/Windows/SmolbeanPlanetSetup.exe s3://dantelore.com/smolbeanplanet/windows/SmolbeanPlanetSetup.exe --cache-control "public,max-age=60"
+
+      - name: Invalidate CloudFront
+        run: |
+          DIST_ID=$(aws cloudfront list-distributions \
+            --query "DistributionList.Items[?Aliases.Items[?@=='dantelore.com']].Id | [0]" \
+            --output text)
+          aws cloudfront create-invalidation --distribution-id $DIST_ID --paths "/smolbeanplanet/*"
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unity Build (Mac)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE:  ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: 6000.1.12f1
+          projectPath: ${{ env.PROJECT_PATH }}
+          targetPlatform: StandaloneOSX
+          buildMethod: CIBuildEntryCLI.BuildCI
+
+      - name: Create DMG
+        run: ./create-dmg.sh
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/GitHubActions-Smolbeanplanet-Upload
+          aws-region: eu-west-1
+
+      - name: Upload to S3 (Mac)
+        run: aws s3 cp Builds/macOS/SmolbeanPlanet.dmg s3://dantelore.com/smolbeanplanet/mac/SmolbeanPlanet.dmg --cache-control "public,max-age=60"
+
+      - name: Invalidate CloudFront
+        run: |
+          DIST_ID=$(aws cloudfront list-distributions \
+            --query "DistributionList.Items[?Aliases.Items[?@=='dantelore.com']].Id | [0]" \
+            --output text)
+          aws cloudfront create-invalidation --distribution-id $DIST_ID --paths "/smolbeanplanet/*"
