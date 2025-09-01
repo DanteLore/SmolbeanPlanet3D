@@ -1,12 +1,17 @@
-name: Unity 6 — Linux Build (smoke test)
+name: Unity 6 — Linux Build
 
 on:
   push:
-    branches: [ release ]
-  workflow_dispatch:
+    branches: [ release ]      # build only when you push to 'release'
+    tags:     [ 'v*' ]         # and on version tags like v0.3.0
+  workflow_dispatch:            # allow manual runs from the Actions tab
+
+concurrency:
+  group: unity-build-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
-  UNITY_VERSION: "6000.1.12f1"   # <-- set this to match your project
+  UNITY_VERSION: "6000.0.0f1"   # <-- set to match ProjectSettings/ProjectVersion.txt
   PROJECT_PATH: "."
 
 jobs:
@@ -14,8 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        # If you use Git LFS, uncomment:
+        # with:
+        #   lfs: true
 
-      # Cache speeds up repeat builds
       - name: Cache Library
         uses: actions/cache@v4
         with:
@@ -25,15 +32,17 @@ jobs:
             Library-${{ env.UNITY_VERSION }}-
             Library-
 
-      - name: Build (Linux)
+      - name: Unity Build (Linux)
         uses: game-ci/unity-builder@v4
         env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_LICENSE:  ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          unityVersion: ${{ env.UNITY_VERSION }}
-          projectPath: ${{ env.PROJECT_PATH }}
+          unityVersion:   ${{ env.UNITY_VERSION }}
+          projectPath:    ${{ env.PROJECT_PATH }}
           targetPlatform: StandaloneLinux64
-          buildMethod: CIBuildEntryCLI.BuildCI
+          buildMethod:    CIBuildEntryCLI.BuildCI
           customParameters: >
             -buildTarget StandaloneLinux64
             -outputPath Builds/Linux/SmolbeanPlanet.x86_64
@@ -50,3 +59,4 @@ jobs:
           name: Smolbean-StandaloneLinux64
           path: Smolbean-StandaloneLinux64.zip
           compression-level: 0
+          retention-days: 7
