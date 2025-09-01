@@ -122,7 +122,7 @@ data "aws_iam_policy_document" "github_trust" {
 resource "aws_iam_role" "github_actions" {
   name               = var.role_name
   assume_role_policy = data.aws_iam_policy_document.github_trust.json
-  description        = "Role for GitHub Actions (${var.github_owner}/${var.github_repo}) to upload to s3://${var.s3_bucket}/${var.s3_prefix}/ and invalidate CloudFront."
+  description        = "Role for GitHub Actions (${var.github_owner}/${var.github_repo}) to upload to s3://${var.s3_bucket}/${var.s3_prefix}/ and manage CloudFront cache."
 }
 
 ########################################
@@ -170,27 +170,36 @@ resource "aws_iam_role_policy_attachment" "attach_s3" {
 }
 
 ########################################
-# CloudFront invalidation permission (all distributions)
+# CloudFront permissions (invalidate + list)
 ########################################
+# Grant CreateInvalidation on any distribution and allow listing distributions
+# so the workflow can look up the distribution ID by domain at runtime.
 
-data "aws_iam_policy_document" "cloudfront_invalidate" {
+data "aws_iam_policy_document" "cloudfront_manage_cache" {
   statement {
     sid     = "CreateInvalidation"
     effect  = "Allow"
     actions = ["cloudfront:CreateInvalidation"]
-    resources = ["*"]   # allow invalidations on any distribution
+    resources = ["*"]
+  }
+
+  statement {
+    sid     = "ListDistributions"
+    effect  = "Allow"
+    actions = ["cloudfront:ListDistributions"]
+    resources = ["*"]
   }
 }
 
-resource "aws_iam_policy" "cloudfront_invalidate" {
-  name        = "${var.role_name}-CloudFrontInvalidate"
-  description = "Allow CloudFront invalidations on any distribution"
-  policy      = data.aws_iam_policy_document.cloudfront_invalidate.json
+resource "aws_iam_policy" "cloudfront_manage_cache" {
+  name        = "${var.role_name}-CloudFrontManageCache"
+  description = "Allow CloudFront invalidations and listing distributions (for ID lookup)"
+  policy      = data.aws_iam_policy_document.cloudfront_manage_cache.json
 }
 
 resource "aws_iam_role_policy_attachment" "attach_cf" {
   role       = aws_iam_role.github_actions.name
-  policy_arn = aws_iam_policy.cloudfront_invalidate.arn
+  policy_arn = aws_iam_policy.cloudfront_manage_cache.arn
 }
 
 ########################################
