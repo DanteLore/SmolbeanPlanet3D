@@ -86,16 +86,17 @@ public class FarmerSelectFieldCenterState : IState
         var pos = center + (Quaternion.AngleAxis(angle, Vector3.up) * (Vector3.forward * range));
 
         Ray ray = new(pos + (Vector3.up * 1000f), Vector3.down);
-        if (Physics.Raycast(ray, out var rayHit, float.MaxValue, LayerMask.GetMask(groundLayer)) &&
+        if (Physics.Raycast(ray, out var rayHit, 2000f, LayerMask.GetMask(groundLayer)) &&
             Physics.OverlapSphere(rayHit.point, fieldRadius, LayerMask.GetMask(buildingLayer, natureLayer)).Length == 0 &&
             NavMesh.SamplePosition(rayHit.point, out var navHit, 1f, NavMesh.AllAreas) &&
             navHit.position.y >= -0.5f // Not in the sea :)
             )
         {
-            float grassQtty = GroundWearManager.Instance.GetAvailableGrass(navHit.position, fieldRadius);
-
-            if(grassQtty >= 50f)
-                fieldLocations.Add(new SearchResult { pos = navHit.position, grassQtty = grassQtty });
+            float amount = GroundWearManager.Instance.GetAvailableGrass(navHit.position, fieldRadius);
+            float max = GroundWearManager.Instance.GetMaxGrass(fieldRadius);
+            float grassQtty = amount / max;
+            
+            fieldLocations.Add(new SearchResult { pos = navHit.position, grassQtty = grassQtty });
         }
     }
 }

@@ -4,9 +4,10 @@ using UnityEngine;
 public class Farmer : SmolbeanColonist, IReturnDrops
 {
     public DropSpec dropSpec;
-    public float fieldRadius = 4f;
+    public float fieldRadius = 4.0f;
     public Vector3 fieldCenter;
     public float grassHarvested;
+    public float swathRadius = 2.0f;
 
     public override void InitialiseStats(AnimalStats newStats = null)
     {

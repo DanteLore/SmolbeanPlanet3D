@@ -30,12 +30,13 @@ public class FarmerHarvestState : IState
     public void Tick()
     {
         var pos = farmer.transform.position + (farmer.transform.rotation * Vector3.forward * 0.5f);
-        var available = GroundWearManager.Instance.GetAvailableGrass(pos, searchRadius: 2f);
+        var available = GroundWearManager.Instance.GetAvailableGrass(pos, searchRadius: farmer.swathRadius);
+        var max = GroundWearManager.Instance.GetMaxGrass(searchRadius: farmer.swathRadius);
 
-        if (available <= 1f)
+        if (available / max <= 0.1f) // Harvest until only 10% of grass is left
         {
             NoGrassLeft = true;
-        }  
+        }
         else
         {
             // Can't use Time.deltaTime as we might not be called every frame
