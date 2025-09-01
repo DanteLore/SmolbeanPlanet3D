@@ -4,14 +4,13 @@ on:
   push:
     branches: [ release ]      # build only when you push to 'release'
     tags:     [ 'v*' ]         # and on version tags like v0.3.0
-  workflow_dispatch:            # allow manual runs from the Actions tab
+  workflow_dispatch:
 
 concurrency:
   group: unity-build-${{ github.ref }}
   cancel-in-progress: true
 
 env:
-  UNITY_VERSION: "6000.1.12f1"   # <-- set to match ProjectSettings/ProjectVersion.txt
   PROJECT_PATH: "."
 
 jobs:
@@ -23,13 +22,21 @@ jobs:
         # with:
         #   lfs: true
 
+      # Read the exact Unity version from ProjectSettings/ProjectVersion.txt
+      - name: Read Unity version
+        id: unityver
+        run: |
+          ver=$(awk -F': ' '/m_EditorVersion:/{print $2}' ProjectSettings/ProjectVersion.txt)
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+          echo "Using Unity $ver"
+
       - name: Cache Library
         uses: actions/cache@v4
         with:
           path: Library
-          key: Library-${{ env.UNITY_VERSION }}-${{ hashFiles('ProjectSettings/**','**/*.cs','**/*.asset','**/*.meta') }}
+          key: Library-${{ steps.unityver.outputs.version }}-${{ hashFiles('ProjectSettings/**','**/*.cs','**/*.asset','**/*.meta') }}
           restore-keys: |
-            Library-${{ env.UNITY_VERSION }}-
+            Library-${{ steps.unityver.outputs.version }}-
             Library-
 
       - name: Unity Build (Linux)
@@ -39,7 +46,7 @@ jobs:
           UNITY_EMAIL:    ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
-          unityVersion:   ${{ env.UNITY_VERSION }}
+          unityVersion:   ${{ steps.unityver.outputs.version }}
           projectPath:    ${{ env.PROJECT_PATH }}
           targetPlatform: StandaloneLinux64
           buildMethod:    CIBuildEntryCLI.BuildCI
