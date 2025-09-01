@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  UNITY_VERSION: "6000.0.0f1"   # <-- set to match ProjectSettings/ProjectVersion.txt
+  UNITY_VERSION: "6000.1.12f1"   # <-- set to match ProjectSettings/ProjectVersion.txt
   PROJECT_PATH: "."
 
 jobs:
