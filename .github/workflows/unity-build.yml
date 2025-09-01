@@ -1,28 +1,31 @@
-name: Unity 6 — Linux Build
+name: Unity 6 — Linux Build + S3 Upload
 
 on:
   push:
-    branches: [ release ]      # build only when you push to 'release'
-    tags:     [ 'v*' ]         # and on version tags like v0.3.0
+    branches: [ release ]      # build when you push to 'release'
+    tags:     [ 'v*' ]         # and on tags like v0.3.0
   workflow_dispatch:
 
 concurrency:
   group: unity-build-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  id-token: write   # needed for OIDC
+  contents: read
+
 env:
   PROJECT_PATH: "."
+  S3_BUCKET: "dantelore.com"
+  S3_PREFIX: "smolbeanplanet/linux"
 
 jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        # If you use Git LFS, uncomment:
-        # with:
-        #   lfs: true
 
-      # Read the exact Unity version from ProjectSettings/ProjectVersion.txt
+      # Read Unity version from ProjectVersion.txt
       - name: Read Unity version
         id: unityver
         run: |
@@ -58,12 +61,26 @@ jobs:
       - name: Package artifact
         run: |
           cd Builds/Linux
-          zip -r ../../Smolbean-StandaloneLinux64.zip .
+          zip -r ../../linux.zip .
 
+      # Debug: keep artifact in Actions UI for quick download
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: Smolbean-StandaloneLinux64
-          path: Smolbean-StandaloneLinux64.zip
+          path: linux.zip
           compression-level: 0
           retention-days: 7
+
+      # ----- S3 UPLOAD -----
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::<YOUR_ACCOUNT_ID>:role/GitHubActions-Smolbeanplanet-Upload
+          aws-region: eu-west-1
+
+      - name: Upload to S3
+        run: |
+          aws s3 cp linux.zip \
+            "s3://${{ env.S3_BUCKET }}/${{ env.S3_PREFIX }}/linux.zip" \
+            --cache-control "public,max-age=60"
