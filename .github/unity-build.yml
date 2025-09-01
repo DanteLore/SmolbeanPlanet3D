@@ -1,0 +1,52 @@
+name: Unity 6 — Linux Build (smoke test)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  UNITY_VERSION: "6000.1.12f1"   # <-- set this to match your project
+  PROJECT_PATH: "."
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Cache speeds up repeat builds
+      - name: Cache Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ env.UNITY_VERSION }}-${{ hashFiles('ProjectSettings/**','**/*.cs','**/*.asset','**/*.meta') }}
+          restore-keys: |
+            Library-${{ env.UNITY_VERSION }}-
+            Library-
+
+      - name: Build (Linux)
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          unityVersion: ${{ env.UNITY_VERSION }}
+          projectPath: ${{ env.PROJECT_PATH }}
+          targetPlatform: StandaloneLinux64
+          buildMethod: CIBuildEntryCLI.BuildCI
+          customParameters: >
+            -buildTarget StandaloneLinux64
+            -outputPath Builds/Linux/SmolbeanPlanet.x86_64
+            -development false
+
+      - name: Package artifact
+        run: |
+          cd Builds/Linux
+          zip -r ../../Smolbean-StandaloneLinux64.zip .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Smolbean-StandaloneLinux64
+          path: Smolbean-StandaloneLinux64.zip
+          compression-level: 0
