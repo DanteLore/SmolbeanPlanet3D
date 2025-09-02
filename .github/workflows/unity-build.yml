@@ -91,10 +91,10 @@ jobs:
 
       - name: Invalidate CloudFront
         run: |
-          DIST_ID=$(aws cloudfront list-distributions `
+          $distId = aws cloudfront list-distributions `
             --query "DistributionList.Items[?Aliases.Items[?@=='dantelore.com']].Id | [0]" `
-            --output text)
-          aws cloudfront create-invalidation --distribution-id $DIST_ID --paths "/smolbeanplanet/*"
+            --output text
+          aws cloudfront create-invalidation --distribution-id $distId --paths "/smolbeanplanet/*"
 
   build-macos:
     runs-on: macos-latest
