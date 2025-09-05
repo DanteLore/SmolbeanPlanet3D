@@ -8,10 +8,21 @@ DefaultGroupName=Smolbean Planet
 OutputBaseFilename=SmolbeanPlanetSetup
 Compression=lzma
 SolidCompression=yes
+; Ensure 64-bit install path on 64-bit Windows
+ArchitecturesInstallIn64BitMode=x64
 
 [Files]
+; Main EXE
 Source: "Builds\Windows\SmolbeanPlanet.exe"; DestDir: "{app}"; Flags: ignoreversion
+
+; Critical DLL (was missing)
+Source: "Builds\Windows\UnityPlayer.dll"; DestDir: "{app}"; Flags: ignoreversion
+
+; Game data folder (you already had this)
 Source: "Builds\Windows\SmolbeanPlanet_Data\*"; DestDir: "{app}\SmolbeanPlanet_Data"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+; Mono runtime folder (was missing)
+Source: "Builds\Windows\MonoBleedingEdge\*"; DestDir: "{app}\MonoBleedingEdge"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\Smolbean Planet"; Filename: "{app}\SmolbeanPlanet.exe"
@@ -19,3 +30,7 @@ Name: "{commondesktop}\Smolbean Planet"; Filename: "{app}\SmolbeanPlanet.exe"; T
 
 [Tasks]
 Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "Additional icons:"; Flags: unchecked
+
+[Run]
+; Optional: auto-launch after install (kept off by default—remove 'skipifsilent' if you want it to run in silent installs)
+Filename: "{app}\SmolbeanPlanet.exe"; Description: "Launch Smolbean Planet"; Flags: nowait postinstall skipifsilent
