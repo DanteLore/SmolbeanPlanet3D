@@ -15,13 +15,13 @@ ArchitecturesInstallIn64BitMode=x64
 ; Main EXE
 Source: "Builds\Windows\SmolbeanPlanet.exe"; DestDir: "{app}"; Flags: ignoreversion
 
-; Critical DLL (was missing)
+; Critical DLL
 Source: "Builds\Windows\UnityPlayer.dll"; DestDir: "{app}"; Flags: ignoreversion
 
-; Game data folder (you already had this)
+; Game data folder
 Source: "Builds\Windows\SmolbeanPlanet_Data\*"; DestDir: "{app}\SmolbeanPlanet_Data"; Flags: ignoreversion recursesubdirs createallsubdirs
 
-; Mono runtime folder (was missing)
+; Mono runtime folder 
 Source: "Builds\Windows\MonoBleedingEdge\*"; DestDir: "{app}\MonoBleedingEdge"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]

@@ -29,6 +29,7 @@ jobs:
           projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: StandaloneLinux64
           buildMethod: CIBuildEntryCLI.BuildCI
+          customParameters: -buildProfile test -requireProfile true
 
       - name: Package Linux zip
         run: |
@@ -70,6 +71,7 @@ jobs:
           projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: StandaloneWindows64
           buildMethod: CIBuildEntryCLI.BuildCI
+          customParameters: -buildProfile test -requireProfile true
 
       - name: Run Inno Setup to create installer
         run: |
@@ -112,6 +114,7 @@ jobs:
           projectPath: ${{ env.PROJECT_PATH }}
           targetPlatform: StandaloneOSX
           buildMethod: CIBuildEntryCLI.BuildCI
+          customParameters: -buildProfile test -requireProfile true
 
       - name: Create DMG
         run: ./create-dmg.sh
