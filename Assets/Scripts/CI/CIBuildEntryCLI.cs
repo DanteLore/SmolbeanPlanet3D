@@ -1,54 +1,30 @@
 #if UNITY_EDITOR
 using System;
+using UnityEditor;
+using UnityEditor.Build.Profile;
 using UnityEngine;
 
 public static class CIBuildEntryCLI
 {
-    // Examples:
-    // -executeMethod CIBuildEntryCLI.BuildCI -buildKey mac -outputPath Builds/macOS/SmolbeanPlanet.app -development false -buildProfile test -requireProfile true
-    // -executeMethod CIBuildEntryCLI.BuildCI -buildTarget StandaloneWindows64 -outputPath Builds/Windows/SmolbeanPlanet/SmolbeanPlanet.exe -development false -buildProfile test
-    // -executeMethod CIBuildEntryCLI.ListBuilders
-
     public static void BuildCI()
     {
         // Accept either -buildKey (preferred) or -buildTarget (fallback).
-        var buildKey       = GetArg("-buildKey",   "");
-        var buildTargetKey = GetArg("-buildTarget",""); // e.g., StandaloneOSX
-        var key            = !string.IsNullOrEmpty(buildKey) ? buildKey
+        var buildKey = GetArg("-buildKey", "");
+        var buildTargetKey = GetArg("-buildTarget", ""); // e.g., StandaloneOSX
+        var key = !string.IsNullOrEmpty(buildKey) ? buildKey
                           : !string.IsNullOrEmpty(buildTargetKey) ? buildTargetKey
                           : "StandaloneLinux64"; // default
 
-        var outPath         = GetArg("-outputPath", "");
-        bool dev            = GetArg("-development", "false").ToLowerInvariant() == "true";
-        var profileName     = GetArg("-buildProfile", "");
-        bool requireProfile = GetArg("-requireProfile", "false").ToLowerInvariant() == "true";
+        var outPath = GetArg("-outputPath", "");
+        var profileName = GetArg("-buildProfile", "Smolbean");
 
-        // Activate Build Profile first (Unity 6; safe no-op otherwise).
-        if (!string.IsNullOrEmpty(profileName))
-        {
-            var ok = BuildProfileActivator.TryActivate(profileName);
-            if (!ok)
-            {
-                var msg = $"[CI] Build Profile '{profileName}' not activated.";
-                if (requireProfile) throw new Exception(msg);
-                Debug.LogWarning(msg + " Proceeding without it.");
-            }
-        }
+        SetBuildProfile(profileName);
 
         // Resolve the concrete builder via your registry.
         var builder = BuilderRegistry.Resolve(key);
 
         // Run the build.
-        builder.Run(dev, string.IsNullOrEmpty(outPath) ? null : outPath);
-    }
-
-    public static void ListBuilders()
-    {
-        // Convenience to see what's registered on the CI box
-        BuilderRegistry.EnsureInitialized();
-        Debug.Log("Available build keys:\n" +
-                  "(Use your own method to enumerate keys if you have one; " +
-                  "currently BuilderRegistry keeps keys internal. Consider adding a Keys() accessor.)");
+        builder.Run(string.IsNullOrEmpty(outPath) ? null : outPath);
     }
 
     private static string GetArg(string name, string fallback)
@@ -57,6 +33,16 @@ public static class CIBuildEntryCLI
         for (int i = 0; i < args.Length; i++)
             if (args[i] == name && i + 1 < args.Length) return args[i + 1];
         return fallback;
+    }
+
+    private static void SetBuildProfile(string profileName)
+    {
+        Debug.Log($"[CI] Current build profile: {BuildProfile.GetActiveBuildProfile().name}");
+        var profile = AssetDatabase.LoadAssetAtPath<BuildProfile>($"Assets/Settings/Build Profiles/{profileName}.asset");
+        if (profile == null)
+            throw new Exception($"[CI] Build Profile not found: {profileName}");
+        BuildProfile.SetActiveBuildProfile(profile);
+        Debug.Log($"[CI] Switched to build profile: {BuildProfile.GetActiveBuildProfile().name}");
     }
 }
 #endif
