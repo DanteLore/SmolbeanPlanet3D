@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 15003, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Test
+  m_Name: Smolbean
   m_EditorClassIdentifier: 
   m_AssetVersion: 1
   m_BuildTarget: 2
@@ -398,6 +398,14 @@ MonoBehaviour:
         type: 3}'
     - line: '|       m_Width: 16'
     - line: '|       m_Height: 16'
+    - line: '|       m_Kind: 0'
+    - line: '|   - m_BuildTarget: '
+    - line: '|     m_Icons:'
+    - line: '|     - serializedVersion: 2'
+    - line: '|       m_Icon: {fileID: 2800000, guid: ca74becbb156f4a6c8b0db0ae374b612,
+        type: 3}'
+    - line: '|       m_Width: 128'
+    - line: '|       m_Height: 128'
     - line: '|       m_Kind: 0'
     - line: '|   m_BuildTargetPlatformIcons: []'
     - line: '|   m_BuildTargetBatching:'
