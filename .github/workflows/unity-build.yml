@@ -73,12 +73,12 @@ jobs:
 
       - name: Run Inno Setup to create installer
         run: |
-          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
 
       - name: Move installer into Builds/Windows
         run: |
-          mkdir -p Builds\Windows
-          move Output\SmolbeanPlanetSetup.exe Builds\Windows\SmolbeanPlanetSetup.exe
+          New-Item -ItemType Directory -Force -Path Builds\Windows
+          Move-Item -Path Output\SmolbeanPlanetSetup.exe -Destination Builds\Windows\SmolbeanPlanetSetup.exe -Force
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -91,10 +91,10 @@ jobs:
 
       - name: Invalidate CloudFront
         run: |
-          DIST_ID=$(aws cloudfront list-distributions \
-            --query "DistributionList.Items[?Aliases.Items[?@=='dantelore.com']].Id | [0]" \
-            --output text)
-          aws cloudfront create-invalidation --distribution-id $DIST_ID --paths "/smolbeanplanet/*"
+          $distId = aws cloudfront list-distributions `
+            --query "DistributionList.Items[?Aliases.Items[?@=='dantelore.com']].Id | [0]" `
+            --output text
+          aws cloudfront create-invalidation --distribution-id $distId --paths "/smolbeanplanet/*"
 
   build-macos:
     runs-on: macos-latest
