@@ -10,6 +10,7 @@ public abstract class BuildTaskBase
     public abstract BuildTarget Target { get; }
     public abstract string DefaultOutputPath { get; }
 
+    [Obsolete]
     public void Run(bool development, string outputPathOverride = null)
     {
         var group = BuildPipeline.GetBuildTargetGroup(Target);
@@ -29,6 +30,13 @@ public abstract class BuildTaskBase
             locationPathName = outputPath,
             options = development ? BuildOptions.Development | BuildOptions.AllowDebugging : BuildOptions.None
         };
+
+        Debug.Log($"CI Snapshot → Dev={development}, Strip={PlayerSettings.strippingLevel}, " +
+            $"Backend={PlayerSettings.GetScriptingBackend(group)}, " +
+            $"APICompat={PlayerSettings.GetApiCompatibilityLevel(group)}, " +
+            $"Defines={PlayerSettings.GetScriptingDefineSymbolsForGroup(group)}, " +
+            $"Graphics={string.Join(";", PlayerSettings.GetGraphicsAPIs(Target))}, " +
+            $"UnityVersion={Application.unityVersion}");
 
         var report = BuildPipeline.BuildPlayer(opts);
         if (report.summary.result != BuildResult.Succeeded)
