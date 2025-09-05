@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using UnityEditor;
+using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
@@ -10,7 +11,6 @@ public abstract class BuildTaskBase
     public abstract BuildTarget Target { get; }
     public abstract string DefaultOutputPath { get; }
 
-    [Obsolete]
     public void Run(bool development, string outputPathOverride = null)
     {
         var group = BuildPipeline.GetBuildTargetGroup(Target);
@@ -31,12 +31,21 @@ public abstract class BuildTaskBase
             options = development ? BuildOptions.Development | BuildOptions.AllowDebugging : BuildOptions.None
         };
 
-        Debug.Log($"CI Snapshot → Dev={development}, Strip={PlayerSettings.strippingLevel}, " +
-            $"Backend={PlayerSettings.GetScriptingBackend(group)}, " +
-            $"APICompat={PlayerSettings.GetApiCompatibilityLevel(group)}, " +
-            $"Defines={PlayerSettings.GetScriptingDefineSymbolsForGroup(group)}, " +
-            $"Graphics={string.Join(";", PlayerSettings.GetGraphicsAPIs(Target))}, " +
-            $"UnityVersion={Application.unityVersion}");
+        var namedTarget = NamedBuildTarget.FromBuildTargetGroup(group);
+
+        // enforce settings
+        PlayerSettings.SetScriptingBackend(namedTarget, ScriptingImplementation.IL2CPP);
+        PlayerSettings.SetApiCompatibilityLevel(namedTarget, ApiCompatibilityLevel.NET_Unity_4_8);
+
+        // logging
+        var backend = PlayerSettings.GetScriptingBackend(namedTarget);
+        var api     = PlayerSettings.GetApiCompatibilityLevel(namedTarget);
+        var defines = PlayerSettings.GetScriptingDefineSymbols(namedTarget);
+
+        Debug.Log($"[CI] Snapshot → Dev={development}, Strip={PlayerSettings.GetManagedStrippingLevel(namedTarget)}, " +
+                $"Backend={backend}, APICompat={api}, Defines={defines}, " +
+                $"Graphics={string.Join(";", PlayerSettings.GetGraphicsAPIs(Target))}, " +
+                $"UnityVersion={Application.unityVersion}");
 
         var report = BuildPipeline.BuildPlayer(opts);
         if (report.summary.result != BuildResult.Succeeded)
