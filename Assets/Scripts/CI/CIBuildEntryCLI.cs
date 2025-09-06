@@ -16,7 +16,9 @@ public static class CIBuildEntryCLI
 
         var outPath = GetArg("-outputPath", "");
 
-        Debug.Log($"[CI] Current build profile: {BuildProfile.GetActiveBuildProfile().name}");
+        var buildProfile = BuildProfile.GetActiveBuildProfile();
+        var buildProfileName = buildProfile != null ? buildProfile.name : "null";
+        Debug.Log($"[CI] Current build profile: {buildProfileName}");
 
         // Resolve the concrete builder via your registry.
         var builder = BuilderRegistry.Resolve(key);
