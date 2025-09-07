@@ -20,9 +20,11 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
-    void Awake()
+    private void Awake()
     {
-        if(Instance != null && Instance != this)
+        Debug.Log("GameStateManager Awake");
+
+        if (Instance != null && Instance != this)
             Destroy(this);
         else
             Instance = this;
@@ -31,9 +33,20 @@ public class GameStateManager : MonoBehaviour
         IsStarted = false;
     }
 
-    void OnApplicationQuit()
+    private void Start()
     {
+        Debug.Log("[GameStateManager] Start");
+    }
+
+    private void OnApplicationQuit()
+    {
+        Debug.Log("[GameStateManager] Quit");
         EndGame();
+    }
+
+    private void OnGUI()
+    {
+        Debug.Log("[GameStateManager] GUI");
     }
 
     public void Pause()

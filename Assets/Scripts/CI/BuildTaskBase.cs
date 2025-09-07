@@ -30,13 +30,22 @@ public abstract class BuildTaskBase
             scenes = DefaultScenes,
             target = Target,
             locationPathName = outputPath,
-            options = BuildOptions.None
+            options = BuildOptions.Development | BuildOptions.AllowDebugging
         };
 
         var namedTarget = NamedBuildTarget.FromBuildTargetGroup(group);
 
-        PlayerSettings.SetScriptingBackend(namedTarget, ScriptingImplementation.IL2CPP);
+        PlayerSettings.stripEngineCode = false;
+        PlayerSettings.SetManagedStrippingLevel(
+            NamedBuildTarget.Standalone,
+            ManagedStrippingLevel.Low
+        );
+        PlayerSettings.SetScriptingBackend(namedTarget, ScriptingImplementation.Mono2x);
         PlayerSettings.SetApiCompatibilityLevel(namedTarget, ApiCompatibilityLevel.NET_Unity_4_8);
+
+        EditorUserBuildSettings.development = true;
+        EditorUserBuildSettings.connectProfiler = false;
+        EditorUserBuildSettings.allowDebugging = true;
 
         PrintDebugSnapshotInfo(namedTarget);
 

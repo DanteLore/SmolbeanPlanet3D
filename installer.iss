@@ -14,6 +14,7 @@ ArchitecturesInstallIn64BitMode=x64
 [Files]
 ; --- Main EXE
 Source: "Builds\Windows\SmolbeanPlanet.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Builds\Windows\UnityPlayer.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 ; --- Core player DLLs
 ; UnityPlayer.dll exists for both Mono and IL2CPP players
@@ -30,6 +31,7 @@ Source: "Builds\Windows\SmolbeanPlanet_Data\*"; DestDir: "{app}\SmolbeanPlanet_D
 
 ; --- Mono runtime (Mono backend only; lives INSIDE the Data folder)
 Source: "Builds\Windows\SmolbeanPlanet_Data\MonoBleedingEdge\*"; DestDir: "{app}\SmolbeanPlanet_Data\MonoBleedingEdge"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
+
 
 [Icons]
 Name: "{group}\Smolbean Planet"; Filename: "{app}\SmolbeanPlanet.exe"

@@ -238,7 +238,7 @@ MonoBehaviour:
     - line: '|   AndroidTargetSdkVersion: 0'
     - line: '|   AndroidPreferredInstallLocation: 1'
     - line: '|   aotOptions: '
-    - line: '|   stripEngineCode: 1'
+    - line: '|   stripEngineCode: 0'
     - line: '|   iPhoneStrippingLevel: 0'
     - line: '|   iPhoneScriptCallOptimization: 0'
     - line: '|   ForceInternetPermission: 0'
@@ -799,7 +799,7 @@ MonoBehaviour:
     - line: '|   additionalCompilerArguments: {}'
     - line: '|   platformArchitecture: {}'
     - line: '|   scriptingBackend:'
-    - line: '|     Standalone: 1'
+    - line: '|     Standalone: 0'
     - line: '|   il2cppCompilerConfiguration: {}'
     - line: '|   il2cppCodeGeneration: {}'
     - line: '|   il2cppStacktraceInformation: {}'
@@ -812,6 +812,7 @@ MonoBehaviour:
     - line: '|     PS4: 1'
     - line: '|     PS5: 1'
     - line: '|     Stadia: 1'
+    - line: '|     Standalone: 1'
     - line: '|     WebGL: 1'
     - line: '|     Windows Store Apps: 1'
     - line: '|     XboxOne: 1'
@@ -932,10 +933,10 @@ MonoBehaviour:
     - rid: 1048444402837749835
       type: {class: OSXStandaloneBuildProfile, ns: UnityEditor.OSXStandalone, asm: UnityEditor.OSXStandalone.Extensions}
       data:
-        m_Development: 0
-        m_ConnectProfiler: 1
+        m_Development: 1
+        m_ConnectProfiler: 0
         m_BuildWithDeepProfilingSupport: 0
-        m_AllowDebugging: 0
+        m_AllowDebugging: 1
         m_WaitForManagedDebugger: 0
         m_ManagedDebuggerFixedPort: 0
         m_ExplicitNullChecks: 0
