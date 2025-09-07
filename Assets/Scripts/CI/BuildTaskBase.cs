@@ -10,7 +10,7 @@ public abstract class BuildTaskBase
 {
     public abstract BuildTarget Target { get; }
     public abstract string DefaultOutputPath { get; }
-    
+
     protected static string[] DefaultScenes => Array.ConvertAll(EditorBuildSettings.scenes, s => s.path);
 
     public void Run(string outputPathOverride = null)
@@ -78,8 +78,19 @@ public abstract class BuildTaskBase
     protected static void CleanupDoNotShip(string buildDir)
     {
         foreach (var d in Directory.GetDirectories(buildDir, "*", SearchOption.AllDirectories))
+        {
             if (d.IndexOf("donotship", StringComparison.OrdinalIgnoreCase) >= 0)
-                Directory.Delete(d, true);
+            {
+                try
+                {
+                    Directory.Delete(d, true);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogWarning($"Failed to delete directory: '{d}': {ex.Message}");
+                }
+            }
+        }
     }
 }
 #endif
