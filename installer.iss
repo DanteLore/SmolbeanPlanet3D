@@ -32,6 +32,8 @@ Source: "Builds\Windows\SmolbeanPlanet_Data\*"; DestDir: "{app}\SmolbeanPlanet_D
 ; --- Mono runtime 
 Source: "Builds\Windows\MonoBleedingEdge\*"; DestDir: "{app}\MonoBleedingEdge"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
 
+; --- D3D12 runtime folder
+Source: "Builds\Windows\D3D12\*"; DestDir: "{app}\D3D12"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
 
 [Icons]
 Name: "{group}\Smolbean Planet"; Filename: "{app}\SmolbeanPlanet.exe"
