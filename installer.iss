@@ -29,8 +29,8 @@ Source: "Builds\Windows\WinPixEventRuntime.dll"; DestDir: "{app}"; Flags: ignore
 ; --- Game data folder (required for both Mono and IL2CPP)
 Source: "Builds\Windows\SmolbeanPlanet_Data\*"; DestDir: "{app}\SmolbeanPlanet_Data"; Flags: ignoreversion recursesubdirs createallsubdirs
 
-; --- Mono runtime (Mono backend only; lives INSIDE the Data folder)
-Source: "Builds\Windows\SmolbeanPlanet_Data\MonoBleedingEdge\*"; DestDir: "{app}\SmolbeanPlanet_Data\MonoBleedingEdge"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
+; --- Mono runtime 
+Source: "Builds\Windows\MonoBleedingEdge\*"; DestDir: "{app}\MonoBleedingEdge"; Flags: ignoreversion recursesubdirs createallsubdirs skipifsourcedoesntexist
 
 
 [Icons]
