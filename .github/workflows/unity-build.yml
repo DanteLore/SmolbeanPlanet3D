@@ -17,6 +17,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - name: Ensure LFS files present
+        run: |
+          git lfs install
+          git lfs pull
+          # Fail if any pointer files remain
+          if grep -RIl --exclude-dir=.git '^version https://git-lfs.github.com/spec' Assets; then
+            echo "::error ::LFS pointer(s) detected in Assets (not hydrated)"; exit 1
+          fi
 
       - name: Unity Build (Linux)
         uses: game-ci/unity-builder@v4
@@ -55,6 +67,17 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - name: Ensure LFS files present
+        run: |
+          git lfs install
+          git lfs pull
+          if (Select-String -Path Assets\* -Pattern "^version https://git-lfs.github.com/spec" -Quiet) {
+            Write-Error "LFS pointer(s) detected in Assets (not hydrated)"; exit 1
+          }
 
       - name: Install Inno Setup
         run: choco install innosetup -y
@@ -100,6 +123,17 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - name: Ensure LFS files present
+        run: |
+          git lfs install
+          git lfs pull
+          if grep -RIl --exclude-dir=.git '^version https://git-lfs.github.com/spec' Assets; then
+            echo "::error ::LFS pointer(s) detected in Assets (not hydrated)"; exit 1
+          fi
 
       - name: Unity Build (Mac)
         uses: game-ci/unity-builder@v4
