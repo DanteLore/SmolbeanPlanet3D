@@ -3,6 +3,8 @@
 
 Build*
 
+*.g.cs
+
 ### Terraform ###
 .terraform/
 *.tfstate

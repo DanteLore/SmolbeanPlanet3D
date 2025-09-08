@@ -49,6 +49,8 @@ public abstract class BuildTaskBase
 
         PrintDebugSnapshotInfo(namedTarget);
 
+        BuildInfoGenerator.Generate(Target);
+
         var report = BuildPipeline.BuildPlayer(opts);
         if (report.summary.result != BuildResult.Succeeded)
             throw new Exception($"Build failed: {report.summary.result} ({report.summary.totalErrors} errors).");

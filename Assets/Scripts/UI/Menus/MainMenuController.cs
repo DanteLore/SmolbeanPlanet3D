@@ -1,5 +1,5 @@
-using System;
 using System.Collections;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,29 +11,41 @@ public class MainMenuController : SmolbeanMenu
     void OnEnable()
     {
         document = GetComponent<UIDocument>();
+        var root = document.rootVisualElement;
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
 
-        var newGameButton = document.rootVisualElement.Q<Button>("newGameButton");
+        var newGameButton = root.Q<Button>("newGameButton");
         newGameButton.clicked += NewGameButtonClicked;
 
-        var resumeButton = document.rootVisualElement.Q<Button>("resumeButton");
+        var resumeButton = root.Q<Button>("resumeButton");
         resumeButton.clicked += ResumeButtonClicked;
         resumeButton.visible = CanResume();
         GameStateManager.Instance.GameStatusChanged += (o, started) => resumeButton.visible = CanResume();
 
-        var saveGameButton = document.rootVisualElement.Q<Button>("saveGameButton");
+        var saveGameButton = root.Q<Button>("saveGameButton");
         saveGameButton.clicked += SaveGameButtonClicked;
         saveGameButton.visible = GameStateManager.Instance.IsStarted;
         GameStateManager.Instance.GameStatusChanged += (o, started) => saveGameButton.visible = started;
 
-        var loadGameButton = document.rootVisualElement.Q<Button>("loadGameButton");
+        var loadGameButton = root.Q<Button>("loadGameButton");
         loadGameButton.clicked += LoadGameButtonClicked;
 
-        var settingsButton = document.rootVisualElement.Q<Button>("settingsButton");
+        var settingsButton = root.Q<Button>("settingsButton");
         settingsButton.clicked += SettingsButtonClicked;
 
-        var quitButton = document.rootVisualElement.Q<Button>("quitButton");
+        var quitButton = root.Q<Button>("quitButton");
         quitButton.clicked += QuitButtonClicked;
+
+        root.Q<Label>("debugInfoLabel").text = GetDisplayDebugInfo();
+    }
+
+    private static string GetDisplayDebugInfo()
+    {
+        var sb = new StringBuilder();
+        sb.Append($"{BuildInfo.ProductName} v{BuildInfo.Version}");
+        sb.Append($" (Unity {BuildInfo.UnityVersion}, {BuildInfo.Platform}/{BuildInfo.ScriptingBackend})");
+        sb.Append($" built at {BuildInfo.BuildTimeUtc}");
+        return sb.ToString();
     }
 
     private static bool CanResume()
