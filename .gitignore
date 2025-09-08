@@ -1,8 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/unity
 # Edit at https://www.toptal.com/developers/gitignore?templates=unity
 
-Build*
-
 *.g.cs
 
 ### Terraform ###
@@ -22,6 +20,7 @@ Build*
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
+/[Bb]uild_BackUpThisFolder_ButDontShipItWithYourGame*/
 
 # Profile Analyzer
 tmp*.pdata
