@@ -34,6 +34,7 @@ public class CameraController : MonoBehaviour, IObjectGenerator
     private SmolbeanInputActions actions;
     private InputAction movementAction;
     private InputAction rotationAction;
+    private InputAction zoomAction;
     private float rotationInput;
     private float zoomInput;
     private bool isMouseOverUI;
@@ -47,7 +48,7 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         actions = new SmolbeanInputActions();
         movementAction = actions.GodView.Movement;
         rotationAction = actions.GodView.RotateCamera;
-        actions.GodView.ZoomCamera.performed += CameraZoomInput;
+        zoomAction = actions.GodView.ZoomCamera;
 
         QualitySettings.SetQualityLevel(QualitySettings.names.Length - 1, true);
     }
@@ -72,13 +73,6 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         virtualCamera.gameObject.SetActive(!isPaused);
     }
 
-    private void CameraZoomInput(InputAction.CallbackContext context)
-    {
-        // Only zoom if the mouse is not over the UI
-        if(!isMouseOverUI && !GameStateManager.Instance.IsPaused)
-            zoomInput = context.ReadValue<Vector2>().y / 100f;
-    }
-
     void Update()
     {
         isMouseOverUI = EventSystem.current.IsPointerOverGameObject();
@@ -89,6 +83,11 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         var trans = transform;
 
         // Zoom
+
+        // Only zoom if the mouse is not over the UI
+        if(!isMouseOverUI && !GameStateManager.Instance.IsPaused)
+            zoomInput = zoomAction.ReadValue<Vector2>().y / 200f;
+
         float zoomNorm = Mathf.InverseLerp(zoomDistanceMin, zoomDistanceMax, zoomDistance);
 
         if(zoomInput > 0f)
