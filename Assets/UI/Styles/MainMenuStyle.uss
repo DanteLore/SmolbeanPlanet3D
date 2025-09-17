@@ -5,7 +5,9 @@ Button {
     flex-shrink: 1;
 }
 
-Button:hover {
+Button:hover,
+Button:focus,
+Button:hover:focus {
     scale: 1.1 1.1;
     rotate: 1.5deg;
     transition-duration: 0.2s;
