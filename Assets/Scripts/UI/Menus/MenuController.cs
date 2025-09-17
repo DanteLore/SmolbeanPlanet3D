@@ -1,70 +1,71 @@
 using UnityEngine;
-using System.Linq;
-using System.Collections.Generic;
-using System;
+using UnityEngine.InputSystem;
 
 public class MenuController : MonoBehaviour
 {
-    public string defaultMenuName = "MainMenu";
-
     public static MenuController Instance { get; private set; }
 
     private bool isVisible;
     private string activeMenu = "";
 
-    private Dictionary<KeyCode, string> hotkeyLookup;
     private SoundPlayer soundPlayer;
-    private bool closedThisFrame = false;
+    private SmolbeanInputActions inputActions;
 
-    void Awake()
+    private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
             DestroyImmediate(gameObject);
         else
             Instance = this;
 
-        hotkeyLookup = gameObject
-                            .GetComponentsInChildren<SmolbeanMenu>(true)
-                            .Where(m => m.hotKey != KeyCode.None)
-                            .ToDictionary(m => m.hotKey, m => m.name);
+        inputActions = new SmolbeanInputActions();
     }
 
-    void Start()
+    private void Start()
     {
         isVisible = true; // force this to true when the game starts to stop a sound playing :)
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
+
+        inputActions.Menus.Enable();
+
         ShowMenu();
     }
 
-    void Update()
+    private void OnEnable()
     {
-        // No hotkeys when the game hasn't started yet!
-        if(!GameStateManager.Instance.IsStarted)
+        inputActions.Menus.ShowMenu.performed += OnShowMenu;
+        inputActions.Menus.HideMenu.performed += OnHideMenu;
+        inputActions.Menus.ToggleMenu.performed += OnToggleMenu;
+    }
+
+    private void OnToggleMenu(InputAction.CallbackContext context)
+    {
+        if (!GameStateManager.Instance.IsStarted)
             return;
 
-        // Escape always closes the current menu
-        if(isVisible && Input.GetKeyDown(KeyCode.Escape))
-        {    
+        if(isVisible)
             CloseAll();
-        }
-        else if(!closedThisFrame)
-        {        
-            // Check hotkeys
-            foreach(KeyCode key in hotkeyLookup.Keys)
-            {
-                if(Input.GetKeyDown(key))
-                {
-                    if(!isVisible)
-                        ShowMenu(hotkeyLookup[key]);
-                    else if(hotkeyLookup[key] == activeMenu)
-                        CloseAll();
+        else
+            ShowMenu();
+    }
 
-                    break; // Take the first pressed hotkey
-                }
-            }
-        }
+    private void OnHideMenu(InputAction.CallbackContext context)
+    {
+        // If the game hasn't started yet, don't close the menu!
+        if (!GameStateManager.Instance.IsStarted)
+            return;
 
-        closedThisFrame = false;
+        if (isVisible)
+            CloseAll();
+    }
+
+    private void OnShowMenu(InputAction.CallbackContext context)
+    {
+        if (!GameStateManager.Instance.IsStarted)
+            return;
+
+        if(!isVisible)
+            ShowMenu();
     }
 
     public void ShowMenu(string menuName = "MainMenu")
@@ -103,8 +104,6 @@ public class MenuController : MonoBehaviour
         isVisible = false;
         GameStateManager.Instance.Resume();
         ToolbarController.Instance.ShowToolbar();
-
-        closedThisFrame = true;
     }
 
     public void Close(string name)

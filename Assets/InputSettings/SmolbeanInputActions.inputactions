@@ -2,6 +2,74 @@
     "name": "SmolbeanInputActions",
     "maps": [
         {
+            "name": "Menus",
+            "id": "23072d27-8f6e-482b-928a-2732cb0f3cb8",
+            "actions": [
+                {
+                    "name": "ShowMenu",
+                    "type": "Button",
+                    "id": "dfa8e20b-fca4-45ae-afa0-c6e97fef97a9",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HideMenu",
+                    "type": "Button",
+                    "id": "2bb9545a-28e6-421e-ae05-94a374163916",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleMenu",
+                    "type": "Button",
+                    "id": "7bbab7c3-60a1-4858-ad86-fe8399a65542",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "90b6a2a6-a100-4d38-b891-ef02acf0ae7c",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ShowMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9b8dd840-4748-4980-872d-a04e09206b5f",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HideMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d575d796-a659-4f5b-8b7e-4175f0e9c0dd",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
             "name": "GodView",
             "id": "01952a88-4403-4d5f-b09b-a56ace7d0aa2",
             "actions": [

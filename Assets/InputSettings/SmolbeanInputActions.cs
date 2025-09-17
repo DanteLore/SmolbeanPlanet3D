@@ -88,6 +88,74 @@ public partial class @SmolbeanInputActions: IInputActionCollection2, IDisposable
     ""name"": ""SmolbeanInputActions"",
     ""maps"": [
         {
+            ""name"": ""Menus"",
+            ""id"": ""23072d27-8f6e-482b-928a-2732cb0f3cb8"",
+            ""actions"": [
+                {
+                    ""name"": ""ShowMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""dfa8e20b-fca4-45ae-afa0-c6e97fef97a9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HideMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""2bb9545a-28e6-421e-ae05-94a374163916"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""7bbab7c3-60a1-4858-ad86-fe8399a65542"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""90b6a2a6-a100-4d38-b891-ef02acf0ae7c"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ShowMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9b8dd840-4748-4980-872d-a04e09206b5f"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HideMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d575d796-a659-4f5b-8b7e-4175f0e9c0dd"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
             ""name"": ""GodView"",
             ""id"": ""01952a88-4403-4d5f-b09b-a56ace7d0aa2"",
             ""actions"": [
@@ -422,6 +490,11 @@ public partial class @SmolbeanInputActions: IInputActionCollection2, IDisposable
     ],
     ""controlSchemes"": []
 }");
+        // Menus
+        m_Menus = asset.FindActionMap("Menus", throwIfNotFound: true);
+        m_Menus_ShowMenu = m_Menus.FindAction("ShowMenu", throwIfNotFound: true);
+        m_Menus_HideMenu = m_Menus.FindAction("HideMenu", throwIfNotFound: true);
+        m_Menus_ToggleMenu = m_Menus.FindAction("ToggleMenu", throwIfNotFound: true);
         // GodView
         m_GodView = asset.FindActionMap("GodView", throwIfNotFound: true);
         m_GodView_Movement = m_GodView.FindAction("Movement", throwIfNotFound: true);
@@ -431,6 +504,7 @@ public partial class @SmolbeanInputActions: IInputActionCollection2, IDisposable
 
     ~@SmolbeanInputActions()
     {
+        UnityEngine.Debug.Assert(!m_Menus.enabled, "This will cause a leak and performance issues, SmolbeanInputActions.Menus.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_GodView.enabled, "This will cause a leak and performance issues, SmolbeanInputActions.GodView.Disable() has not been called.");
     }
 
@@ -503,6 +577,124 @@ public partial class @SmolbeanInputActions: IInputActionCollection2, IDisposable
     {
         return asset.FindBinding(bindingMask, out action);
     }
+
+    // Menus
+    private readonly InputActionMap m_Menus;
+    private List<IMenusActions> m_MenusActionsCallbackInterfaces = new List<IMenusActions>();
+    private readonly InputAction m_Menus_ShowMenu;
+    private readonly InputAction m_Menus_HideMenu;
+    private readonly InputAction m_Menus_ToggleMenu;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Menus".
+    /// </summary>
+    public struct MenusActions
+    {
+        private @SmolbeanInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public MenusActions(@SmolbeanInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Menus/ShowMenu".
+        /// </summary>
+        public InputAction @ShowMenu => m_Wrapper.m_Menus_ShowMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "Menus/HideMenu".
+        /// </summary>
+        public InputAction @HideMenu => m_Wrapper.m_Menus_HideMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "Menus/ToggleMenu".
+        /// </summary>
+        public InputAction @ToggleMenu => m_Wrapper.m_Menus_ToggleMenu;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Menus; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="MenusActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(MenusActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="MenusActions" />
+        public void AddCallbacks(IMenusActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MenusActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MenusActionsCallbackInterfaces.Add(instance);
+            @ShowMenu.started += instance.OnShowMenu;
+            @ShowMenu.performed += instance.OnShowMenu;
+            @ShowMenu.canceled += instance.OnShowMenu;
+            @HideMenu.started += instance.OnHideMenu;
+            @HideMenu.performed += instance.OnHideMenu;
+            @HideMenu.canceled += instance.OnHideMenu;
+            @ToggleMenu.started += instance.OnToggleMenu;
+            @ToggleMenu.performed += instance.OnToggleMenu;
+            @ToggleMenu.canceled += instance.OnToggleMenu;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="MenusActions" />
+        private void UnregisterCallbacks(IMenusActions instance)
+        {
+            @ShowMenu.started -= instance.OnShowMenu;
+            @ShowMenu.performed -= instance.OnShowMenu;
+            @ShowMenu.canceled -= instance.OnShowMenu;
+            @HideMenu.started -= instance.OnHideMenu;
+            @HideMenu.performed -= instance.OnHideMenu;
+            @HideMenu.canceled -= instance.OnHideMenu;
+            @ToggleMenu.started -= instance.OnToggleMenu;
+            @ToggleMenu.performed -= instance.OnToggleMenu;
+            @ToggleMenu.canceled -= instance.OnToggleMenu;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="MenusActions.UnregisterCallbacks(IMenusActions)" />.
+        /// </summary>
+        /// <seealso cref="MenusActions.UnregisterCallbacks(IMenusActions)" />
+        public void RemoveCallbacks(IMenusActions instance)
+        {
+            if (m_Wrapper.m_MenusActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="MenusActions.AddCallbacks(IMenusActions)" />
+        /// <seealso cref="MenusActions.RemoveCallbacks(IMenusActions)" />
+        /// <seealso cref="MenusActions.UnregisterCallbacks(IMenusActions)" />
+        public void SetCallbacks(IMenusActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MenusActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MenusActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="MenusActions" /> instance referencing this action map.
+    /// </summary>
+    public MenusActions @Menus => new MenusActions(this);
 
     // GodView
     private readonly InputActionMap m_GodView;
@@ -621,6 +813,35 @@ public partial class @SmolbeanInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="GodViewActions" /> instance referencing this action map.
     /// </summary>
     public GodViewActions @GodView => new GodViewActions(this);
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Menus" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="MenusActions.AddCallbacks(IMenusActions)" />
+    /// <seealso cref="MenusActions.RemoveCallbacks(IMenusActions)" />
+    public interface IMenusActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "ShowMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnShowMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "HideMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHideMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ToggleMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnToggleMenu(InputAction.CallbackContext context);
+    }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "GodView" which allows adding and removing callbacks.
     /// </summary>
