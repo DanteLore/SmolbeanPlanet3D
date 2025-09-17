@@ -44,11 +44,6 @@ public class GameStateManager : MonoBehaviour
         EndGame();
     }
 
-    private void OnGUI()
-    {
-        Debug.Log("[GameStateManager] GUI");
-    }
-
     public void Pause()
     {
         IsPaused = true;
