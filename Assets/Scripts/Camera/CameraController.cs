@@ -9,7 +9,8 @@ using UnityEngine.InputSystem;
 // https://www.youtube.com/watch?v=pJQndtJ2rk0
 // https://www.youtube.com/watch?v=ZSP3bFaZm-o
 public class CameraController : MonoBehaviour, IObjectGenerator
-{    
+{
+    // Inspector fields
     [SerializeField] private CinemachineVirtualCamera virtualCamera;
     [SerializeField] private float speedMin = 1f;
     [SerializeField] private float speedMax = 10f;
@@ -25,6 +26,7 @@ public class CameraController : MonoBehaviour, IObjectGenerator
     [SerializeField] private Vector3 startPosition;
     [SerializeField] private float startZoomDistance;
 
+    // Private state
     private GridManager gridManager;
     private CinemachineTransposer transposer;
     private float zoomDistance;
@@ -39,10 +41,11 @@ public class CameraController : MonoBehaviour, IObjectGenerator
     private float zoomInput;
     private bool isMouseOverUI;
 
-    public int Priority { get { return 600; }}
+    // IObjectGenerator
+    public int Priority => 600;
+    public bool RunModeOnly => true;
 
-    public bool RunModeOnly { get { return true; }}
-
+    // Unity lifecycle
     void Awake()
     {
         actions = new SmolbeanInputActions();
@@ -68,11 +71,6 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         Clear();
     }
 
-    private void PauseStateChanged(object sender, bool isPaused)
-    {
-        virtualCamera.gameObject.SetActive(!isPaused);
-    }
-
     void Update()
     {
         isMouseOverUI = EventSystem.current.IsPointerOverGameObject();
@@ -82,33 +80,31 @@ public class CameraController : MonoBehaviour, IObjectGenerator
 
         var trans = transform;
 
-        // Zoom
-
-        // Only zoom if the mouse is not over the UI
-        if(!isMouseOverUI && !GameStateManager.Instance.IsPaused)
+        // Zoom — only if mouse is not over UI
+        if (!isMouseOverUI && !GameStateManager.Instance.IsPaused)
             zoomInput = zoomAction.ReadValue<Vector2>().y / 200f;
 
         float zoomNorm = Mathf.InverseLerp(zoomDistanceMin, zoomDistanceMax, zoomDistance);
 
-        if(zoomInput > 0f)
-            targetZoom -= zoomStep;
-        else if(zoomInput < 0f)
-            targetZoom += zoomStep;
+        if (zoomInput > 0f)
+            targetZoom -= zoomStep * PrefsManager.Instance.ZoomSpeed;
+        else if (zoomInput < 0f)
+            targetZoom += zoomStep * PrefsManager.Instance.ZoomSpeed;
 
         targetZoom = Mathf.Clamp(targetZoom, zoomDistanceMin, zoomDistanceMax);
 
         Vector3 lookVector = Quaternion.Euler(0f, trans.rotation.y, 0f) * Vector3.Lerp(lookAngleMin, lookAngleMax, zoomNorm).normalized;
-        
+
         zoomDistance = Mathf.Lerp(zoomDistance, targetZoom, Time.unscaledDeltaTime * zoomSpeed);
         transposer.m_FollowOffset = lookVector * zoomDistance;
 
-        float altMultiplier = Mathf.Lerp(1, speedAltitudeMultiplier, zoomNorm);
+        float altMultiplier = Mathf.Lerp(1, speedAltitudeMultiplier * PrefsManager.Instance.AltitudeSpeedMultiplier, zoomNorm);
 
         // Move
-        if(movementAction.inProgress)
+        if (movementAction.inProgress)
         {
             Vector2 input = movementAction.ReadValue<Vector2>();
-            speed = Mathf.Lerp(speed, speedMax * altMultiplier, Time.unscaledDeltaTime);
+            speed = Mathf.Lerp(speed, speedMax * altMultiplier * PrefsManager.Instance.PanSpeed, Time.unscaledDeltaTime);
             Vector3 move = trans.forward * input.y + trans.right * input.x;
             move *= speed * Time.unscaledDeltaTime;
             var newPos = trans.position + move;
@@ -123,11 +119,11 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         }
 
         // Rotate
-        if(rotationAction.activeControl != null && 
+        if (rotationAction.activeControl != null &&
             (!rotationAction.activeControl.path.Contains("Mouse") || Mouse.current.rightButton.isPressed))
         {
             rotationInput = rotationAction.ReadValue<Vector2>().x;
-            rotateSpeed = Mathf.Abs(rotationInput) < 1 ? rotateSpeedMin : Mathf.Lerp(rotateSpeed, rotateSpeedMax, Time.unscaledDeltaTime);
+            rotateSpeed = Mathf.Abs(rotationInput) < 1 ? rotateSpeedMin : Mathf.Lerp(rotateSpeed, rotateSpeedMax * PrefsManager.Instance.RotateSpeed, Time.unscaledDeltaTime);
             rotationInput *= rotateSpeed * Time.unscaledDeltaTime;
             trans.eulerAngles += new Vector3(0f, rotationInput, 0f);
         }
@@ -136,15 +132,27 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         zoomInput = 0f;
     }
 
+    private void PauseStateChanged(object sender, bool isPaused)
+    {
+        virtualCamera.gameObject.SetActive(!isPaused);
+    }
+
+    // Public interface
     public void Clear()
     {
         targetZoom = startZoomDistance;
         SetTarget(startPosition);
     }
 
+    public void SetTarget(Vector3 pos)
+    {
+        transform.position = pos;
+    }
+
+    // IObjectGenerator
     public IEnumerator Generate(List<int> gameMap, int gameMapWidth, int gameMapHeight)
     {
-        return null; // Nothing to do here
+        return null;
     }
 
     public void SaveTo(SaveFileData saveData, string filename)
@@ -186,10 +194,5 @@ public class CameraController : MonoBehaviour, IObjectGenerator
         targetZoom = zoomDistance;
 
         return null;
-    }
-
-    public void SetTarget(Vector3 pos)
-    {
-        transform.position = pos;
     }
 }

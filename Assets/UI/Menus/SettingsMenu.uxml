@@ -19,6 +19,14 @@
                     <ui:Slider picking-mode="Ignore" label="Ambient Volume" value="42" high-value="1" name="ambientSlider" low-value="0.0001" />
                 </ui:VisualElement>
             </ui:Tab>
+            <ui:Tab label="📷 Camera" name="cameraTab">
+                <ui:VisualElement style="flex-grow: 1; width: 400px;">
+                    <ui:Slider picking-mode="Ignore" label="Pan Speed" name="panSpeedSlider" low-value="0.1" high-value="3" value="1" />
+                    <ui:Slider picking-mode="Ignore" label="Zoom Speed" name="zoomSpeedSlider" low-value="0.1" high-value="3" value="1" />
+                    <ui:Slider picking-mode="Ignore" label="Rotate Speed" name="rotateSpeedSlider" low-value="0.1" high-value="3" value="1" />
+                    <ui:Slider picking-mode="Ignore" label="Altitude Multiplier" name="altitudeSpeedSlider" low-value="0.1" high-value="3" value="1" />
+                </ui:VisualElement>
+            </ui:Tab>
         </ui:TabView>
         <ui:VisualElement name="ControlsContainer">
             <ui:Button text="Done" display-tooltip-when-elided="true" name="doneButton" style="width: 100px; height: 30px;" />
