@@ -15,8 +15,9 @@ public class CameraController : MonoBehaviour, IObjectGenerator
     [SerializeField] private float speedMin = 1f;
     [SerializeField] private float speedMax = 10f;
     [SerializeField] private float speedAltitudeMultiplier = 30f;
-    [SerializeField] private float rotateSpeedMin = 90f;
-    [SerializeField] private float rotateSpeedMax = 180f;
+    [SerializeField] private float rotateSpeedMin = 1f;
+    [SerializeField] private float rotateSpeedMax = 10f;
+    [SerializeField] private float mouseRotateSensitivity = 0.1f;
     [SerializeField] private float zoomStep = 10f;
     [SerializeField] private float zoomSpeed = 5f;
     [SerializeField] private float zoomDistanceMin = 10f;
@@ -123,8 +124,20 @@ public class CameraController : MonoBehaviour, IObjectGenerator
             (!rotationAction.activeControl.path.Contains("Mouse") || Mouse.current.rightButton.isPressed))
         {
             rotationInput = rotationAction.ReadValue<Vector2>().x;
-            rotateSpeed = Mathf.Abs(rotationInput) < 1 ? rotateSpeedMin : Mathf.Lerp(rotateSpeed, rotateSpeedMax * PrefsManager.Instance.RotateSpeed, Time.unscaledDeltaTime);
-            rotationInput *= rotateSpeed * Time.unscaledDeltaTime;
+
+            bool isMouse = rotationAction.activeControl.path.Contains("Mouse");
+            if (isMouse)
+            {
+                rotationInput *= mouseRotateSensitivity * PrefsManager.Instance.RotateSpeed;
+            }
+            else
+            {
+                rotateSpeed = Mathf.Abs(rotationInput) < 1
+                    ? rotateSpeedMin
+                    : Mathf.Lerp(rotateSpeed, rotateSpeedMax * PrefsManager.Instance.RotateSpeed, Time.unscaledDeltaTime);
+                rotationInput *= rotateSpeed * Time.unscaledDeltaTime;
+            }
+
             trans.eulerAngles += new Vector3(0f, rotationInput, 0f);
         }
 

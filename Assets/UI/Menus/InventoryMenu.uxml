@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
-    <Style src="project://database/Assets/UI/NewStyles/InventroryMenuStyle.uss?fileID=7433441132597879392&amp;guid=f3a17fe69a7bf4b73bc2c605ca633420&amp;type=3#InventroryMenuStyle" />
+    <Style src="project://database/Assets/UI/Styles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <Style src="project://database/Assets/UI/Styles/InventroryMenuStyle.uss?fileID=7433441132597879392&amp;guid=f3a17fe69a7bf4b73bc2c605ca633420&amp;type=3#InventroryMenuStyle" />
     <ui:VisualElement name="Container" style="flex-grow: 1;">
         <ui:VisualElement name="MenuContainer" class="menuContainer" style="flex-grow: 1;">
             <ui:Label text="𐚱 Inventory" name="Title" class="title" />

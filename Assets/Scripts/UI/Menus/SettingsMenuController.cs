@@ -1,11 +1,14 @@
 using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.UIElements;
 
 public class SettingsMenuController : SmolbeanMenu
 {
+    private const float CameraSpeedMin = 0.1f;
+    private const float CameraSpeedMax = 3f;
+
+
     public AudioMixer mixer;
 
     private UIDocument document;
@@ -80,18 +83,26 @@ public class SettingsMenuController : SmolbeanMenu
     private void SetupCameraTab(VisualElement root)
     {
         var panSpeedSlider = root.Q<Slider>("panSpeedSlider");
+        panSpeedSlider.lowValue = CameraSpeedMin;
+        panSpeedSlider.highValue = CameraSpeedMax;
         panSpeedSlider.value = PrefsManager.Instance.PanSpeed;
         panSpeedSlider.RegisterValueChangedCallback(v => PrefsManager.Instance.PanSpeed = v.newValue);
 
         var zoomSpeedSlider = root.Q<Slider>("zoomSpeedSlider");
+        zoomSpeedSlider.lowValue = CameraSpeedMin;
+        zoomSpeedSlider.highValue = CameraSpeedMax;
         zoomSpeedSlider.value = PrefsManager.Instance.ZoomSpeed;
         zoomSpeedSlider.RegisterValueChangedCallback(v => PrefsManager.Instance.ZoomSpeed = v.newValue);
 
         var rotateSpeedSlider = root.Q<Slider>("rotateSpeedSlider");
+        rotateSpeedSlider.lowValue = CameraSpeedMin;
+        rotateSpeedSlider.highValue = CameraSpeedMax;
         rotateSpeedSlider.value = PrefsManager.Instance.RotateSpeed;
         rotateSpeedSlider.RegisterValueChangedCallback(v => PrefsManager.Instance.RotateSpeed = v.newValue);
 
         var altitudeSpeedSlider = root.Q<Slider>("altitudeSpeedSlider");
+        altitudeSpeedSlider.lowValue = CameraSpeedMin;
+        altitudeSpeedSlider.highValue = CameraSpeedMax;
         altitudeSpeedSlider.value = PrefsManager.Instance.AltitudeSpeedMultiplier;
         altitudeSpeedSlider.RegisterValueChangedCallback(v => PrefsManager.Instance.AltitudeSpeedMultiplier = v.newValue);
     }

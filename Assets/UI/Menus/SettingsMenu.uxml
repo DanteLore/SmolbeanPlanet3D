@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/NewStyles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
+    <Style src="project://database/Assets/UI/Styles/MenuStyle.uss?fileID=7433441132597879392&amp;guid=7e8b8f03762b749d3a51a94d20243997&amp;type=3#MenuStyle" />
     <ui:VisualElement name="MenuContainer" class="menuContainer" style="flex-grow: 1;">
         <ui:Label tabindex="-1" text="Settings" display-tooltip-when-elided="true" name="Title" class="title" />
         <ui:TabView style="height: 100%; width: 90%;">
@@ -21,10 +21,10 @@
             </ui:Tab>
             <ui:Tab label="📷 Camera" name="cameraTab">
                 <ui:VisualElement style="flex-grow: 1; width: 400px;">
-                    <ui:Slider picking-mode="Ignore" label="Pan Speed" name="panSpeedSlider" low-value="0.1" high-value="3" value="1" />
-                    <ui:Slider picking-mode="Ignore" label="Zoom Speed" name="zoomSpeedSlider" low-value="0.1" high-value="3" value="1" />
-                    <ui:Slider picking-mode="Ignore" label="Rotate Speed" name="rotateSpeedSlider" low-value="0.1" high-value="3" value="1" />
-                    <ui:Slider picking-mode="Ignore" label="Altitude Multiplier" name="altitudeSpeedSlider" low-value="0.1" high-value="3" value="1" />
+                    <ui:Slider picking-mode="Ignore" label="Pan Speed" name="panSpeedSlider" />
+                    <ui:Slider picking-mode="Ignore" label="Zoom Speed" name="zoomSpeedSlider" />
+                    <ui:Slider picking-mode="Ignore" label="Rotate Speed" name="rotateSpeedSlider" />
+                    <ui:Slider picking-mode="Ignore" label="Altitude Multiplier" name="altitudeSpeedSlider" />
                 </ui:VisualElement>
             </ui:Tab>
         </ui:TabView>
