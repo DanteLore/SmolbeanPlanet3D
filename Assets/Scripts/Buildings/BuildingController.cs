@@ -69,7 +69,7 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
 
     void Start()
     {
-        gridManager = FindFirstObjectByType<GridManager>();
+        gridManager = FindAnyObjectByType<GridManager>();
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
     }
 
@@ -141,7 +141,7 @@ public class BuildingController : MonoBehaviour, IObjectGenerator
             rotationY = 0,
             prefabIndex = Array.IndexOf(buildings, spec),
             complete = true,
-            inventory = startingInventory
+            inventory = startingInventory?.ToArray()
         };
 
         return InstantiateBuilding(saveData);

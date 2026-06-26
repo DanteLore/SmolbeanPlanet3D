@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "SmolbeanPlanet3D.sln"
+    "dotnet.defaultSolution": "SmolbeanPlanet3D.slnx"
 }

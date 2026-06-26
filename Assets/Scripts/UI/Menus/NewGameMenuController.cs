@@ -18,8 +18,8 @@ public class NewGameMenuController : SmolbeanMenu
     {
         document = GetComponent<UIDocument>();
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
-        mapCreator = FindFirstObjectByType<GameMapCreator>();
-        mapGeneratorManager = FindFirstObjectByType<MapGeneratorManager>();
+        mapCreator = FindAnyObjectByType<GameMapCreator>();
+        mapGeneratorManager = FindAnyObjectByType<MapGeneratorManager>();
         
         var startGameButton = document.rootVisualElement.Q<Button>("startGameButton");
         startGameButton.clicked += StartGameClicked;

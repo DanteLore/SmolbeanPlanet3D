@@ -91,7 +91,7 @@ public class MapGeneratorManager : MonoBehaviour
 
     private static IEnumerable<IObjectGenerator> GetAllGenerators()
     {
-        return FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+        return FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include)
                     .OfType<IObjectGenerator>();
     }
   

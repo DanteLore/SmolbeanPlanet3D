@@ -38,7 +38,7 @@ public class DataCollectionManager : MonoBehaviour, IObjectGenerator
 
     private void InitialiseSeries()
     {
-        Series = FindObjectsByType<DataCollectionSeries>(sortMode: FindObjectsSortMode.None).OrderBy(s => s.seriesName).ToList();
+        Series = FindObjectsByType<DataCollectionSeries>().OrderBy(s => s.seriesName).ToList();
         foreach (var series in Series)
             series.Clear();
     }

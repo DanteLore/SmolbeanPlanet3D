@@ -243,15 +243,15 @@ DropdownField:focus Label {
 .unity-collection-view__item,
 .unity-collection-view__item:hover,
 .unity-collection-view__item:focus,
-.unity-collection-view__item:hover:enabled,  {
-    background-color: rgba(0, 0, 0, 0.2); 
+.unity-collection-view__item:hover:enabled {
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
-.unity-collection-view__item--alternative-background, 
-.unity-collection-view__item--alternative-background:hover, 
+.unity-collection-view__item--alternative-background,
+.unity-collection-view__item--alternative-background:hover,
 .unity-collection-view__item--alternative-background:focus,
-.unity-collection-view__item--alternative-background:hover:enabled, {
-    background-color: rgba(40, 40, 40, 0.2); 
+.unity-collection-view__item--alternative-background:hover:enabled {
+    background-color: rgba(40, 40, 40, 0.2);
 }
 
 .unity-collection-view__item--selected,
@@ -267,9 +267,9 @@ DropdownField:focus Label {
 
 .unity-list-view .unity-multi-column-header__column,
 .unity-list-view .unity-multi-column-header__column:hover,
-.unity-list-view .unity-multi-column-header__column:hover:enabled, {
+.unity-list-view .unity-multi-column-header__column:hover:enabled {
     background-color: transparent;
-    border-width: 0px;  
+    border-width: 0px;
 }
 
 .unity-list-view .unity-multi-column-header__column{

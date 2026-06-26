@@ -28,7 +28,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
 
         //StateMachine.ShouldLog = true;
 
-        var gridManager = FindFirstObjectByType<GridManager>();
+        var gridManager = FindAnyObjectByType<GridManager>();
         Bounds bounds = gameObject.GetRendererBounds();
         float halfMyHeight = bounds.max.y - bounds.min.y;
 

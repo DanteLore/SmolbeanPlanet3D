@@ -55,7 +55,7 @@ public class CameraController : MonoBehaviour, IObjectGenerator
 
     void Start()
     {
-        gridManager = FindFirstObjectByType<GridManager>();
+        gridManager = FindAnyObjectByType<GridManager>();
         transposer = virtualCamera.GetCinemachineComponent<CinemachineTransposer>();
         zoomDistance = transposer.m_FollowOffset.magnitude;
         targetZoom = zoomDistance;

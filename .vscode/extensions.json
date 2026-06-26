@@ -1,5 +1,9 @@
 {
     "recommendations": [
-      "visualstudiotoolsforunity.vstuc"
+      "visualstudiotoolsforunity.vstuc",
+      "ms-dotnettools.csharp",
+      "ms-dotnettools.csdevkit",
+      "shader-slang.slang-language-extension",
+      "kleber-swf.unity-code-snippets"
     ]
 }

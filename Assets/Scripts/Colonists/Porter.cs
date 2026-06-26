@@ -21,7 +21,7 @@ public class Porter : SmolbeanColonist, IGatherDrops, IDeliverDrops
         //StateMachine.ShouldLog = true;
         //StateMachine.OnLogMessage += message => Think(message);
 
-        var gridManager = FindFirstObjectByType<GridManager>();
+        var gridManager = FindAnyObjectByType<GridManager>();
 
         var idle = new IdleState(animator);
         var giveUpJob = new SwitchColonistToFreeState(this);

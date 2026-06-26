@@ -1,3 +1,4 @@
+[System.Serializable]
 public struct Thought
 {
     public string thought;

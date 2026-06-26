@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;  
+using Newtonsoft.Json;
 
 [Serializable]
 public class BuildingObjectSaveData
@@ -10,6 +9,6 @@ public class BuildingObjectSaveData
     public float positionZ;
     public float rotationY;
     public int prefabIndex;
-    public IEnumerable<InventoryItemSaveData> inventory;
+    public InventoryItemSaveData[] inventory;
     public bool complete = true;
 }

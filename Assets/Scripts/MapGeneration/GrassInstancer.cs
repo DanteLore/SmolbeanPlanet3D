@@ -137,7 +137,7 @@ public class GrassInstancer : MonoBehaviour, IObjectGenerator
 
     private void Start()
     {
-        gridManager = FindFirstObjectByType<GridManager>();
+        gridManager = FindAnyObjectByType<GridManager>();
         renderThresholdSqr = renderThreshold * renderThreshold;
         positionThresholdSqr = positionThreshold * positionThreshold;
         cameraTransform = mainCamera.transform;

@@ -37,7 +37,7 @@ public class MapInteractionManager : MonoBehaviour
 
     void Start()
     {
-        gridManager = FindFirstObjectByType<GridManager>();
+        gridManager = FindAnyObjectByType<GridManager>();
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
         stateMachine = new StateMachine(shouldLog: false, allowSelfTransitions: true);
         SetupLayerData();

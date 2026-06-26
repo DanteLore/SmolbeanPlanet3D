@@ -48,7 +48,7 @@ public class ShipwreckManager : MonoBehaviour, IObjectGenerator
         ClearNatureObjectsAround(pos);
         yield return null;
 
-        FindFirstObjectByType<CameraController>().SetTarget(pos);
+        FindAnyObjectByType<CameraController>().SetTarget(pos);
         yield return null;
     }
 

@@ -19,7 +19,7 @@ public class AmbientManager : MonoBehaviour
 
     void Start()
     {
-        gridManager = FindFirstObjectByType<GridManager>();
+        gridManager = FindAnyObjectByType<GridManager>();
 
         soundPlayer = GetComponent<SoundPlayer>();
         soundPlayer.Play("Wind");

@@ -35,7 +35,7 @@ public class MapMenuController : SmolbeanMenu
 
     void OnEnable()
     {
-        gridManager = FindFirstObjectByType<GridManager>();
+        gridManager = FindAnyObjectByType<GridManager>();
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
 
         document = GetComponent<UIDocument>();

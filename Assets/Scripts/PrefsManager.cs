@@ -153,7 +153,7 @@ public class PrefsManager : MonoBehaviour
 
     void Start()
     {
-        grassInstancer = FindFirstObjectByType<GrassInstancer>();
+        grassInstancer = FindAnyObjectByType<GrassInstancer>();
 
         MusicVolume = MusicVolume; // Not sure how I feel about this... 😵‍💫
         SfxVolume = SfxVolume;     // BUT

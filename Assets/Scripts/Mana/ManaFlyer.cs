@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -7,7 +8,7 @@ public class ManaFlyer : MonoBehaviour
     public float durationSeconds = 10f;
     public Camera mainCamera;
     public float targetZDistance = 1.0f;
-    public VisualElement uiElement;
+    [NonSerialized] public VisualElement uiElement;
 
     private float elapsed;
 

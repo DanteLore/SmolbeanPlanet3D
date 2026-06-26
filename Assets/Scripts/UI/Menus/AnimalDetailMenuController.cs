@@ -17,7 +17,7 @@ public class AnimalDetailMenuController : SmolbeanMenu
     {
         document = GetComponent<UIDocument>();
         root = document.rootVisualElement;
-        gridManager = FindFirstObjectByType<GridManager>();
+        gridManager = FindAnyObjectByType<GridManager>();
         soundPlayer = GameObject.Find("SFXManager").GetComponent<SoundPlayer>();
 
         document.rootVisualElement.Q<Button>("closeButton").clicked += CloseButtonClicked;
