@@ -14,6 +14,8 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     [SerializeField] private float nockDuration = 0.1f;
     [SerializeField] private float aimDuration = 10f;
     [SerializeField] private float armLength = 1.5f;
+    [SerializeField] private float arrowSpawnOffset = 0.8f;
+    [SerializeField] private float targetRotationOffset = 90f;
 
     public Vector3 BowPosition { get; private set; }
     public Quaternion BowRotation { get; private set; }
@@ -21,9 +23,19 @@ public class Hunter : ResourceGatherer, IDeliverDrops
 
     public SmolbeanAnimal Prey { get; set; }
     public bool IsAimReady => BowActive && Time.time - aimStartTime > aimDuration;
-    public float IKWeight => BowActive ? Mathf.Clamp01((Time.time - aimStartTime) / aimDuration) : 0f;
+    public bool IsRecoverDone => !BowActive && Time.time - recoverStartTime > aimDuration;
+    public float IKWeight
+    {
+        get
+        {
+            if (BowActive)
+                return Mathf.Clamp01((Time.time - aimStartTime) / aimDuration);
+            return Mathf.Clamp01(1f - (Time.time - recoverStartTime) / aimDuration);
+        }
+    }
 
     private float aimStartTime;
+    private float recoverStartTime;
     private float armHeight;
     private float chosenShotHeight;
     private Vector3 preyTargetPoint;
@@ -51,6 +63,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         var nockArrow = new NockArrowState(this, nockDuration);
         var takeAim = new TakeAimState(this, soundPlayer);
         var shoot = new GenericState("Shoot", onEnter: Shoot);
+        var recover = new RecoverState(this);
         var walkToTarget = new WalkToTargetState(this, navAgent, animator, soundPlayer);
         var searchForDrops = new GenericState("SearchForDrops", onEnter: SearchForDropStart, tick: SearchForDropTick);
         var giveUpJob = new SwitchColonistToFreeState(this);
@@ -70,8 +83,9 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         AT(walkToTarget, searchForPrey, StuckGettingToShootingPosition());
         AT(nockArrow, takeAim, NockReady());
         AT(takeAim, shoot, Ready());
-        AT(shoot, waitForTargetToDie, ShotDone());
-        AT(shoot, waitForTargetToDie, ArrowLost());
+        AT(shoot, recover, ShotDone());
+        AT(shoot, recover, ArrowLost());
+        AT(recover, waitForTargetToDie, RecoverDone());
         AT(waitForTargetToDie, searchForDrops, TargetDiedAfter(0.1f));
         AT(waitForTargetToDie, searchForShootingSpot, TargetDidNotDieAfter(0.1f));
         AT(searchForDrops, walkToDrop, DropFound());
@@ -98,6 +112,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         Func<bool> Ready() => () => takeAim.IsReady && Prey != null;
         Func<bool> ShotDone() => () => arrow != null && !arrow.Flying;
         Func<bool> ArrowLost() => () => arrow == null;
+        Func<bool> RecoverDone() => () => recover.IsReady;
         Func<bool> StuckGettingToShootingPosition() => () => walkToTarget.StuckTime > 10f * Time.timeScale;
         Func<bool> StuckGettingToDrop() => () => walkToDrop.StuckTime > 10f * Time.timeScale;
         Func<bool> TargetDiedAfter(float s) => () => waitForTargetToDie.TimeIdle > s && Prey == null;
@@ -115,7 +130,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     {
         base.Update();
 
-        if (!BowActive || Prey == null)
+        if (IKWeight <= 0f || Prey == null)
             return;
 
         BowPosition = transform.position + Vector3.up * armHeight + LaunchDirection() * armLength;
@@ -128,6 +143,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
             return;
 
         transform.LookAt(Prey.transform.position);
+        transform.Rotate(0f, targetRotationOffset, 0f);
     }
 
     public void ChooseShotHeight()
@@ -144,6 +160,12 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     public void StopAiming()
     {
         BowActive = false;
+    }
+
+    public void StartRecovering()
+    {
+        BowActive = false;
+        recoverStartTime = Time.time;
     }
 
     private void SearchForDropTick()
@@ -178,7 +200,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         Think("Fire!");
         soundPlayer.Play("LooseArrow");
 
-        Vector3 origin = transform.position + Vector3.up * armHeight;
+        Vector3 origin = transform.position + Vector3.up * armHeight + LaunchDirection() * arrowSpawnOffset;
         preyTargetPoint = Prey.transform.GetRendererBounds().center + targetPointOffset;
         float distanceY = preyTargetPoint.y - origin.y;
         float time = CalculateTimeToTarget(chosenShotHeight, Physics.gravity.y, distanceY);

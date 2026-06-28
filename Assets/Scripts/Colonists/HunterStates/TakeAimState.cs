@@ -23,7 +23,6 @@ public class TakeAimState : IState
     public void OnExit()
     {
         soundPlayer.Stop("BowStretch");
-        hunter.StopAiming();
     }
 
     public void Tick()

@@ -13,13 +13,23 @@ public class HunterIKRelay : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-        if (hunter == null || !hunter.BowActive)
+        if (hunter == null)
             return;
 
         float weight = hunter.IKWeight;
-        animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, weight);
-        animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, weight);
-        animator.SetIKPosition(AvatarIKGoal.LeftHand, hunter.BowPosition);
-        animator.SetIKRotation(AvatarIKGoal.LeftHand, hunter.BowRotation);
+
+        if (weight > 0f)
+        {
+            animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, weight);
+            animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, weight);
+            animator.SetIKPosition(AvatarIKGoal.LeftHand, hunter.BowPosition);
+            animator.SetIKRotation(AvatarIKGoal.LeftHand, hunter.BowRotation);
+        }
+
+        if (hunter.Prey != null)
+        {
+            animator.SetLookAtWeight(weight);
+            animator.SetLookAtPosition(hunter.Prey.transform.position);
+        }
     }
 }

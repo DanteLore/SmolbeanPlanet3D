@@ -32,6 +32,9 @@ public static class GameObjectExtensions
             .Select(r => r.bounds)
             .ToArray();
 
+        if (allBounds.Length == 0)
+            return new Bounds(transform.position, Vector3.zero);
+
         var bounds = allBounds[0];
         for (int i = 1; i < allBounds.Length; i++)
             bounds.Encapsulate(allBounds[i]);
