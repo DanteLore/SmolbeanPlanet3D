@@ -9,13 +9,25 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     [SerializeField] private float minShotHeight = 1f;
     [SerializeField] private float maxShotHeight = 3f;
     [SerializeField] private AnimalSpec targetSpecies;
-    [SerializeField] private GameObject bow;
     [SerializeField] private Arrow arrowPrefab;
     [SerializeField] private Vector3 targetPointOffset;
-    private Vector3 preyTargetPoint;
-    private Arrow arrow;
+    [SerializeField] private float nockDuration = 0.1f;
+    [SerializeField] private float aimDuration = 10f;
+    [SerializeField] private float armLength = 1.5f;
+
+    public Vector3 BowPosition { get; private set; }
+    public Quaternion BowRotation { get; private set; }
+    public bool BowActive { get; private set; }
 
     public SmolbeanAnimal Prey { get; set; }
+    public bool IsAimReady => BowActive && Time.time - aimStartTime > aimDuration;
+    public float IKWeight => BowActive ? Mathf.Clamp01((Time.time - aimStartTime) / aimDuration) : 0f;
+
+    private float aimStartTime;
+    private float armHeight;
+    private float chosenShotHeight;
+    private Vector3 preyTargetPoint;
+    private Arrow arrow;
 
     public override void InitialiseStats(AnimalStats newStats = null)
     {
@@ -26,7 +38,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     {
         base.Start();
 
-        //StateMachine.ShouldLog = true;
+        armHeight = CalculateArmHeight();
 
         var gridManager = FindAnyObjectByType<GridManager>();
         Bounds bounds = gameObject.GetRendererBounds();
@@ -36,6 +48,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         var waitForTargetToDie = new IdleState(animator);
         var searchForPrey = new SearchForPreyState(this, targetSpecies, creatureLayer);
         var searchForShootingSpot = new SearchForShootingSpotState(this, gridManager, halfMyHeight, targetPointOffset, natureLayer, groundLayer, shotDistance);
+        var nockArrow = new NockArrowState(this, nockDuration);
         var takeAim = new TakeAimState(this, soundPlayer);
         var shoot = new GenericState("Shoot", onEnter: Shoot);
         var walkToTarget = new WalkToTargetState(this, navAgent, animator, soundPlayer);
@@ -48,36 +61,27 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         var dropInventory = new DropInventoryAtDropPointState(this, DropController.Instance);
 
         AT(giveUpJob, JobTerminated());
-
         AT(idle, searchForPrey, IdleFor(2f));
-
         AT(searchForPrey, searchForShootingSpot, TargetFound());
         AT(searchForPrey, idle, NoTargetFound());
-
         AT(searchForShootingSpot, walkToTarget, SpotPicked());
         AT(searchForShootingSpot, idle, NoSpotFound());
-
-        AT(walkToTarget, takeAim, InPosition());
+        AT(walkToTarget, nockArrow, InPosition());
         AT(walkToTarget, searchForPrey, StuckGettingToShootingPosition());
-
+        AT(nockArrow, takeAim, NockReady());
         AT(takeAim, shoot, Ready());
-
         AT(shoot, waitForTargetToDie, ShotDone());
         AT(shoot, waitForTargetToDie, ArrowLost());
-
         AT(waitForTargetToDie, searchForDrops, TargetDiedAfter(0.1f));
         AT(waitForTargetToDie, searchForShootingSpot, TargetDidNotDieAfter(0.1f));
-
         AT(searchForDrops, walkToDrop, DropFound());
         AT(walkToDrop, pickupDrop, IsCloseEnoughToDrop());
         AT(walkToDrop, walkHome, NoDropsFound());
         AT(walkToDrop, walkHome, StuckGettingToDrop());
         AT(pickupDrop, walkHome, InventoryEmpty());
         AT(pickupDrop, walkToDropPoint, InventoryNotEmpty());
-
         AT(walkToDropPoint, dropInventory, IsAtDropPoint());
         AT(dropInventory, walkHome, InventoryEmpty());
-
         AT(searchForDrops, walkHome, NoDropsFound());
         AT(walkHome, idle, IsAtSpawnPoint());
 
@@ -90,6 +94,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         Func<bool> NoSpotFound() => () => !searchForShootingSpot.InProgress && !searchForShootingSpot.Found;
         Func<bool> NoTargetFound() => () => !searchForPrey.InProgress && Prey == null;
         Func<bool> InPosition() => () => Prey != null && CloseEnoughTo(Target, 2f);
+        Func<bool> NockReady() => () => nockArrow.IsReady && Prey != null;
         Func<bool> Ready() => () => takeAim.IsReady && Prey != null;
         Func<bool> ShotDone() => () => arrow != null && !arrow.Flying;
         Func<bool> ArrowLost() => () => arrow == null;
@@ -106,12 +111,46 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         Func<bool> InventoryNotEmpty() => () => !Inventory.IsEmpty();
     }
 
+    protected override void Update()
+    {
+        base.Update();
+
+        if (!BowActive || Prey == null)
+            return;
+
+        BowPosition = transform.position + Vector3.up * armHeight + LaunchDirection() * armLength;
+        BowRotation = Quaternion.LookRotation(LaunchDirection(), Vector3.up) * Quaternion.Euler(0f, 0f, 90f);
+    }
+
+    public void UpdateAiming()
+    {
+        if (Prey == null)
+            return;
+
+        transform.LookAt(Prey.transform.position);
+    }
+
+    public void ChooseShotHeight()
+    {
+        chosenShotHeight = Random.Range(minShotHeight, maxShotHeight);
+    }
+
+    public void StartAiming()
+    {
+        BowActive = true;
+        aimStartTime = Time.time;
+    }
+
+    public void StopAiming()
+    {
+        BowActive = false;
+    }
+
     private void SearchForDropTick()
     {
         if (!TargetDrop)
         {
             var target = GetDropTarget();
-
             if (target != null)
             {
                 TargetDrop = target.gameObject;
@@ -134,30 +173,45 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         TargetDrop = null;
     }
 
-    public void TakeAim()
-    {
-        transform.LookAt(Prey.transform.position);
-        // Gonna have to do some funky stuff with animations and IK here one day :S
-        // Maybe an animation...
-        // Whatever
-    }
-
     public void Shoot()
     {
         Think("Fire!");
         soundPlayer.Play("LooseArrow");
 
-        Vector3 bowPos = transform.position + transform.rotation * new Vector3(0f, 1f, 1f);
-        float shotHeight = Random.Range(minShotHeight, maxShotHeight);
+        Vector3 origin = transform.position + Vector3.up * armHeight;
         preyTargetPoint = Prey.transform.GetRendererBounds().center + targetPointOffset;
-        float distanceY = preyTargetPoint.y - bowPos.y;
-        float time = CalculateTimeToTarget(shotHeight, Physics.gravity.y, distanceY);
-        Vector3 horizontalDirection = preyTargetPoint - bowPos;
+        float distanceY = preyTargetPoint.y - origin.y;
+        float time = CalculateTimeToTarget(chosenShotHeight, Physics.gravity.y, distanceY);
+        Vector3 horizontalDirection = preyTargetPoint - origin;
         horizontalDirection.y = 0f;
 
-        arrow = Instantiate(arrowPrefab, bowPos, Quaternion.identity);
-        Rigidbody arrowBody = arrow.GetComponent<Rigidbody>();
-        arrowBody.linearVelocity = CalculateInitialVelocity(shotHeight, horizontalDirection, Physics.gravity.y, time);
+        arrow = Instantiate(arrowPrefab, origin, Quaternion.identity);
+        arrow.GetComponent<Rigidbody>().linearVelocity = CalculateInitialVelocity(chosenShotHeight, horizontalDirection, Physics.gravity.y, time);
+    }
+
+    private Vector3 LaunchDirection()
+    {
+        Vector3 origin = transform.position + Vector3.up * armHeight;
+        Vector3 targetPos = Prey.transform.GetRendererBounds().center + targetPointOffset;
+        float distanceY = targetPos.y - origin.y;
+        float time = CalculateTimeToTarget(chosenShotHeight, Physics.gravity.y, distanceY);
+        Vector3 horizontalDirection = targetPos - origin;
+        horizontalDirection.y = 0f;
+        return CalculateInitialVelocity(chosenShotHeight, horizontalDirection, Physics.gravity.y, time).normalized;
+    }
+
+    private float CalculateArmHeight()
+    {
+        Transform shoulder = body.transform.FindDeepChild("Shoulder.L");
+        Transform foot = body.transform.FindDeepChild("Foot.L");
+
+        if (shoulder == null || foot == null)
+        {
+            Debug.LogWarning("Hunter: could not find Shoulder.L or Foot.L bones, defaulting armHeight to 0.9");
+            return 0.9f;
+        }
+
+        return shoulder.position.y - foot.position.y;
     }
 
     private float CalculateTimeToTarget(float height, float gravity, float distanceY)
@@ -169,8 +223,6 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     {
         Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * height);
         Vector3 velocityXZ = horizontalDirection * (1 / time);
-        Vector3 velocityFinal = velocityY + velocityXZ;
-        velocityFinal *= -Mathf.Sign(gravity);
-        return velocityFinal;
+        return -Mathf.Sign(gravity) * (velocityY + velocityXZ);
     }
 }

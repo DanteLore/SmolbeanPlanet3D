@@ -1,13 +1,10 @@
-using UnityEngine;
-
 public class TakeAimState : IState
 {
     private readonly Hunter hunter;
     private readonly SoundPlayer soundPlayer;
-    private float aimStartTime;
-    public string Name { get => GetType().Name; }
 
-    public bool IsReady { get => Time.time - aimStartTime > 1f; }
+    public string Name { get => GetType().Name; }
+    public bool IsReady { get => hunter.IsAimReady; }
 
     public TakeAimState(Hunter hunter, SoundPlayer soundPlayer)
     {
@@ -17,18 +14,20 @@ public class TakeAimState : IState
 
     public void OnEnter()
     {
-        aimStartTime = Time.time;
         hunter.Think("Taking aim...");
         soundPlayer.Play("BowStretch");
+        hunter.ChooseShotHeight();
+        hunter.StartAiming();
     }
 
     public void OnExit()
     {
         soundPlayer.Stop("BowStretch");
+        hunter.StopAiming();
     }
 
     public void Tick()
     {
-        hunter.TakeAim();
+        hunter.UpdateAiming();
     }
 }

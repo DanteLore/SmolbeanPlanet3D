@@ -60,6 +60,9 @@ MeshRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -81,9 +84,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &7581404027262410325
 GameObject:
@@ -151,10 +156,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7581404027262410325}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 100
-  m_Drag: 50
-  m_AngularDrag: 0.5
+  m_LinearDamping: 50
+  m_AngularDamping: 0.5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -188,11 +193,8 @@ MonoBehaviour:
   groundLayer: Ground
   buildingLayer: Buildings
   dropLayer: Drops
-  speciesIndex: 0
-  species: {fileID: 0}
-  target: {x: 0, y: 0, z: 0}
   memoryLength: 12
-  prefabIndex: -1
+  transformCached: {fileID: 0}
   damage: 20
   hitCooldown: 1
   idleTime: 1
@@ -240,7 +242,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c7c8ddac78b84a028ea3feb28243e3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  virtualCameraName: FollowCamera
 --- !u!1001 &377112930599266902
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -493,7 +494,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 719080500288706311}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: fdb2b9d1eddea4b16adc1463aa9e1c8c, type: 3}
   m_Controller: {fileID: 9100000, guid: f580a5b94bf2c48fc9e0f1f2799439f7, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0

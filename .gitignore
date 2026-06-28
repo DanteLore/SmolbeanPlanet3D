@@ -79,6 +79,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 # Packed Addressables
+/[Aa]ssets/[Rr]esources/PerformanceTest*
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 
 # Temporary auto-generated Android Assets

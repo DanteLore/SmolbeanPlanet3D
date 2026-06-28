@@ -3,6 +3,21 @@ using UnityEngine;
 
 public static class GameObjectExtensions
 {
+    public static Transform FindDeepChild(this Transform parent, string name)
+    {
+        if (parent.name == name)
+            return parent;
+
+        foreach (Transform child in parent)
+        {
+            Transform found = child.FindDeepChild(name);
+            if (found != null)
+                return found;
+        }
+
+        return null;
+    }
+
     public static Bounds GetRendererBounds(this GameObject go, bool activeOnly = true)
     {
         return go.transform.GetRendererBounds(activeOnly: activeOnly);
