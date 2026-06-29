@@ -16,8 +16,10 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     [SerializeField] private float armLength = 1.5f;
     [SerializeField] private float arrowSpawnOffset = 0.8f;
     [SerializeField] private float targetRotationOffset = 90f;
+    [SerializeField] private float drawLength = 0.4f;
 
     public Vector3 BowPosition { get; private set; }
+    public Vector3 DrawHandPosition { get; private set; }
     public Quaternion BowRotation { get; private set; }
     public bool BowActive { get; private set; }
 
@@ -133,8 +135,10 @@ public class Hunter : ResourceGatherer, IDeliverDrops
         if (IKWeight <= 0f || Prey == null)
             return;
 
-        BowPosition = transform.position + Vector3.up * armHeight + LaunchDirection() * armLength;
-        BowRotation = Quaternion.LookRotation(LaunchDirection(), Vector3.up) * Quaternion.Euler(0f, 0f, 90f);
+        Vector3 launchDir = LaunchDirection();
+        BowPosition = transform.position + Vector3.up * armHeight + launchDir * armLength;
+        DrawHandPosition = BowPosition - launchDir * drawLength;
+        BowRotation = Quaternion.LookRotation(launchDir, Vector3.up) * Quaternion.Euler(0f, 0f, 90f);
     }
 
     public void UpdateAiming()
@@ -143,7 +147,9 @@ public class Hunter : ResourceGatherer, IDeliverDrops
             return;
 
         transform.LookAt(Prey.transform.position);
-        transform.Rotate(0f, targetRotationOffset, 0f);
+        Quaternion facingPrey = transform.rotation;
+        Quaternion sideon = facingPrey * Quaternion.Euler(0f, targetRotationOffset, 0f);
+        transform.rotation = Quaternion.Slerp(facingPrey, sideon, IKWeight);
     }
 
     public void ChooseShotHeight()

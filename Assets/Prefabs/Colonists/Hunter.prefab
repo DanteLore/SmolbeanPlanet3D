@@ -262,6 +262,9 @@ MonoBehaviour:
   nockDuration: 0.1
   aimDuration: 1
   armLength: 2
+  arrowSpawnOffset: 0.8
+  targetRotationOffset: 45
+  drawLength: 0.4
 --- !u!114 &-7274162803684928981
 MonoBehaviour:
   m_ObjectHideFlags: 0

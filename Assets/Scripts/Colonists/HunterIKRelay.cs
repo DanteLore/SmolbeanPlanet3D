@@ -24,6 +24,9 @@ public class HunterIKRelay : MonoBehaviour
             animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, weight);
             animator.SetIKPosition(AvatarIKGoal.LeftHand, hunter.BowPosition);
             animator.SetIKRotation(AvatarIKGoal.LeftHand, hunter.BowRotation);
+
+            animator.SetIKPositionWeight(AvatarIKGoal.RightHand, weight);
+            animator.SetIKPosition(AvatarIKGoal.RightHand, hunter.DrawHandPosition);
         }
 
         if (hunter.Prey != null)
