@@ -10,6 +10,7 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     [SerializeField] private float maxShotHeight = 3f;
     [SerializeField] private AnimalSpec targetSpecies;
     [SerializeField] private Arrow arrowPrefab;
+    [SerializeField] private GameObject nockedArrow;
     [SerializeField] private Vector3 targetPointOffset;
     [SerializeField] private float nockDuration = 0.1f;
     [SerializeField] private float aimDuration = 10f;
@@ -161,6 +162,8 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     {
         BowActive = true;
         aimStartTime = Time.time;
+        if (nockedArrow != null)
+            nockedArrow.SetActive(true);
     }
 
     public void StopAiming()
@@ -205,6 +208,8 @@ public class Hunter : ResourceGatherer, IDeliverDrops
     {
         Think("Fire!");
         soundPlayer.Play("LooseArrow");
+        if (nockedArrow != null)
+            nockedArrow.SetActive(false);
 
         Vector3 origin = transform.position + Vector3.up * armHeight + LaunchDirection() * arrowSpawnOffset;
         preyTargetPoint = Prey.transform.GetRendererBounds().center + targetPointOffset;
